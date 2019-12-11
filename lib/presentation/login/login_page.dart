@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -98,7 +99,9 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             child: RaisedButton(
               elevation: 5.0,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(MainBottomNavigation.routeName);
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0)),
               color: Colors.blueAccent,
