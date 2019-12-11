@@ -60,3 +60,16 @@ Use these steps to clone from SourceTree, our client for using the repository co
 4. Open the directory you just created to see your repository’s files.
 
 Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+
+
+## Steps to sync flutter repo in android studio. Probably on other IDE too
+
+1. Follow this guidelines to install flutter on your computer (https://flutter.dev/docs/get-started/install)
+2. Make sure you have flutter SDK installed in your system
+3. Make sure you have dart SDK
+4. Check flutter sdk is point the correct path. File -> Settings -> Language and Framework
+ -> Flutter -> Select flutter path to the path of flutter you installed on your computer.
+ eg: E:\Flutter Folder\flutter. Then on the bottom of that will show flutter version (Flutter 1.9.1 hotfix ...)
+5. Check dart sdk is point the correct path. Step is same as above but pick dart under Language and Framework.
+6. After all done, ope pubspec.yaml then pubspec.get or by terminal flutter pub get. Then you ready to go.
+7. If still have error, you can invalidate cache and restart IDE.
