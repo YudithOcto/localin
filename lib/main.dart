@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/presentation/profile/edit_profile.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (_) => LoginPage(),
         MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
+        EditProfilePage.routeName: (_) => EditProfilePage(),
       },
     );
   }

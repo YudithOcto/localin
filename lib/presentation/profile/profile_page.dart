@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bottom_company_information.dart';
+import 'package:localin/presentation/profile/edit_profile.dart';
+import 'package:localin/presentation/profile/profile_row_card.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 
@@ -17,24 +19,22 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 5.0,
-          backgroundColor: Theme.of(context).canvasColor,
-          title: Image.asset(
-            'images/app_bar_logo.png',
-            width: MediaQuery.of(context).size.width * 0.3,
-            height: 50.0,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 5.0,
+        backgroundColor: Theme.of(context).canvasColor,
+        title: Image.asset(
+          'images/app_bar_logo.png',
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: 50.0,
         ),
-        body: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return SingleCard(index);
-          },
-        ),
+      ),
+      body: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return SingleCard(index);
+        },
       ),
     );
   }
@@ -45,7 +45,12 @@ class HeaderProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ProfileImageCard(),
+        ProfileRowCard(
+          isEditProfile: false,
+          onSettingPressed: () {
+            Navigator.of(context).pushNamed(EditProfilePage.routeName);
+          },
+        ),
         DanaActiveRow(),
         Visibility(
           visible: false,
@@ -61,111 +66,6 @@ class HeaderProfile extends StatelessWidget {
           color: Colors.black26,
         ),
       ],
-    );
-  }
-}
-
-class ProfileImageCard extends StatelessWidget {
-  final Function onPressed;
-  ProfileImageCard({this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.2;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 20.0),
-          height: height,
-          child: Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
-              Positioned(
-                left: 0.0,
-                right: 0.0,
-                top: 20.0,
-                child: CircleAvatar(
-                  radius: 50.0,
-                  child: Icon(
-                    Icons.person,
-                    size: 50.0,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 25.0,
-                right: 140.0,
-                child: Icon(
-                  Icons.settings,
-                  color: Themes.primaryBlue,
-                ),
-              ),
-              Positioned(
-                left: 20.0,
-                right: 0.0,
-                bottom: -10.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Jhon Thor',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      Icons.verified_user,
-                      size: 20.0,
-                      color: Themes.primaryBlue,
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
-          height: 55.0,
-          decoration: BoxDecoration(
-              border: Border.all(color: Themes.primaryBlue),
-              borderRadius: BorderRadius.circular(8.0)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              gridColumnDetail('Posts', '3959'),
-              gridColumnDetail('Views', '8k'),
-              gridColumnDetail('Points', '443'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget gridColumnDetail(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          Text(
-            value,
-            style: kValueStyle,
-          ),
-          SizedBox(
-            height: 2.0,
-          ),
-          Text(
-            title,
-            style: kTitleStyle,
-          ),
-        ],
-      ),
     );
   }
 }
