@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bottom_company_information.dart';
-import 'package:localin/presentation/profile/edit_profile.dart';
+import 'package:localin/presentation/profile/edit_profile_page.dart';
 import 'package:localin/presentation/profile/profile_row_card.dart';
+import 'package:localin/presentation/profile/row_connect_dana.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
+
+import 'connect_dana_account_page.dart';
 
 const kTitleStyle = TextStyle(
     fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
@@ -54,7 +57,11 @@ class HeaderProfile extends StatelessWidget {
         DanaActiveRow(),
         Visibility(
           visible: false,
-          child: DanaInactiveRow(),
+          child: RowConnectDana(
+            onPressed: () {
+              Navigator.of(context).pushNamed(ConnectDanaAccountPage.routeName);
+            },
+          ),
         ),
         DescriptionColumn(),
         SizedBox(
@@ -133,42 +140,6 @@ class DanaActiveRow extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class DanaInactiveRow extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Image.asset(
-          'images/dana_logo.png',
-          scale: 9.0,
-        ),
-        SizedBox(
-          width: 8.0,
-        ),
-        Container(
-          decoration: BoxDecoration(
-              color: Themes.primaryBlue,
-              borderRadius: BorderRadius.circular(10.0)),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-            child: Text(
-              'CONNECT',
-              style: kValueStyle.copyWith(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                  letterSpacing: -.5,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

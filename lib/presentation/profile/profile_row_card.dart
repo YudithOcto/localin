@@ -31,10 +31,11 @@ class ProfileRowCard extends StatelessWidget {
                 top: 20.0,
                 child: CircleAvatar(
                   radius: 50.0,
-                  backgroundColor: Themes.red,
+                  backgroundColor: Colors.grey,
                   child: Icon(
                     Icons.person,
                     size: 50.0,
+                    color: Colors.white,
                   ),
                 ),
               ),

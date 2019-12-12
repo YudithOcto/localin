@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+
+import '../themes.dart';
+
 class Constants {
   static const kRandomWords =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
@@ -7,4 +11,7 @@ class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'
       'Tangerang, Banten 15810';
+
+  static const kValueStyle = TextStyle(
+      fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
 }
