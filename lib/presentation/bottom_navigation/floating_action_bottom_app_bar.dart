@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FloatingActionBottomAppBarItem {
-  IconData iconData;
+  String iconData;
   String text;
   FloatingActionBottomAppBarItem({this.iconData, this.text});
 }
@@ -85,8 +85,8 @@ class _FloatingActionBottomAppBarState
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  item.iconData,
+                ImageIcon(
+                  ExactAssetImage(item.iconData),
                   color: color,
                 ),
                 SizedBox(

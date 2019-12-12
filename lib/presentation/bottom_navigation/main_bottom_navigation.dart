@@ -48,17 +48,17 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
           selectedTabIndex: currentSelected,
           items: [
             FloatingActionBottomAppBarItem(
-              iconData: Icons.home,
+              iconData: 'images/home_logo.png',
               text: 'Home',
             ),
             FloatingActionBottomAppBarItem(
-                iconData: Icons.search, text: 'Search'),
+                iconData: 'images/search_logo.png', text: 'Search'),
             FloatingActionBottomAppBarItem(
-                iconData: Icons.book, text: 'My Bookings'),
+                iconData: 'images/article_logo.png', text: 'My Bookings'),
             FloatingActionBottomAppBarItem(
-                iconData: Icons.notifications, text: 'Notification'),
+                iconData: 'images/notification_logo.png', text: 'Notification'),
             FloatingActionBottomAppBarItem(
-                iconData: Icons.account_circle, text: 'Profile'),
+                iconData: 'images/account_logo.png', text: 'Profile'),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

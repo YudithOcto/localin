@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/bottom_company_information.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 
@@ -321,7 +322,7 @@ class SingleCard extends StatelessWidget {
     if (index == 0) {
       return HeaderProfile();
     } else if (index == 4) {
-      return BottomCard();
+      return BottomCompanyInformation();
     } else {
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -390,17 +391,5 @@ class SingleCard extends StatelessWidget {
         ),
       );
     }
-  }
-}
-
-class BottomCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 150.0,
-      margin: EdgeInsets.only(top: 10.0),
-      width: double.infinity,
-      color: Colors.black,
-    );
   }
 }
