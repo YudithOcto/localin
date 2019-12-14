@@ -179,7 +179,7 @@ class RowQuickMenu extends StatelessWidget {
           Expanded(
             child: CircleMaterialButton(
               onPressed: () {},
-              imageAsset: 'images/quick_dana_logo.png',
+              icon: Icons.monetization_on,
             ),
           )
         ],
@@ -205,8 +205,10 @@ class RowCommunity extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
+          Container(
+            height: Orientation.portrait == MediaQuery.of(context).orientation
+                ? MediaQuery.of(context).size.height * 0.5
+                : MediaQuery.of(context).size.height * 0.9,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 4,

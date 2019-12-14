@@ -17,6 +17,7 @@ class CircleMaterialButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RawMaterialButton(
       elevation: 5.0,
+      padding: EdgeInsets.all(0.0),
       onPressed: onPressed,
       fillColor: backgroundColor,
       shape: CircleBorder(),
