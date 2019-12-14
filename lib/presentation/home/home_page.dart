@@ -164,7 +164,7 @@ class RowQuickMenu extends StatelessWidget {
           Expanded(
             child: CircleMaterialButton(
               onPressed: () {},
-              imageAsset: 'images/quick_attraction_logo.png',
+              icon: Icons.beach_access,
             ),
           ),
           Expanded(

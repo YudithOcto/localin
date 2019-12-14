@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/presentation/article/article_detail_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/profile/connect_dana_account_page.dart';
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
         MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
         EditProfilePage.routeName: (_) => EditProfilePage(),
         ConnectDanaAccountPage.routeName: (_) => ConnectDanaAccountPage(),
+        ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
       },
     );
   }

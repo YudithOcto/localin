@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/article/article_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../../themes.dart';
@@ -8,23 +9,26 @@ class ArticleSingleCard extends StatelessWidget {
   ArticleSingleCard(this.index);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          upperRow(),
-          bigImages(),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Text(
-              '#Pembongkaran Makam #Tangerang',
-              style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(ArticleDetailPage.routeName),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            upperRow(),
+            bigImages(),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Text(
+                '#Pembongkaran Makam #Tangerang',
+                style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
+              ),
             ),
-          ),
-          rowChat(),
-          Divider()
-        ],
+            rowChat(),
+            Divider()
+          ],
+        ),
       ),
     );
   }

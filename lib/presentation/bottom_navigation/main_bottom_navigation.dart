@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localin/presentation/article/article_page.dart';
+import 'package:localin/presentation/article/article_detail_page.dart';
 import 'package:localin/presentation/community/community_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
@@ -34,7 +34,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
           children: <Widget>[
             HomePage(),
             SearchPage(),
-            ArticlePage(),
+            ArticleDetailPage(),
             CommunityPage(),
             ProfilePage()
           ],
