@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/error_page/page_404.dart';
 import 'package:localin/presentation/home/widget/article_single_card.dart';
 import 'package:localin/presentation/home/widget/circle_material_button.dart';
 import 'package:localin/presentation/home/widget/community_single_card.dart';
@@ -127,7 +128,9 @@ class HeaderContentCard extends StatelessWidget {
           right: 20.0,
           child: FloatingActionButton(
             backgroundColor: Themes.red,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(Page404.routeName);
+            },
             elevation: 5.0,
             child: Icon(
               Icons.add,
