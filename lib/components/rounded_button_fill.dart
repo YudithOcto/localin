@@ -22,7 +22,7 @@ class RoundedButtonFill extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         decoration: BoxDecoration(
-            color: backgroundColor, borderRadius: BorderRadius.circular(10.0)),
+            color: backgroundColor, borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
           child: Text(

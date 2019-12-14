@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/widget/community_card_widget.dart';
+import 'package:localin/presentation/community/widget/community_star_indicator.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../themes.dart';
@@ -25,29 +27,29 @@ class _CommunityPageState extends State<CommunityPage> {
       ),
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
-        child: Container(
-          margin: EdgeInsets.only(left: 10.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0)),
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'Cari Komunitas'),
-                ),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 16.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0)),
+                    prefixIcon: Icon(Icons.search),
+                    hintText: 'Cari Komunitas'),
               ),
-              Row(
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10.0),
+              child: Row(
                 children: List.generate(4, (index) {
                   return QuickMenuCommunity(index: index);
                 }),
               ),
-              CommunityCardWidget(),
-              CommunityBottomCard(),
-            ],
-          ),
+            ),
+            CommunityCardWidget(),
+            CommunityBottomCard(),
+          ],
         ),
       ),
     );
