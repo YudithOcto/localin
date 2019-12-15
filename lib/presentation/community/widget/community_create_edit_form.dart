@@ -125,6 +125,7 @@ class _CommunityCreateEditFormState extends State<CommunityCreateEditForm> {
               height: 50.0,
               child: RoundedButtonFill(
                 onPressed: () {},
+                needCenter: true,
                 fontSize: 18.0,
                 title: widget.isUpdatePage ? 'Simpan' : 'Buat Komunitas',
               ),

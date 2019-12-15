@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/widget/community_create_edit_form.dart';
-import 'package:localin/presentation/community/widget/community_create_edit_header.dart';
+import 'package:localin/presentation/community/widget/custom_rounded_header_page.dart';
 
 class CommunityCreateEditPage extends StatefulWidget {
   static const routeName = '/communityCreateEdit';
@@ -31,7 +31,15 @@ class _CommunityCreateEditPageState extends State<CommunityCreateEditPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            CommunityCreateEditHeader(),
+            CustomRoundedHeaderPage(
+              bigTitle: 'Buat Komunitas',
+              subtitleFirst:
+                  'hubungkan bisnis, diri anda sendiri, atau gerakan ke komunitas orang di seluruh'
+                  'dunia dengan ',
+              subtitleSecond:
+                  ' Untuk memulai, tentukan nama, lalu pilih kategori halaman.',
+              boldSubtitle: 'Localin.',
+            ),
             CommunityCreateEditForm(
               isUpdatePage: isUpdatePage,
             ),

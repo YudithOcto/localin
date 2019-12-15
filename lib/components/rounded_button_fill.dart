@@ -8,12 +8,16 @@ class RoundedButtonFill extends StatelessWidget {
   final String title;
   final Color titleColor, backgroundColor;
   final double fontSize;
+  final bool needCenter;
+  final double height;
 
   RoundedButtonFill(
       {@required this.onPressed,
       this.title,
+      this.height,
       this.titleColor = Colors.white,
       this.backgroundColor = Themes.primaryBlue,
+      this.needCenter = false,
       this.fontSize = 12.0});
 
   @override
@@ -21,13 +25,15 @@ class RoundedButtonFill extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        alignment: Alignment.center,
+        height: height != null ? height : null,
+        alignment: needCenter ? Alignment.center : null,
         decoration: BoxDecoration(
             color: backgroundColor, borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
           child: Text(
             title,
+            textAlign: TextAlign.center,
             style: Constants.kValueStyle.copyWith(
                 color: titleColor,
                 fontSize: fontSize,

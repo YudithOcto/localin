@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/community_create_edit_page.dart';
+import 'package:localin/presentation/community/community_create_event_page.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/themes.dart';
@@ -66,6 +67,7 @@ class _CommunityProfileState extends State<CommunityProfile> {
                         alignment: Alignment.centerRight,
                         child: RoundedButtonFill(
                           onPressed: () {},
+                          height: 30.0,
                           title: 'Gabung Komunitas',
                         ),
                       ),
@@ -259,8 +261,14 @@ class CommunityDescription extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              'images/community_logo.png',
+            InkWell(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(CommunityCreateEventPage.routeName);
+              },
+              child: Image.asset(
+                'images/community_logo.png',
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
