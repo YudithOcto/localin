@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/rounded_button_fill.dart';
+import 'package:localin/presentation/community/community_create_edit_page.dart';
 import 'package:localin/presentation/community/widget/community_card_widget.dart';
-import 'package:localin/presentation/community/widget/community_star_indicator.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../themes.dart';
@@ -110,7 +109,12 @@ class CommunityBottomCard extends StatelessWidget {
             ),
             RaisedButton(
               elevation: 5.0,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(CommunityCreateEditPage.routeName, arguments: {
+                  CommunityCreateEditPage.isUpdatePage: false,
+                });
+              },
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0)),

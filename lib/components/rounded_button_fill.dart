@@ -21,6 +21,7 @@ class RoundedButtonFill extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
+        alignment: Alignment.center,
         decoration: BoxDecoration(
             color: backgroundColor, borderRadius: BorderRadius.circular(8.0)),
         child: Padding(

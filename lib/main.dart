@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/article/article_detail_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/community/community_create_edit_page.dart';
 import 'package:localin/presentation/community/community_profile.dart';
 import 'package:localin/presentation/error_page/page_404.dart';
 import 'package:localin/presentation/login/login_page.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
         Page404.routeName: (_) => Page404(),
         CommunityProfile.routeName: (_) => CommunityProfile(),
+        CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
       },
     );
   }

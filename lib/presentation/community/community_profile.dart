@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
+import 'package:localin/presentation/community/community_create_edit_page.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/themes.dart';
@@ -322,9 +323,18 @@ class CommunityDescription extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(right: 15.0),
                 alignment: Alignment.centerRight,
-                child: Icon(
-                  Icons.settings,
-                  color: Themes.primaryBlue,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        CommunityCreateEditPage.routeName,
+                        arguments: {
+                          CommunityCreateEditPage.isUpdatePage: true,
+                        });
+                  },
+                  child: Icon(
+                    Icons.settings,
+                    color: Themes.primaryBlue,
+                  ),
                 ),
               ),
             ),
