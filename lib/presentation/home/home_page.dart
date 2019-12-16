@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/error_page/page_404.dart';
+import 'package:localin/presentation/home/widget/article_single_card.dart';
+import 'package:localin/presentation/home/widget/circle_material_button.dart';
+import 'package:localin/presentation/home/widget/community_single_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import '../../themes.dart';
 
@@ -23,21 +27,20 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 250.0,
-              child: Image.asset(
-                'images/static_map_image.png',
-                fit: BoxFit.fill,
-              ),
+            HeaderContentCard(),
+            RowQuickMenu(),
+            containerDivider(),
+            RowCommunity(),
+            Divider(
+              color: Colors.black26,
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.all(12.0),
+              margin: EdgeInsets.only(top: 5.0),
               child: Text(
                 'Yang Terjadi Di Sekitarmu',
                 style: kValueStyle,
@@ -46,136 +49,177 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 10.0,
             ),
-            Container(
-              height: 500.0,
-              child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Divider();
-                },
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return ArticleSingleCard(index);
-                },
-              ),
-            )
+            Column(
+              children: List.generate(4, (index) {
+                return ArticleSingleCard(index);
+              }),
+            ),
           ],
         ),
       ),
     );
   }
-}
 
-class ArticleSingleCard extends StatelessWidget {
-  final int index;
-  ArticleSingleCard(this.index);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        upperRow(),
-        bigImages(),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0),
-          child: Text(
-            '#Pembongkaran Makam #Tangerang',
-            style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
-          ),
-        ),
-        rowChat()
-      ],
+  containerDivider() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 25.0, horizontal: 10.0),
+      color: Colors.black26,
+      width: double.infinity,
+      height: 1.0,
     );
   }
+}
 
-  Widget upperRow() {
-    return Row(
+class HeaderContentCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      overflow: Overflow.visible,
       children: <Widget>[
-        CircleAvatar(
-          radius: 25.0,
-          backgroundImage: AssetImage(
-            'images/article_icon.png',
+        Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: Image.asset(
+            'images/static_map_image.png',
+            fit: BoxFit.fill,
           ),
         ),
-        SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Positioned(
+          bottom: -20.0,
+          left: 20.0,
+          child: Row(
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20.0),
-                child: Text(
-                  'Kali Jalan Aria Putra Ciputat sudah sepekan Banyak Sampah, Keluarkan Bau Menyengat',
-                  overflow: TextOverflow.ellipsis,
-                  style: kValueStyle,
+              CircleAvatar(
+                radius: 20.0,
+                child: Icon(
+                  Icons.person,
+                  size: 20.0,
                 ),
               ),
-              SizedBox(
-                height: 5.0,
-              ),
-              Row(
+              SizedBox(width: 15.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Themes.green,
-                        borderRadius: BorderRadius.circular(4.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        'Tangerang Online',
-                        style: kValueStyle.copyWith(
-                            color: Colors.white, fontSize: 10.0),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'John Thor',
+                        style: kValueStyle.copyWith(fontSize: 18.0),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.0,
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Icon(
+                        Icons.verified_user,
+                        color: Themes.primaryBlue,
+                        size: 15.0,
+                      )
+                    ],
                   ),
                   Text(
-                    '15 Oktober 2019',
+                    'Mau ngapain hari ini',
                     style: kValueStyle.copyWith(
-                        fontSize: 12.0, color: Colors.black45),
-                  ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      margin: EdgeInsets.only(right: 5.0),
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.black45,
-                      ),
-                    ),
+                        fontSize: 16.0, color: Colors.black54),
                   )
                 ],
               )
             ],
           ),
+        ),
+        Positioned(
+          bottom: -25.0,
+          right: 20.0,
+          child: FloatingActionButton(
+            backgroundColor: Themes.red,
+            onPressed: () {
+              Navigator.of(context).pushNamed(Page404.routeName);
+            },
+            elevation: 5.0,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 40.0,
+            ),
+          ),
         )
       ],
     );
   }
+}
 
-  Widget bigImages() {
+class RowQuickMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-      width: double.infinity,
-      decoration: BoxDecoration(
-          color: Colors.grey, borderRadius: BorderRadius.circular(8.0)),
-      height: 150.0,
-    );
-  }
-
-  Widget rowChat() {
-    return Container(
-      margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
+      margin: EdgeInsets.only(top: 60.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Icon(Icons.favorite_border),
-          Icon(Icons.chat_bubble_outline),
-          Icon(Icons.share),
-          Icon(Icons.bookmark_border),
+          Expanded(
+            child: CircleMaterialButton(
+              onPressed: () {},
+              icon: Icons.hotel,
+            ),
+          ),
+          Expanded(
+            child: CircleMaterialButton(
+              onPressed: () {},
+              icon: Icons.confirmation_number,
+            ),
+          ),
+          Expanded(
+            child: CircleMaterialButton(
+              onPressed: () {},
+              icon: Icons.beach_access,
+            ),
+          ),
+          Expanded(
+            child: CircleMaterialButton(
+              onPressed: () {},
+              icon: Icons.restaurant,
+            ),
+          ),
+          Expanded(
+            child: CircleMaterialButton(
+              onPressed: () {},
+              icon: Icons.monetization_on,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class RowCommunity extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Text(
+            'Komunitas di Sekitarmu',
+            style: kValueStyle.copyWith(fontSize: 24.0),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Container(
+            height: Orientation.portrait == MediaQuery.of(context).orientation
+                ? MediaQuery.of(context).size.height * 0.5
+                : MediaQuery.of(context).size.height * 0.9,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return CommunitySingleCard(index: index);
+              },
+            ),
+          ),
         ],
       ),
     );

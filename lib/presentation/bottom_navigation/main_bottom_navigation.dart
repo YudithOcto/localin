@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localin/presentation/article/article_page.dart';
-import 'package:localin/presentation/community/community_page.dart';
+import 'package:localin/presentation/article/article_detail_page.dart';
+import 'package:localin/presentation/community/community_feed.dart';
 import 'package:localin/presentation/home/home_page.dart';
+import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/presentation/search/search_page.dart';
 import 'floating_action_bottom_app_bar.dart';
@@ -33,9 +34,9 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             HomePage(),
-            SearchPage(),
-            ArticlePage(),
             CommunityPage(),
+            ArticleDetailPage(),
+            NotificationListPage(),
             ProfilePage()
           ],
           controller: pageController,
@@ -54,7 +55,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
             FloatingActionBottomAppBarItem(
                 iconData: 'images/search_logo.png', text: 'Search'),
             FloatingActionBottomAppBarItem(
-                iconData: 'images/article_logo.png', text: 'My Bookings'),
+                iconData: 'images/article_logo.png', text: 'Article'),
             FloatingActionBottomAppBarItem(
                 iconData: 'images/notification_logo.png', text: 'Notification'),
             FloatingActionBottomAppBarItem(
