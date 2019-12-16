@@ -152,10 +152,7 @@ class CommunitySingleCard extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 20.0,
-          ),
-          Divider(
-            color: Colors.black87,
+            height: 5.0,
           ),
         ],
       ),

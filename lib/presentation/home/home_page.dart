@@ -35,6 +35,9 @@ class _HomePageState extends State<HomePage> {
             RowQuickMenu(),
             containerDivider(),
             RowCommunity(),
+            Divider(
+              color: Colors.black26,
+            ),
             Container(
               padding: const EdgeInsets.all(12.0),
               margin: EdgeInsets.only(top: 5.0),
@@ -82,15 +85,15 @@ class HeaderContentCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: -25.0,
+          bottom: -20.0,
           left: 20.0,
           child: Row(
             children: <Widget>[
               CircleAvatar(
-                radius: 30.0,
+                radius: 20.0,
                 child: Icon(
                   Icons.person,
-                  size: 40.0,
+                  size: 20.0,
                 ),
               ),
               SizedBox(width: 15.0),

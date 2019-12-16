@@ -226,7 +226,7 @@ class SingleCardComment extends StatelessWidget {
                         width: 10.0,
                       ),
                       Text(
-                        'Koemntari',
+                        'Komentari',
                         style: kValueStyle.copyWith(
                             color: Themes.primaryBlue, fontSize: 12.0),
                       )

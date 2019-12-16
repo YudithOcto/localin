@@ -15,19 +15,18 @@ class CircleMaterialButton extends StatelessWidget {
       this.imageAsset});
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      elevation: 5.0,
-      padding: EdgeInsets.all(0.0),
-      onPressed: onPressed,
-      fillColor: backgroundColor,
-      shape: CircleBorder(),
+    return Container(
+      height: 60.0,
+      width: 60.0,
+      decoration:
+          BoxDecoration(shape: BoxShape.circle, color: Themes.primaryBlue),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(4.0),
         child: imageAsset != null
             ? Image.asset(
                 imageAsset,
-                fit: BoxFit.cover,
-                scale: 2.0,
+                fit: BoxFit.scaleDown,
+                scale: 5.0,
               )
             : Icon(
                 icon,
