@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/article_detail_page.dart';
+import 'package:localin/presentation/booking/success_booking_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_create_edit_page.dart';
 import 'package:localin/presentation/community/community_create_event_page.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
         CommunityCreateEventPage.routeName: (_) => CommunityCreateEventPage(),
         NotificationListPage.routeName: (_) => NotificationListPage(),
+        SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
       },
     );
   }

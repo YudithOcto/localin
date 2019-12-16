@@ -25,8 +25,7 @@ class CircleMaterialButton extends StatelessWidget {
         child: imageAsset != null
             ? Image.asset(
                 imageAsset,
-                fit: BoxFit.scaleDown,
-                scale: 5.0,
+                fit: BoxFit.contain,
               )
             : Icon(
                 icon,

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/presentation/booking/success_booking_page.dart';
 import 'package:localin/presentation/error_page/page_404.dart';
-import 'package:localin/presentation/home/widget/article_single_card.dart';
-import 'package:localin/presentation/home/widget/circle_material_button.dart';
-import 'package:localin/presentation/home/widget/community_single_card.dart';
+import 'package:localin/presentation/home/widget/home_content_default.dart';
+import 'package:localin/presentation/home/widget/home_content_hotel.dart';
+import 'package:localin/presentation/home/widget/search_hotel_home.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import '../../themes.dart';
 
@@ -13,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isSearchPage = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,61 +30,73 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            HeaderContentCard(),
-            RowQuickMenu(),
-            containerDivider(),
-            RowCommunity(),
-            Divider(
-              color: Colors.black26,
+            HeaderContentCard(
+              onPressed: () {
+                setState(() {
+                  isSearchPage = !isSearchPage;
+                });
+              },
             ),
-            Container(
-              padding: const EdgeInsets.all(12.0),
-              margin: EdgeInsets.only(top: 5.0),
-              child: Text(
-                'Yang Terjadi Di Sekitarmu',
-                style: kValueStyle,
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Column(
-              children: List.generate(4, (index) {
-                return ArticleSingleCard(index);
-              }),
-            ),
+            isSearchPage ? SearchHotelContent() : HomeContentDefault(),
           ],
         ),
       ),
     );
   }
+}
 
-  containerDivider() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 25.0, horizontal: 10.0),
-      color: Colors.black26,
-      width: double.infinity,
-      height: 1.0,
+class SearchHotelContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        SearchHotelHome(),
+        Container(
+          padding: EdgeInsets.only(bottom: 70.0),
+          child: Column(
+            children: List.generate(5, (index) {
+              return FadeAnimation(
+                delay: 0.5,
+                fadeDirection: FadeDirection.bottom,
+                child: HomeContentHotel(
+                  index: index,
+                ),
+              );
+            }),
+          ),
+        )
+      ],
     );
   }
 }
 
 class HeaderContentCard extends StatelessWidget {
+  final Function onPressed;
+
+  HeaderContentCard({this.onPressed});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.loose,
       overflow: Overflow.visible,
       children: <Widget>[
-        Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.4,
-          child: Image.asset(
-            'images/static_map_image.png',
-            fit: BoxFit.fill,
+        InkWell(
+          onTap: () {
+            Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
+          },
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: Image.asset(
+              'images/static_map_image.png',
+              fit: BoxFit.fill,
+            ),
           ),
         ),
         Positioned(
@@ -132,7 +147,7 @@ class HeaderContentCard extends StatelessWidget {
           child: FloatingActionButton(
             backgroundColor: Themes.red,
             onPressed: () {
-              Navigator.of(context).pushNamed(Page404.routeName);
+              onPressed();
             },
             elevation: 5.0,
             child: Icon(
@@ -143,85 +158,6 @@ class HeaderContentCard extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class RowQuickMenu extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 60.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            child: CircleMaterialButton(
-              onPressed: () {},
-              icon: Icons.hotel,
-            ),
-          ),
-          Expanded(
-            child: CircleMaterialButton(
-              onPressed: () {},
-              icon: Icons.confirmation_number,
-            ),
-          ),
-          Expanded(
-            child: CircleMaterialButton(
-              onPressed: () {},
-              icon: Icons.beach_access,
-            ),
-          ),
-          Expanded(
-            child: CircleMaterialButton(
-              onPressed: () {},
-              icon: Icons.restaurant,
-            ),
-          ),
-          Expanded(
-            child: CircleMaterialButton(
-              onPressed: () {},
-              icon: Icons.monetization_on,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class RowCommunity extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text(
-            'Komunitas di Sekitarmu',
-            style: kValueStyle.copyWith(fontSize: 24.0),
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Container(
-            height: Orientation.portrait == MediaQuery.of(context).orientation
-                ? MediaQuery.of(context).size.height * 0.5
-                : MediaQuery.of(context).size.height * 0.9,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return CommunitySingleCard(index: index);
-              },
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
