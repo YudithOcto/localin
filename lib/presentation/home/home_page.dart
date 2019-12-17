@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/presentation/booking/booking_detail_page.dart';
 import 'package:localin/presentation/booking/success_booking_page.dart';
 import 'package:localin/presentation/error_page/page_404.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
@@ -88,7 +89,8 @@ class HeaderContentCard extends StatelessWidget {
       children: <Widget>[
         InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
+            //Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
+            Navigator.of(context).pushNamed(BookingDetailPage.routeName);
           },
           child: Container(
             width: double.infinity,

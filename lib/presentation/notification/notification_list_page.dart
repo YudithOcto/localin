@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_header_below_base_appbar.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../themes.dart';
@@ -25,29 +26,8 @@ class _NotificationListPageState extends State<NotificationListPage> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.1,
-            color: Themes.primaryBlue,
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 10.0,
-                ),
-                Icon(
-                  Icons.keyboard_backspace,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 20.0,
-                ),
-                Text(
-                  'Notifikasi',
-                  style:
-                      kValueStyle.copyWith(color: Colors.white, fontSize: 18.0),
-                ),
-              ],
-            ),
+          CustomHeaderBelowAppBar(
+            title: 'Notifikasi',
           ),
           SizedBox(
             height: 15.0,

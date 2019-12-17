@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/booking/widgets/booking_information_card.dart';
 import 'package:localin/presentation/booking/widgets/booking_product_detail_card.dart';
 
 import '../../themes.dart';
@@ -13,7 +14,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Themes.primaryBlue,
+        backgroundColor: Themes.darkBlue,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 5.0,
@@ -32,6 +33,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                BookingInformationCard(),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Icon(

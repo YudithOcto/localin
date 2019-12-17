@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/home/widget/article_single_card.dart';
+import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
-
-import 'circle_material_button.dart';
 import 'community_single_card.dart';
 
 class HomeContentDefault extends StatelessWidget {
@@ -13,6 +12,7 @@ class HomeContentDefault extends StatelessWidget {
       delay: 0.5,
       fadeDirection: FadeDirection.bottom,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           RowQuickMenu(),
           containerDivider(),
@@ -25,7 +25,7 @@ class HomeContentDefault extends StatelessWidget {
             margin: EdgeInsets.only(top: 5.0),
             child: Text(
               'Yang Terjadi Di Sekitarmu',
-              style: kValueStyle,
+              style: kValueStyle.copyWith(fontSize: 24.0),
             ),
           ),
           SizedBox(
@@ -47,70 +47,6 @@ class HomeContentDefault extends StatelessWidget {
       color: Colors.black26,
       width: double.infinity,
       height: 1.0,
-    );
-  }
-}
-
-class RowQuickMenu extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 60.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            child: FadeAnimation(
-              delay: 1.2,
-              fadeDirection: FadeDirection.right,
-              child: CircleMaterialButton(
-                onPressed: () {},
-                icon: Icons.hotel,
-              ),
-            ),
-          ),
-          Expanded(
-            child: FadeAnimation(
-              delay: 1.3,
-              fadeDirection: FadeDirection.right,
-              child: CircleMaterialButton(
-                onPressed: () {},
-                icon: Icons.confirmation_number,
-              ),
-            ),
-          ),
-          Expanded(
-            child: FadeAnimation(
-              delay: 1.2,
-              fadeDirection: FadeDirection.right,
-              child: CircleMaterialButton(
-                onPressed: () {},
-                icon: Icons.beach_access,
-              ),
-            ),
-          ),
-          Expanded(
-            child: FadeAnimation(
-              delay: 1.4,
-              fadeDirection: FadeDirection.right,
-              child: CircleMaterialButton(
-                onPressed: () {},
-                icon: Icons.restaurant,
-              ),
-            ),
-          ),
-          Expanded(
-            child: FadeAnimation(
-              delay: 1.5,
-              fadeDirection: FadeDirection.right,
-              child: CircleMaterialButton(
-                onPressed: () {},
-                imageAsset: 'images/quick_dana_logo.png',
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

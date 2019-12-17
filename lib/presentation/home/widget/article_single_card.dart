@@ -18,14 +18,11 @@ class ArticleSingleCard extends StatelessWidget {
           children: <Widget>[
             upperRow(),
             bigImages(),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Text(
-                '#Pembongkaran Makam #Tangerang',
-                style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
-              ),
+            Text(
+              '#Pembongkaran Makam #Tangerang',
+              style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
             ),
-            rowChat(),
+            rowBottomIcon(),
             Divider()
           ],
         ),
@@ -112,16 +109,28 @@ class ArticleSingleCard extends StatelessWidget {
     );
   }
 
-  Widget rowChat() {
+  Widget rowBottomIcon() {
     return Container(
       margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Icon(Icons.favorite_border),
-          Icon(Icons.chat_bubble_outline),
-          Icon(Icons.share),
-          Icon(Icons.bookmark_border),
+          Icon(
+            Icons.favorite_border,
+            color: Colors.grey,
+          ),
+          ImageIcon(
+            ExactAssetImage('images/ic_chat.png'),
+            color: Colors.black,
+          ),
+          Icon(
+            Icons.share,
+            color: Colors.grey,
+          ),
+          Icon(
+            Icons.bookmark_border,
+            color: Colors.grey,
+          ),
         ],
       ),
     );

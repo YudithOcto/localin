@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/article_detail_page.dart';
+import 'package:localin/presentation/booking/booking_detail_page.dart';
+import 'package:localin/presentation/booking/booking_history_page.dart';
+import 'package:localin/presentation/booking/room_detail_page.dart';
 import 'package:localin/presentation/booking/success_booking_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_create_edit_page.dart';
@@ -41,6 +44,9 @@ class MyApp extends StatelessWidget {
         CommunityCreateEventPage.routeName: (_) => CommunityCreateEventPage(),
         NotificationListPage.routeName: (_) => NotificationListPage(),
         SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
+        BookingDetailPage.routeName: (_) => BookingDetailPage(),
+        BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
+        RoomDetailPage.routeName: (_) => RoomDetailPage(),
       },
     );
   }
