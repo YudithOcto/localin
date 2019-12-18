@@ -136,7 +136,7 @@ class SingleCardComment extends StatelessWidget {
             height: 10.0,
           ),
           Text(
-            Constants.kRandomWords,
+            kRandomWords,
             style: kValueStyle.copyWith(
                 color: Colors.black87,
                 fontWeight: FontWeight.w500,
@@ -146,7 +146,7 @@ class SingleCardComment extends StatelessWidget {
             height: 10.0,
           ),
           Text(
-            Constants.kRandomWords,
+            kRandomWords,
             style: kValueStyle.copyWith(
                 color: Colors.black87,
                 fontWeight: FontWeight.w500,

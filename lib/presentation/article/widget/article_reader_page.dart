@@ -14,7 +14,7 @@ class ArticleReaderPage extends StatelessWidget {
           Container(
             width: double.infinity,
             child: Text(
-              Constants.kLargeRandomWords,
+              kLargeRandomWords,
               style:
                   kValueStyle.copyWith(fontSize: 14.0, color: Colors.black54),
             ),

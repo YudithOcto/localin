@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/widget/recommended_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/constants.dart';
 
 import '../../../themes.dart';
 
@@ -49,7 +50,7 @@ class ArticleCommentPage extends StatelessWidget {
                       height: 10.0,
                     ),
                     Text(
-                      Constants.kRandomWords,
+                      kRandomWords,
                       style: kValueStyle.copyWith(
                           color: Colors.black87,
                           fontWeight: FontWeight.w500,

@@ -1,9 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/booking/widgets/room_detail_title.dart';
+import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/themes.dart';
 
 class RoomLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        RoomDetailTitle(
+          title: 'Location',
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: Stack(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.asset(
+                      'images/static_map_image.png',
+                      width: 100.0,
+                      height: 100.0,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      alignment: FractionalOffset.center,
+                      height: 25.0,
+                      decoration: BoxDecoration(
+                          color: Themes.primaryBlue,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(12.0),
+                              bottomRight: Radius.circular(12.0))),
+                      child: Text(
+                        'Lihat di Peta',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 11.0),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Beverly 90210 Serpong, Jl. Trimezia, Curug Sengareng, Kelapa Dua, Tangerang, Banten, Indonesia, 15810',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black87,
+                        fontSize: 12.0),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    'Batu Ceper, Kota Tangerang',
+                    style: kValueStyle.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Themes.grey,
+                        fontSize: 11.0),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Themes.primaryBlue,
+                        size: 15.0,
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        '4.6 Km near from your location',
+                        style: kValueStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Themes.grey,
+                            fontSize: 11.0),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        Container(
+          color: Colors.black38,
+          height: 1,
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
+        ),
+      ],
+    );
   }
 }

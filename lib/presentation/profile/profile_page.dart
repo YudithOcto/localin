@@ -153,7 +153,7 @@ class DescriptionColumn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
-            Constants.kRandomWords,
+            kRandomWords,
             textAlign: TextAlign.center,
             style: kValueStyle.copyWith(fontSize: 12.0),
           ),
