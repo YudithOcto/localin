@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/booking/booking_detail_page.dart';
-import 'package:localin/presentation/booking/success_booking_page.dart';
-import 'package:localin/presentation/error_page/page_404.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
-import 'package:localin/presentation/home/widget/home_content_hotel.dart';
-import 'package:localin/presentation/home/widget/search_hotel_home.dart';
+import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
+import 'package:localin/presentation/home/widget/search_form_widget.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import '../../themes.dart';
 
@@ -56,7 +54,7 @@ class SearchHotelContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SearchHotelHome(),
+        SearchFormWidget(),
         Container(
           padding: EdgeInsets.only(bottom: 70.0),
           child: Column(
@@ -64,7 +62,7 @@ class SearchHotelContent extends StatelessWidget {
               return FadeAnimation(
                 delay: 0.5,
                 fadeDirection: FadeDirection.bottom,
-                child: HomeContentHotel(
+                child: HomeContentSearchHotel(
                   index: index,
                 ),
               );

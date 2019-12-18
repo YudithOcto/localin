@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SearchHotelHome extends StatefulWidget {
+class SearchFormWidget extends StatefulWidget {
   @override
-  _SearchHotelHomeState createState() => _SearchHotelHomeState();
+  _SearchFormWidgetState createState() => _SearchFormWidgetState();
 }
 
-class _SearchHotelHomeState extends State<SearchHotelHome> {
+class _SearchFormWidgetState extends State<SearchFormWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -38,7 +38,10 @@ class _RoomDetailPageState extends State<RoomDetailPage> {
               children: <Widget>[
                 Container(
                   width: double.infinity,
-                  height: size.height * 0.3,
+                  height:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? size.height * 0.3
+                          : size.height * 0.6,
                   child: Image.asset(
                     'images/reddoor_image.jpg',
                     fit: BoxFit.fill,

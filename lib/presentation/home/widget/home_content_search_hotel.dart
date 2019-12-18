@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/home/widget/search_hotel_home.dart';
 
 import '../../../themes.dart';
 
-class HomeContentHotel extends StatelessWidget {
+class HomeContentSearchHotel extends StatelessWidget {
   final cardTextStyle = TextStyle(
       fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
 
   final int index;
-  HomeContentHotel({this.index});
+  HomeContentSearchHotel({this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +139,6 @@ class HomeContentHotel extends StatelessWidget {
                       '/Room/Night',
                       style: cardTextStyle.copyWith(
                           fontSize: 11.0, color: Colors.black38),
-                    ),
-                    SizedBox(
-                      height: 5.0,
                     ),
                   ],
                 ),
