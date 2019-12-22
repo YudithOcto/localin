@@ -26,19 +26,13 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    final user = routeArgs['user'];
-    print(user);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         body: PageView(
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            HomePage(
-              user: user,
-            ),
+            HomePage(),
             CommunityPage(),
             ArticleDetailPage(),
             NotificationListPage(),

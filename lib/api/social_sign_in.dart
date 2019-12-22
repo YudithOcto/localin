@@ -1,9 +1,8 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:localin/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SocialSignIn {
   final facebookLogin = FacebookLogin();
@@ -16,21 +15,23 @@ class SocialSignIn {
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
-        final graphResponse = await Dio().get(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token');
-
         final AuthCredential credential =
             FacebookAuthProvider.getCredential(accessToken: token);
-        try {
-          final AuthResult authResult =
-              await _auth.signInWithCredential(credential);
-          final FirebaseUser user = authResult.user;
-          print(user.providerId);
-        } catch (error) {
-          print(error);
-        }
+        final AuthResult authResult =
+            await _auth.signInWithCredential(credential);
+        final FirebaseUser user = authResult.user;
 
-        return jsonDecode(graphResponse.data);
+        Map<String, dynamic> _userResult = Map();
+        _userResult['user_id'] = user.uid;
+        _userResult['user_email'] = user.email;
+        _userResult['user_name'] = user.displayName;
+        _userResult['user_photo'] = user.photoUrl;
+        _userResult['source'] = credential.providerId;
+
+        SharedPreferences sf = await SharedPreferences.getInstance();
+        sf.setString(
+            kFacebookExpired, result.accessToken.expires.toIso8601String());
+        return _userResult;
         break;
 
       case FacebookLoginStatus.cancelledByUser:
@@ -43,26 +44,50 @@ class SocialSignIn {
     return null;
   }
 
-  Future<String> signInWithGoogle() async {
+  Future<Map<String, dynamic>> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    Map<String, dynamic> _userResult = Map();
+    try {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
 
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+      final AuthResult authResult =
+          await _auth.signInWithCredential(credential);
+      final FirebaseUser user = authResult.user;
 
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
-    return '$user';
+      final FirebaseUser currentUser = await _auth.currentUser();
+      assert(user.uid == currentUser.uid);
+
+      _userResult['user_id'] = user.uid;
+      _userResult['user_email'] = user.email;
+      _userResult['user_name'] = user.displayName;
+      _userResult['user_photo'] = user.photoUrl;
+      _userResult['source'] = credential.providerId;
+    } catch (error) {
+      print(error);
+    }
+
+    return _userResult;
   }
 
-  Future<void> signOutGoogle() async {}
+  Future<Null> signOutGoogle() async {
+    await googleSignIn.signOut();
+    await _auth.signOut();
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    sf.clear();
+  }
+
+  Future<Null> facebookLogout() async {
+    await facebookLogin.logOut();
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    sf.clear();
+  }
 }

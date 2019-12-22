@@ -5,13 +5,12 @@ import 'package:localin/presentation/booking/booking_detail_page.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
 import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
 import 'package:localin/presentation/home/widget/search_form_widget.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:provider/provider.dart';
 import '../../themes.dart';
 
 class HomePage extends StatefulWidget {
-  final Map user;
-  HomePage({this.user});
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -38,7 +37,6 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             HeaderContentCard(
-              user: widget.user,
               onPressed: () {
                 setState(() {
                   isSearchPage = !isSearchPage;
@@ -80,12 +78,12 @@ class SearchHotelContent extends StatelessWidget {
 
 class HeaderContentCard extends StatelessWidget {
   final Function onPressed;
-  final Map user;
 
-  HeaderContentCard({this.onPressed, this.user});
+  HeaderContentCard({this.onPressed});
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<AuthProvider>(context);
     return Stack(
       fit: StackFit.loose,
       overflow: Overflow.visible,
@@ -120,7 +118,7 @@ class HeaderContentCard extends StatelessWidget {
                   : CircleAvatar(
                       radius: 25.0,
                       backgroundImage:
-                          NetworkImage('${user['picture']['data']['url']}'),
+                          NetworkImage('${user.userModel.imageProfile}'),
                     ),
               SizedBox(width: 15.0),
               Column(
@@ -129,7 +127,7 @@ class HeaderContentCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        user['name'],
+                        user.userModel.username,
                         style: kValueStyle.copyWith(fontSize: 18.0),
                       ),
                       SizedBox(

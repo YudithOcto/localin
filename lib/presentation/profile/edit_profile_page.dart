@@ -5,7 +5,9 @@ import 'package:localin/presentation/profile/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/presentation/profile/profile_row_card.dart';
 import 'package:localin/presentation/profile/row_connect_dana.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../themes.dart';
 
@@ -18,6 +20,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
+    var authState = Provider.of<AuthProvider>(context);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -49,7 +52,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       width: 80.0,
                     ),
                     Text(
-                      'mail@example.com',
+                      '${authState.userModel.email.isNotEmpty ? authState.userModel.email : ''}',
                       style: Constants.kValueStyle,
                     )
                   ],
@@ -70,6 +73,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       child: Container(
                         height: 30.0,
                         child: TextFormField(
+                          initialValue: authState.userModel.email.isNotEmpty
+                              ? authState.userModel.email
+                              : '',
+                          style: TextStyle(fontSize: 12.0, color: Colors.black),
                           decoration: InputDecoration(
                               labelText: 'Display Name',
                               enabledBorder: OutlineInputBorder(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:localin/api/social_sign_in.dart';
+import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../themes.dart';
 
@@ -16,6 +20,7 @@ class ProfileRowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 0.2;
+    var authState = Provider.of<AuthProvider>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -24,20 +29,25 @@ class ProfileRowCard extends StatelessWidget {
           height: height,
           child: Stack(
             overflow: Overflow.visible,
+            alignment: FractionalOffset.center,
             children: <Widget>[
               Positioned(
-                left: 0.0,
-                right: 0.0,
                 top: 20.0,
-                child: CircleAvatar(
-                  radius: 50.0,
-                  backgroundColor: Colors.grey,
-                  child: Icon(
-                    Icons.person,
-                    size: 50.0,
-                    color: Colors.white,
-                  ),
-                ),
+                child: authState.userModel.imageProfile.isNotEmpty
+                    ? CircleAvatar(
+                        radius: 50.0,
+                        backgroundImage:
+                            NetworkImage(authState.userModel.imageProfile),
+                      )
+                    : CircleAvatar(
+                        radius: 50.0,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person,
+                          size: 50.0,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
               Positioned(
                 bottom: 25.0,
@@ -63,7 +73,7 @@ class ProfileRowCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Jhon Thor',
+                        '${authState.userModel.username.isNotEmpty ? authState.userModel.username : ''}',
                         style: TextStyle(
                             fontSize: 20.0,
                             color: Colors.black,
@@ -110,6 +120,81 @@ class ProfileRowCard extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+              Positioned(
+                right: 0.0,
+                top: 5.0,
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Logout'),
+                            content: Text('Are you sure you want to log out?'),
+                            actions: <Widget>[
+                              RaisedButton(
+                                elevation: 4.0,
+                                color: Themes.primaryBlue,
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: Colors.white),
+                                ),
+                              ),
+                              RaisedButton(
+                                elevation: 4.0,
+                                color: Colors.grey,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  if (authState.userModel.source ==
+                                      'facebook') {
+                                    SocialSignIn().facebookLogout();
+                                  } else {
+                                    SocialSignIn().signOutGoogle();
+                                  }
+                                  Navigator.of(context).pushReplacementNamed(
+                                      LoginPage.routeName);
+                                },
+                                child: Text(
+                                  'Ok',
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Themes.primaryBlue,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            bottomLeft: Radius.circular(30.0))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.power_settings_new,
+                            color: Colors.white,
+                            size: 20.0,
+                          ),
+                          SizedBox(
+                            width: 4.0,
+                          ),
+                          Text(
+                            'LOGOUT',
+                            style:
+                                TextStyle(fontSize: 12.0, color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               )
             ],
           ),
@@ -125,9 +210,9 @@ class ProfileRowCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                gridColumnDetail('Posts', '3959'),
-                gridColumnDetail('Views', '8k'),
-                gridColumnDetail('Points', '443'),
+                gridColumnDetail('Posts', '0'),
+                gridColumnDetail('Views', '0'),
+                gridColumnDetail('Points', '0'),
               ],
             ),
           ),

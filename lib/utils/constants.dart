@@ -38,6 +38,9 @@ const kLargeRandomWords = 'Lorem ipsum dolor sit amet, '
     'Fusce nec tristique metus. Ut malesuada lacus ex, ut finibus lacus vulputate '
     'sit amet. Proin vitae massa et enim suscipit volutpat ac quis est.';
 
+const kUserCache = 'UserModelCache';
+const kFacebookExpired = 'facebookExpired';
+
 class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'
