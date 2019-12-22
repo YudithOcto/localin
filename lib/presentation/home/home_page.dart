@@ -9,6 +9,9 @@ import 'package:localin/presentation/profile/profile_page.dart';
 import '../../themes.dart';
 
 class HomePage extends StatefulWidget {
+  final Map user;
+  HomePage({this.user});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -35,6 +38,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             HeaderContentCard(
+              user: widget.user,
               onPressed: () {
                 setState(() {
                   isSearchPage = !isSearchPage;
@@ -76,8 +80,9 @@ class SearchHotelContent extends StatelessWidget {
 
 class HeaderContentCard extends StatelessWidget {
   final Function onPressed;
+  final Map user;
 
-  HeaderContentCard({this.onPressed});
+  HeaderContentCard({this.onPressed, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +109,19 @@ class HeaderContentCard extends StatelessWidget {
           left: 20.0,
           child: Row(
             children: <Widget>[
-              CircleAvatar(
-                radius: 20.0,
-                child: Icon(
-                  Icons.person,
-                  size: 20.0,
-                ),
-              ),
+              user == null
+                  ? CircleAvatar(
+                      radius: 20.0,
+                      child: Icon(
+                        Icons.person,
+                        size: 20.0,
+                      ),
+                    )
+                  : CircleAvatar(
+                      radius: 25.0,
+                      backgroundImage:
+                          NetworkImage('${user['picture']['data']['url']}'),
+                    ),
               SizedBox(width: 15.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +129,7 @@ class HeaderContentCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        'John Thor',
+                        user['name'],
                         style: kValueStyle.copyWith(fontSize: 18.0),
                       ),
                       SizedBox(

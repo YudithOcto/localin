@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class FacilitiesModel {
   String title;
   String icon;

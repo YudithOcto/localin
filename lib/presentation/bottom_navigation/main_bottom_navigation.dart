@@ -5,7 +5,6 @@ import 'package:localin/presentation/community/community_feed.dart';
 import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/presentation/search/search_page.dart';
 import 'floating_action_bottom_app_bar.dart';
 
 class MainBottomNavigation extends StatefulWidget {
@@ -27,13 +26,19 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final user = routeArgs['user'];
+    print(user);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         body: PageView(
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            HomePage(),
+            HomePage(
+              user: user,
+            ),
             CommunityPage(),
             ArticleDetailPage(),
             NotificationListPage(),

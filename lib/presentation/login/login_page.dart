@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/api/social_sign_in.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 
 class LoginPage extends StatefulWidget {
@@ -30,7 +31,11 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             child: RaisedButton(
               elevation: 5.0,
-              onPressed: () {},
+              onPressed: () async {
+                var signin = await SocialSignIn().signInFacebook();
+                Navigator.of(context).pushNamed(MainBottomNavigation.routeName,
+                    arguments: {'user': signin});
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0)),
               color: Colors.blueAccent,
@@ -99,8 +104,13 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             child: RaisedButton(
               elevation: 5.0,
-              onPressed: () {
-                Navigator.of(context).pushNamed(MainBottomNavigation.routeName);
+              onPressed: () async {
+                var result = await SocialSignIn().signInWithGoogle();
+                if (result.isNotEmpty) {
+                  Navigator.of(context)
+                      .pushNamed(MainBottomNavigation.routeName);
+                }
+                //
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0)),
