@@ -10,6 +10,7 @@ class RoundedButtonFill extends StatelessWidget {
   final double fontSize;
   final bool needCenter;
   final double height;
+  final FontWeight fontWeight;
 
   RoundedButtonFill(
       {@required this.onPressed,
@@ -18,6 +19,7 @@ class RoundedButtonFill extends StatelessWidget {
       this.titleColor = Colors.white,
       this.backgroundColor = Themes.primaryBlue,
       this.needCenter = false,
+      this.fontWeight = FontWeight.w500,
       this.fontSize = 12.0});
 
   @override
@@ -38,7 +40,7 @@ class RoundedButtonFill extends StatelessWidget {
                 color: titleColor,
                 fontSize: fontSize,
                 letterSpacing: -.5,
-                fontWeight: FontWeight.w500),
+                fontWeight: fontWeight),
           ),
         ),
       ),

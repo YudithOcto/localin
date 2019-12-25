@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
-import 'package:localin/presentation/booking/booking_detail_page.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
 import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
 import 'package:localin/presentation/home/widget/search_form_widget.dart';
@@ -91,7 +90,7 @@ class HeaderContentCard extends StatelessWidget {
         InkWell(
           onTap: () {
             //Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
-            Navigator.of(context).pushNamed(BookingDetailPage.routeName);
+            //Navigator.of(context).pushNamed(BookingDetailPage.routeName);
           },
           child: Container(
             width: double.infinity,
@@ -105,49 +104,53 @@ class HeaderContentCard extends StatelessWidget {
         Positioned(
           bottom: -20.0,
           left: 20.0,
-          child: Row(
-            children: <Widget>[
-              user == null
-                  ? CircleAvatar(
-                      radius: 20.0,
-                      child: Icon(
-                        Icons.person,
-                        size: 20.0,
-                      ),
-                    )
-                  : CircleAvatar(
-                      radius: 25.0,
-                      backgroundImage:
-                          NetworkImage('${user.userModel.imageProfile}'),
-                    ),
-              SizedBox(width: 15.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        user.userModel.username,
-                        style: kValueStyle.copyWith(fontSize: 18.0),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        Icons.verified_user,
-                        color: Themes.primaryBlue,
-                        size: 15.0,
+          child: FadeAnimation(
+            fadeDirection: FadeDirection.top,
+            delay: 0.8,
+            child: Row(
+              children: <Widget>[
+                user == null
+                    ? CircleAvatar(
+                        radius: 20.0,
+                        child: Icon(
+                          Icons.person,
+                          size: 20.0,
+                        ),
                       )
-                    ],
-                  ),
-                  Text(
-                    'Mau ngapain hari ini',
-                    style: kValueStyle.copyWith(
-                        fontSize: 16.0, color: Colors.black54),
-                  )
-                ],
-              )
-            ],
+                    : CircleAvatar(
+                        radius: 25.0,
+                        backgroundImage:
+                            NetworkImage('${user.userModel.imageProfile}'),
+                      ),
+                SizedBox(width: 15.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          user.userModel.username,
+                          style: kValueStyle.copyWith(fontSize: 18.0),
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Icon(
+                          Icons.verified_user,
+                          color: Themes.primaryBlue,
+                          size: 15.0,
+                        )
+                      ],
+                    ),
+                    Text(
+                      'Mau ngapain hari ini',
+                      style: kValueStyle.copyWith(
+                          fontSize: 16.0, color: Colors.black54),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
         Positioned(

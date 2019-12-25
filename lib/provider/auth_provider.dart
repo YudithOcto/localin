@@ -22,11 +22,13 @@ class AuthProvider extends BaseModelProvider {
     setState(ViewState.Busy);
     UserBaseModel signInToApiResult;
     var signInFacebookResult = await SocialSignIn().signInFacebook();
-    if (signInFacebookResult != null) {
+    if (signInFacebookResult != null && signInFacebookResult.length > 1) {
       signInToApiResult =
           await getUserFromApi(UserRequest.fromJson(signInFacebookResult));
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
+    } else {
+      errorMessage = signInFacebookResult['error'];
     }
     setState(ViewState.Idle);
     return userModel;
@@ -36,11 +38,13 @@ class AuthProvider extends BaseModelProvider {
     setState(ViewState.Busy);
     UserBaseModel signInToApiResult;
     var signInGoogleResult = await SocialSignIn().signInWithGoogle();
-    if (signInGoogleResult != null) {
+    if (signInGoogleResult != null && signInGoogleResult.length > 1) {
       signInToApiResult =
           await getUserFromApi(UserRequest.fromJson(signInGoogleResult));
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
+    } else {
+      errorMessage = signInGoogleResult['error'];
     }
     setState(ViewState.Idle);
     return userModel;
@@ -54,6 +58,7 @@ class AuthProvider extends BaseModelProvider {
       model = UserModel.fromJson(jsonDecode(sf.getString(kUserCache)));
       if (model != null) {
         userModel = model;
+        notifyListeners();
       }
     }
     if (facebookExpiredCache != null) {
@@ -65,5 +70,22 @@ class AuthProvider extends BaseModelProvider {
       }
     }
     return model;
+  }
+
+  void setUserModel(UserModel model) {
+    this.userModel = model;
+    notifyListeners();
+  }
+
+  Future<String> signOutFacebook() async {
+    await SocialSignIn().facebookLogout();
+    var result = await _repository.userLogout();
+    return result;
+  }
+
+  Future<String> signOutGoogle() async {
+    await SocialSignIn().signOutGoogle();
+    var result = await _repository.userLogout();
+    return result;
   }
 }

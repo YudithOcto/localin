@@ -10,6 +10,7 @@ class UserModel {
   String apiToken;
   String username;
   String email;
+  String error;
 
   UserModel(
       {this.id,
@@ -22,6 +23,7 @@ class UserModel {
       this.source,
       this.apiToken,
       this.username,
+      this.error,
       this.email});
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
@@ -38,6 +40,10 @@ class UserModel {
       username: body['nama'],
       email: body['email'],
     );
+  }
+
+  factory UserModel.withError(String value) {
+    return UserModel(error: value);
   }
 
   Map<String, dynamic> toJson() {

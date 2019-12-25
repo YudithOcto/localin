@@ -12,9 +12,10 @@ import 'package:localin/presentation/error_page/page_404.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/login/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
-import 'package:localin/presentation/profile/connect_dana_account_page.dart';
+import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/edit_profile_page.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/provider/home/home_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AuthProvider>(
           create: (_) => AuthProvider(),
         ),
+        ChangeNotifierProvider<HomeProvider>(
+          create: (_) => HomeProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'Localin App',

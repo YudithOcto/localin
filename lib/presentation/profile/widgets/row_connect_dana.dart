@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
-import 'package:localin/utils/constants.dart';
-
-import '../../themes.dart';
 
 class RowConnectDana extends StatelessWidget {
   final Function onPressed;

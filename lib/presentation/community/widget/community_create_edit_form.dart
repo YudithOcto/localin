@@ -111,11 +111,11 @@ class _CommunityCreateEditFormState extends State<CommunityCreateEditForm> {
               height: 15.0,
             ),
             Visibility(
-              visible: widget.isUpdatePage,
+              visible: !widget.isUpdatePage,
               child: dashBorderBig(),
             ),
             Visibility(
-              visible: widget.isUpdatePage,
+              visible: !widget.isUpdatePage,
               child: SizedBox(
                 height: 15.0,
               ),

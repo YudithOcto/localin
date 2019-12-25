@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
-import '../../themes.dart';
+import '../../../themes.dart';
 
 class ConnectDanaAccountPage extends StatefulWidget {
   static const routeName = '/connectDana';

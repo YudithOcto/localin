@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/profile/widgets/single_card.dart';
+import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 const kTitleStyle = TextStyle(
     fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
@@ -16,23 +18,49 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 5.0,
-        backgroundColor: Theme.of(context).canvasColor,
-        title: Image.asset(
-          'images/app_bar_logo.png',
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: 50.0,
+    return ChangeNotifierProvider<UserProfileProvider>(
+      create: (_) => UserProfileProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 5.0,
+          backgroundColor: Theme.of(context).canvasColor,
+          title: Image.asset(
+            'images/app_bar_logo.png',
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: 50.0,
+          ),
         ),
+        body: Content(),
       ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return SingleCard(index);
-        },
-      ),
+    );
+  }
+}
+
+class Content extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var state = Provider.of<UserProfileProvider>(context, listen: false);
+    return FutureBuilder(
+      future: state.getUserArticle(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Consumer<UserProfileProvider>(
+            builder: (_, state, child) {
+              return ListView.builder(
+                itemCount: state.article != null && state.article.isNotEmpty
+                    ? state.article.length
+                    : 0,
+                itemBuilder: (context, index) {
+                  return SingleCard(index, state.article);
+                },
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

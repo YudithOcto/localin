@@ -1,5 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
+import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
+import 'package:localin/model/user/user_model.dart';
 import 'package:localin/model/user/user_request.dart';
 
 class Repository {
@@ -7,5 +12,34 @@ class Repository {
 
   Future<UserBaseModel> getUserLogin(UserRequest userRequest) async {
     return apiProvider.getUserData(userRequest.toJson());
+  }
+
+  Future<String> userLogout() async {
+    return apiProvider.userLogout();
+  }
+
+  Future<UserModel> getUserProfile() async {
+    return apiProvider.getUserProfile();
+  }
+
+  Future<UpdateProfileModel> verifyUserAccount() async {
+    return apiProvider.verifyUserAccount();
+  }
+
+  Future<ArticleBaseResponse> getUserArticle() async {
+    return apiProvider.getUserArticle();
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityList() async {
+    return apiProvider.getCommunityList();
+  }
+
+  Future<CommunityDetailBaseResponse> createCommunity(FormData data) async {
+    return apiProvider.createCommunity(data);
+  }
+
+  Future<CommunityDetailBaseResponse> editCommunity(
+      FormData data, String communityId) async {
+    return apiProvider.editCommunity(data, communityId);
   }
 }

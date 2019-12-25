@@ -2,7 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_constant.dart';
+import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/community/community_base_response_category.dart';
+import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
+import 'package:localin/model/user/user_model.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +19,8 @@ class ApiProvider {
     getOptionRequest();
     setupLoggingInterceptor();
   }
+
+  /// BASE REQUEST RELATED
 
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
@@ -41,8 +48,9 @@ class ApiProvider {
         errorDescription = "Receive timeout in connection with API server";
         break;
       case DioErrorType.RESPONSE:
-        errorDescription =
-            "Received invalid status code: ${error.response.statusCode}";
+        errorDescription = error.response.data != null
+            ? convertResponseErrorMessage(error.response.data)
+            : 'Request failed with status cide ${error.response.statusCode}';
         break;
       case DioErrorType.SEND_TIMEOUT:
         errorDescription = "Request to API Timeout";
@@ -54,11 +62,16 @@ class ApiProvider {
     return errorDescription;
   }
 
+  String convertResponseErrorMessage(Map<String, dynamic> body) {
+    return body['message'];
+  }
+
   void setupLoggingInterceptor() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _dio.interceptors.add(InterceptorsWrapper(onRequest: (Options options) {
+    _dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (Options options) async {
       if (options.headers.containsKey("requiredToken")) {
-        String token = prefs.getString('kUserCache');
+        String token = await getToken();
+        options.headers.clear();
         var header = {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -68,11 +81,17 @@ class ApiProvider {
     }));
   }
 
+  getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
+    return model.apiToken;
+  }
+
+  /// API RELATED
+
   Future<UserBaseModel> getUserData(var bodyRequest) async {
     try {
-      var response = await _dio.post(ApiConstant.kLoginUrl,
-          data: bodyRequest,
-          options: Options(headers: {'requiredToken': false}));
+      var response = await _dio.post(ApiConstant.kLoginUrl, data: bodyRequest);
       var baseModel = UserBaseModel.fromJson(response.data);
       sharedPreferences.setString(
           kUserCache, jsonEncode(baseModel.userModel.toJson()));
@@ -82,6 +101,131 @@ class ApiProvider {
         return UserBaseModel.withError(_handleError(error));
       } else {
         return UserBaseModel(error: error);
+      }
+    }
+  }
+
+  Future<String> userLogout() async {
+    try {
+      var response = await _dio.get(ApiConstant.kLogoutUrl,
+          options: Options(headers: {'requiredToken': true}));
+      sharedPreferences.clear();
+      return response.toString();
+    } catch (error) {
+      if (error is DioError) {
+        String logout = convertResponseErrorMessage(error.response.data);
+        if (logout.contains('Success logout')) {
+          sharedPreferences.clear();
+        }
+        return _handleError(error);
+      } else {
+        return error.toString();
+      }
+    }
+  }
+
+  Future<UserModel> getUserProfile() async {
+    try {
+      var response = await _dio.get(ApiConstant.kProfile,
+          options: Options(headers: {'requiredToken': true}));
+      var model = UserModel.fromJson(response.data);
+      sharedPreferences.setString(kUserCache, jsonEncode(model.toJson()));
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return UserModel.withError(_handleError(error));
+      } else {
+        return UserModel.withError(error);
+      }
+    }
+  }
+
+  Future<UpdateProfileModel> verifyUserAccount() async {
+    try {
+      var response = await _dio.get(ApiConstant.kVerifyAccount,
+          options: Options(headers: {'requiredToken': true}));
+      var model = UpdateProfileModel.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return UpdateProfileModel.errorJson(_handleError(error));
+      } else {
+        return UpdateProfileModel.errorJson(error);
+      }
+    }
+  }
+
+  Future<ArticleBaseResponse> getUserArticle() async {
+    try {
+      var response = await _dio.get(ApiConstant.kUserArticle,
+          options: Options(headers: {'requiredToken': true}));
+      var model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityList() async {
+    try {
+      var response = await _dio.get(ApiConstant.kCommunity,
+          options: Options(headers: {'requiredToken': true}));
+      var model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<CommunityBaseResponseCategory> searchCommunityCategory(
+      String search) async {
+    try {
+      var response = await _dio.get(ApiConstant.kSearchCategory,
+          queryParameters: {'keyword': search},
+          options: Options(headers: {'requiredToken': true}));
+      var model = CommunityBaseResponseCategory.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityBaseResponseCategory.withError(_handleError(error));
+      } else {
+        return CommunityBaseResponseCategory.withError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> createCommunity(FormData form) async {
+    try {
+      var response = await _dio.post(ApiConstant.kCreateCommunity, data: form);
+      return CommunityDetailBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> editCommunity(
+      FormData form, String communityID) async {
+    try {
+      var response = await _dio
+          .post('${ApiConstant.kEditCommunity}$communityID', data: form);
+      return CommunityDetailBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
       }
     }
   }

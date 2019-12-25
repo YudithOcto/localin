@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:localin/api/social_sign_in.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../themes.dart';
+import '../../../themes.dart';
 
-class ProfileRowCard extends StatelessWidget {
+class ProfilePageRowCard extends StatelessWidget {
   final kTitleStyle = TextStyle(
       fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
 
@@ -14,13 +13,12 @@ class ProfileRowCard extends StatelessWidget {
       fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
 
   final Function onSettingPressed;
-  final bool isEditProfile;
-  ProfileRowCard({this.onSettingPressed, this.isEditProfile});
 
+  ProfilePageRowCard({this.onSettingPressed});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 0.2;
-    var authState = Provider.of<AuthProvider>(context);
+    var authState = Provider.of<AuthProvider>(context, listen: false);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -52,14 +50,11 @@ class ProfileRowCard extends StatelessWidget {
               Positioned(
                 bottom: 25.0,
                 right: 140.0,
-                child: Visibility(
-                  visible: !isEditProfile,
-                  child: InkWell(
-                    onTap: onSettingPressed,
-                    child: Icon(
-                      Icons.settings,
-                      color: Themes.primaryBlue,
-                    ),
+                child: InkWell(
+                  onTap: onSettingPressed,
+                  child: Icon(
+                    Icons.settings,
+                    color: Themes.primaryBlue,
                   ),
                 ),
               ),
@@ -67,66 +62,36 @@ class ProfileRowCard extends StatelessWidget {
                 left: 20.0,
                 right: 0.0,
                 bottom: -10.0,
-                child: Visibility(
-                  visible: !isEditProfile,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '${authState.userModel.username.isNotEmpty ? authState.userModel.username : ''}',
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        Icons.verified_user,
-                        size: 20.0,
-                        color: Themes.primaryBlue,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 25.0,
-                left: 0.0,
-                right: 0.0,
-                child: Align(
-                  alignment: FractionalOffset.center,
-                  child: Visibility(
-                    visible: isEditProfile,
-                    child: Container(
-                      width: 100.0,
-                      decoration: BoxDecoration(
-                          color: Themes.primaryBlue,
-                          borderRadius: BorderRadius.circular(6.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12.0, vertical: 4.0),
-                        child: Text(
-                          'Change',
-                          textAlign: TextAlign.center,
-                          style: kValueStyle.copyWith(
-                              color: Colors.white,
-                              fontSize: 12.0,
-                              letterSpacing: -.5,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '${authState.userModel.username.isNotEmpty ? authState.userModel.username : ''}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    authState.userModel.status == 'verified_identitas'
+                        ? Icon(
+                            Icons.verified_user,
+                            size: 20.0,
+                            color: Themes.primaryBlue,
+                          )
+                        : Container()
+                  ],
                 ),
               ),
               Positioned(
                 right: 0.0,
                 top: 5.0,
                 child: InkWell(
-                  onTap: () {
-                    showDialog(
+                  onTap: () async {
+                    var logout = await showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
@@ -147,15 +112,7 @@ class ProfileRowCard extends StatelessWidget {
                                 elevation: 4.0,
                                 color: Colors.grey,
                                 onPressed: () {
-                                  Navigator.of(context).pop();
-                                  if (authState.userModel.source ==
-                                      'facebook') {
-                                    SocialSignIn().facebookLogout();
-                                  } else {
-                                    SocialSignIn().signOutGoogle();
-                                  }
-                                  Navigator.of(context).pushReplacementNamed(
-                                      LoginPage.routeName);
+                                  Navigator.of(context).pop('success');
                                 },
                                 child: Text(
                                   'Ok',
@@ -166,6 +123,25 @@ class ProfileRowCard extends StatelessWidget {
                             ],
                           );
                         });
+                    if (logout != null && logout == 'success') {
+                      if (authState.userModel.source == 'facebook.com') {
+                        var result = await authState.signOutFacebook();
+                        if (result == 'Success logout') {
+                          Navigator.of(context)
+                              .pushReplacementNamed(LoginPage.routeName);
+                        } else {
+                          showErrorMessageDialog(context, result);
+                        }
+                      } else {
+                        var result = await authState.signOutGoogle();
+                        if (result.contains('Success logout')) {
+                          Navigator.of(context)
+                              .pushReplacementNamed(LoginPage.routeName);
+                        } else {
+                          showErrorMessageDialog(context, result);
+                        }
+                      }
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -199,26 +175,42 @@ class ProfileRowCard extends StatelessWidget {
             ],
           ),
         ),
-        Visibility(
-          visible: !isEditProfile,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
-            height: 55.0,
-            decoration: BoxDecoration(
-                border: Border.all(color: Themes.primaryBlue),
-                borderRadius: BorderRadius.circular(8.0)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                gridColumnDetail('Posts', '0'),
-                gridColumnDetail('Views', '0'),
-                gridColumnDetail('Points', '0'),
-              ],
-            ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+          height: 55.0,
+          decoration: BoxDecoration(
+              border: Border.all(color: Themes.primaryBlue),
+              borderRadius: BorderRadius.circular(8.0)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              gridColumnDetail('Posts', '0'),
+              gridColumnDetail('Views', '0'),
+              gridColumnDetail('Points', '0'),
+            ],
           ),
         ),
       ],
     );
+  }
+
+  void showErrorMessageDialog(BuildContext context, String error) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Login'),
+            content: Text(error),
+            actions: <Widget>[
+              RaisedButton(
+                elevation: 5.0,
+                color: Themes.primaryBlue,
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Ok'),
+              )
+            ],
+          );
+        });
   }
 
   Widget gridColumnDetail(String title, String value) {

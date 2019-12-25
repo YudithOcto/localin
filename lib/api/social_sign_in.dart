@@ -35,10 +35,14 @@ class SocialSignIn {
         break;
 
       case FacebookLoginStatus.cancelledByUser:
-        return null;
+        Map<String, dynamic> _userResult = Map();
+        _userResult['error'] = 'Cancelled';
+        return _userResult;
         break;
       case FacebookLoginStatus.error:
-        return null;
+        Map<String, dynamic> _userResult = Map();
+        _userResult['error'] = 'Sign in error';
+        return _userResult;
         break;
     }
     return null;
@@ -72,22 +76,19 @@ class SocialSignIn {
       _userResult['user_photo'] = user.photoUrl;
       _userResult['source'] = credential.providerId;
     } catch (error) {
-      print(error);
+      _userResult['error'] = 'Authentication failed';
     }
 
     return _userResult;
   }
 
   Future<Null> signOutGoogle() async {
-    await googleSignIn.signOut();
+    var result = await googleSignIn.signOut();
+    print(result);
     await _auth.signOut();
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    sf.clear();
   }
 
   Future<Null> facebookLogout() async {
     await facebookLogin.logOut();
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    sf.clear();
   }
 }

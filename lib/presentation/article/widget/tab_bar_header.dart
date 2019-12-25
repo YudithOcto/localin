@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/widget/TabsViewDynamic.dart';
 import 'package:localin/presentation/article/widget/article_comment_page.dart';
-import 'package:localin/presentation/article/widget/banner_article.dart';
 import 'package:localin/presentation/article/widget/article_reader_page.dart';
-import 'package:localin/presentation/profile/row_connect_dana.dart';
-
 import '../../../themes.dart';
 
 class TabBarHeader extends StatefulWidget {

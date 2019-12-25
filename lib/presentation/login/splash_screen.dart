@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero).then((value) async {
+    Future.delayed(Duration(seconds: 2)).then((value) async {
       var userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
       if (userCache != null) {

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/article/article_detail_provider.dart';
+import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 class RowHeaderArticle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var state = Provider.of<ArticleDetailProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
@@ -13,14 +17,14 @@ class RowHeaderArticle extends StatelessWidget {
             height: 5.0,
           ),
           Text(
-            'Source: Tangerang Online (Antara Foto/Fadli)',
+            'Source: ${state.articleModel.author}',
             style: kValueStyle.copyWith(color: Colors.grey, fontSize: 10.0),
           ),
           SizedBox(
             height: 15.0,
           ),
           Text(
-            'Kali Jalan Aria Putra Ciputat Sudak Sepekan Banyak Sampah, Keluarkan Bau Menyengat',
+            '${state.articleModel.title}',
             style: kValueStyle.copyWith(fontSize: 20.0),
           ),
           SizedBox(
@@ -31,7 +35,7 @@ class RowHeaderArticle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Senin, 12 agustus 2019',
+                '${DateHelper.formatDateFromApi(state.articleModel.createdAt)}',
                 style:
                     kValueStyle.copyWith(fontSize: 10.0, color: Colors.black45),
               ),
