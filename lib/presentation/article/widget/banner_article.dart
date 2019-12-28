@@ -14,13 +14,14 @@ class BannerArticle extends StatelessWidget {
             left: 0.0,
             right: 0.0,
             top: 0.0,
-            child: state.articleModel.image != null
+            child: state?.articleModel?.image != null
                 ? Hero(
                     tag: state.articleModel.image,
                     child: Image.network(
                       state.articleModel.image,
                       width: double.infinity,
                       height: MediaQuery.of(context).size.height * 0.3,
+                      fit: BoxFit.cover,
                     ),
                   )
                 : Container(

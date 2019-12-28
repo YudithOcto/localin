@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_profile.dart';
 import 'package:localin/presentation/community/widget/community_star_indicator.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
@@ -7,14 +8,19 @@ import 'package:localin/utils/star_display.dart';
 import '../../../themes.dart';
 
 class CommunityCardWidget extends StatelessWidget {
+  final List<CommunityDetail> detailList;
+
+  CommunityCardWidget({this.detailList});
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 10.0),
       child: Column(
-        children: List.generate(3, (index) {
+        children:
+            List.generate(detailList != null ? detailList.length : 0, (index) {
           return SingleCommunityCard(
-            total: 2,
+            total: detailList != null ? detailList.length : 0,
+            detail: detailList[index],
           );
         }),
       ),
@@ -24,8 +30,9 @@ class CommunityCardWidget extends StatelessWidget {
 
 class SingleCommunityCard extends StatelessWidget {
   final int total;
+  final CommunityDetail detail;
 
-  SingleCommunityCard({this.total});
+  SingleCommunityCard({this.total, this.detail});
   @override
   Widget build(BuildContext context) {
     if (total == 1) {
@@ -38,7 +45,9 @@ class SingleCommunityCard extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
           child: Column(
             children: <Widget>[
-              UpperCommunityCardRow(),
+              UpperCommunityCardRow(
+                detail: detail,
+              ),
               Container(
                 width: double.infinity,
                 height: 250.0,
@@ -57,7 +66,8 @@ class SingleCommunityCard extends StatelessWidget {
     } else {
       return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(CommunityProfile.routeName);
+          Navigator.of(context).pushNamed(CommunityProfile.routeName,
+              arguments: {CommunityProfile.communityModel: null});
         },
         child: Container(
           width: double.infinity,
@@ -67,7 +77,9 @@ class SingleCommunityCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              UpperCommunityCardRow(),
+              UpperCommunityCardRow(
+                detail: detail,
+              ),
               Flexible(
                 child: Row(
                   children: <Widget>[
@@ -119,6 +131,8 @@ class SingleCommunityCard extends StatelessWidget {
 }
 
 class UpperCommunityCardRow extends StatelessWidget {
+  final CommunityDetail detail;
+  UpperCommunityCardRow({this.detail});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -128,19 +142,28 @@ class UpperCommunityCardRow extends StatelessWidget {
         ),
         Row(
           children: <Widget>[
-            Image.asset(
-              'images/community_logo.png',
-              scale: 1.5,
-            ),
+            detail != null && detail.logoUrl != null
+                ? Image.network(
+                    detail?.logoUrl,
+                    width: 50.0,
+                    height: 50.0,
+                  )
+                : Image.asset(
+                    'images/community_logo.png',
+                    scale: 1.5,
+                  ),
             Text(
-              'IT Community',
+              '${detail?.name}',
               style: kValueStyle.copyWith(
                   fontSize: 18.0, color: Themes.primaryBlue),
             ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Icon(Icons.more_vert),
+            Visibility(
+              visible: false,
+              child: Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(Icons.more_vert),
+                ),
               ),
             )
           ],
@@ -175,7 +198,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 2.0),
                   child: Text(
-                    'IT',
+                    '${detail?.categoryName}',
                     style: kValueStyle.copyWith(
                         color: Colors.white,
                         fontSize: 8.0,
@@ -186,7 +209,7 @@ class UpperCommunityCardRow extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  '3980 Mengikuti',
+                  '${detail?.follower} Mengikuti',
                   textAlign: TextAlign.right,
                   style: kValueStyle.copyWith(
                       fontSize: 8.0, color: Themes.primaryBlue),

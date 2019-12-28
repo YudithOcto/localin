@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
-import 'package:localin/presentation/booking/booking_history_page.dart';
 import 'package:localin/presentation/booking/room_detail_page.dart';
+import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/provider/home/home_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'circle_material_button.dart';
 
 class RowQuickMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var state = Provider.of<HomeProvider>(context, listen: false);
     return Container(
       margin: EdgeInsets.only(top: 60.0),
       child: Row(
@@ -20,7 +23,7 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Kamar',
                 onPressed: () {
-                  Navigator.of(context).pushNamed(BookingHistoryPage.routeName);
+                  state.setRoomPage(true);
                 },
                 icon: Icons.hotel,
               ),
@@ -33,7 +36,7 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Event',
                 onPressed: () {
-                  Navigator.of(context).pushNamed(RoomDetailPage.routeName);
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
                 },
                 icon: Icons.confirmation_number,
               ),
@@ -45,7 +48,9 @@ class RowQuickMenu extends StatelessWidget {
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'Atraksi',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                },
                 icon: Icons.beach_access,
               ),
             ),
@@ -56,7 +61,9 @@ class RowQuickMenu extends StatelessWidget {
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'Makan',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                },
                 icon: Icons.restaurant,
               ),
             ),
@@ -67,7 +74,9 @@ class RowQuickMenu extends StatelessWidget {
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'DANA',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                },
                 imageAsset: 'images/quick_dana_logo.png',
               ),
             ),

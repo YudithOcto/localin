@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
-import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
-import 'package:localin/presentation/home/widget/search_form_widget.dart';
-import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/presentation/home/widget/home_header_card.dart';
+import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
+import 'package:localin/provider/home/home_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import '../../themes.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isSearchPage = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,145 +28,41 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            HeaderContentCard(
-              onPressed: () {
-                setState(() {
-                  isSearchPage = !isSearchPage;
-                });
-              },
-            ),
-            isSearchPage ? SearchHotelContent() : HomeContentDefault(),
-          ],
+        child: Consumer<HomeProvider>(
+          builder: (ctx, state, child) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                HomeHeaderCard(),
+                state.isRoomPage ? SearchHotelWidget() : HomeContentDefault(),
+              ],
+            );
+          },
         ),
       ),
     );
   }
-}
 
-class SearchHotelContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SearchFormWidget(),
-        Container(
-          padding: EdgeInsets.only(bottom: 70.0),
-          child: Column(
-            children: List.generate(5, (index) {
-              return FadeAnimation(
-                delay: 0.5,
-                fadeDirection: FadeDirection.bottom,
-                child: HomeContentSearchHotel(
-                  index: index,
+  getLocation() async {
+    var result = await Provider.of<HomeProvider>(context).locationPermission();
+    if (result.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text('You need to activate GPS'),
+              actions: <Widget>[
+                RaisedButton(
+                  elevation: 5.0,
+                  child: Text('Ok'),
+                  onPressed: () {
+                    PermissionHandler().openAppSettings();
+                  },
                 ),
-              );
-            }),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class HeaderContentCard extends StatelessWidget {
-  final Function onPressed;
-
-  HeaderContentCard({this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    var user = Provider.of<AuthProvider>(context);
-    return Stack(
-      fit: StackFit.loose,
-      overflow: Overflow.visible,
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            //Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
-            //Navigator.of(context).pushNamed(BookingDetailPage.routeName);
-          },
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: Image.asset(
-              'images/static_map_image.png',
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: -20.0,
-          left: 20.0,
-          child: FadeAnimation(
-            fadeDirection: FadeDirection.top,
-            delay: 0.8,
-            child: Row(
-              children: <Widget>[
-                user == null
-                    ? CircleAvatar(
-                        radius: 20.0,
-                        child: Icon(
-                          Icons.person,
-                          size: 20.0,
-                        ),
-                      )
-                    : CircleAvatar(
-                        radius: 25.0,
-                        backgroundImage:
-                            NetworkImage('${user.userModel.imageProfile}'),
-                      ),
-                SizedBox(width: 15.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          user.userModel.username,
-                          style: kValueStyle.copyWith(fontSize: 18.0),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Icon(
-                          Icons.verified_user,
-                          color: Themes.primaryBlue,
-                          size: 15.0,
-                        )
-                      ],
-                    ),
-                    Text(
-                      'Mau ngapain hari ini',
-                      style: kValueStyle.copyWith(
-                          fontSize: 16.0, color: Colors.black54),
-                    )
-                  ],
-                )
               ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: -25.0,
-          right: 20.0,
-          child: FloatingActionButton(
-            backgroundColor: Themes.red,
-            onPressed: () {
-              onPressed();
-            },
-            elevation: 5.0,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 40.0,
-            ),
-          ),
-        )
-      ],
-    );
+            );
+          });
+    }
   }
 }

@@ -17,14 +17,14 @@ class RowHeaderArticle extends StatelessWidget {
             height: 5.0,
           ),
           Text(
-            'Source: ${state.articleModel.author}',
+            'Source: ${state?.articleModel?.author}',
             style: kValueStyle.copyWith(color: Colors.grey, fontSize: 10.0),
           ),
           SizedBox(
             height: 15.0,
           ),
           Text(
-            '${state.articleModel.title}',
+            '${state?.articleModel?.title}',
             style: kValueStyle.copyWith(fontSize: 20.0),
           ),
           SizedBox(
@@ -35,7 +35,7 @@ class RowHeaderArticle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '${DateHelper.formatDateFromApi(state.articleModel.createdAt)}',
+                '${DateHelper.formatDateFromApi(state?.articleModel?.createdAt)}',
                 style:
                     kValueStyle.copyWith(fontSize: 10.0, color: Colors.black45),
               ),

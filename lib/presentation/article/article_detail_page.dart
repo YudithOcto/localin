@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/article/article_model.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/widget/banner_article.dart';
 import 'package:localin/presentation/article/widget/row_header_article.dart';
 import 'package:localin/presentation/article/widget/tab_bar_header.dart';
@@ -18,7 +18,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    ArticleModel articleModel = routeArgs[ArticleDetailPage.articleDetailModel];
+    ArticleDetail articleModel =
+        routeArgs[ArticleDetailPage.articleDetailModel];
     return ChangeNotifierProvider<ArticleDetailProvider>(
       create: (_) => ArticleDetailProvider(articleModel),
       child: Scaffold(

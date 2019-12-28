@@ -8,7 +8,8 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/community/community_create_edit_page.dart';
 import 'package:localin/presentation/community/community_create_event_page.dart';
 import 'package:localin/presentation/community/community_profile.dart';
-import 'package:localin/presentation/error_page/page_404.dart';
+import 'package:localin/presentation/community/widget/community_category_search.dart';
+import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/login/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
           EditProfilePage.routeName: (_) => EditProfilePage(),
           ConnectDanaAccountPage.routeName: (_) => ConnectDanaAccountPage(),
           ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
-          Page404.routeName: (_) => Page404(),
+          EmptyPage.routeName: (_) => EmptyPage(),
           CommunityProfile.routeName: (_) => CommunityProfile(),
           CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
           CommunityCreateEventPage.routeName: (_) => CommunityCreateEventPage(),
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
           BookingDetailPage.routeName: (_) => BookingDetailPage(),
           BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
           RoomDetailPage.routeName: (_) => RoomDetailPage(),
+          CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
         },
       ),
     );

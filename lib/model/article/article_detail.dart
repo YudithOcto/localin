@@ -1,6 +1,6 @@
 import 'package:localin/model/article/tag_model.dart';
 
-class ArticleModel {
+class ArticleDetail {
   String title;
   String slug;
   String description;
@@ -11,7 +11,7 @@ class ArticleModel {
   String authorImage;
   List<TagModel> tags;
 
-  ArticleModel(
+  ArticleDetail(
       {this.title,
       this.slug,
       this.description,
@@ -22,9 +22,9 @@ class ArticleModel {
       this.authorImage,
       this.tags});
 
-  factory ArticleModel.fromJson(Map<String, dynamic> body) {
+  factory ArticleDetail.fromJson(Map<String, dynamic> body) {
     List tags = body['tags'];
-    return ArticleModel(
+    return ArticleDetail(
       title: body['judul'],
       slug: body['slug'],
       description: body['deskripsi'],

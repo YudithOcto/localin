@@ -94,6 +94,7 @@ class _FloatingActionBottomAppBarState
                 ),
                 Text(
                   item.text,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: color,
                       fontSize: 10.0,

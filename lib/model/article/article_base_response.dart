@@ -1,10 +1,10 @@
-import 'article_model.dart';
+import 'article_detail.dart';
 
 class ArticleBaseResponse {
   String error;
   String message;
   int total;
-  List<ArticleModel> data;
+  List<ArticleDetail> data;
 
   ArticleBaseResponse({this.error, this.message, this.total, this.data});
 
@@ -13,7 +13,7 @@ class ArticleBaseResponse {
     return ArticleBaseResponse(
       message: body['message'],
       total: body['pagination']['total'],
-      data: article.map((value) => ArticleModel.fromJson(value)).toList(),
+      data: article.map((value) => ArticleDetail.fromJson(value)).toList(),
     );
   }
 

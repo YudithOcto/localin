@@ -5,6 +5,8 @@ import 'package:localin/api/api_constant.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
+import 'package:localin/model/community/community_join_response.dart';
+import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -170,9 +172,27 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityDetailBaseResponse> getCommunityList() async {
+  Future<ArticleBaseResponse> getArticleList() async {
+    try {
+      var response = await _dio.get(ApiConstant.kArticleList,
+          options: Options(headers: {'requiredToken': true}));
+      var model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error);
+      }
+    }
+  }
+
+  /// COMMUNITY
+
+  Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
     try {
       var response = await _dio.get(ApiConstant.kCommunity,
+          queryParameters: {'search': '$search'},
           options: Options(headers: {'requiredToken': true}));
       var model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
@@ -185,26 +205,43 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityBaseResponseCategory> searchCommunityCategory(
+  Future<CommunityDetailBaseResponse> getUserCommunityList() async {
+    try {
+      var response = await _dio.get(ApiConstant.kUserCommunity,
+          options: Options(headers: {'requiredToken': true}));
+      var model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<CommunityBaseResponseCategory> getCategoryListCommunity(
       String search) async {
     try {
       var response = await _dio.get(ApiConstant.kSearchCategory,
           queryParameters: {'keyword': search},
           options: Options(headers: {'requiredToken': true}));
-      var model = CommunityBaseResponseCategory.fromJson(response.data);
+      var data = response.data;
+      var model = CommunityBaseResponseCategory.fromJson(data[0]);
       return model;
     } catch (error) {
       if (error is DioError) {
         return CommunityBaseResponseCategory.withError(_handleError(error));
       } else {
-        return CommunityBaseResponseCategory.withError(error);
+        return CommunityBaseResponseCategory.withError(error.toString());
       }
     }
   }
 
   Future<CommunityDetailBaseResponse> createCommunity(FormData form) async {
     try {
-      var response = await _dio.post(ApiConstant.kCreateCommunity, data: form);
+      var response = await _dio.post(ApiConstant.kCreateCommunity,
+          data: form, options: Options(headers: {'requiredToken': true}));
       return CommunityDetailBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -218,8 +255,10 @@ class ApiProvider {
   Future<CommunityDetailBaseResponse> editCommunity(
       FormData form, String communityID) async {
     try {
-      var response = await _dio
-          .post('${ApiConstant.kEditCommunity}$communityID', data: form);
+      var response = await _dio.post(
+          '${ApiConstant.kEditCommunity}$communityID',
+          data: form,
+          options: Options(headers: {'requiredToken': true}));
       return CommunityDetailBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -227,6 +266,64 @@ class ApiProvider {
       } else {
         return CommunityDetailBaseResponse.hasError(error);
       }
+    }
+  }
+
+  Future<CommunityJoinResponse> joinCommunity(String communityId) async {
+    try {
+      var response = await _dio.get('${ApiConstant.kJoinCommunity}$communityId',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityJoinResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityJoinResponse.withError(_handleError(error));
+      } else {
+        return CommunityJoinResponse.withError(error);
+      }
+    }
+  }
+
+  Future<CommunityMemberResponse> memberCommunity(String communityId) async {
+    try {
+      var response = await _dio.get(
+          '${ApiConstant.kMemberCommunity}$communityId',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityMemberResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityMemberResponse.withError(_handleError(error));
+      } else {
+        return CommunityMemberResponse.withError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityListByCategoryId(
+      String categoryId) async {
+    try {
+      var response = await _dio.get(
+          '${ApiConstant.kSearchCategory}/$categoryId',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityDetailBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<String> postComment(FormData data, String communityId) async {
+    try {
+      var response = await _dio.post(
+          '${ApiConstant.kCommentCommunity}$communityId',
+          data: data,
+          options: Options(headers: {'requiredToken': true}));
+      return response.toString();
+    } catch (error) {
+      print(error);
+      return error;
     }
   }
 }

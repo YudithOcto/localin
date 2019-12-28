@@ -14,7 +14,6 @@ class CommunityDetailBaseResponse {
     return CommunityDetailBaseResponse(
       error: null,
       message: body['message'],
-      total: body['pagination']['total'],
       communityDetail:
           detail.map((value) => CommunityDetail.fromJson(value)).toList(),
     );

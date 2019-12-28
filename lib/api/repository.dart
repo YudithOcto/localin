@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/community/community_join_response.dart';
+import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -30,8 +33,12 @@ class Repository {
     return apiProvider.getUserArticle();
   }
 
-  Future<CommunityDetailBaseResponse> getCommunityList() async {
-    return apiProvider.getCommunityList();
+  Future<ArticleBaseResponse> getArticleList() async {
+    return apiProvider.getArticleList();
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {
+    return apiProvider.getCommunityList(keyword);
   }
 
   Future<CommunityDetailBaseResponse> createCommunity(FormData data) async {
@@ -41,5 +48,27 @@ class Repository {
   Future<CommunityDetailBaseResponse> editCommunity(
       FormData data, String communityId) async {
     return apiProvider.editCommunity(data, communityId);
+  }
+
+  Future<CommunityBaseResponseCategory> getCategoryListCommunity(
+      String search) async {
+    return apiProvider.getCategoryListCommunity(search);
+  }
+
+  Future<CommunityJoinResponse> joinCommunity(String id) async {
+    return apiProvider.joinCommunity(id);
+  }
+
+  Future<CommunityMemberResponse> communityMember(String communityId) async {
+    return apiProvider.memberCommunity(communityId);
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityListByCategory(
+      String categoryId) async {
+    return apiProvider.getCommunityListByCategoryId(categoryId);
+  }
+
+  Future<CommunityDetailBaseResponse> getUserCommunityList() async {
+    return apiProvider.getUserCommunityList();
   }
 }

@@ -1,25 +1,33 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/community/community_category.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
-import 'package:localin/utils/permission_helper.dart';
+import 'package:localin/utils/helper_permission.dart';
 
-class CreateCommunityProvider with ChangeNotifier {
+class CommunityCreateEditProvider with ChangeNotifier {
   Repository _repository = Repository();
-  PermissionHelper _permissionHelper = PermissionHelper();
+  HelperPermission _permissionHelper = HelperPermission();
   File coverImageFile, logoImageFile;
   TextEditingController communityNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String category;
+  TextEditingController categoryController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool autoValidate = false;
+  FocusNode focusNode = FocusNode();
+  CommunityCategory category = CommunityCategory();
+  bool loading = false;
 
   @override
   void dispose() {
-    super.dispose();
     communityNameController.dispose();
     descriptionController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   Future<String> openCamera(bool isIcon) async {
@@ -62,32 +70,63 @@ class CreateCommunityProvider with ChangeNotifier {
 
   Future<CommunityDetailBaseResponse> createCommunity(bool updateCommunity,
       {String communityId}) async {
+    setLoading(true);
     String logoPath = logoImageFile?.path ?? '';
     String coverPath = coverImageFile?.path ?? '';
     FormData formData = FormData.fromMap(
       {
         'nama': communityNameController.text,
-        'kategory': category,
+        'kategory': category.id,
         'deskripsi': descriptionController.text,
-        'logo': MultipartFile.fromFileSync(
-          logoPath,
-          filename: '${communityNameController.text}logo${DateTime.now()}',
-        ),
-        'sampul': MultipartFile.fromFileSync(coverPath,
-            filename: '${communityNameController.text}sampul${DateTime.now()}')
+        'logo': logoPath.isEmpty
+            ? null
+            : MultipartFile.fromFileSync(
+                logoPath,
+                filename:
+                    '${communityNameController.text}logo${DateTime.now()}',
+              ),
+        'sampul': coverPath.isNotEmpty
+            ? MultipartFile.fromFileSync(coverPath,
+                filename:
+                    '${communityNameController.text}sampul${DateTime.now()}')
+            : null
       },
     );
     var response;
     if (updateCommunity) {
       response = await _repository.editCommunity(formData, communityId);
+      setLoading(false);
     } else {
       response = await _repository.createCommunity(formData);
+      setLoading(false);
     }
     return response;
   }
 
-  void setCategory(String value) {
+  void setAutoValidate(bool value) {
+    this.autoValidate = value;
+    notifyListeners();
+  }
+
+  bool validateInput() {
+    var form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else {
+      setAutoValidate(true);
+      return false;
+    }
+  }
+
+  void setCategory(CommunityCategory value) {
+    categoryController.text = value.categoryName;
     this.category = value;
+    notifyListeners();
+  }
+
+  void setLoading(bool loading) {
+    this.loading = loading;
     notifyListeners();
   }
 }

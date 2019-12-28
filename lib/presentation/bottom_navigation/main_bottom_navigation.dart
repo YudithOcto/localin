@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localin/presentation/article/article_detail_page.dart';
-import 'package:localin/presentation/community/community_feed.dart';
+import 'package:localin/presentation/booking/booking_history_page.dart';
+import 'package:localin/presentation/community/community_feed_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/home/home_provider.dart';
+import 'package:provider/provider.dart';
 import 'floating_action_bottom_app_bar.dart';
 
 class MainBottomNavigation extends StatefulWidget {
@@ -33,8 +35,8 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             HomePage(),
-            CommunityPage(),
-            ArticleDetailPage(),
+            CommunityFeedPage(),
+            BookingHistoryPage(),
             NotificationListPage(),
             ProfilePage()
           ],
@@ -54,7 +56,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
             FloatingActionBottomAppBarItem(
                 iconData: 'images/search_logo.png', text: 'Search'),
             FloatingActionBottomAppBarItem(
-                iconData: 'images/article_logo.png', text: 'Article'),
+                iconData: 'images/article_logo.png', text: 'Booking'),
             FloatingActionBottomAppBarItem(
                 iconData: 'images/notification_logo.png', text: 'Notification'),
             FloatingActionBottomAppBarItem(
@@ -88,23 +90,29 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
     if (currentSelected != 0) {
       _selectedTab(0);
     } else {
-      return showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Are you sure?'),
-              content: Text('Do you want to exit app?'),
-              actions: <Widget>[
-                FlatButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text('No')),
-                FlatButton(
-                  onPressed: () => SystemNavigator.pop(),
-                  child: Text('Yes'),
-                )
-              ],
-            ),
-          ) ??
-          false;
+      var state = Provider.of<HomeProvider>(context);
+      if (state.isRoomPage) {
+        state.setRoomPage(false);
+        return null;
+      } else {
+        return showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Are you sure?'),
+                content: Text('Do you want to exit app?'),
+                actions: <Widget>[
+                  FlatButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: Text('No')),
+                  FlatButton(
+                    onPressed: () => SystemNavigator.pop(),
+                    child: Text('Yes'),
+                  )
+                ],
+              ),
+            ) ??
+            false;
+      }
     }
     return null;
   }

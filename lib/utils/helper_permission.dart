@@ -1,6 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 
-class PermissionHelper {
+class HelperPermission {
   Future<bool> checkPermission() async {
     var permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.storage);

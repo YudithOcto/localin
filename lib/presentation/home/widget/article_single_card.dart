@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/article_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/utils/date_helper.dart';
 
 import '../../../themes.dart';
 
 class ArticleSingleCard extends StatelessWidget {
   final int index;
-  ArticleSingleCard(this.index);
+  final ArticleDetail articleDetail;
+  ArticleSingleCard(this.index, this.articleDetail);
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(ArticleDetailPage.routeName),
+      onTap: () => Navigator.of(context).pushNamed(ArticleDetailPage.routeName,
+          arguments: {ArticleDetailPage.articleDetailModel: articleDetail}),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(
@@ -18,9 +22,14 @@ class ArticleSingleCard extends StatelessWidget {
           children: <Widget>[
             upperRow(),
             bigImages(),
-            Text(
-              '#Pembongkaran Makam #Tangerang',
-              style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
+            Row(
+              children: List.generate(articleDetail?.tags?.length, (index) {
+                return Text(
+                  '#${articleDetail?.tags[index]?.tagName}',
+                  style:
+                      kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
+                );
+              }),
             ),
             rowBottomIcon(),
             Divider()
@@ -33,12 +42,19 @@ class ArticleSingleCard extends StatelessWidget {
   Widget upperRow() {
     return Row(
       children: <Widget>[
-        CircleAvatar(
-          radius: 25.0,
-          backgroundImage: AssetImage(
-            'images/article_icon.png',
-          ),
-        ),
+        articleDetail?.authorImage != null
+            ? CircleAvatar(
+                backgroundImage: NetworkImage(
+                  articleDetail?.authorImage,
+                ),
+                radius: 25.0,
+              )
+            : CircleAvatar(
+                radius: 25.0,
+                backgroundImage: AssetImage(
+                  'images/article_icon.png',
+                ),
+              ),
         SizedBox(
           width: 10.0,
         ),
@@ -49,7 +65,7 @@ class ArticleSingleCard extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(right: 20.0),
                 child: Text(
-                  'Kali Jalan Aria Putra Ciputat sudah sepekan Banyak Sampah, Keluarkan Bau Menyengat',
+                  '${articleDetail?.title}',
                   overflow: TextOverflow.ellipsis,
                   style: kValueStyle,
                 ),
@@ -66,7 +82,7 @@ class ArticleSingleCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
-                        'Tangerang Online',
+                        '${articleDetail?.tags?.first?.tagName}',
                         style: kValueStyle.copyWith(
                             color: Colors.white, fontSize: 10.0),
                       ),
@@ -76,9 +92,9 @@ class ArticleSingleCard extends StatelessWidget {
                     width: 5.0,
                   ),
                   Text(
-                    '15 Oktober 2019',
+                    '${DateHelper.formatDateFromApi(articleDetail?.createdAt)}',
                     style: kValueStyle.copyWith(
-                        fontSize: 12.0, color: Colors.black45),
+                        fontSize: 11.0, color: Colors.black45),
                   ),
                   Expanded(
                     child: Container(
@@ -101,10 +117,15 @@ class ArticleSingleCard extends StatelessWidget {
 
   Widget bigImages() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.grey, borderRadius: BorderRadius.circular(8.0)),
+          image: articleDetail?.image != null
+              ? DecorationImage(
+                  image: NetworkImage(articleDetail?.image), fit: BoxFit.cover)
+              : null,
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(8.0)),
       height: 150.0,
     );
   }

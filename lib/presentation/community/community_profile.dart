@@ -6,6 +6,7 @@ import 'package:localin/presentation/article/widget/community_description.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/image_helper.dart';
 import 'package:localin/utils/star_display.dart';
 
 class CommunityProfile extends StatefulWidget {
@@ -19,6 +20,9 @@ class CommunityProfile extends StatefulWidget {
 class _CommunityProfileState extends State<CommunityProfile> {
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    CommunityDetail detail = routeArgs[CommunityProfile.communityModel];
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -28,15 +32,30 @@ class _CommunityProfileState extends State<CommunityProfile> {
                 Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.3,
-                  color: Colors.grey,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    image: detail?.cover != null
+                        ? DecorationImage(
+                            image: NetworkImage(
+                              '${ImageHelper.addSubFixHttp(detail?.cover)}',
+                            ),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
                 ),
                 Positioned(
                   left: 20.0,
                   top: 20.0,
                   child: SafeArea(
-                    child: Icon(
-                      Icons.keyboard_backspace,
-                      color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop('refresh');
+                      },
+                      child: Icon(
+                        Icons.keyboard_backspace,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 )

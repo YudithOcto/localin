@@ -16,7 +16,7 @@ class ArticleReaderPage extends StatelessWidget {
           Container(
             width: double.infinity,
             child: Text(
-              state.articleModel.description,
+              '${state?.articleModel?.description}',
               style:
                   kValueStyle.copyWith(fontSize: 14.0, color: Colors.black54),
             ),

@@ -3,8 +3,8 @@ import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../themes.dart';
 
-class Page404 extends StatelessWidget {
-  static const routeName = '/404page';
+class EmptyPage extends StatelessWidget {
+  static const routeName = '/emptyPage';
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;
@@ -27,6 +27,8 @@ class Page404 extends StatelessWidget {
             alignment: Alignment.center,
             child: Image.asset(
               'images/404_image.png',
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.5,
             ),
           ),
           Text(
@@ -38,7 +40,7 @@ class Page404 extends StatelessWidget {
             height: 5.0,
           ),
           Text(
-            'Oops. sepertinya kamu tersesat',
+            'Oops. Page akan segera datang',
             style: kValueStyle.copyWith(
                 fontSize: 20.0,
                 color: Themes.primaryBlue,

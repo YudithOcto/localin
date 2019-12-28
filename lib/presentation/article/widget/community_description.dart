@@ -17,23 +17,40 @@ class CommunityDescription extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        SizedBox(
+          height: 15.0,
+        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            SizedBox(
+              width: 5.0,
+            ),
             InkWell(
               onTap: () {
                 Navigator.of(context)
                     .pushNamed(CommunityCreateEventPage.routeName);
               },
-              child: Image.asset(
-                'images/community_logo.png',
-              ),
+              child: articleModel?.logoUrl == null
+                  ? Image.asset(
+                      'images/community_logo.png',
+                      height: 50.0,
+                      width: 50.0,
+                    )
+                  : Image.network(
+                      articleModel?.logoUrl,
+                      height: 50.0,
+                      width: 50.0,
+                    ),
+            ),
+            SizedBox(
+              width: 15.0,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  '${articleModel.name}',
+                  '${articleModel?.name}',
                   style: kValueStyle.copyWith(
                       color: Themes.primaryBlue, fontSize: 20.0),
                 ),
@@ -64,7 +81,7 @@ class CommunityDescription extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 2.0),
                         child: Text(
-                          'IT',
+                          '${articleModel?.categoryName}',
                           style: kValueStyle.copyWith(
                               color: Colors.white,
                               fontSize: 8.0,
@@ -79,7 +96,7 @@ class CommunityDescription extends StatelessWidget {
                   height: 3.0,
                 ),
                 Text(
-                  '3980 Mengikuti',
+                  '${articleModel.follower} Mengikuti',
                   textAlign: TextAlign.right,
                   style: kValueStyle.copyWith(
                       fontSize: 10.0, color: Themes.primaryBlue),
@@ -120,7 +137,7 @@ class CommunityDescription extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
           child: Text(
-            '${articleModel.description}',
+            '${articleModel?.description}',
             style: kValueStyle.copyWith(color: Colors.black87, fontSize: 12.0),
           ),
         )

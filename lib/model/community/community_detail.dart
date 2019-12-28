@@ -3,8 +3,12 @@ class CommunityDetail {
   String slug;
   String name;
   String category;
+  String categoryName;
   String description;
   String logo;
+  String logoUrl;
+  int imageCount;
+  int follower;
   String ranting;
   String status;
   String createBy;
@@ -12,8 +16,9 @@ class CommunityDetail {
   String updatedAt;
   String deletedAt;
   String cover;
-  double latitude;
-  double longitude;
+  String latitude;
+  String longitude;
+  bool isJoin;
 
   CommunityDetail(
       {this.id,
@@ -30,7 +35,12 @@ class CommunityDetail {
       this.deletedAt,
       this.cover,
       this.latitude,
-      this.longitude});
+      this.longitude,
+      this.categoryName,
+      this.follower,
+      this.imageCount,
+      this.logoUrl,
+      this.isJoin});
 
   factory CommunityDetail.fromJson(Map<String, dynamic> body) {
     return CommunityDetail(
@@ -49,6 +59,11 @@ class CommunityDetail {
       cover: body['sampul'],
       latitude: body['latitude'],
       longitude: body['longitude'],
+      categoryName: body['kategori_nama'],
+      follower: body['follower'],
+      imageCount: body['image_count'],
+      logoUrl: body['logo_url'],
+      isJoin: body['is_join'],
     );
   }
 }

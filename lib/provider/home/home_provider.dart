@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/utils/permission_helper.dart';
+import 'package:localin/utils/helper_permission.dart';
+import 'package:localin/utils/location_helper.dart';
 
 class HomeProvider with ChangeNotifier {
   Position position;
@@ -15,7 +18,7 @@ class HomeProvider with ChangeNotifier {
   var currentAddress = '';
   var listLatitude = [];
   var listLongitude = [];
-  PermissionHelper _permissionHelper = PermissionHelper();
+  HelperPermission _permissionHelper = HelperPermission();
   GoogleMapController mapController;
   double latitude = 3.130236, longitude = 101.687618;
   Completer<GoogleMapController> controller = Completer();
@@ -23,14 +26,19 @@ class HomeProvider with ChangeNotifier {
   int _markerIdCounter = 1;
   Repository _repository = Repository();
   List<CommunityDetail> communityDetail = List();
+  List<ArticleDetail> articleDetail = List();
+  bool isRoomPage = false;
+  String previewUrl = '';
 
-  HomeProvider() {
-    checkLocation();
-    locationPermission();
-  }
+  HomeProvider() {}
 
-  checkLocation() async {
+  Future<Position> checkLocation() async {
     isLocationEnabled = await geolocator.isLocationServiceEnabled();
+    final locData = await geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
+    previewUrl = LocationHelper.generateLocationPreviewImage(
+        locData.latitude, locData.longitude);
+    notifyListeners();
   }
 
   updateMarkerPosition(CameraPosition _position) {
@@ -50,21 +58,36 @@ class HomeProvider with ChangeNotifier {
 
   Future<String> locationPermission() async {
     //request runtime permission first
-    var isCameraPermissionGranted =
+    var isLocationPermissionGranted =
         await _permissionHelper.getLocationPermission();
-    if (isCameraPermissionGranted) {
+    if (isLocationPermissionGranted) {
+      var checkGps = await geolocator.isLocationServiceEnabled();
       return '';
     } else {
       return 'You need to grant permission for camera';
     }
   }
 
-  Future<CommunityDetailBaseResponse> getArticles() async {
-    var response = await _repository.getCommunityList();
+  Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
+    var response = await _repository.getCommunityList(search);
     if (response != null) {
       communityDetail.clear();
       communityDetail.addAll(response.communityDetail);
     }
     return response;
+  }
+
+  Future<ArticleBaseResponse> getArticleList() async {
+    var response = await _repository.getArticleList();
+    if (response != null) {
+      articleDetail.clear();
+      articleDetail.addAll(response.data);
+    }
+    return response;
+  }
+
+  void setRoomPage(bool value) {
+    this.isRoomPage = value;
+    notifyListeners();
   }
 }

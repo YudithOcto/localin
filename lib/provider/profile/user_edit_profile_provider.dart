@@ -7,11 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:localin/api/api_constant.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/user/user_model.dart';
-import 'package:localin/utils/permission_helper.dart';
+import 'package:localin/utils/helper_permission.dart';
 
 class UserEditProfileProvider with ChangeNotifier {
   bool cameraStatus, storageStatus;
-  PermissionHelper _permissionHelper = PermissionHelper();
+  HelperPermission _permissionHelper = HelperPermission();
   TextEditingController displayNameController = TextEditingController();
   TextEditingController shortBioController = TextEditingController();
   TextEditingController idCardController = TextEditingController();

@@ -26,7 +26,8 @@ class BottomCompanyInformation extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
                   child: Image.asset(
                     'images/localin_logo_white.png',
-                    color: Colors.white,
+                    fit: BoxFit.cover,
+                    height: 30.0,
                   ),
                 ),
                 Text(

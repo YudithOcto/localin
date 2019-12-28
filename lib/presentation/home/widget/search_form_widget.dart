@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/provider/home/home_provider.dart';
+import 'package:provider/provider.dart';
 
 class SearchFormWidget extends StatefulWidget {
   @override
@@ -8,16 +10,22 @@ class SearchFormWidget extends StatefulWidget {
 class _SearchFormWidgetState extends State<SearchFormWidget> {
   @override
   Widget build(BuildContext context) {
+    var state = Provider.of<HomeProvider>(context, listen: false);
     return Container(
-      margin: EdgeInsets.only(top: 50.0),
+      margin: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(
-                Icons.keyboard_backspace,
-                color: Colors.black45,
-                size: 30.0,
+              InkWell(
+                onTap: () {
+                  state.setRoomPage(false);
+                },
+                child: Icon(
+                  Icons.keyboard_backspace,
+                  color: Colors.black45,
+                  size: 30.0,
+                ),
               ),
               SizedBox(
                 width: 10.0,

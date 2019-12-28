@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bottom_company_information.dart';
-import 'package:localin/model/article/article_model.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/article_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -10,7 +10,7 @@ import 'header_profile.dart';
 
 class SingleCard extends StatelessWidget {
   final int index;
-  final List<ArticleModel> articleModel;
+  final List<ArticleDetail> articleModel;
   SingleCard(this.index, this.articleModel);
 
   @override

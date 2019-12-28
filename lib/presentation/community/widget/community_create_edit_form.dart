@@ -1,140 +1,171 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
+import 'package:localin/presentation/community/community_create_edit_page.dart';
+import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/community/community_createedit_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class CommunityCreateEditForm extends StatefulWidget {
-  final bool isUpdatePage;
-
-  CommunityCreateEditForm({@required this.isUpdatePage});
-  @override
-  _CommunityCreateEditFormState createState() =>
-      _CommunityCreateEditFormState();
-}
-
-class _CommunityCreateEditFormState extends State<CommunityCreateEditForm> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool autoValidate = false;
-
+class CommunityCreateEditForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    bool isUpdatePage = routeArgs[CommunityCreateEditPage.isUpdatePage];
+    var provider = Provider.of<CommunityCreateEditProvider>(context);
     return Form(
-      key: formKey,
-      autovalidate: autoValidate,
+      key: provider.formKey,
+      autovalidate: provider.autoValidate,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            title('Nama Komunitas'),
-            SizedBox(
-              height: 15.0,
-            ),
-            Container(
-              height: 50.0,
-              child: TextFormField(
-                onSaved: (value) {},
-                validator: (value) =>
-                    value.isEmpty ? 'Nama Komunitas di butuhkan' : null,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 12.0, color: Colors.black45),
-                    hintText: 'Beri nama komunitas anda',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0))),
+        child: provider.loading == false
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  title('Nama Komunitas'),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Container(
+                    height: 50.0,
+                    child: TextFormField(
+                      controller: provider.communityNameController,
+                      validator: (value) =>
+                          value.isEmpty ? 'Nama Komunitas di butuhkan' : null,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          hintStyle:
+                              TextStyle(fontSize: 12.0, color: Colors.black45),
+                          hintText: 'Beri nama komunitas anda',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  title('Kategori'),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    child: InkWell(
+                      onTap: () async {
+                        var result = await Navigator.of(context)
+                            .pushNamed(CommunityCategorySearch.routeName);
+                        if (result != null) {
+                          provider.setCategory(result);
+                        }
+                      },
+                      child: TextFormField(
+                        enabled: false,
+                        controller: provider.categoryController,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                                fontSize: 12.0, color: Colors.black45),
+                            hintText: 'Contoh: IT, Otomotif, Seni dsb',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0))),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  title('Deskripsi'),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Container(
+                    height: 120.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(color: Colors.black26)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: provider.descriptionController,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                                fontSize: 12.0, color: Colors.black45),
+                            hintText:
+                                'Deskripsikan komunitas anda untuk menjangkau pengikut'),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  title('Logo'),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  dashBorder(context),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Visibility(visible: isUpdatePage, child: title('Sampul')),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Visibility(
+                    visible: isUpdatePage,
+                    child: dashBorderBig(context),
+                  ),
+                  Visibility(
+                    visible: isUpdatePage,
+                    child: SizedBox(
+                      height: 15.0,
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 50.0,
+                    child: RoundedButtonFill(
+                      onPressed: () async {
+                        if (provider.validateInput()) {
+                          var result =
+                              await provider.createCommunity(isUpdatePage);
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Community Create'),
+                                  content: Text(
+                                      '${result?.message != null ? result?.message : result?.error}'),
+                                  actions: <Widget>[
+                                    RaisedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      color: Themes.primaryBlue,
+                                      elevation: 5.0,
+                                      child: Text('OK'),
+                                    )
+                                  ],
+                                );
+                              });
+                        }
+                      },
+                      needCenter: true,
+                      fontSize: 18.0,
+                      title: isUpdatePage ? 'Simpan' : 'Buat Komunitas',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                ],
+              )
+            : Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            title('Kategori'),
-            SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              height: 50.0,
-              child: TextFormField(
-                onSaved: (value) {},
-                validator: (value) =>
-                    value.isEmpty ? 'Kategori di butuhkan' : null,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 12.0, color: Colors.black45),
-                    hintText: 'Contoh: IT, Otomotif, Seni dsb',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0))),
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            title('Deskripsi'),
-            SizedBox(
-              height: 15.0,
-            ),
-            Container(
-              height: 120.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.black26)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  onSaved: (value) {},
-                  validator: (value) =>
-                      value.isEmpty ? 'Deskripsi di butuhkan' : null,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle:
-                          TextStyle(fontSize: 12.0, color: Colors.black45),
-                      hintText:
-                          'Deskripsikan komunitas anda untuk menjangkau pengikut'),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 15.0,
-            ),
-            title('Logo'),
-            SizedBox(
-              height: 15.0,
-            ),
-            dashBorder(),
-            SizedBox(
-              height: 15.0,
-            ),
-            title('Sampul'),
-            SizedBox(
-              height: 15.0,
-            ),
-            Visibility(
-              visible: !widget.isUpdatePage,
-              child: dashBorderBig(),
-            ),
-            Visibility(
-              visible: !widget.isUpdatePage,
-              child: SizedBox(
-                height: 15.0,
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 50.0,
-              child: RoundedButtonFill(
-                onPressed: () {},
-                needCenter: true,
-                fontSize: 18.0,
-                title: widget.isUpdatePage ? 'Simpan' : 'Buat Komunitas',
-              ),
-            ),
-            SizedBox(
-              height: 15.0,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -149,7 +180,7 @@ class _CommunityCreateEditFormState extends State<CommunityCreateEditForm> {
     );
   }
 
-  Widget dashBorderBig() {
+  Widget dashBorderBig(BuildContext context) {
     return Container(
       height: 180.0,
       width: double.infinity,
@@ -173,48 +204,105 @@ class _CommunityCreateEditFormState extends State<CommunityCreateEditForm> {
     );
   }
 
-  Widget dashBorder() {
-    return Container(
-      alignment: Alignment.center,
-      child: DottedBorder(
-        borderType: BorderType.RRect,
-        dashPattern: <double>[5, 5],
-        color: Colors.black26,
-        radius: Radius.circular(12),
-        padding: EdgeInsets.all(6),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: <Widget>[
-                Icon(
-                  Icons.photo_camera,
-                  size: 50.0,
-                  color: Colors.grey,
+  Widget dashBorder(BuildContext context) {
+    var state = Provider.of<CommunityCreateEditProvider>(context);
+    return InkWell(
+      onTap: () {
+        showDialogImagePicker(context, state);
+      },
+      child: Container(
+        alignment: Alignment.center,
+        child: state.logoImageFile == null
+            ? DottedBorder(
+                borderType: BorderType.RRect,
+                dashPattern: <double>[5, 5],
+                color: Colors.black26,
+                radius: Radius.circular(12),
+                padding: EdgeInsets.all(6),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      children: <Widget>[
+                        Icon(
+                          Icons.photo_camera,
+                          size: 50.0,
+                          color: Colors.grey,
+                        ),
+                        Text(
+                          'Drop files here',
+                          style:
+                              TextStyle(fontSize: 12.0, color: Colors.black38),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-                Text(
-                  'Drop files here',
-                  style: TextStyle(fontSize: 12.0, color: Colors.black38),
-                )
-              ],
-            ),
-          ),
-        ),
+              )
+            : Container(
+                margin: EdgeInsets.only(top: 10.0),
+                height: 100.0,
+                width: 100.0,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Themes.primaryBlue)),
+                child: Image.file(state.logoImageFile),
+              ),
       ),
     );
   }
 
-  void validateInput() {
-    var form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
-
-      /// go to other page
-    } else {
-      setState(() {
-        autoValidate = true;
-      });
-    }
+  void showDialogImagePicker(
+      BuildContext context, CommunityCreateEditProvider profileState) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Community'),
+            content: Text('Please choose 1 of your preferences'),
+            actions: <Widget>[
+              RaisedButton(
+                color: Themes.primaryBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0)),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  var request = await profileState.openGallery(true);
+                  if (request.isNotEmpty) {
+                    print(request);
+                  }
+                },
+                elevation: 5.0,
+                child: Text(
+                  'Image Gallery',
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+              ),
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0)),
+                color: Themes.primaryBlue,
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  var request = await profileState.openCamera(true);
+                  if (request.isEmpty) {
+                    print(request);
+                  }
+                },
+                elevation: 5.0,
+                child: Text(
+                  'Camera',
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+              )
+            ],
+          );
+        });
   }
 }
