@@ -37,7 +37,7 @@ class _CommunityProfileState extends State<CommunityProfile> {
                     image: detail?.cover != null
                         ? DecorationImage(
                             image: NetworkImage(
-                              '${ImageHelper.addSubFixHttp(detail?.cover)}',
+                              '${detail?.cover}',
                             ),
                             fit: BoxFit.cover,
                           )

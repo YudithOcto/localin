@@ -13,18 +13,25 @@ class CommunityCardWidget extends StatelessWidget {
   CommunityCardWidget({this.detailList});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 10.0),
-      child: Column(
-        children:
-            List.generate(detailList != null ? detailList.length : 0, (index) {
-          return SingleCommunityCard(
-            total: detailList != null ? detailList.length : 0,
-            detail: detailList[index],
+    return detailList.isNotEmpty
+        ? Container(
+            margin: EdgeInsets.only(left: 10.0),
+            child: Column(
+              children: List.generate(
+                  detailList != null ? detailList.length : 0, (index) {
+                return SingleCommunityCard(
+                  total: detailList != null ? detailList.length : 0,
+                  detail: detailList[index],
+                );
+              }),
+            ),
+          )
+        : Center(
+            child: Container(
+              margin: EdgeInsets.only(top: 40.0),
+              child: Text('No Community found'),
+            ),
           );
-        }),
-      ),
-    );
   }
 }
 
@@ -39,7 +46,8 @@ class SingleCommunityCard extends StatelessWidget {
       /// we have this row if total item just 1
       return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(CommunityProfile.routeName);
+          Navigator.of(context).pushNamed(CommunityProfile.routeName,
+              arguments: {CommunityProfile.communityModel: detail});
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),

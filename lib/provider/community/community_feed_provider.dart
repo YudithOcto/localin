@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
+import 'package:localin/model/community/community_category.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
 
 class CommunityFeedProvider extends BaseModelProvider {
   CommunityBaseResponseCategory categoryList;
   CommunityDetailBaseResponse communityDetail;
+  int currentQuickPicked = 0;
   bool isSearchLoading = false;
   Repository _repository = Repository();
   TextEditingController searchController = TextEditingController();
@@ -41,6 +43,9 @@ class CommunityFeedProvider extends BaseModelProvider {
     final response = await _repository.getCategoryListCommunity('');
     if (response != null && response.message != null) {
       categoryList = response;
+      CommunityCategory category = CommunityCategory();
+      category.categoryName = 'all';
+      categoryList.communityCategory.insert(0, category);
     }
     return response;
   }
@@ -64,8 +69,25 @@ class CommunityFeedProvider extends BaseModelProvider {
     return response;
   }
 
+  Future<CommunityDetailBaseResponse> searchCommunityBaseCategory(
+      String categoryId) async {
+    setLoadingSearching(true);
+    final response = await _repository.getCommunityListByCategory(categoryId);
+    if (response != null) {
+      communityDetail = response;
+      setLoadingSearching(false);
+      notifyListeners();
+    }
+    return response;
+  }
+
   void setLoadingSearching(bool value) {
     isSearchLoading = value;
+    notifyListeners();
+  }
+
+  void setCurrentQuickPicked(int index) {
+    this.currentQuickPicked = index;
     notifyListeners();
   }
 }

@@ -93,19 +93,32 @@ class QuickMenuCommunity extends StatelessWidget {
   QuickMenuCommunity({this.index, this.category});
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<CommunityFeedProvider>(context);
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        provider.setCurrentQuickPicked(index);
+        if (index == 0) {
+          provider.searchCommunity('');
+        } else {
+          provider.searchCommunityBaseCategory(category.id);
+        }
+      },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 4.0),
         decoration: BoxDecoration(
-            color: Themes.primaryBlue,
+            color: provider.currentQuickPicked == index
+                ? Themes.silverGrey
+                : Themes.primaryBlue,
             borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             category?.categoryName,
             style: kValueStyle.copyWith(
-                color: Colors.white, fontWeight: FontWeight.w500),
+                color: provider.currentQuickPicked == index
+                    ? Themes.primaryBlue
+                    : Colors.white,
+                fontWeight: FontWeight.w500),
           ),
         ),
       ),

@@ -96,7 +96,7 @@ class CommunityDescription extends StatelessWidget {
                   height: 3.0,
                 ),
                 Text(
-                  '${articleModel.follower} Mengikuti',
+                  '${articleModel?.follower} Mengikuti',
                   textAlign: TextAlign.right,
                   style: kValueStyle.copyWith(
                       fontSize: 10.0, color: Themes.primaryBlue),
