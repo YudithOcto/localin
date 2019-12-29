@@ -125,7 +125,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
-                    ImageHelper.addSubFixHttp(widget.model.cover),
+                    widget?.model?.cover,
                     width: double.infinity,
                     height: 200.0,
                     fit: BoxFit.cover,
@@ -193,10 +193,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                       width: 10.0,
                     ),
                     Visibility(
-                      visible: widget.model.isJoin == null ||
-                              widget.model.isJoin == false
-                          ? true
-                          : false,
+                      visible: widget.model.isJoin == false ? true : false,
                       child: Container(
                         decoration: BoxDecoration(
                             color: Themes.primaryBlue,

@@ -242,10 +242,12 @@ class ApiProvider {
     try {
       var response = await _dio.post(ApiConstant.kCreateCommunity,
           data: form, options: Options(headers: {'requiredToken': true}));
-      return CommunityDetailBaseResponse.fromJson(response.data);
+      return CommunityDetailBaseResponse.uploadSuccess(
+          response.data['message']);
     } catch (error) {
       if (error is DioError) {
-        return CommunityDetailBaseResponse.hasError(_handleError(error));
+        return CommunityDetailBaseResponse.hasError(
+            error?.response?.statusMessage);
       } else {
         return CommunityDetailBaseResponse.hasError(error);
       }

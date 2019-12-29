@@ -19,7 +19,7 @@ class CommunityCreateEditProvider with ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool autoValidate = false;
   FocusNode focusNode = FocusNode();
-  CommunityCategory category = CommunityCategory();
+  CommunityCategory category;
   bool loading = false;
 
   @override
@@ -36,11 +36,12 @@ class CommunityCreateEditProvider with ChangeNotifier {
         await _permissionHelper.getCameraPermission();
     if (isCameraPermissionGranted) {
       if (isIcon) {
-        logoImageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+        logoImageFile = await ImagePicker.pickImage(
+            source: ImageSource.camera, imageQuality: 85);
         if (logoImageFile != null) notifyListeners();
       } else {
-        coverImageFile =
-            await ImagePicker.pickImage(source: ImageSource.camera);
+        coverImageFile = await ImagePicker.pickImage(
+            source: ImageSource.camera, imageQuality: 85);
         if (coverImageFile != null) notifyListeners();
       }
       return '';
@@ -54,12 +55,12 @@ class CommunityCreateEditProvider with ChangeNotifier {
         await _permissionHelper.getStoragePermission();
     if (isStoragePermissionGranted) {
       if (isIcon) {
-        logoImageFile =
-            await ImagePicker.pickImage(source: ImageSource.gallery);
+        logoImageFile = await ImagePicker.pickImage(
+            source: ImageSource.gallery, imageQuality: 85);
         if (logoImageFile != null) notifyListeners();
       } else {
-        coverImageFile =
-            await ImagePicker.pickImage(source: ImageSource.gallery);
+        coverImageFile = await ImagePicker.pickImage(
+            source: ImageSource.gallery, imageQuality: 85);
         if (coverImageFile != null) notifyListeners();
       }
       return '';
@@ -76,7 +77,7 @@ class CommunityCreateEditProvider with ChangeNotifier {
     FormData formData = FormData.fromMap(
       {
         'nama': communityNameController.text,
-        'kategory': category.id,
+        'kategori': category.id,
         'deskripsi': descriptionController.text,
         'logo': logoPath.isEmpty
             ? null
@@ -110,7 +111,11 @@ class CommunityCreateEditProvider with ChangeNotifier {
 
   bool validateInput() {
     var form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() &&
+        logoImageFile != null &&
+        coverImageFile != null &&
+        logoImageFile.lengthSync() <= 900000 &&
+        category != null) {
       form.save();
       return true;
     } else {

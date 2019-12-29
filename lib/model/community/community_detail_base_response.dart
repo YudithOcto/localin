@@ -19,6 +19,11 @@ class CommunityDetailBaseResponse {
     );
   }
 
+  CommunityDetailBaseResponse.uploadSuccess(String value)
+      : communityDetail = List(),
+        message = value,
+        error = null;
+
   CommunityDetailBaseResponse.hasError(String value)
       : communityDetail = List(),
         error = value;
