@@ -9,7 +9,7 @@ class CommunityMemberDetail {
   factory CommunityMemberDetail.fromJson(Map<String, dynamic> body) {
     return CommunityMemberDetail(
       id: body['id'],
-      name: body['name'],
+      name: body['nama'],
       status: body['status'],
       isApproved: body['is_approved'],
     );

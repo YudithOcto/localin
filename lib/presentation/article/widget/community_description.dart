@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/community/community_create_edit_page.dart';
-import 'package:localin/presentation/community/community_create_event_page.dart';
-import 'package:localin/presentation/community/community_profile.dart';
+import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
+import 'package:localin/presentation/community/pages/community_create_event_page.dart';
+import 'package:localin/presentation/community/pages/community_detail_page.dart';
+import 'package:localin/presentation/community/pages/community_member_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../../themes.dart';
@@ -12,7 +13,8 @@ class CommunityDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    CommunityDetail articleModel = routeArgs[CommunityProfile.communityModel];
+    CommunityDetail articleModel =
+        routeArgs[CommunityDetailPage.communityModel];
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,8 +30,12 @@ class CommunityDescription extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed(CommunityCreateEventPage.routeName);
+//                Navigator.of(context)
+//                    .pushNamed(CommunityCreateEventPage.routeName);
+                Navigator.of(context).pushNamed(CommunityMemberPage.routeName,
+                    arguments: {
+                      CommunityMemberPage.communityId: articleModel.id
+                    });
               },
               child: articleModel?.logoUrl == null
                   ? Image.asset(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/community/community_profile.dart';
+import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/image_helper.dart';
@@ -29,8 +29,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
           InkWell(
             onTap: () async {
               var result = await Navigator.of(context)
-                  .pushNamed(CommunityProfile.routeName, arguments: {
-                CommunityProfile.communityModel: widget.model,
+                  .pushNamed(CommunityDetailPage.routeName, arguments: {
+                CommunityDetailPage.communityModel: widget.model,
               });
 
               if (result == 'refresh') {
@@ -163,10 +163,11 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                   children: <Widget>[
                     InkWell(
                       onTap: () async {
-                        var result = await Navigator.of(context)
-                            .pushNamed(CommunityProfile.routeName, arguments: {
-                          CommunityProfile.communityModel: widget.model,
-                        });
+                        var result = await Navigator.of(context).pushNamed(
+                            CommunityDetailPage.routeName,
+                            arguments: {
+                              CommunityDetailPage.communityModel: widget.model,
+                            });
 
                         if (result == 'refresh') {
                           ///refresh here

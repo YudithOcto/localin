@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/community/community_profile.dart';
+import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/community/widget/community_star_indicator.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/star_display.dart';
@@ -46,8 +46,8 @@ class SingleCommunityCard extends StatelessWidget {
       /// we have this row if total item just 1
       return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(CommunityProfile.routeName,
-              arguments: {CommunityProfile.communityModel: detail});
+          Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
+              arguments: {CommunityDetailPage.communityModel: detail});
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
@@ -61,6 +61,7 @@ class SingleCommunityCard extends StatelessWidget {
                 height: 250.0,
                 decoration: BoxDecoration(
                     color: Colors.grey,
+                    image: DecorationImage(image: NetworkImage(detail?.cover)),
                     borderRadius: BorderRadius.circular(12.0)),
               ),
               SizedBox(
@@ -72,66 +73,67 @@ class SingleCommunityCard extends StatelessWidget {
         ),
       );
     } else {
-      return InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(CommunityProfile.routeName,
-              arguments: {CommunityProfile.communityModel: null});
-        },
-        child: Container(
-          width: double.infinity,
-          height: 300.0,
-          margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              UpperCommunityCardRow(
-                detail: detail,
-              ),
-              Flexible(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(12.0)),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(12.0)),
-                            ),
+      return Container(
+        width: double.infinity,
+        height: 300.0,
+        margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 0.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            UpperCommunityCardRow(
+              detail: detail,
+            ),
+            Flexible(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        image: detail?.cover != null
+                            ? DecorationImage(
+                                image: NetworkImage(detail?.cover),
+                                fit: BoxFit.cover)
+                            : null,
+                        borderRadius: BorderRadius.circular(12.0)),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(12.0)),
                           ),
-                          SizedBox(
-                            height: 10.0,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(12.0)),
                           ),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(12.0)),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
-              SizedBox(
-                height: 15.0,
-              ),
-              CommunityStarIndicator()
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            CommunityStarIndicator(
+              detail: detail,
+            )
+          ],
         ),
       );
     }
@@ -143,90 +145,96 @@ class UpperCommunityCardRow extends StatelessWidget {
   UpperCommunityCardRow({this.detail});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 15.0,
-        ),
-        Row(
-          children: <Widget>[
-            detail != null && detail.logoUrl != null
-                ? Image.network(
-                    detail?.logoUrl,
-                    width: 50.0,
-                    height: 50.0,
-                  )
-                : Image.asset(
-                    'images/community_logo.png',
-                    scale: 1.5,
-                  ),
-            Text(
-              '${detail?.name}',
-              style: kValueStyle.copyWith(
-                  fontSize: 18.0, color: Themes.primaryBlue),
-            ),
-            Visibility(
-              visible: false,
-              child: Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.more_vert),
-                ),
-              ),
-            )
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 5.0, right: 10.0, bottom: 5.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
+            arguments: {CommunityDetailPage.communityModel: detail});
+      },
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 15.0,
+          ),
+          Row(
             children: <Widget>[
-              Icon(
-                Icons.location_on,
-                color: Themes.primaryBlue,
-                size: 8.0,
-              ),
-              SizedBox(
-                width: 5.0,
-              ),
+              detail != null && detail.logoUrl != null
+                  ? Image.network(
+                      detail?.logoUrl,
+                      width: 50.0,
+                      height: 50.0,
+                    )
+                  : Image.asset(
+                      'images/community_logo.png',
+                      scale: 1.5,
+                    ),
               Text(
-                'Kebon Nanas, Kota Tangerang',
+                '${detail?.name}',
                 style: kValueStyle.copyWith(
-                  fontSize: 8.0,
-                ),
+                    fontSize: 18.0, color: Themes.primaryBlue),
               ),
-              SizedBox(
-                width: 5.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Themes.primaryBlue,
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 2.0),
-                  child: Text(
-                    '${detail?.categoryName}',
-                    style: kValueStyle.copyWith(
-                        color: Colors.white,
-                        fontSize: 8.0,
-                        letterSpacing: -.5,
-                        fontWeight: FontWeight.w500),
+              Visibility(
+                visible: false,
+                child: Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.more_vert),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '${detail?.follower} Mengikuti',
-                  textAlign: TextAlign.right,
-                  style: kValueStyle.copyWith(
-                      fontSize: 8.0, color: Themes.primaryBlue),
                 ),
               )
             ],
           ),
-        ),
-      ],
+          Container(
+            margin: EdgeInsets.only(left: 5.0, right: 10.0, bottom: 5.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Icon(
+                  Icons.location_on,
+                  color: Themes.primaryBlue,
+                  size: 8.0,
+                ),
+                SizedBox(
+                  width: 5.0,
+                ),
+                Text(
+                  'Kebon Nanas, Kota Tangerang',
+                  style: kValueStyle.copyWith(
+                    fontSize: 8.0,
+                  ),
+                ),
+                SizedBox(
+                  width: 5.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Themes.primaryBlue,
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 2.0),
+                    child: Text(
+                      '${detail?.categoryName}',
+                      style: kValueStyle.copyWith(
+                          color: Colors.white,
+                          fontSize: 8.0,
+                          letterSpacing: -.5,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '${detail?.follower} Mengikuti',
+                    textAlign: TextAlign.right,
+                    style: kValueStyle.copyWith(
+                        fontSize: 8.0, color: Themes.primaryBlue),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -6,23 +6,22 @@ import 'package:localin/presentation/article/widget/community_description.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/image_helper.dart';
 import 'package:localin/utils/star_display.dart';
 
-class CommunityProfile extends StatefulWidget {
+class CommunityDetailPage extends StatefulWidget {
   static const routeName = '/communityProfile';
   static const communityModel = '/communityModel';
 
   @override
-  _CommunityProfileState createState() => _CommunityProfileState();
+  _CommunityDetailPageState createState() => _CommunityDetailPageState();
 }
 
-class _CommunityProfileState extends State<CommunityProfile> {
+class _CommunityDetailPageState extends State<CommunityDetailPage> {
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    CommunityDetail detail = routeArgs[CommunityProfile.communityModel];
+    CommunityDetail detail = routeArgs[CommunityDetailPage.communityModel];
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

@@ -59,8 +59,8 @@ class Repository {
     return apiProvider.joinCommunity(id);
   }
 
-  Future<CommunityMemberResponse> communityMember(String communityId) async {
-    return apiProvider.memberCommunity(communityId);
+  Future<CommunityMemberResponse> getCommunityMember(String communityId) async {
+    return apiProvider.getMemberCommunity(communityId);
   }
 
   Future<CommunityDetailBaseResponse> getCommunityListByCategory(

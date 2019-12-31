@@ -226,8 +226,7 @@ class ApiProvider {
       var response = await _dio.get(ApiConstant.kSearchCategory,
           queryParameters: {'keyword': search},
           options: Options(headers: {'requiredToken': true}));
-      var data = response.data;
-      var model = CommunityBaseResponseCategory.fromJson(data[0]);
+      var model = CommunityBaseResponseCategory.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -285,7 +284,7 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityMemberResponse> memberCommunity(String communityId) async {
+  Future<CommunityMemberResponse> getMemberCommunity(String communityId) async {
     try {
       var response = await _dio.get(
           '${ApiConstant.kMemberCommunity}$communityId',

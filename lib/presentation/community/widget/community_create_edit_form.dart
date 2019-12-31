@@ -1,7 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
-import 'package:localin/presentation/community/community_create_edit_page.dart';
+import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_createedit_provider.dart';

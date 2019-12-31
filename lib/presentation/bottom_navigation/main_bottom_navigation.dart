@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localin/presentation/booking/booking_history_page.dart';
-import 'package:localin/presentation/community/community_feed_page.dart';
+import 'package:localin/presentation/community/pages/community_feed_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
