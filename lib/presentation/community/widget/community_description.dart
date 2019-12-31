@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
-import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
-import 'package:localin/presentation/community/pages/community_member_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
 class CommunityDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    CommunityDetail articleModel =
-        routeArgs[CommunityDetailPage.communityModel];
+    var provider = Provider.of<CommunityDetailProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,19 +29,15 @@ class CommunityDescription extends StatelessWidget {
               onTap: () {
 //                Navigator.of(context)
 //                    .pushNamed(CommunityCreateEventPage.routeName);
-                Navigator.of(context).pushNamed(CommunityMemberPage.routeName,
-                    arguments: {
-                      CommunityMemberPage.communityId: articleModel.id
-                    });
               },
-              child: articleModel?.logoUrl == null
+              child: provider?.communityDetail?.logoUrl == null
                   ? Image.asset(
                       'images/community_logo.png',
                       height: 50.0,
                       width: 50.0,
                     )
                   : Image.network(
-                      articleModel?.logoUrl,
+                      provider?.communityDetail?.logoUrl,
                       height: 50.0,
                       width: 50.0,
                     ),
@@ -56,7 +49,7 @@ class CommunityDescription extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  '${articleModel?.name}',
+                  '${provider?.communityDetail?.name}',
                   style: kValueStyle.copyWith(
                       color: Themes.primaryBlue, fontSize: 20.0),
                 ),
@@ -87,7 +80,7 @@ class CommunityDescription extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 2.0),
                         child: Text(
-                          '${articleModel?.categoryName}',
+                          '${provider?.communityDetail?.categoryName}',
                           style: kValueStyle.copyWith(
                               color: Colors.white,
                               fontSize: 8.0,
@@ -101,11 +94,19 @@ class CommunityDescription extends StatelessWidget {
                 SizedBox(
                   height: 3.0,
                 ),
-                Text(
-                  '${articleModel?.follower} Mengikuti',
-                  textAlign: TextAlign.right,
-                  style: kValueStyle.copyWith(
-                      fontSize: 10.0, color: Themes.primaryBlue),
+                InkWell(
+                  onTap: () {
+                    provider.setSearchMemberPage(true);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '${provider?.communityDetail?.follower} Mengikuti',
+                      textAlign: TextAlign.right,
+                      style: kValueStyle.copyWith(
+                          fontSize: 10.0, color: Themes.primaryBlue),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -143,7 +144,7 @@ class CommunityDescription extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
           child: Text(
-            '${articleModel?.description}',
+            '${provider?.communityDetail?.description}',
             style: kValueStyle.copyWith(color: Colors.black87, fontSize: 12.0),
           ),
         )

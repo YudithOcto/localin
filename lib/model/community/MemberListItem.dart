@@ -12,5 +12,8 @@ class AdminItem extends MemberListItem {
 
 class MemberItem extends MemberListItem {
   String title;
-  MemberItem({this.title});
+  String id;
+  String status;
+  int isApproved;
+  MemberItem({this.title, this.id, this.status, this.isApproved});
 }

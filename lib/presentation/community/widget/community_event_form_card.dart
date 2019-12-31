@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/widget/community_event_form_date_time.dart';
 import 'package:localin/presentation/community/widget/community_heading_title_widget.dart';
+import 'package:localin/provider/community/community_event_provider.dart';
+import 'package:provider/provider.dart';
 
 class CommunityEventFormCard extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _CommunityEventFormCardState extends State<CommunityEventFormCard> {
   bool selectedFund = false;
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<CommunityEventProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15.0),
       child: Column(

@@ -64,7 +64,6 @@ class MyApp extends StatelessWidget {
           BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
           RoomDetailPage.routeName: (_) => RoomDetailPage(),
           CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
-          CommunityMemberPage.routeName: (_) => CommunityMemberPage(),
         },
       ),
     );

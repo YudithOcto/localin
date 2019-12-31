@@ -73,6 +73,7 @@ class ApiProvider {
         .add(InterceptorsWrapper(onRequest: (Options options) async {
       if (options.headers.containsKey("requiredToken")) {
         String token = await getToken();
+        print(token);
         options.headers.clear();
         var header = {
           'Content-Type': 'application/json',
@@ -322,6 +323,17 @@ class ApiProvider {
           data: data,
           options: Options(headers: {'requiredToken': true}));
       return response.toString();
+    } catch (error) {
+      print(error);
+      return error;
+    }
+  }
+
+  Future<void> createEventCommunity(String communityId, FormData formData) async {
+    try {
+      var response = await _dio.post('${ApiConstant.kCreateEventCommunity}/$communityId',
+      data: formData, options: Options(headers: {'requiredToken': true}));
+      return response;
     } catch (error) {
       print(error);
       return error;

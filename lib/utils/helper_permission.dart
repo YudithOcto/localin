@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class HelperPermission {
@@ -38,6 +41,30 @@ class HelperPermission {
         break;
       case PermissionStatus.restricted:
         break;
+    }
+  }
+
+  Future<File> openCamera() async {
+    File file;
+    var isCameraPermissionGranted = await getCameraPermission();
+    if (isCameraPermissionGranted) {
+      file = await ImagePicker.pickImage(
+          source: ImageSource.camera, imageQuality: 85);
+      return file;
+    } else {
+      return file;
+    }
+  }
+
+  Future<File> openGallery() async {
+    File file;
+    var isStoragePermissionGranted = await getStoragePermission();
+    if (isStoragePermissionGranted) {
+      file = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 85);
+      return file;
+    } else {
+      return file;
     }
   }
 }

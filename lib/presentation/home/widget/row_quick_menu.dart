@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
-import 'package:localin/presentation/booking/room_detail_page.dart';
+import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,9 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Event',
                 onPressed: () {
-                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                  //Navigator.of(context).pushNamed(EmptyPage.routeName);
+                  Navigator.of(context)
+                      .pushNamed(CommunityCreateEventPage.routeName);
                 },
                 icon: Icons.confirmation_number,
               ),
