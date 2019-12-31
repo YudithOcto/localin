@@ -72,7 +72,8 @@ class Repository {
     return apiProvider.getUserCommunityList();
   }
 
-  Future<void> createCommunityEvent(String communityId, FormData formData) async {
+  Future<void> createCommunityEvent(
+      String communityId, FormData formData) async {
     return apiProvider.createEventCommunity(communityId, formData);
   }
 }

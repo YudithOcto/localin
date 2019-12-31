@@ -329,10 +329,13 @@ class ApiProvider {
     }
   }
 
-  Future<void> createEventCommunity(String communityId, FormData formData) async {
+  Future<void> createEventCommunity(
+      String communityId, FormData formData) async {
     try {
-      var response = await _dio.post('${ApiConstant.kCreateEventCommunity}/$communityId',
-      data: formData, options: Options(headers: {'requiredToken': true}));
+      var response = await _dio.post(
+          '${ApiConstant.kCreateEventCommunity}/$communityId',
+          data: formData,
+          options: Options(headers: {'requiredToken': true}));
       return response;
     } catch (error) {
       print(error);
