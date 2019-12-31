@@ -37,6 +37,10 @@ class Repository {
     return apiProvider.getArticleList();
   }
 
+  Future<ArticleBaseResponse> createArticle() async {
+    return apiProvider.createArticle();
+  }
+
   Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {
     return apiProvider.getCommunityList(keyword);
   }

@@ -12,7 +12,7 @@ class ArticleBaseResponse {
     List article = body['data'];
     return ArticleBaseResponse(
       message: body['message'],
-      total: body['pagination']['total'],
+      total: body['pagination']['total'] ?? null,
       data: article.map((value) => ArticleDetail.fromJson(value)).toList(),
     );
   }

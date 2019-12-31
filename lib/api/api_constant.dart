@@ -20,4 +20,5 @@ class ApiConstant {
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';
   static const String kArticleList = 'v1/artikel';
+  static const String kCreateArticle = 'v1/artikel/entri/';
 }

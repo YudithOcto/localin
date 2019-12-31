@@ -183,7 +183,22 @@ class ApiProvider {
       if (error is DioError) {
         return ArticleBaseResponse.withError(_handleError(error));
       } else {
-        return ArticleBaseResponse.withError(error);
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleBaseResponse> createArticle() async {
+    try {
+      var response = await _dio.post(ApiConstant.kCreateArticle,
+      options: Options(headers: {'requiredToken': true}));
+      var model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
       }
     }
   }

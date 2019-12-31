@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/article/article_detail_page.dart';
+import 'package:localin/presentation/article/pages/article_detail_page.dart';
+import 'package:localin/presentation/article/pages/create_article_page.dart';
 import 'package:localin/presentation/booking/booking_detail_page.dart';
 import 'package:localin/presentation/booking/booking_history_page.dart';
 import 'package:localin/presentation/booking/room_detail_page.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
           BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
           RoomDetailPage.routeName: (_) => RoomDetailPage(),
           CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
+          CreateArticlePage.routeName: (_) => CreateArticlePage(),
         },
       ),
     );
