@@ -9,7 +9,6 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
-import 'package:localin/presentation/community/pages/community_member_page.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';

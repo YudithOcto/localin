@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_constant.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_join_response.dart';
@@ -70,7 +71,8 @@ class ApiProvider {
 
   void setupLoggingInterceptor() async {
     _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (Options options) async {
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+      print('send request：path:${options.baseUrl}${options.path}');
       if (options.headers.containsKey("requiredToken")) {
         String token = await getToken();
         print(token);
@@ -315,6 +317,22 @@ class ApiProvider {
     }
   }
 
+  Future<CommunityMemberResponse> approveMemberCommunity(
+      String communityId, String memberId) async {
+    try {
+      var response = await _dio.get(
+          '${ApiConstant.kMemberCommunity}$communityId/$memberId/approve',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityMemberResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityMemberResponse.withError(_handleError(error));
+      } else {
+        return CommunityMemberResponse.withError(error);
+      }
+    }
+  }
+
   Future<CommunityDetailBaseResponse> getCommunityListByCategoryId(
       String categoryId) async {
     try {
@@ -326,21 +344,41 @@ class ApiProvider {
       if (error is DioError) {
         return CommunityDetailBaseResponse.hasError(_handleError(error));
       } else {
-        return CommunityDetailBaseResponse.hasError(error);
+        return CommunityDetailBaseResponse.hasError(error.toString());
       }
     }
   }
 
-  Future<String> postComment(FormData data, String communityId) async {
+  Future<CommunityCommentBaseResponse> postComment(
+      FormData data, String communityId) async {
     try {
       var response = await _dio.post(
           '${ApiConstant.kCommentCommunity}$communityId',
           data: data,
           options: Options(headers: {'requiredToken': true}));
-      return response.toString();
+      return CommunityCommentBaseResponse.addComment(response.data);
     } catch (error) {
-      print(error);
-      return error;
+      if (error is DioError) {
+        return CommunityCommentBaseResponse.withError(_handleError(error));
+      } else {
+        return CommunityCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityCommentBaseResponse> getCommentList(
+      String communityId) async {
+    try {
+      var response = await _dio.get(
+          '${ApiConstant.kCommentCommunity}$communityId',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityCommentBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityCommentBaseResponse.withError(_handleError(error));
+      } else {
+        return CommunityCommentBaseResponse.withError(error.toString());
+      }
     }
   }
 

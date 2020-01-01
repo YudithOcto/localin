@@ -3,8 +3,10 @@ class CommunityMemberDetail {
   String name;
   String status;
   int isApproved;
+  String imageProfile;
 
-  CommunityMemberDetail({this.id, this.name, this.status, this.isApproved});
+  CommunityMemberDetail(
+      {this.id, this.name, this.status, this.isApproved, this.imageProfile});
 
   factory CommunityMemberDetail.fromJson(Map<String, dynamic> body) {
     return CommunityMemberDetail(
@@ -12,6 +14,7 @@ class CommunityMemberDetail {
       name: body['nama'],
       status: body['status'],
       isApproved: body['is_approved'],
+      imageProfile: body['image_profile'],
     );
   }
 }

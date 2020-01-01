@@ -67,4 +67,15 @@ class HelperPermission {
       return file;
     }
   }
+
+  Future<File> openVideoStorage() async {
+    File file;
+    var isStoragePermissionGranted = await getStoragePermission();
+    if (isStoragePermissionGranted) {
+      file = await ImagePicker.pickVideo(source: ImageSource.gallery);
+      return file;
+    } else {
+      return file;
+    }
+  }
 }

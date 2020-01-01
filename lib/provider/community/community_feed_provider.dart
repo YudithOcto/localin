@@ -15,6 +15,7 @@ class CommunityFeedProvider extends BaseModelProvider {
   Repository _repository = Repository();
   TextEditingController searchController = TextEditingController();
   Timer _debounce;
+  String currentCategoryId;
 
   CommunityFeedProvider() {
     setState(ViewState.Busy);
@@ -81,13 +82,25 @@ class CommunityFeedProvider extends BaseModelProvider {
     return response;
   }
 
+  Future<CommunityDetailBaseResponse> joinCommunity(String communityId) async {
+    final response = await _repository.joinCommunity(communityId);
+    var result;
+    if (response != null) {
+      if (currentCategoryId != null && currentQuickPicked > 0) {
+        result = await searchCommunityBaseCategory(currentCategoryId);
+      }
+    }
+    return result;
+  }
+
   void setLoadingSearching(bool value) {
     isSearchLoading = value;
     notifyListeners();
   }
 
-  void setCurrentQuickPicked(int index) {
+  void setCurrentQuickPicked(int index, String categoryId) {
     this.currentQuickPicked = index;
+    this.currentCategoryId = categoryId;
     notifyListeners();
   }
 }

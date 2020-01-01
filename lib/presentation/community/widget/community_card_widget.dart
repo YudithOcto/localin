@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
-import 'package:localin/presentation/community/widget/community_star_indicator.dart';
+import 'package:localin/presentation/community/widget/community_feed_bottom_row.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/utils/star_display.dart';
+import 'package:localin/utils/image_helper.dart';
 
 import '../../../themes.dart';
 
@@ -61,13 +61,20 @@ class SingleCommunityCard extends StatelessWidget {
                 height: 250.0,
                 decoration: BoxDecoration(
                     color: Colors.grey,
-                    image: DecorationImage(image: NetworkImage(detail?.cover)),
+                    image: detail?.cover != null
+                        ? DecorationImage(
+                            image: NetworkImage(
+                                ImageHelper.addSubFixHttp(detail?.cover)),
+                            fit: BoxFit.cover)
+                        : null,
                     borderRadius: BorderRadius.circular(12.0)),
               ),
               SizedBox(
                 height: 15.0,
               ),
-              CommunityStarIndicator(),
+              CommunityFeedBottomRow(
+                detail: detail,
+              ),
             ],
           ),
         ),
@@ -130,7 +137,7 @@ class SingleCommunityCard extends StatelessWidget {
             SizedBox(
               height: 15.0,
             ),
-            CommunityStarIndicator(
+            CommunityFeedBottomRow(
               detail: detail,
             )
           ],
@@ -167,6 +174,9 @@ class UpperCommunityCardRow extends StatelessWidget {
                       'images/community_logo.png',
                       scale: 1.5,
                     ),
+              SizedBox(
+                width: 10.0,
+              ),
               Text(
                 '${detail?.name}',
                 style: kValueStyle.copyWith(
@@ -184,7 +194,7 @@ class UpperCommunityCardRow extends StatelessWidget {
             ],
           ),
           Container(
-            margin: EdgeInsets.only(left: 5.0, right: 10.0, bottom: 5.0),
+            margin: EdgeInsets.only(left: 5.0, right: 10.0, bottom: 10.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
@@ -224,10 +234,10 @@ class UpperCommunityCardRow extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    '${detail?.follower} Mengikuti',
+                    '${detail?.follower} Orang Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 8.0, color: Themes.primaryBlue),
+                        fontSize: 10.0, color: Themes.primaryBlue),
                   ),
                 )
               ],

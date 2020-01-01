@@ -96,7 +96,7 @@ class QuickMenuCommunity extends StatelessWidget {
     var provider = Provider.of<CommunityFeedProvider>(context);
     return InkWell(
       onTap: () {
-        provider.setCurrentQuickPicked(index);
+        provider.setCurrentQuickPicked(index, category.id);
         if (index == 0) {
           provider.searchCommunity('');
         } else {

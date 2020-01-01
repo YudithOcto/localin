@@ -7,7 +7,8 @@ class HeadingItem extends MemberListItem {
 
 class AdminItem extends MemberListItem {
   String title;
-  AdminItem({this.title});
+  String imageProfile;
+  AdminItem({this.title, this.imageProfile});
 }
 
 class MemberItem extends MemberListItem {
@@ -15,5 +16,7 @@ class MemberItem extends MemberListItem {
   String id;
   String status;
   int isApproved;
-  MemberItem({this.title, this.id, this.status, this.isApproved});
+  String imageProfile;
+  MemberItem(
+      {this.title, this.id, this.status, this.isApproved, this.imageProfile});
 }

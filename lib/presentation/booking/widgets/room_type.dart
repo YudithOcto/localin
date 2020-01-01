@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
-import 'package:intl/intl.dart';
 import 'package:localin/components/bullet_text.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/booking/widgets/room_detail_title.dart';
@@ -34,7 +32,7 @@ class RoomType extends StatelessWidget {
 
   Widget singleCardRoom() {
     return Container(
-        margin: prefix0.EdgeInsets.symmetric(vertical: 5.0),
+        margin: EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
             border: Border.all(color: Themes.grey),
             borderRadius: BorderRadius.circular(8.0)),
@@ -145,9 +143,7 @@ class RoomType extends StatelessWidget {
     return Bullet(
       'Pay Now Only',
       style: TextStyle(
-          fontSize: 10.0,
-          fontWeight: prefix0.FontWeight.w500,
-          color: Themes.dimGrey),
+          fontSize: 10.0, fontWeight: FontWeight.w500, color: Themes.dimGrey),
     );
   }
 }

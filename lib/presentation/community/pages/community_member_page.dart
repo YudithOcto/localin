@@ -31,13 +31,17 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
     List<MemberListItem> memberList = List();
     items.map((value) {
       if (value.status == 'admin') {
-        adminItem.add(AdminItem(title: value.name));
+        adminItem.add(
+            AdminItem(title: value.name, imageProfile: value.imageProfile));
       } else {
-        memberItem.add(MemberItem(
-            title: value.name,
-            id: value.id,
-            isApproved: value.isApproved,
-            status: value.status));
+        memberItem.add(
+          MemberItem(
+              title: value.name,
+              id: value.id,
+              isApproved: value.isApproved,
+              status: value.status,
+              imageProfile: value.imageProfile),
+        );
       }
     }).toList();
     memberList.insert(0, HeadingItem(title: 'ADMIN'));
@@ -104,7 +108,8 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                     final item = snapshot.data[index];
                     if (item is HeadingItem) {
                       return Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(
+                            left: 16.0, top: 5.0, bottom: 5.0),
                         child: Text(
                           item.title,
                           style: TextStyle(
@@ -118,26 +123,79 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                         title: Text(item.title),
                         leading: CircleAvatar(
                           backgroundColor: Themes.silverGrey,
-                          child: Icon(
-                            Icons.people,
-                            color: Themes.red,
-                          ),
+                          backgroundImage: item.imageProfile != null
+                              ? NetworkImage(item.imageProfile)
+                              : null,
+                          child: item.imageProfile != null
+                              ? Container()
+                              : Icon(
+                                  Icons.people,
+                                  color: Themes.red,
+                                ),
                         ),
                       );
                     } else {
                       var memberItem = item as MemberItem;
                       return ListTile(
                         title: Text(memberItem.title),
-                        trailing: Icon(Icons.person_add),
-                        leading: memberItem.isApproved == 0
-                            ? CircleAvatar(
-                                backgroundColor: Themes.silverGrey,
-                                child: Icon(
+                        trailing: InkWell(
+                          onTap: () async {
+                            var dialog = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Community Member'),
+                                    content: Text('Approve this person?'),
+                                    actions: <Widget>[
+                                      RaisedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        color: Themes.silverGrey,
+                                        elevation: 5.0,
+                                        child: Text('Cancel'),
+                                      ),
+                                      RaisedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop('success');
+                                        },
+                                        color: Themes.primaryBlue,
+                                        elevation: 5.0,
+                                        child: Text(
+                                          'Ok',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                });
+
+                            if (dialog != null) {
+                              var approved = await provider.approveMember(
+                                  widget.communityId, memberItem.id);
+                              if (approved == null || approved.error != null) {
+                                showErrorDialog(approved?.error);
+                              } else {
+                                Navigator.of(context).pop();
+                              }
+                            }
+                          },
+                          child: Icon(Icons.person_add),
+                        ),
+                        leading: CircleAvatar(
+                          backgroundColor: Themes.silverGrey,
+                          backgroundImage: memberItem.imageProfile != null
+                              ? NetworkImage(memberItem.imageProfile)
+                              : null,
+                          child: memberItem.imageProfile != null
+                              ? Container()
+                              : Icon(
                                   Icons.people,
                                   color: Themes.red,
                                 ),
-                              )
-                            : Container(),
+                        ),
                       );
                     }
                   },
@@ -148,5 +206,37 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
         ),
       ],
     );
+  }
+
+  void showErrorDialog(String success) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Community Member'),
+            content: Text('$success'),
+            actions: <Widget>[
+              RaisedButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                color: Themes.silverGrey,
+                elevation: 5.0,
+                child: Text('Cancel'),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Themes.primaryBlue,
+                elevation: 5.0,
+                child: Text(
+                  'Ok',
+                  style: TextStyle(fontSize: 12.0, color: Colors.white),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

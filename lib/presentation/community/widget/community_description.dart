@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
-import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
 import 'package:provider/provider.dart';
@@ -25,21 +23,22 @@ class CommunityDescription extends StatelessWidget {
             SizedBox(
               width: 5.0,
             ),
-            InkWell(
-              onTap: () {
-//                Navigator.of(context)
-//                    .pushNamed(CommunityCreateEventPage.routeName);
-              },
+            Container(
+              margin: EdgeInsets.only(left: 15.0, right: 10.0),
               child: provider?.communityDetail?.logoUrl == null
-                  ? Image.asset(
-                      'images/community_logo.png',
-                      height: 50.0,
-                      width: 50.0,
+                  ? CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      backgroundImage: AssetImage('images/community_logo.png'),
                     )
-                  : Image.network(
-                      provider?.communityDetail?.logoUrl,
-                      height: 50.0,
-                      width: 50.0,
+                  : CircleAvatar(
+                      backgroundColor: Themes.primaryBlue,
+                      radius: 31.0,
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(
+                            '${provider?.communityDetail?.logoUrl}'),
+                      ),
                     ),
             ),
             SizedBox(
@@ -98,14 +97,11 @@ class CommunityDescription extends StatelessWidget {
                   onTap: () {
                     provider.setSearchMemberPage(true);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '${provider?.communityDetail?.follower} Mengikuti',
-                      textAlign: TextAlign.right,
-                      style: kValueStyle.copyWith(
-                          fontSize: 10.0, color: Themes.primaryBlue),
-                    ),
+                  child: Text(
+                    '${provider?.communityDetail?.follower} Mengikuti',
+                    textAlign: TextAlign.right,
+                    style: kValueStyle.copyWith(
+                        fontSize: 10.0, color: Themes.primaryBlue),
                   ),
                 )
               ],

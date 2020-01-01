@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
+import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
@@ -67,6 +68,11 @@ class Repository {
     return apiProvider.getMemberCommunity(communityId);
   }
 
+  Future<CommunityMemberResponse> approveMember(
+      String communityId, String memberId) async {
+    return apiProvider.approveMemberCommunity(communityId, memberId);
+  }
+
   Future<CommunityDetailBaseResponse> getCommunityListByCategory(
       String categoryId) async {
     return apiProvider.getCommunityListByCategoryId(categoryId);
@@ -74,6 +80,11 @@ class Repository {
 
   Future<CommunityDetailBaseResponse> getUserCommunityList() async {
     return apiProvider.getUserCommunityList();
+  }
+
+  Future<CommunityCommentBaseResponse> getCommunityCommentList(
+      String communityId) async {
+    return apiProvider.getCommentList(communityId);
   }
 
   Future<void> createCommunityEvent(

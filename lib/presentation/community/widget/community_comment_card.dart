@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/date_helper.dart';
 
 import '../../../themes.dart';
 
 class CommunityCommentCard extends StatelessWidget {
   final int index;
-  CommunityCommentCard({this.index});
+  final CommunityComment commentDetail;
+  CommunityCommentCard({this.index, this.commentDetail});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +33,7 @@ class CommunityCommentCard extends StatelessWidget {
                     style: kValueStyle.copyWith(color: Themes.primaryBlue),
                   ),
                   Text(
-                    '4 jan',
+                    '${DateHelper.formatDateFromApi(commentDetail?.updatedAt)}',
                     style: kValueStyle.copyWith(
                         fontSize: 10.0, color: Colors.black26),
                   )
@@ -43,31 +45,27 @@ class CommunityCommentCard extends StatelessWidget {
             height: 10.0,
           ),
           Text(
-            kRandomWords,
+            '${commentDetail?.commentContent}',
             style: kValueStyle.copyWith(
                 color: Colors.black87,
                 fontWeight: FontWeight.w500,
                 fontSize: 12.0),
           ),
-          SizedBox(
-            height: 10.0,
+          Visibility(
+            visible: false,
+            child: SizedBox(
+              height: 10.0,
+            ),
           ),
-          Text(
-            kRandomWords,
-            style: kValueStyle.copyWith(
-                color: Colors.black87,
-                fontWeight: FontWeight.w500,
-                fontSize: 12.0),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Text(
-            '#ITCommunity #IsengItuSukses',
-            style: kValueStyle.copyWith(
-                color: Themes.primaryBlue,
-                fontWeight: FontWeight.w500,
-                fontSize: 12.0),
+          Visibility(
+            visible: false,
+            child: Text(
+              '#ITCommunity #IsengItuSukses',
+              style: kValueStyle.copyWith(
+                  color: Themes.primaryBlue,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12.0),
+            ),
           ),
           SizedBox(
             height: 10.0,
@@ -75,7 +73,13 @@ class CommunityCommentCard extends StatelessWidget {
           Container(
             height: 150.0,
             width: double.infinity,
-            color: Colors.grey,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: Colors.grey,
+              image: DecorationImage(
+                  image: NetworkImage('${commentDetail?.attachment}'),
+                  fit: BoxFit.cover),
+            ),
           ),
           SizedBox(
             height: 10.0,

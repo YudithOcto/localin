@@ -10,6 +10,6 @@ class DateHelper {
   static String formatDateFromApi(String value) {
     if (value == null) return '';
     DateTime dateTime = DateTime.parse(value);
-    return DateFormat('EEEE, dd MMMM yyyy').format(dateTime);
+    return DateFormat('dd MMMM yyyy, hh:mm').format(dateTime);
   }
 }

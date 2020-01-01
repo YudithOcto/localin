@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/widget/recommended_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/constants.dart';
-import 'package:localin/utils/constants.dart';
 
 import '../../../themes.dart';
 
