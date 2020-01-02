@@ -1,17 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/rounded_button_fill.dart';
+import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+
+import '../../../themes.dart';
 
 class CommunityFormInput extends StatefulWidget {
+  final Function onRefresh;
+
+  CommunityFormInput({this.onRefresh});
+
   @override
   _CommunityFormInputState createState() => _CommunityFormInputState();
 }
 
 class _CommunityFormInputState extends State<CommunityFormInput> {
   double size = 50.0;
-  bool isImageShown = false;
+  VideoPlayerController _videoPlayerController;
+
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<CommunityDetailProvider>(context);
     return Container(
       margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
       child: Row(
@@ -41,10 +54,15 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
                 children: <Widget>[
                   TextFormField(
                     onTap: () {
-                      setState(() {
-                        size = 200.0;
-                      });
+                      if (size < 200.0) {
+                        setState(() {
+                          size = 200.0;
+                        });
+                      }
                     },
+                    controller: provider.commentController,
+                    validator: (value) =>
+                        value.isEmpty ? 'Field is required' : null,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
@@ -65,14 +83,30 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Visibility(
-                              visible: isImageShown,
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: 5.0, left: 5.0),
-                                child: Icon(
-                                  Icons.add_photo_alternate,
-                                  size: 50.0,
-                                ),
-                              ),
+                              visible: provider.attachmentFileVideo != null,
+                              child: provider?.attachmentFileVideo != null &&
+                                      _videoPlayerController.value.initialized
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Container(
+                                        width: 100.0,
+                                        height: 60.0,
+                                        child:
+                                            VideoPlayer(_videoPlayerController),
+                                      ),
+                                    )
+                                  : Container(),
+                            ),
+                            Visibility(
+                              visible: provider.attachmentFileImage != null,
+                              child: provider?.attachmentFileImage != null
+                                  ? Container(
+                                      width: 100.0,
+                                      height: 60.0,
+                                      child: Image.file(
+                                          provider?.attachmentFileImage),
+                                    )
+                                  : Container(),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -85,18 +119,21 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
                                     children: <Widget>[
                                       InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            isImageShown = true;
-                                          });
+                                          showDialogAttachment();
                                         },
                                         child: Icon(Icons.attach_file),
                                       ),
-                                      Text(
-                                        'Tambah Foto/Video',
-                                        textAlign: TextAlign.center,
-                                        style: kValueStyle.copyWith(
-                                            fontSize: 10.0,
-                                            color: Colors.black45),
+                                      InkWell(
+                                        onTap: () {
+                                          showDialogAttachment();
+                                        },
+                                        child: Text(
+                                          'Tambah Foto/Video',
+                                          textAlign: TextAlign.center,
+                                          style: kValueStyle.copyWith(
+                                              fontSize: 10.0,
+                                              color: Colors.black45),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -104,7 +141,15 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
                                     child: Align(
                                       alignment: Alignment.bottomRight,
                                       child: RoundedButtonFill(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          CommunityCommentBaseResponse result =
+                                              await provider.postComment();
+                                          if (result.error != null) {
+                                            showErrorDialog(result.error);
+                                          } else {
+                                            widget.onRefresh();
+                                          }
+                                        },
                                         title: 'Kirim',
                                       ),
                                     ),
@@ -126,7 +171,12 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
             child: Container(
               margin: EdgeInsets.only(top: 15.0, right: 15.0),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    size = 200.0;
+                  });
+                  showDialogAttachment();
+                },
                 child: Icon(Icons.attach_file),
               ),
             ),
@@ -134,5 +184,70 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
         ],
       ),
     );
+  }
+
+  void showDialogAttachment() async {
+    var provider = Provider.of<CommunityDetailProvider>(context);
+    var result = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Attachment'),
+            content: Text('choose image or video'),
+            actions: <Widget>[
+              RaisedButton(
+                onPressed: () async {
+                  var res = await provider.getImageFromStorage();
+                  if (res == null) {
+                    Navigator.of(context).pop('success');
+                  } else {
+                    Navigator.of(context).pop('$res');
+                  }
+                },
+                child: Text('Image'),
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  var res = await provider.getVideoFromStorage();
+                  if (res == null) {
+                    Navigator.of(context).pop('success');
+                  } else {
+                    Navigator.of(context).pop('$res');
+                  }
+                },
+                child: Text('Video'),
+              )
+            ],
+          );
+        });
+    if (result == 'success') {
+      _videoPlayerController =
+          VideoPlayerController.file(provider.attachmentFileImage)
+            ..initialize().then((_) {
+              setState(() {});
+            });
+    } else {
+      showErrorDialog(result);
+    }
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('$message'),
+            actions: <Widget>[
+              RaisedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Themes.primaryBlue,
+                child: Text('OK'),
+              )
+            ],
+          );
+        });
   }
 }

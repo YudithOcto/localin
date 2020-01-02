@@ -11,7 +11,23 @@ import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class CommunityDetailCommentSection extends StatelessWidget {
+class CommunityDetailCommentSection extends StatefulWidget {
+  @override
+  _CommunityDetailCommentSectionState createState() =>
+      _CommunityDetailCommentSectionState();
+}
+
+class _CommunityDetailCommentSectionState
+    extends State<CommunityDetailCommentSection> {
+  Future comment;
+
+  @override
+  void initState() {
+    super.initState();
+    var provider = Provider.of<CommunityDetailProvider>(context, listen: false);
+    comment = provider.getCommentList(provider.communityDetail.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<CommunityDetailProvider>(context);
@@ -58,7 +74,13 @@ class CommunityDetailCommentSection extends StatelessWidget {
             ),
           ),
         ),
-        CommunityFormInput(),
+        CommunityFormInput(
+          onRefresh: () {
+            setState(() {
+              comment = provider.getCommentList(provider.communityDetail.id);
+            });
+          },
+        ),
         SizedBox(
           height: 40.0,
           child: Divider(
@@ -68,7 +90,7 @@ class CommunityDetailCommentSection extends StatelessWidget {
           ),
         ),
         FutureBuilder<CommunityCommentBaseResponse>(
-            future: provider.getCommentList(provider.communityDetail.id),
+            future: comment,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(

@@ -91,4 +91,9 @@ class Repository {
       String communityId, FormData formData) async {
     return apiProvider.createEventCommunity(communityId, formData);
   }
+
+  Future<CommunityCommentBaseResponse> postComment(
+      String communityId, FormData formData) {
+    return apiProvider.postComment(formData, communityId);
+  }
 }

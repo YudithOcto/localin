@@ -27,7 +27,7 @@ class CommunityCommentBaseResponse {
 
   CommunityCommentBaseResponse.addComment(Map<String, dynamic> body)
       : message = body['message'],
-        commentResult = body['data'],
+        commentResult = CommunityComment.fromJson(body['data']),
         error = null;
 }
 

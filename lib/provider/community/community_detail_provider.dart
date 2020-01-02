@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
@@ -15,7 +17,14 @@ class CommunityDetailProvider extends BaseModelProvider {
   Repository _repository = Repository();
   HelperPermission _permissionHelper = HelperPermission();
   CommunityDetailProvider({this.communityDetail});
-  File attachmentFile;
+  File attachmentFileImage, attachmentFileVideo;
+  TextEditingController commentController = TextEditingController();
+
+  @override
+  void dispose() {
+    commentController.dispose();
+    super.dispose();
+  }
 
   void setSearchMemberPage(bool value) {
     this.isSearchMemberPage = value;
@@ -48,8 +57,9 @@ class CommunityDetailProvider extends BaseModelProvider {
   Future<String> getImageFromStorage() async {
     var result = await _permissionHelper.openGallery();
     if (result != null) {
-      attachmentFile = result;
-      return '';
+      attachmentFileImage = result;
+      notifyListeners();
+      return null;
     }
     return 'You need to grant permission for storage';
   }
@@ -57,9 +67,39 @@ class CommunityDetailProvider extends BaseModelProvider {
   Future<String> getVideoFromStorage() async {
     var result = await _permissionHelper.openVideoStorage();
     if (result != null) {
-      attachmentFile = result;
-      return '';
+      attachmentFileVideo = result;
+      notifyListeners();
+      return null;
     }
     return 'You need to grant permission for storage';
+  }
+
+  Future<CommunityCommentBaseResponse> postComment() async {
+    String type = attachmentFileImage != null
+        ? 'image'
+        : attachmentFileVideo != null ? 'video' : null;
+    String attachmentFilePath = attachmentFileImage != null
+        ? attachmentFileImage.path
+        : attachmentFileVideo != null ? attachmentFileVideo.path : '';
+    FormData formData = FormData.fromMap(
+      {
+        'komentar': commentController.text,
+        'tipe': type,
+        'lampiran': attachmentFilePath.isEmpty
+            ? null
+            : MultipartFile.fromFileSync(
+                attachmentFilePath,
+                filename: '$attachmentFilePath}',
+              ),
+      },
+    );
+    var response = await _repository.postComment(communityDetail.id, formData);
+    if (response.message != null) {
+      commentController.clear();
+      attachmentFileVideo = null;
+      attachmentFileImage = null;
+      notifyListeners();
+    }
+    return response;
   }
 }
