@@ -75,16 +75,19 @@ class ArticleSingleCard extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Themes.green,
-                        borderRadius: BorderRadius.circular(4.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        '${articleDetail?.tags?.first?.tagName}',
-                        style: kValueStyle.copyWith(
-                            color: Colors.white, fontSize: 10.0),
+                  Visibility(
+                    visible: articleDetail.tags.isNotEmpty,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Themes.green,
+                          borderRadius: BorderRadius.circular(4.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          '${articleDetail.tags.isNotEmpty ? articleDetail?.tags?.first?.tagName : ''}',
+                          style: kValueStyle.copyWith(
+                              color: Colors.white, fontSize: 10.0),
+                        ),
                       ),
                     ),
                   ),

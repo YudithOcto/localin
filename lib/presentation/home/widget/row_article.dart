@@ -44,17 +44,26 @@ class _RowArticleState extends State<RowArticle> {
             future: articleFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return Container(
+                  alignment: FractionalOffset.center,
                   child: CircularProgressIndicator(),
                 );
               } else {
-                return Column(
-                  children:
-                      List.generate(snapshot?.data?.data?.length, (index) {
-                    return ArticleSingleCard(
-                        index, snapshot?.data?.data[index]);
-                  }),
-                );
+                if (snapshot.hasError) {
+                  return Container(
+                    child: Text('Ooops, we have an error here'),
+                  );
+                } else {
+                  return Column(
+                    children: List.generate(
+                        snapshot?.data != null
+                            ? snapshot?.data?.data?.length
+                            : 0, (index) {
+                      return ArticleSingleCard(
+                          index, snapshot?.data?.data[index]);
+                    }),
+                  );
+                }
               }
             }),
       ],

@@ -18,7 +18,7 @@ class RowQuickMenu extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: FadeAnimation(
-              delay: 0.2,
+              delay: 0.1,
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'Kamar',
@@ -31,7 +31,7 @@ class RowQuickMenu extends StatelessWidget {
           ),
           Expanded(
             child: FadeAnimation(
-              delay: 0.3,
+              delay: 0.2,
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'Event',
@@ -46,7 +46,7 @@ class RowQuickMenu extends StatelessWidget {
           ),
           Expanded(
             child: FadeAnimation(
-              delay: 0.4,
+              delay: 0.2,
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'Atraksi',
@@ -59,7 +59,7 @@ class RowQuickMenu extends StatelessWidget {
           ),
           Expanded(
             child: FadeAnimation(
-              delay: 0.5,
+              delay: 0.3,
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'Makan',
@@ -72,7 +72,7 @@ class RowQuickMenu extends StatelessWidget {
           ),
           Expanded(
             child: FadeAnimation(
-              delay: 0.6,
+              delay: 0.3,
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'DANA',

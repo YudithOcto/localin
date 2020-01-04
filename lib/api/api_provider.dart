@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_constant.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
@@ -205,6 +206,19 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleTagResponse> getArticleTags(String keyword) async {
+    try {
+      var response = await _dio.get(ApiConstant.kArticleTags,
+          queryParameters: {'keyword': keyword},
+          options: Options(headers: {'requiredToken': true}));
+      List result = response.data;
+      var model = ArticleTagResponse.fromJson(result[0]);
+      return model;
+    } catch (error) {
+      return ArticleTagResponse.withError(error.toString());
+    }
+  }
+
   /// COMMUNITY
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
@@ -263,10 +277,9 @@ class ApiProvider {
           response.data['message']);
     } catch (error) {
       if (error is DioError) {
-        return CommunityDetailBaseResponse.hasError(
-            error?.response?.statusMessage);
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
       } else {
-        return CommunityDetailBaseResponse.hasError(error);
+        return CommunityDetailBaseResponse.hasError(error.toString());
       }
     }
   }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
@@ -40,6 +41,10 @@ class Repository {
 
   Future<ArticleBaseResponse> createArticle() async {
     return apiProvider.createArticle();
+  }
+
+  Future<ArticleTagResponse> getArticleTags(String keyword) async {
+    return apiProvider.getArticleTags(keyword);
   }
 
   Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {

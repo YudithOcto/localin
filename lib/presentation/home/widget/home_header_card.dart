@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/presentation/article/pages/create_article_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -56,17 +57,19 @@ class HomeHeaderCard extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Text(
-                          user.userModel.username,
+                          '${user?.userModel?.username ?? ''}',
                           style: kValueStyle.copyWith(fontSize: 18.0),
                         ),
                         SizedBox(
                           width: 5.0,
                         ),
-                        Icon(
-                          Icons.verified_user,
-                          color: Themes.primaryBlue,
-                          size: 15.0,
-                        )
+                        user?.userModel?.status == 'verified_identitas'
+                            ? Icon(
+                                Icons.verified_user,
+                                color: Themes.primaryBlue,
+                                size: 15.0,
+                              )
+                            : Container(),
                       ],
                     ),
                     Text(
@@ -85,8 +88,10 @@ class HomeHeaderCard extends StatelessWidget {
           right: 20.0,
           child: FloatingActionButton(
             backgroundColor: Themes.red,
-            onPressed: () {},
-            elevation: 5.0,
+            onPressed: () {
+              Navigator.of(context).pushNamed(CreateArticlePage.routeName);
+            },
+            elevation: 2.0,
             child: Icon(
               Icons.add,
               color: Colors.white,

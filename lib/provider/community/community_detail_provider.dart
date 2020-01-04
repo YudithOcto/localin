@@ -9,7 +9,6 @@ import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/utils/helper_permission.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class CommunityDetailProvider extends BaseModelProvider {
   CommunityDetail communityDetail;

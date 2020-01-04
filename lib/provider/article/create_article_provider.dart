@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/article/article_tag_response.dart';
+import 'package:localin/model/article/tag_model.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/utils/helper_permission.dart';
 
@@ -13,6 +16,8 @@ class CreateArticleProvider extends BaseModelProvider {
   TextEditingController contentController = TextEditingController();
   TextEditingController tagsController = TextEditingController();
   File attachmentImage;
+  ArticleTagResponse tagResponse;
+  TagModel userChosenTag;
 
   @override
   void dispose() {
@@ -38,5 +43,20 @@ class CreateArticleProvider extends BaseModelProvider {
       return '';
     }
     return 'You need to grant permission for storage';
+  }
+
+  Future<ArticleTagResponse> getArticleTags(String keyword) async {
+    var result = await _repository.getArticleTags(keyword);
+    if (result != null && result.error == null) {
+      tagResponse = result;
+      notifyListeners();
+    }
+    return result;
+  }
+
+  void setChosenTag(TagModel model) {
+    this.userChosenTag = model;
+    this.tagsController.text = model.tagName;
+    notifyListeners();
   }
 }
