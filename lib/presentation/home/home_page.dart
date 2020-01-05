@@ -34,7 +34,11 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                HomeHeaderCard(),
+                HomeHeaderCard(
+                  notifyParent: () {
+                    setState(() {});
+                  },
+                ),
                 state.isRoomPage ? SearchHotelWidget() : HomeContentDefault(),
               ],
             );

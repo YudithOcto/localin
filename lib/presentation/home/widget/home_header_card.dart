@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../../../themes.dart';
 
 class HomeHeaderCard extends StatelessWidget {
+  final Function() notifyParent;
+  HomeHeaderCard({@required this.notifyParent});
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<AuthProvider>(context);
@@ -88,8 +90,12 @@ class HomeHeaderCard extends StatelessWidget {
           right: 20.0,
           child: FloatingActionButton(
             backgroundColor: Themes.red,
-            onPressed: () {
-              Navigator.of(context).pushNamed(CreateArticlePage.routeName);
+            onPressed: () async {
+              var result = await Navigator.of(context)
+                  .pushNamed(CreateArticlePage.routeName);
+              if (result != null) {
+                notifyParent();
+              }
             },
             elevation: 2.0,
             child: Icon(

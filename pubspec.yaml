@@ -24,6 +24,7 @@ dependencies:
   permission_handler: ^4.0.0
   geolocator: ^5.1.5
   video_player: ^0.10.2+1
+  geocoder: ^0.2.1
 
 dev_dependencies:
   flutter_test:

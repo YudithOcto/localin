@@ -39,8 +39,8 @@ class Repository {
     return apiProvider.getArticleList();
   }
 
-  Future<ArticleBaseResponse> createArticle() async {
-    return apiProvider.createArticle();
+  Future<ArticleBaseResponse> createArticle(FormData form) async {
+    return apiProvider.createArticle(form);
   }
 
   Future<ArticleTagResponse> getArticleTags(String keyword) async {

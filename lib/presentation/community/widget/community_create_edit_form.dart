@@ -1,7 +1,9 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
+import 'package:localin/presentation/community/pages/community_google_maps.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_createedit_provider.dart';
@@ -66,6 +68,37 @@ class CommunityCreateEditForm extends StatelessWidget {
                       hintStyle:
                           TextStyle(fontSize: 12.0, color: Colors.black45),
                       hintText: 'Contoh: IT, Otomotif, Seni dsb',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0))),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            title('Location'),
+            SizedBox(
+              height: 10.0,
+            ),
+            Container(
+              child: InkWell(
+                onTap: () async {
+                  var result = await Navigator.of(context)
+                      .pushNamed(CommunityGoogleMaps.routeName);
+                  if (result != null && result is Address) {
+                    provider.locationController.text =
+                        '${result.locality}, ${result.subAdminArea}';
+                    provider.setAddress(result);
+                  }
+                },
+                child: TextFormField(
+                  enabled: false,
+                  controller: provider.locationController,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                      hintStyle:
+                          TextStyle(fontSize: 12.0, color: Colors.black45),
+                      hintText: 'Jln. Pegangsaan Timur . . .',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0))),
                 ),
@@ -181,6 +214,8 @@ class CommunityCreateEditForm extends StatelessWidget {
                           context, 'Logo File too big. Please upload smaller');
                     } else if (provider.category == null) {
                       showDialogValidate(context, 'Category is required');
+                    } else if (provider.address == null) {
+                      showDialogValidate(context, 'Location is required');
                     }
                   }
                 },

@@ -191,10 +191,13 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleBaseResponse> createArticle() async {
+  Future<ArticleBaseResponse> createArticle(FormData form) async {
     try {
       var response = await _dio.post(ApiConstant.kCreateArticle,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(
+            headers: {'requiredToken': true},
+          ),
+          data: form);
       var model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {

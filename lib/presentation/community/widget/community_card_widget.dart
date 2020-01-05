@@ -165,10 +165,9 @@ class UpperCommunityCardRow extends StatelessWidget {
           Row(
             children: <Widget>[
               detail != null && detail.logoUrl != null
-                  ? Image.network(
-                      detail?.logoUrl,
-                      width: 50.0,
-                      height: 50.0,
+                  ? CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(detail?.logoUrl, scale: 5.0),
                     )
                   : Image.asset(
                       'images/community_logo.png',
@@ -207,7 +206,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                   width: 5.0,
                 ),
                 Text(
-                  'Kebon Nanas, Kota Tangerang',
+                  '${detail?.address}',
                   style: kValueStyle.copyWith(
                     fontSize: 8.0,
                   ),

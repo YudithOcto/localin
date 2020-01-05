@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_category.dart';
@@ -15,17 +16,21 @@ class CommunityCreateEditProvider with ChangeNotifier {
   File coverImageFile, logoImageFile;
   TextEditingController communityNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool autoValidate = false;
   FocusNode focusNode = FocusNode();
   CommunityCategory category;
   bool loading = false;
+  Address address;
 
   @override
   void dispose() {
     communityNameController.dispose();
     descriptionController.dispose();
+    locationController.dispose();
+    categoryController.dispose();
     focusNode.dispose();
     super.dispose();
   }
@@ -79,6 +84,9 @@ class CommunityCreateEditProvider with ChangeNotifier {
         'nama': communityNameController.text,
         'kategori': category.id,
         'deskripsi': descriptionController.text,
+        'latitude': address.coordinates.latitude,
+        'longitude': address.coordinates.longitude,
+        'address': '${address.locality}, ${address.subAdminArea}',
         'logo': logoPath.isEmpty
             ? null
             : MultipartFile.fromFileSync(
@@ -115,7 +123,8 @@ class CommunityCreateEditProvider with ChangeNotifier {
         logoImageFile != null &&
         coverImageFile != null &&
         logoImageFile.lengthSync() <= 900000 &&
-        category != null) {
+        category != null &&
+        address != null) {
       form.save();
       return true;
     } else {
@@ -132,6 +141,11 @@ class CommunityCreateEditProvider with ChangeNotifier {
 
   void setLoading(bool loading) {
     this.loading = loading;
+    notifyListeners();
+  }
+
+  void setAddress(Address value) {
+    this.address = value;
     notifyListeners();
   }
 }

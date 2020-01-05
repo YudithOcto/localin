@@ -30,7 +30,7 @@ class _RowCommunityState extends State<RowCommunity> {
         future: baseResponseFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.error != null) {
               return Center(

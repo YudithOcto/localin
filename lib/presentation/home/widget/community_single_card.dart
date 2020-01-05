@@ -40,10 +40,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             child: Row(
               children: <Widget>[
                 widget.model.logoUrl != null
-                    ? Image.network(
-                        widget.model.logoUrl,
-                        width: 50.0,
-                        height: 50.0,
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(widget.model.logoUrl),
                       )
                     : Image.asset(
                         'images/community_logo.png',
@@ -84,7 +82,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                   width: 5.0,
                 ),
                 Text(
-                  'Kebon Nanas, Kota Tangerang',
+                  '${widget.model.address}',
                   style: kValueStyle.copyWith(
                     fontSize: 8.0,
                   ),

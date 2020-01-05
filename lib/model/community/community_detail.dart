@@ -5,6 +5,7 @@ class CommunityDetail {
   String category;
   String categoryName;
   String description;
+  String address;
   String logo;
   String logoUrl;
   int imageCount;
@@ -26,6 +27,7 @@ class CommunityDetail {
       this.name,
       this.category,
       this.description,
+      this.address,
       this.logo,
       this.ranting,
       this.status,
@@ -49,6 +51,7 @@ class CommunityDetail {
       name: body['nama'],
       category: body['kategori'],
       description: body['deskripsi'],
+      address: body['address'],
       logo: body['logo'],
       ranting: body['ranting'],
       status: body['status'],

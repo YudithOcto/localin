@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/article/tag_model.dart';
 import 'package:localin/provider/base_model_provider.dart';
@@ -18,6 +20,7 @@ class CreateArticleProvider extends BaseModelProvider {
   File attachmentImage;
   ArticleTagResponse tagResponse;
   TagModel userChosenTag;
+  bool autoValidate = false;
 
   @override
   void dispose() {
@@ -31,6 +34,7 @@ class CreateArticleProvider extends BaseModelProvider {
     var result = await _permissionHelper.openCamera();
     if (result != null) {
       attachmentImage = result;
+      notifyListeners();
       return '';
     }
     return 'You need to grant permission for camera';
@@ -40,6 +44,7 @@ class CreateArticleProvider extends BaseModelProvider {
     var result = await _permissionHelper.openGallery();
     if (result != null) {
       attachmentImage = result;
+      notifyListeners();
       return '';
     }
     return 'You need to grant permission for storage';
@@ -50,6 +55,49 @@ class CreateArticleProvider extends BaseModelProvider {
     if (result != null && result.error == null) {
       tagResponse = result;
       notifyListeners();
+    }
+    return result;
+  }
+
+  bool validateInput() {
+    var form = formKey.currentState;
+    if (form.validate() && attachmentImage != null) {
+      form.save();
+      return true;
+    } else {
+      autoValidate = true;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<ArticleBaseResponse> createArticle() async {
+    setState(ViewState.Busy);
+    String attachmentPath =
+        attachmentImage != null ? attachmentImage.path : null;
+    FormData formData = FormData.fromMap(
+      {
+        'judul': titleController.text != null && titleController.text.isNotEmpty
+            ? titleController.text
+            : null,
+        'deskripsi':
+            contentController.text != null && contentController.text.isNotEmpty
+                ? contentController.text
+                : null,
+        'gambar': attachmentPath != null && attachmentPath.isNotEmpty
+            ? MultipartFile.fromFileSync(
+                attachmentPath,
+                filename: '$attachmentPath}',
+              )
+            : null,
+        'tag[]': tagsController.text != null && tagsController.text.isNotEmpty
+            ? tagsController.text
+            : null
+      },
+    );
+    var result = await _repository.createArticle(formData);
+    if (result != null) {
+      setState(ViewState.Idle);
     }
     return result;
   }
