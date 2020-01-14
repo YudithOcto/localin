@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/profile/widgets/dana_active_row.dart';
 import 'package:localin/presentation/profile/widgets/profile_page_row_card.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'connect_dana_account_page.dart';
@@ -17,11 +19,17 @@ class HeaderProfile extends StatelessWidget {
         ProfilePageRowCard(onSettingPressed: () {
           Navigator.of(context).pushNamed(EditProfilePage.routeName);
         }),
-        RowConnectDana(
-          onPressed: () {
-            Navigator.of(context).pushNamed(ConnectDanaAccountPage.routeName);
-          },
-        ),
+        Provider.of<UserProfileProvider>(context).isUserDanaAccountActive
+            ? DanaActiveRow()
+            : RowConnectDana(
+                onPressed: () async {
+                  var result = await Navigator.of(context)
+                      .pushNamed(ConnectDanaAccountPage.routeName);
+                  if (result != null && result == 'success') {
+                    Provider.of<UserProfileProvider>(context).getUserArticle();
+                  }
+                },
+              ),
         authState?.userModel?.shortBio != null
             ? DescriptionColumn()
             : Container(),

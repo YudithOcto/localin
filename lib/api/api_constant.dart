@@ -22,4 +22,13 @@ class ApiConstant {
   static const String kArticleList = 'v1/artikel';
   static const String kCreateArticle = 'v1/artikel/entri/';
   static const String kArticleTags = 'v1/artikel/tags';
+
+  /// Hotel
+  static const String kHotel = 'v1/hotel';
+  static const String kHotelDetail = 'v1/hotel/detail';
+
+  /// DANA
+  static const String kDanaMe = 'payment/dana/me';
+  static const String kDanaPhoneActivate = 'v1/member/update/handphone';
+  static const String kDanaAuth = 'payment/dana/auth';
 }

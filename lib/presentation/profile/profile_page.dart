@@ -49,7 +49,10 @@ class Content extends StatelessWidget {
         } else {
           return Consumer<UserProfileProvider>(
             builder: (_, state, child) {
-              return ListView.builder(
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
                 itemCount: state.article != null && state.article.isNotEmpty
                     ? state.article.length
                     : 0,

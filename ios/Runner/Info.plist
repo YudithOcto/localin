@@ -87,5 +87,10 @@
         <!-- Permission options for the `reminder` group -->
         <key>NSRemindersUsageDescription</key>
         <string>reminders</string>
+
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSAllowsArbitraryLoadsInWebContent</key>
+        <true/>
 </dict>
 </plist>

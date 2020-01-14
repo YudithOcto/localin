@@ -71,22 +71,26 @@ class SingleCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          constraints: BoxConstraints(maxWidth: 100.0),
-                          decoration: BoxDecoration(
-                              color: Themes.orange,
-                              borderRadius: BorderRadius.circular(6.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 4.0),
-                            child: Text(
-                              articleModel[index]?.tags[0]?.tagName ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              style: kValueStyle.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 10.0,
-                                  letterSpacing: -.5,
-                                  fontWeight: FontWeight.w500),
+                        Visibility(
+                          visible: articleModel[index].tags != null &&
+                              articleModel[index].tags.isNotEmpty,
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 100.0),
+                            decoration: BoxDecoration(
+                                color: Themes.orange,
+                                borderRadius: BorderRadius.circular(6.0)),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 4.0),
+                              child: Text(
+                                '${articleModel[index].tags != null && articleModel[index].tags.isNotEmpty ? articleModel[index]?.tags[0]?.tagName : ''}',
+                                overflow: TextOverflow.ellipsis,
+                                style: kValueStyle.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.0,
+                                    letterSpacing: -.5,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
                         ),

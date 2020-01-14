@@ -17,6 +17,7 @@ import 'package:localin/presentation/login/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/edit_profile_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
           CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
           CreateArticlePage.routeName: (_) => CreateArticlePage(),
           CommunityGoogleMaps.routeName: (_) => CommunityGoogleMaps(),
+          WebViewPage.routeName: (_) => WebViewPage(),
         },
       ),
     );

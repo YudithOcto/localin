@@ -7,6 +7,9 @@ import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
+import 'package:localin/model/dana/dana_activate_base_response.dart';
+import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -100,5 +103,25 @@ class Repository {
   Future<CommunityCommentBaseResponse> postComment(
       String communityId, FormData formData) {
     return apiProvider.postComment(formData, communityId);
+  }
+
+  ///Hotel
+  Future<HotelListBaseResponse> getHotelList(
+      String latitude, String longitude, String keyword) {
+    return apiProvider.getHotelList(latitude, longitude, keyword);
+  }
+
+  Future<HotelListBaseResponse> getHotelDetail(
+      int hotelId, DateTime checkInDate, DateTime checkOutDate) {
+    return apiProvider.getHotelDetail(hotelId, checkInDate, checkOutDate);
+  }
+
+  ///Dana
+  Future<DanaUserAccountResponse> getUserDanaStatus() {
+    return apiProvider.getUserDanaStatus();
+  }
+
+  Future<DanaActivateBaseResponse> activateDana(FormData data) {
+    return apiProvider.activateDanaAccount(data);
   }
 }

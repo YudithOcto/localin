@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/presentation/booking/room_detail_page.dart';
 
 import '../../../themes.dart';
@@ -8,13 +9,15 @@ class HomeContentSearchHotel extends StatelessWidget {
       fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
 
   final int index;
-  HomeContentSearchHotel({this.index});
+  final HotelListEntity hotel;
+  HomeContentSearchHotel({this.index, this.hotel});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(RoomDetailPage.routeName);
+        Navigator.of(context).pushNamed(RoomDetailPage.routeName,
+            arguments: {RoomDetailPage.hotelId: hotel.hotelId});
       },
       child: Container(
         margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
@@ -45,14 +48,14 @@ class HomeContentSearchHotel extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'RedDoorz Apartment near Summarecon Mall Serpong',
+                          '${hotel.hotelName}',
                           style: cardTextStyle,
                         ),
                         SizedBox(
                           height: 5.0,
                         ),
                         Text(
-                          'Batu Ceper, Kota Tangerang',
+                          '${hotel.shortAddress}',
                           style: cardTextStyle.copyWith(
                               color: Colors.black38, fontSize: 11.0),
                         ),
@@ -70,7 +73,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                               width: 5.0,
                             ),
                             Text(
-                              '4.6 Km near from your location',
+                              '${hotel.distance}',
                               style: cardTextStyle.copyWith(
                                   color: Colors.black38, fontSize: 11.0),
                             ),
@@ -134,7 +137,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                         height: 5.0,
                       ),
                       Text(
-                        'Rp 233.750',
+                        'Rp ${hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty ? hotel.roomAvailability.first.sellingAmount : ''}',
                         style: cardTextStyle.copyWith(
                             fontSize: 14.0, color: Themes.primaryBlue),
                       ),

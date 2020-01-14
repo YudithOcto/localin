@@ -9,6 +9,9 @@ import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
+import 'package:localin/model/dana/dana_activate_base_response.dart';
+import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -29,8 +32,9 @@ class ApiProvider {
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
         baseUrl: ApiConstant.kBaseUrl,
-        receiveTimeout: 5000,
-        connectTimeout: 5000);
+        receiveTimeout: 7000,
+        maxRedirects: 3,
+        connectTimeout: 7000);
     _dio = Dio(options);
     sharedPreferences = await SharedPreferences.getInstance();
   }
@@ -73,7 +77,7 @@ class ApiProvider {
   void setupLoggingInterceptor() async {
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      print('send request：path:${options.baseUrl}${options.path}');
+      print('send request：path:${options.uri}');
       if (options.headers.containsKey("requiredToken")) {
         String token = await getToken();
         print(token);
@@ -409,6 +413,78 @@ class ApiProvider {
     } catch (error) {
       print(error);
       return error;
+    }
+  }
+
+  /// Hotel
+  Future<HotelListBaseResponse> getHotelList(
+      String latitude, String longitude, String search) async {
+    try {
+      var response = await _dio.get(ApiConstant.kHotel,
+          queryParameters: {
+            'latitude': latitude,
+            'longitude': longitude,
+            'keyword': search,
+            'page': 1,
+            'limit': 10,
+          },
+          options: Options(headers: {'requiredToken': false}));
+      return HotelListBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return HotelListBaseResponse.withError(_handleError(error));
+      } else {
+        return HotelListBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<HotelListBaseResponse> getHotelDetail(
+      int hotelId, DateTime checkInDate, DateTime checkOutDate) async {
+    try {
+      final result = await _dio.get(
+        ApiConstant.kHotelDetail,
+        queryParameters: {
+          'checkin': checkInDate.millisecondsSinceEpoch,
+          'checkout': checkOutDate.millisecondsSinceEpoch,
+          'room': 1,
+          'adult': 1,
+          'children': 0,
+        },
+        options: Options(headers: {'requiredToken': false}),
+      );
+      return HotelListBaseResponse.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return HotelListBaseResponse.withError(_handleError(error));
+      } else {
+        return HotelListBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  /// DANA
+  Future<DanaUserAccountResponse> getUserDanaStatus() async {
+    try {
+      final result = await _dio.get(ApiConstant.kDanaMe,
+          options: Options(headers: {'requiredToken': true}));
+      return DanaUserAccountResponse.fromJson(result.data);
+    } catch (error) {
+      return DanaUserAccountResponse.withError();
+    }
+  }
+
+  Future<DanaActivateBaseResponse> activateDanaAccount(FormData body) async {
+    try {
+      final response = await _dio.post(ApiConstant.kDanaPhoneActivate,
+          data: body, options: Options(headers: {'requiredToken': true}));
+      return DanaActivateBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return DanaActivateBaseResponse.withError(_handleError(error));
+      } else {
+        return DanaActivateBaseResponse.withError(error.toString());
+      }
     }
   }
 }
