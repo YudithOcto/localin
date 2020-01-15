@@ -17,13 +17,28 @@ class MainBottomNavigation extends StatefulWidget {
 
 class _MainBottomNavigationState extends State<MainBottomNavigation> {
   int currentSelected = 0;
+  final List<Widget> pages = [
+    HomePage(
+      key: PageStorageKey('homeKey'),
+    ),
+    CommunityFeedPage(
+      key: PageStorageKey('communityFeedKey'),
+    ),
+    BookingHistoryPage(
+      key: PageStorageKey('bookingHistoryKey'),
+    ),
+    NotificationListPage(
+      key: PageStorageKey('notificationKey'),
+    ),
+    ProfilePage(
+      key: PageStorageKey('profileKey'),
+    )
+  ];
+
+  final PageStorageBucket bucket = PageStorageBucket();
 
   void _selectedTab(int index) {
     onPageChanged(index);
-  }
-
-  void _selectedTabWithAnimation(int index) {
-    animatePageChanged(index);
   }
 
   @override
@@ -31,18 +46,10 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: PageView(
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            HomePage(),
-            CommunityFeedPage(),
-            BookingHistoryPage(),
-            NotificationListPage(),
-            ProfilePage()
-          ],
-          controller: pageController,
+        body: PageStorage(
+          bucket: bucket,
+          child: pages[currentSelected],
         ),
-        extendBody: true,
         bottomNavigationBar: FloatingActionBottomAppBar(
           color: Colors.black,
           selectedColor: Colors.blue,
@@ -63,7 +70,6 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
                 iconData: 'images/account_logo.png', text: 'Profile'),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -71,20 +77,8 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
   void onPageChanged(int page) {
     setState(() {
       currentSelected = page;
-      pageController.jumpToPage(page);
     });
   }
-
-  void animatePageChanged(int page) {
-    setState(() {
-      currentSelected = page;
-      pageController.animateToPage(page,
-          duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-    });
-  }
-
-  PageController pageController =
-      PageController(initialPage: 0, keepPage: false);
 
   Future<bool> _onWillPop() {
     if (currentSelected != 0) {

@@ -1,4 +1,4 @@
-const kGoogleApiKey = 'AIzaSyDSMoJYaboHxFynVBo8t6G-3vyIQpQNlKs';
+const kGoogleApiKey = 'AIzaSyCcpXmCiUxhtk1EcTJ3g9HxVDNYQx9X8Mk';
 
 class LocationHelper {
   static String generateLocationPreviewImage(

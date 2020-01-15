@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/article/widget/TabsViewDynamic.dart';
 import 'package:localin/presentation/article/widget/article_comment_page.dart';
 import 'package:localin/presentation/article/widget/article_reader_page.dart';
 import '../../../themes.dart';
@@ -33,44 +32,30 @@ class _TabBarHeaderState extends State<TabBarHeader>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TabBar(
-          onTap: (value) {
-            setState(() {
-              tabIndex = value;
-              _tabController.animateTo(value);
-            });
-          },
-          tabs: _createTab(context),
-          labelColor: Themes.primaryBlue,
-          labelStyle: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: Themes.primaryBlue,
+    return Container(
+      width: double.infinity,
+      height: 500,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          bottom: TabBar(
+            tabs: _createTab(context),
+            labelColor: Themes.primaryBlue,
+            labelStyle: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Themes.primaryBlue,
+            controller: _tabController,
+          ),
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            ArticleReaderPage(),
+            ArticleCommentPage(),
+          ],
           controller: _tabController,
         ),
-        GestureDetector(
-          onPanUpdate: (details) {
-            if (details.delta.dx < 0 && tabIndex == 0) {
-              //swiping right
-              setState(() {
-                tabIndex = 1;
-                _tabController.animateTo(1);
-              });
-            } else if (details.delta.dx > 0 && tabIndex == 1) {
-              setState(() {
-                tabIndex = 0;
-                _tabController.animateTo(0);
-              });
-            }
-          },
-          child: TabsViewDynamic(
-            tabIndex: tabIndex,
-            firstTab: ArticleReaderPage(),
-            secondTab: ArticleCommentPage(),
-          ),
-        )
-      ],
+      ),
     );
   }
 }

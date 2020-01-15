@@ -8,8 +8,8 @@ import '../../../themes.dart';
 class ArticleCommentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
+    return ListView(
+      shrinkWrap: true,
       children: <Widget>[
         Column(
           children: List.generate(3, (index) {

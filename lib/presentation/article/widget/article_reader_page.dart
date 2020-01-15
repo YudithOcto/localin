@@ -10,8 +10,8 @@ class ArticleReaderPage extends StatelessWidget {
     var state = Provider.of<ArticleDetailProvider>(context);
     return Container(
       width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        shrinkWrap: true,
         children: <Widget>[
           Container(
             width: double.infinity,

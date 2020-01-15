@@ -8,6 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }

@@ -11,6 +11,8 @@ const kValueStyle = TextStyle(
     fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key key}) : super(key: key);
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
