@@ -1,42 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
+import 'package:localin/presentation/home/widget/circle_material_button.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class HomeHeaderCard extends StatelessWidget {
+class HomeHeaderCard extends SliverPersistentHeaderDelegate {
   final Function() notifyParent;
-  HomeHeaderCard({@required this.notifyParent});
+  final double expandedHeight;
+  HomeHeaderCard({@required this.notifyParent, this.expandedHeight});
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     var user = Provider.of<AuthProvider>(context);
-    return Stack(
-      fit: StackFit.loose,
-      overflow: Overflow.visible,
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            //Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
-            //Navigator.of(context).pushNamed(BookingDetailPage.routeName);
-          },
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: Image.asset(
-              'images/static_map_image.png',
-              fit: BoxFit.fill,
+    return Opacity(
+      opacity: (1 - shrinkOffset / expandedHeight),
+      child: Stack(
+        fit: StackFit.expand,
+        overflow: Overflow.visible,
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              //Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
+              //Navigator.of(context).pushNamed(BookingDetailPage.routeName);
+            },
+            child: Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Image.asset(
+                'images/static_map_image.png',
+                fit: BoxFit.fill,
+              ),
             ),
           ),
-        ),
-        Positioned(
-          bottom: -20.0,
-          left: 20.0,
-          child: FadeAnimation(
-            fadeDirection: FadeDirection.top,
-            delay: 0.8,
+          Positioned(
+            bottom: -20.0,
+            left: 20.0,
             child: Row(
               children: <Widget>[
                 user == null
@@ -84,28 +86,32 @@ class HomeHeaderCard extends StatelessWidget {
               ],
             ),
           ),
-        ),
-        Positioned(
-          bottom: -25.0,
-          right: 20.0,
-          child: FloatingActionButton(
-            backgroundColor: Themes.red,
-            onPressed: () async {
-              var result = await Navigator.of(context)
-                  .pushNamed(CreateArticlePage.routeName);
-              if (result != null) {
-                notifyParent();
-              }
-            },
-            elevation: 2.0,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 40.0,
+          Positioned(
+            bottom: -25.0,
+            right: 20.0,
+            child: CircleMaterialButton(
+              backgroundColor: Themes.red,
+              onPressed: () async {
+                var result = await Navigator.of(context)
+                    .pushNamed(CreateArticlePage.routeName);
+                if (result != null) {
+                  notifyParent();
+                }
+              },
+              icon: Icons.add,
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
+
+  @override
+  double get maxExtent => expandedHeight;
+
+  @override
+  double get minExtent => 0.0;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }

@@ -124,7 +124,33 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
             WebViewPage.routeName,
             arguments: {WebViewPage.urlName: result.urlRedirect});
         if (response != null && response == 'success') {
-          Navigator.of(context).pop('success');
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('DANA'),
+                  content: Text(
+                    'Connect to dana success',
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      color: Themes.primaryBlue,
+                      onPressed: () => Navigator.of(context).pop('success'),
+                      child: Text(
+                        'Ok',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    )
+                  ],
+                );
+              });
         }
       }
     } else {

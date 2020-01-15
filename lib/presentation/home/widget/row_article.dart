@@ -30,8 +30,7 @@ class _RowArticleState extends State<RowArticle> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.all(12.0),
-          margin: EdgeInsets.only(top: 5.0),
+          margin: EdgeInsets.only(left: 15.0, top: 15.0),
           child: Text(
             'Yang Terjadi Di Sekitarmu',
             style: kValueStyle.copyWith(fontSize: 24.0),

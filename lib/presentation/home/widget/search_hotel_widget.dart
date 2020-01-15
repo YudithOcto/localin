@@ -82,14 +82,21 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
               if (snapshot.error != null) {
                 return Text('${snapshot.error}');
               } else {
-                return Column(
-                    children:
-                        List.generate(snapshot.data.hotelList.length, (index) {
-                  return HomeContentSearchHotel(
-                    index: index,
-                    hotel: snapshot.data.hotelList[index],
-                  );
-                }));
+                return ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  padding: EdgeInsets.only(bottom: 60.0),
+                  itemCount: snapshot.data?.hotelList?.length,
+                  itemBuilder: (context, index) {
+                    return HomeContentSearchHotel(
+                      index: index,
+                      hotel: snapshot.data.hotelList[index],
+                    );
+                  },
+                );
               }
             }
           },

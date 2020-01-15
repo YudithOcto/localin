@@ -26,24 +26,29 @@ class _HomePageState extends State<HomePage> {
           height: 50.0,
         ),
       ),
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Consumer<HomeProvider>(
-          builder: (ctx, state, child) {
-            return Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                HomeHeaderCard(
+      body: Consumer<HomeProvider>(
+        builder: (ctx, state, child) {
+          return CustomScrollView(
+            slivers: <Widget>[
+              SliverPersistentHeader(
+                delegate: HomeHeaderCard(
                   notifyParent: () {
                     setState(() {});
                   },
+                  expandedHeight: MediaQuery.of(context).size.height * 0.5,
                 ),
-                state.isRoomPage ? SearchHotelWidget() : HomeContentDefault(),
-              ],
-            );
-          },
-        ),
+                pinned: false,
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (_, index) => state.isRoomPage
+                        ? SearchHotelWidget()
+                        : HomeContentDefault(),
+                    childCount: 1),
+              )
+            ],
+          );
+        },
       ),
     );
   }

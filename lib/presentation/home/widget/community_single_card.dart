@@ -20,7 +20,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 10.0),
+      margin:
+          EdgeInsets.only(right: 10.0, left: widget.index == 0 ? 15.0 : 0.0),
       width: MediaQuery.of(context).size.width * 0.7,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,9 +221,6 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                 ),
               )
             ],
-          ),
-          SizedBox(
-            height: 8.0,
           ),
         ],
       ),

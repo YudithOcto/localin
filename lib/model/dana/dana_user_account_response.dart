@@ -1,16 +1,17 @@
 class DanaUserAccountResponse {
   bool error;
   String message;
-  List data;
+  DanaAccountDetail data;
 
   DanaUserAccountResponse({this.error, this.message, this.data});
 
   factory DanaUserAccountResponse.fromJson(Map<String, dynamic> body) {
-    List data = body['data'];
     return DanaUserAccountResponse(
       error: null,
       message: body['message'],
-      data: data,
+      data: body['error'] == false
+          ? DanaAccountDetail.fromJson(body['data'])
+          : null,
     );
   }
 
@@ -18,4 +19,20 @@ class DanaUserAccountResponse {
       : error = true,
         message = null,
         data = null;
+}
+
+class DanaAccountDetail {
+  String ott;
+  int balance;
+  String maskDanaId;
+
+  DanaAccountDetail({this.ott, this.balance, this.maskDanaId});
+
+  factory DanaAccountDetail.fromJson(Map<String, dynamic> body) {
+    return DanaAccountDetail(
+      ott: body['OTT'],
+      balance: body['BALANCE'],
+      maskDanaId: body['MASK_DANA_ID'],
+    );
+  }
 }

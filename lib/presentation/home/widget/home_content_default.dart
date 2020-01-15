@@ -7,31 +7,25 @@ import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 class HomeContentDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FadeAnimation(
-      delay: 0.5,
-      fadeDirection: FadeDirection.bottom,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            RowQuickMenu(),
-            containerDivider(),
-            RowCommunity(),
-            Divider(
-              color: Colors.black26,
-            ),
-            RowArticle()
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          RowQuickMenu(),
+          containerDivider(25.0),
+          RowCommunity(),
+          containerDivider(5.0),
+          RowArticle()
+        ],
       ),
     );
   }
 
-  containerDivider() {
+  containerDivider(double verticalHeight) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 25.0, horizontal: 10.0),
-      color: Colors.black26,
+      margin: EdgeInsets.symmetric(vertical: verticalHeight),
+      color: Colors.black12.withOpacity(0.2),
       width: double.infinity,
       height: 1.0,
     );

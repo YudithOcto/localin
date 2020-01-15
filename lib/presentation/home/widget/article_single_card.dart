@@ -16,7 +16,7 @@ class ArticleSingleCard extends StatelessWidget {
       onTap: () => Navigator.of(context).pushNamed(ArticleDetailPage.routeName,
           arguments: {ArticleDetailPage.articleDetailModel: articleDetail}),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10.0),
+        margin: EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

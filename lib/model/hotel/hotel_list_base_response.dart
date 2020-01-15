@@ -99,7 +99,6 @@ class RoomAvailability {
   int categoryId;
   String categoryName;
   int sellingAmount;
-  int commission;
   PricePerNight pricePerNight;
 
   RoomAvailability(

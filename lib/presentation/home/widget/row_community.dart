@@ -39,17 +39,19 @@ class _RowCommunityState extends State<RowCommunity> {
             } else {
               return Container(
                 width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Text(
-                      'Komunitas di Sekitarmu',
-                      style: kValueStyle.copyWith(fontSize: 24.0),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0),
+                      child: Text(
+                        'Komunitas di Sekitarmu',
+                        style: kValueStyle.copyWith(fontSize: 24.0),
+                      ),
                     ),
                     SizedBox(
-                      height: 8.0,
+                      height: 15.0,
                     ),
                     Consumer<HomeProvider>(
                       builder: (ctx, state, child) {
@@ -59,6 +61,7 @@ class _RowCommunityState extends State<RowCommunity> {
                               ? MediaQuery.of(context).size.height * 0.45
                               : MediaQuery.of(context).size.height * 0.9,
                           child: ListView.builder(
+                            cacheExtent: 1000,
                             scrollDirection: Axis.horizontal,
                             itemCount: state.communityDetail != null
                                 ? state.communityDetail.length
