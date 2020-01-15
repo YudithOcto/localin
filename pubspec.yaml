@@ -28,6 +28,7 @@ dependencies:
   flutter_pagewise: ^1.2.3
   cached_network_image: ^2.0.0
   flutter_webview_plugin: ^0.3.10+1
+  photo_view: ^0.9.1
 
 dev_dependencies:
   flutter_test:
