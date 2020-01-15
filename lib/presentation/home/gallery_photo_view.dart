@@ -83,9 +83,8 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     final item = widget.galleryItems[index];
     return PhotoViewGalleryPageOptions(
-      imageProvider: CachedNetworkImageProvider(
-        '$item', errorListener: () => Icon(Icons.error)
-      ),
+      imageProvider: CachedNetworkImageProvider('$item',
+          errorListener: () => Icon(Icons.error)),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 1.1,
