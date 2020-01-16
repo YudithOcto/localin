@@ -14,7 +14,6 @@ import 'package:localin/utils/location_helper.dart';
 class HomeProvider with ChangeNotifier {
   Position position;
   bool isLocationEnabled = false;
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   var currentAddress = '';
   var listLatitude = [];
   var listLongitude = [];
@@ -29,17 +28,6 @@ class HomeProvider with ChangeNotifier {
   List<ArticleDetail> articleDetail = List();
   bool isRoomPage = false;
   String previewUrl = '';
-
-  HomeProvider() {}
-
-  Future<Position> checkLocation() async {
-    isLocationEnabled = await geolocator.isLocationServiceEnabled();
-    final locData = await geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-    previewUrl = LocationHelper.generateLocationPreviewImage(
-        locData.latitude, locData.longitude);
-    notifyListeners();
-  }
 
   updateMarkerPosition(CameraPosition _position) {
     if (markers.length > 0) {
@@ -56,17 +44,17 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  Future<String> locationPermission() async {
-    //request runtime permission first
-    var isLocationPermissionGranted =
-        await _permissionHelper.getLocationPermission();
-    if (isLocationPermissionGranted) {
-      var checkGps = await geolocator.isLocationServiceEnabled();
-      return '';
-    } else {
-      return 'You need to grant permission for camera';
-    }
-  }
+//  Future<String> locationPermission() async {
+//    //request runtime permission first
+//    var isLocationPermissionGranted =
+//        await _permissionHelper.getLocationPermission();
+//    if (isLocationPermissionGranted) {
+//      var checkGps = await geolocator.isLocationServiceEnabled();
+//      return '';
+//    } else {
+//      return 'You need to grant permission for camera';
+//    }
+//  }
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
     var response = await _repository.getCommunityList(search);
@@ -77,13 +65,9 @@ class HomeProvider with ChangeNotifier {
     return response;
   }
 
-  Future<ArticleBaseResponse> getArticleList() async {
-    var response = await _repository.getArticleList();
-    if (response != null) {
-      articleDetail.clear();
-      articleDetail.addAll(response.data);
-    }
-    return response;
+  Future<List<ArticleDetail>> getArticleList(int offset, int limit) async {
+    var response = await _repository.getArticleList(limit, offset);
+    return response.data;
   }
 
   void setRoomPage(bool value) {

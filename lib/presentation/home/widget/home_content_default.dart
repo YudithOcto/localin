@@ -10,7 +10,6 @@ class HomeContentDefault extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 50.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           RowQuickMenu(),
           containerDivider(25.0),

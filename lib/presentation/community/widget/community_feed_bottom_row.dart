@@ -18,7 +18,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
       children: <Widget>[
         StarDisplay(
           value: 4.0,
-          size: 25.0,
+          size: 20.0,
         ),
         SizedBox(
           width: 5.0,

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/base_appbar.dart';
-import 'package:localin/presentation/booking/widgets/room_description.dart';
-import 'package:localin/presentation/booking/widgets/room_general_facilities.dart';
-import 'package:localin/presentation/booking/widgets/room_location.dart';
-import 'package:localin/presentation/booking/widgets/room_property_policies.dart';
-import 'package:localin/presentation/booking/widgets/room_recommended_by_property.dart';
-import 'package:localin/presentation/booking/widgets/room_type.dart';
+import 'package:localin/presentation/hotel/widgets/room_description.dart';
+import 'package:localin/presentation/hotel/widgets/room_general_facilities.dart';
+import 'package:localin/presentation/hotel/widgets/room_location.dart';
+import 'package:localin/presentation/hotel/widgets/room_property_policies.dart';
+import 'package:localin/presentation/hotel/widgets/room_recommended_by_property.dart';
+import 'package:localin/presentation/hotel/widgets/room_type.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../themes.dart';
 
-class RoomDetailPage extends StatefulWidget {
+class HotelDetailPage extends StatefulWidget {
   static const routeName = '/roomDetailPage';
   static const hotelId = '/hotelId';
 
   @override
-  _RoomDetailPageState createState() => _RoomDetailPageState();
+  _HotelDetailPageState createState() => _HotelDetailPageState();
 }
 
-class _RoomDetailPageState extends State<RoomDetailPage> {
+class _HotelDetailPageState extends State<HotelDetailPage> {
   final cardTextStyle = TextStyle(
       fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
 

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
 import 'package:localin/presentation/home/widget/home_header_card.dart';
 import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/services/location_services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -28,52 +30,57 @@ class _HomePageState extends State<HomePage> {
           height: 50.0,
         ),
       ),
-      body: Consumer<HomeProvider>(
-        builder: (ctx, state, child) {
-          return CustomScrollView(
-            slivers: <Widget>[
-              SliverPersistentHeader(
-                delegate: HomeHeaderCard(
-                  notifyParent: () {
-                    setState(() {});
-                  },
-                  expandedHeight: MediaQuery.of(context).size.height * 0.5,
+      body: StreamProvider<UserLocation>(
+        create: (context) => LocationServices().locationStream,
+        child: Consumer<HomeProvider>(
+          builder: (ctx, state, child) {
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverPersistentHeader(
+                  delegate: HomeHeaderCard(
+                    notifyParent: () {
+                      setState(() {});
+                    },
+                    expandedHeight: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                  pinned: false,
                 ),
-                pinned: false,
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (_, index) => state.isRoomPage
-                        ? SearchHotelWidget()
-                        : HomeContentDefault(),
-                    childCount: 1),
-              )
-            ],
-          );
-        },
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (_, index) => state.isRoomPage
+                          ? SearchHotelWidget(
+                              onSearchFocused: () {},
+                            )
+                          : HomeContentDefault(),
+                      childCount: 1),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  getLocation() async {
-    var result = await Provider.of<HomeProvider>(context).locationPermission();
-    if (result.isNotEmpty) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text('You need to activate GPS'),
-              actions: <Widget>[
-                RaisedButton(
-                  elevation: 5.0,
-                  child: Text('Ok'),
-                  onPressed: () {
-                    PermissionHandler().openAppSettings();
-                  },
-                ),
-              ],
-            );
-          });
-    }
-  }
+//  getLocation() async {
+//    var result = await Provider.of<HomeProvider>(context).locationPermission();
+//    if (result.isNotEmpty) {
+//      showDialog(
+//          context: context,
+//          builder: (context) {
+//            return AlertDialog(
+//              content: Text('You need to activate GPS'),
+//              actions: <Widget>[
+//                RaisedButton(
+//                  elevation: 5.0,
+//                  child: Text('Ok'),
+//                  onPressed: () {
+//                    PermissionHandler().openAppSettings();
+//                  },
+//                ),
+//              ],
+//            );
+//          });
+//    }
+//  }
 }

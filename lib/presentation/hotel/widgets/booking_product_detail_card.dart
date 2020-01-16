@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/booking/widgets/location_detail_card.dart';
-import 'package:localin/presentation/booking/widgets/room_detail_card.dart';
+import 'package:localin/presentation/hotel/widgets/location_detail_card.dart';
+import 'package:localin/presentation/hotel/widgets/room_detail_card.dart';
 
 import '../../../themes.dart';
 

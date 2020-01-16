@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
@@ -40,15 +41,19 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             },
             child: Row(
               children: <Widget>[
-                widget.model.logoUrl != null
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(widget.model.logoUrl),
-                      )
-                    : Image.asset(
-                        'images/community_logo.png',
-                        width: 50.0,
-                        height: 50.0,
-                      ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(60.0),
+                  child: CachedNetworkImage(
+                    width: 40.0,
+                    height: 40.0,
+                    imageUrl: widget.model?.logoUrl,
+                    fit: BoxFit.cover,
+                    fadeInCurve: Curves.easeInOut,
+                    fadeOutDuration: Duration(milliseconds: 300),
+                    errorWidget: (context, url, error) =>
+                        Container(child: Icon(Icons.error)),
+                  ),
+                ),
                 SizedBox(
                   width: 10.0,
                 ),
@@ -70,42 +75,32 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 5.0),
+            margin: EdgeInsets.only(bottom: 5.0, top: 15.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Icon(
-                  Icons.location_on,
-                  color: Themes.primaryBlue,
-                  size: 8.0,
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  '${widget.model.address}',
-                  style: kValueStyle.copyWith(
-                    fontSize: 8.0,
-                  ),
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Themes.primaryBlue,
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 2.0),
-                    child: Text(
-                      '${widget.model.categoryName}',
-                      style: Constants.kValueStyle.copyWith(
-                          color: Colors.white,
-                          fontSize: 8.0,
-                          letterSpacing: -.5,
-                          fontWeight: FontWeight.w500),
-                    ),
+                Visibility(
+                  visible: widget.model.address != null,
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Themes.primaryBlue,
+                        size: 11.0,
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        '${widget.model.address}',
+                        style: kValueStyle.copyWith(
+                          fontSize: 11.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -113,29 +108,61 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                     '${widget.model.follower} follower',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 8.0, color: Themes.primaryBlue),
+                        fontSize: 11.0, color: Themes.primaryBlue),
                   ),
                 )
               ],
             ),
           ),
-          widget.model?.cover != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    widget?.model?.cover,
-                    width: double.infinity,
-                    height: 200.0,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : Container(
+          SizedBox(
+            height: 5.0,
+          ),
+          Stack(
+            children: <Widget>[
+              CachedNetworkImage(
+                imageUrl: widget.model?.cover,
+                imageBuilder: (context, imageProvider) => Container(
                   width: double.infinity,
                   height: 200.0,
                   decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(8.0)),
+                      borderRadius: BorderRadius.circular(12.0),
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: imageProvider)),
                 ),
+                fadeInCurve: Curves.easeIn,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                fadeOutDuration: Duration(milliseconds: 500),
+                errorWidget: (context, url, error) =>
+                    Container(child: Icon(Icons.error)),
+              ),
+              Positioned(
+                top: 10.0,
+                left: 10.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Themes.primaryBlue,
+                          Colors.lightBlueAccent,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12.0)),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      '${widget.model.categoryName}',
+                      style: Constants.kValueStyle.copyWith(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           SizedBox(
             height: 10.0,
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
-import 'package:localin/presentation/booking/widgets/booking_information_card.dart';
-import 'package:localin/presentation/booking/widgets/booking_product_detail_card.dart';
+import 'package:localin/presentation/hotel/widgets/booking_information_card.dart';
+import 'package:localin/presentation/hotel/widgets/booking_product_detail_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 
 import '../../themes.dart';

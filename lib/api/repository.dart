@@ -38,8 +38,8 @@ class Repository {
     return apiProvider.getUserArticle();
   }
 
-  Future<ArticleBaseResponse> getArticleList() async {
-    return apiProvider.getArticleList();
+  Future<ArticleBaseResponse> getArticleList(int offset, int page) async {
+    return apiProvider.getArticleList(page, offset);
   }
 
   Future<ArticleBaseResponse> createArticle(FormData form) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bullet_text.dart';
 import 'package:localin/components/rounded_button_fill.dart';
-import 'package:localin/presentation/booking/widgets/room_detail_title.dart';
+import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/themes.dart';
 
 class RoomType extends StatelessWidget {

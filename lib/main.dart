@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
-import 'package:localin/presentation/booking/booking_detail_page.dart';
-import 'package:localin/presentation/booking/booking_history_page.dart';
-import 'package:localin/presentation/booking/room_detail_page.dart';
-import 'package:localin/presentation/booking/success_booking_page.dart';
+import 'package:localin/presentation/hotel/booking_detail_page.dart';
+import 'package:localin/presentation/hotel/booking_history_page.dart';
+import 'package:localin/presentation/hotel/hotel_detail_page.dart';
+import 'package:localin/presentation/hotel/success_booking_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
           SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
           BookingDetailPage.routeName: (_) => BookingDetailPage(),
           BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
-          RoomDetailPage.routeName: (_) => RoomDetailPage(),
+          HotelDetailPage.routeName: (_) => HotelDetailPage(),
           CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
           CreateArticlePage.routeName: (_) => CreateArticlePage(),
           CommunityGoogleMaps.routeName: (_) => CommunityGoogleMaps(),

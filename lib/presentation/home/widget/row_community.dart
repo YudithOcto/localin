@@ -61,7 +61,6 @@ class _RowCommunityState extends State<RowCommunity> {
                               ? MediaQuery.of(context).size.height * 0.45
                               : MediaQuery.of(context).size.height * 0.9,
                           child: ListView.builder(
-                            cacheExtent: 1000,
                             scrollDirection: Axis.horizontal,
                             itemCount: state.communityDetail != null
                                 ? state.communityDetail.length

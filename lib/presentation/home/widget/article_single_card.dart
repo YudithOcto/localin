@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
@@ -7,9 +8,8 @@ import 'package:localin/utils/date_helper.dart';
 import '../../../themes.dart';
 
 class ArticleSingleCard extends StatelessWidget {
-  final int index;
   final ArticleDetail articleDetail;
-  ArticleSingleCard(this.index, this.articleDetail);
+  ArticleSingleCard(this.articleDetail);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -125,7 +125,13 @@ class ArticleSingleCard extends StatelessWidget {
       decoration: BoxDecoration(
           image: articleDetail?.image != null
               ? DecorationImage(
-                  image: NetworkImage(articleDetail?.image), fit: BoxFit.cover)
+                  image: CachedNetworkImageProvider(
+                    articleDetail?.image,
+                    errorListener: () => Container(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  fit: BoxFit.cover)
               : null,
           color: Colors.grey,
           borderRadius: BorderRadius.circular(8.0)),

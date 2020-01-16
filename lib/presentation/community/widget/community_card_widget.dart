@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
@@ -16,14 +17,16 @@ class CommunityCardWidget extends StatelessWidget {
     return detailList.isNotEmpty
         ? Container(
             margin: EdgeInsets.only(left: 10.0),
-            child: Column(
-              children: List.generate(
-                  detailList != null ? detailList.length : 0, (index) {
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              itemCount: detailList.length,
+              itemBuilder: (context, index) {
                 return SingleCommunityCard(
                   total: detailList != null ? detailList.length : 0,
                   detail: detailList[index],
                 );
-              }),
+              },
             ),
           )
         : Center(
@@ -42,108 +45,45 @@ class SingleCommunityCard extends StatelessWidget {
   SingleCommunityCard({this.total, this.detail});
   @override
   Widget build(BuildContext context) {
-    if (total == 1) {
-      /// we have this row if total item just 1
-      return InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-              arguments: {CommunityDetailPage.communityModel: detail});
-        },
-        child: Container(
-          margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
-          child: Column(
-            children: <Widget>[
-              UpperCommunityCardRow(
-                detail: detail,
-              ),
-              Container(
-                width: double.infinity,
-                height: 250.0,
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    image: detail?.cover != null
-                        ? DecorationImage(
-                            image: NetworkImage(
-                                ImageHelper.addSubFixHttp(detail?.cover)),
-                            fit: BoxFit.cover)
-                        : null,
-                    borderRadius: BorderRadius.circular(12.0)),
-              ),
-              SizedBox(
-                height: 15.0,
-              ),
-              CommunityFeedBottomRow(
-                detail: detail,
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Container(
-        width: double.infinity,
-        height: 300.0,
-        margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 0.0),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
+            arguments: {CommunityDetailPage.communityModel: detail});
+      },
+      child: Container(
+        margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             UpperCommunityCardRow(
               detail: detail,
             ),
-            Flexible(
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        image: detail?.cover != null
-                            ? DecorationImage(
-                                image: NetworkImage(detail?.cover),
-                                fit: BoxFit.cover)
-                            : null,
-                        borderRadius: BorderRadius.circular(12.0)),
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(12.0)),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(12.0)),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+            CachedNetworkImage(
+              imageBuilder: (context, imageProvider) => Container(
+                width: double.infinity,
+                height: 250.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
               ),
+              imageUrl: detail?.cover,
+              fadeInCurve: Curves.easeIn,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              fadeOutDuration: Duration(milliseconds: 500),
+              errorWidget: (context, url, error) =>
+                  Container(child: Icon(Icons.error)),
             ),
             SizedBox(
               height: 15.0,
             ),
             CommunityFeedBottomRow(
               detail: detail,
-            )
+            ),
           ],
         ),
-      );
-    }
+      ),
+    );
   }
 }
 
@@ -164,15 +104,13 @@ class UpperCommunityCardRow extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              detail != null && detail.logoUrl != null
-                  ? CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(detail?.logoUrl, scale: 5.0),
-                    )
-                  : Image.asset(
-                      'images/community_logo.png',
-                      scale: 1.5,
-                    ),
+              CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(detail?.logoUrl,
+                    scale: 5.0,
+                    errorListener: () => Container(
+                          color: Colors.grey,
+                        )),
+              ),
               SizedBox(
                 width: 10.0,
               ),
@@ -193,26 +131,34 @@ class UpperCommunityCardRow extends StatelessWidget {
             ],
           ),
           Container(
-            margin: EdgeInsets.only(left: 5.0, right: 10.0, bottom: 10.0),
+            margin: EdgeInsets.only(
+                top: 10.0, left: 5.0, right: 10.0, bottom: 10.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Icon(
-                  Icons.location_on,
-                  color: Themes.primaryBlue,
-                  size: 8.0,
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  '${detail?.address}',
-                  style: kValueStyle.copyWith(
-                    fontSize: 8.0,
+                Visibility(
+                  visible: detail?.address != null,
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Themes.primaryBlue,
+                        size: 12.0,
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        '${detail?.address}',
+                        style: kValueStyle.copyWith(
+                          fontSize: 11.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  width: 5.0,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -225,7 +171,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                       '${detail?.categoryName}',
                       style: kValueStyle.copyWith(
                           color: Colors.white,
-                          fontSize: 8.0,
+                          fontSize: 11.0,
                           letterSpacing: -.5,
                           fontWeight: FontWeight.w500),
                     ),
@@ -236,7 +182,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                     '${detail?.follower} Orang Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 10.0, color: Themes.primaryBlue),
+                        fontSize: 11.0, color: Themes.primaryBlue),
                   ),
                 )
               ],

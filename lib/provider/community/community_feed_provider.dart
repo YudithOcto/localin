@@ -18,11 +18,11 @@ class CommunityFeedProvider extends BaseModelProvider {
   String currentCategoryId;
 
   CommunityFeedProvider() {
-    setState(ViewState.Busy);
-    Future.wait([getCategoryList(), getCommunityList()]).then((value) {
-      setState(ViewState.Idle);
-    });
     searchController.addListener(_onSearchChanged);
+  }
+
+  Future getCommunityData() async {
+    return Future.wait([getCategoryList(), getCommunityList()]);
   }
 
   _onSearchChanged() {

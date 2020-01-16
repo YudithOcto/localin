@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/home/widget/article_single_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -11,22 +13,12 @@ class RowArticle extends StatefulWidget {
 }
 
 class _RowArticleState extends State<RowArticle> {
-  bool isInit = true;
-  Future<ArticleBaseResponse> articleFuture;
-
-  @override
-  void didChangeDependencies() {
-    if (isInit) {
-      articleFuture =
-          Provider.of<HomeProvider>(context, listen: false).getArticleList();
-      isInit = false;
-    }
-    super.didChangeDependencies();
-  }
+  final int pageSize = 6;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
@@ -39,32 +31,18 @@ class _RowArticleState extends State<RowArticle> {
         SizedBox(
           height: 10.0,
         ),
-        FutureBuilder<ArticleBaseResponse>(
-            future: articleFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  alignment: FractionalOffset.center,
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                if (snapshot.hasError) {
-                  return Container(
-                    child: Text('Ooops, we have an error here'),
-                  );
-                } else {
-                  return Column(
-                    children: List.generate(
-                        snapshot?.data != null
-                            ? snapshot?.data?.data?.length
-                            : 0, (index) {
-                      return ArticleSingleCard(
-                          index, snapshot?.data?.data[index]);
-                    }),
-                  );
-                }
-              }
-            }),
+        PagewiseListView<ArticleDetail>(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          pageSize: pageSize,
+          itemBuilder: (context, item, index) {
+            return ArticleSingleCard(item);
+          },
+          pageFuture: (pageIndex) {
+            return Provider.of<HomeProvider>(context, listen: false)
+                .getArticleList(pageIndex + 1, pageSize);
+          },
+        )
       ],
     );
   }

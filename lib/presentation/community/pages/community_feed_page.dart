@@ -3,7 +3,6 @@ import 'package:localin/model/community/community_category.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/widget/community_card_widget.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/provider/community/community_feed_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -38,54 +37,86 @@ class _CommunityFeedPageState extends State<CommunityFeedPage> {
   }
 }
 
-class ScrollContent extends StatelessWidget {
+class ScrollContent extends StatefulWidget {
+  @override
+  _ScrollContentState createState() => _ScrollContentState();
+}
+
+class _ScrollContentState extends State<ScrollContent> {
+  bool isInit = true;
+  Future communityFuture;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      communityFuture =
+          Provider.of<CommunityFeedProvider>(context).getCommunityData();
+      isInit = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<CommunityFeedProvider>(context);
-    return provider.state == ViewState.Idle
-        ? SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 16.0),
-                  child: TextFormField(
-                    controller: provider.searchController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16.0)),
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Cari Komunitas'),
-                  ),
+    return FutureBuilder(
+      future: communityFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 5.0,
+              ),
+              Text('Loading Community Data'),
+            ],
+          ));
+        } else {
+          return ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 16.0),
+                child: TextFormField(
+                  controller: provider.searchController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16.0)),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Cari Komunitas'),
                 ),
-                Container(
-                  height: 35.0,
-                  margin: EdgeInsets.only(left: 5.0),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: provider?.categoryList?.communityCategory != null
-                        ? provider.categoryList.communityCategory.length
-                        : 0,
-                    itemBuilder: (context, index) {
-                      return QuickMenuCommunity(
-                          index: index,
-                          category:
-                              provider.categoryList.communityCategory[index]);
-                    },
-                  ),
+              ),
+              Container(
+                height: 35.0,
+                margin: EdgeInsets.only(left: 5.0),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: provider?.categoryList?.communityCategory != null
+                      ? provider.categoryList.communityCategory.length
+                      : 0,
+                  itemBuilder: (context, index) {
+                    return QuickMenuCommunity(
+                        index: index,
+                        category:
+                            provider.categoryList.communityCategory[index]);
+                  },
                 ),
-                provider.isSearchLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : CommunityCardWidget(
-                        detailList: provider.communityDetail.communityDetail,
-                      ),
-                CommunityBottomCard(),
-              ],
-            ),
-          )
-        : Center(child: CircularProgressIndicator());
+              ),
+              provider.isSearchLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : CommunityCardWidget(
+                      detailList: provider.communityDetail.communityDetail,
+                    ),
+              CommunityBottomCard(),
+            ],
+          );
+        }
+      },
+    );
   }
 }
 

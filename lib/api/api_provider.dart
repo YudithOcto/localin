@@ -180,9 +180,10 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleBaseResponse> getArticleList() async {
+  Future<ArticleBaseResponse> getArticleList(int offset, int limit) async {
     try {
       var response = await _dio.get(ApiConstant.kArticleList,
+          queryParameters: {'limit': limit, 'page': offset},
           options: Options(headers: {'requiredToken': true}));
       var model = ArticleBaseResponse.fromJson(response.data);
       return model;
@@ -425,7 +426,7 @@ class ApiProvider {
             'latitude': latitude,
             'longitude': longitude,
             'keyword': search,
-            'page': 1,
+            'page': 0,
             'limit': 10,
           },
           options: Options(headers: {'requiredToken': false}));

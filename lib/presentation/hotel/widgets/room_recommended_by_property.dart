@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/booking/widgets/room_detail_title.dart';
+import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/themes.dart';
 
 class RoomRecommendedByProperty extends StatelessWidget {

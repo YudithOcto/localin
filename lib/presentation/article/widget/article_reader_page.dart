@@ -13,18 +13,21 @@ class ArticleReaderPage extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Text(
-              '${state?.articleModel?.description}',
-              style:
-                  kValueStyle.copyWith(fontSize: 14.0, color: Colors.black54),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Container(
+              width: double.infinity,
+              child: Text(
+                '${state?.articleModel?.description}',
+                style:
+                    kValueStyle.copyWith(fontSize: 14.0, color: Colors.black54),
+              ),
             ),
           ),
           SizedBox(
             height: 30.0,
           ),
-          RecommendedCard(),
+          Visibility(visible: false, child: RecommendedCard()),
         ],
       ),
     );

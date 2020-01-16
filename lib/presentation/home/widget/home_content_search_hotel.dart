@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
-import 'package:localin/presentation/booking/room_detail_page.dart';
+import 'package:localin/presentation/hotel/hotel_detail_page.dart';
 
 import '../../../themes.dart';
 
@@ -17,8 +17,8 @@ class HomeContentSearchHotel extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(RoomDetailPage.routeName,
-            arguments: {RoomDetailPage.hotelId: hotel.hotelId});
+        Navigator.of(context).pushNamed(HotelDetailPage.routeName,
+            arguments: {HotelDetailPage.hotelId: hotel.hotelId});
       },
       child: Container(
         margin: EdgeInsets.only(

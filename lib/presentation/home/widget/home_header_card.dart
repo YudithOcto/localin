@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
 import 'package:localin/presentation/home/widget/circle_material_button.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/utils/location_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -22,19 +24,30 @@ class HomeHeaderCard extends SliverPersistentHeaderDelegate {
         fit: StackFit.expand,
         overflow: Overflow.visible,
         children: <Widget>[
-          InkWell(
-            onTap: () {
-              //Navigator.of(context).pushNamed(SuccessBookingPage.routeName);
-              //Navigator.of(context).pushNamed(BookingDetailPage.routeName);
+          Consumer<UserLocation>(
+            builder: (context, location, child) {
+              return Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: CachedNetworkImage(
+                  imageUrl: LocationHelper.generateLocationPreviewImage(
+                      location?.latitude, location?.longitude),
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: Colors.grey,
+                  ),
+                  errorWidget: (context, item, index) => Column(
+                    children: <Widget>[
+                      Icon(Icons.error),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text('No Internet Connection')
+                    ],
+                  ),
+                ),
+              );
             },
-            child: Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: Image.asset(
-                'images/static_map_image.png',
-                fit: BoxFit.fill,
-              ),
-            ),
           ),
           Positioned(
             bottom: -20.0,
