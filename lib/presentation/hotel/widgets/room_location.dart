@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
+import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
@@ -43,10 +45,24 @@ class RoomLocation extends StatelessWidget {
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(12.0),
                               bottomRight: Radius.circular(12.0))),
-                      child: Text(
-                        'Lihat di Peta',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 11.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                              GoogleMapFullScreen.routeName,
+                              arguments: {
+                                GoogleMapFullScreen.targetLocation:
+                                    UserLocation(
+                                        latitude:
+                                            double.parse(detail?.latitude),
+                                        longitude:
+                                            double.parse(detail?.longitude)),
+                              });
+                        },
+                        child: Text(
+                          'Lihat di Peta',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 11.0),
+                        ),
                       ),
                     ),
                   )
@@ -78,24 +94,27 @@ class RoomLocation extends StatelessWidget {
                   SizedBox(
                     height: 5.0,
                   ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.location_on,
-                        color: Themes.primaryBlue,
-                        size: 15.0,
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Text(
-                        '4.6 Km near from your location',
-                        style: kValueStyle.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: Themes.grey,
-                            fontSize: 11.0),
-                      ),
-                    ],
+                  Visibility(
+                    visible: false,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.location_on,
+                          color: Themes.primaryBlue,
+                          size: 15.0,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          '4.6 Km near from your location',
+                          style: kValueStyle.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: Themes.grey,
+                              fontSize: 11.0),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

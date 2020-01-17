@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bullet_text.dart';
 import 'package:localin/components/rounded_button_fill.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/room_availability.dart';
+import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class RoomType extends StatelessWidget {
+class RoomType extends StatefulWidget {
+  @override
+  _RoomTypeState createState() => _RoomTypeState();
+}
+
+class _RoomTypeState extends State<RoomType> {
   final cardTextStyle = TextStyle(
       fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<HotelDetailProvider>(context);
     final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,10 +28,27 @@ class RoomType extends StatelessWidget {
         RoomDetailTitle(
           title: 'Room Type',
         ),
-        Column(
-          children: List.generate(3, (index) {
-            return singleCardRoom();
-          }),
+        StreamBuilder<RoomBaseResponse>(
+          stream: provider.roomStream,
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              if (asyncSnapshot.hasData) {
+                return Column(
+                  children: List.generate(
+                      asyncSnapshot.data.roomAvailability.length, (index) {
+                    return singleCardRoom(
+                        asyncSnapshot.data.roomAvailability[index]);
+                  }),
+                );
+              } else {
+                return Container();
+              }
+            }
+          },
         ),
         Container(
           color: Colors.black38,
@@ -33,7 +60,7 @@ class RoomType extends StatelessWidget {
     );
   }
 
-  Widget singleCardRoom() {
+  Widget singleCardRoom(RoomAvailability roomDetail) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
@@ -62,7 +89,7 @@ class RoomType extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'RedDoorz Apartment near Summarecon Mall Serpong',
+                        '${roomDetail.categoryName}',
                         maxLines: 2,
                         style: cardTextStyle,
                       ),
@@ -74,24 +101,28 @@ class RoomType extends StatelessWidget {
                           return rowRoomInformation();
                         }),
                       ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'View Details',
-                                style: cardTextStyle.copyWith(
-                                    fontSize: 11.0, color: Themes.primaryBlue),
-                              ),
-                              SizedBox(
-                                width: 2.0,
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_right,
-                                color: Themes.primaryBlue,
-                              )
-                            ],
+                      Visibility(
+                        visible: false,
+                        child: Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'View Details',
+                                  style: cardTextStyle.copyWith(
+                                      fontSize: 11.0,
+                                      color: Themes.primaryBlue),
+                                ),
+                                SizedBox(
+                                  width: 2.0,
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right,
+                                  color: Themes.primaryBlue,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )

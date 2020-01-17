@@ -1,40 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/facilities_model.dart';
+import 'package:localin/components/bullet_text.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/custom_date_range_picker.dart' as dtf;
 import 'package:provider/provider.dart';
 
-class RoomGeneralFacilities extends StatelessWidget {
-  createFacilityModel() {
-    final List<FacilitiesModel> facilityList = List();
-    facilityList.add(addModel('AC', iconData[0]));
-    facilityList.add(addModel('Restaurant', iconData[1]));
-    facilityList.add(addModel('Swimming Pool', iconData[2]));
-    facilityList.add(addModel('24 Hour Front Desk', iconData[3]));
-    facilityList.add(addModel('Parking Area', iconData[4]));
-    facilityList.add(addModel('Elevator', iconData[5]));
-    facilityList.add(addModel('WIFI', iconData[6]));
-    return facilityList;
-  }
+class RoomGeneralFacilities extends StatefulWidget {
+  @override
+  _RoomGeneralFacilitiesState createState() => _RoomGeneralFacilitiesState();
+}
 
-  addModel(String title, String icon) {
-    FacilitiesModel model = FacilitiesModel();
-    model.title = title;
-    model.icon = icon;
-    return model;
-  }
-
-  final iconData = [
-    'images/facilities_ac.png',
-    'images/facilities_restaurant.png',
-    'images/facilities_swimming.png',
-    'images/facilities_24_hour.png',
-    'images/facilities_parking.png',
-    'images/facilities_elevator.png',
-    'images/facilities_wifi.png'
-  ];
+class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
+  DateTime checkIn = DateTime.now().add(Duration(days: 200));
+  DateTime checkOut = DateTime.now().add(Duration(days: 201));
   @override
   Widget build(BuildContext context) {
     final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
@@ -47,6 +27,7 @@ class RoomGeneralFacilities extends StatelessWidget {
         SizedBox(
           height: 10.0,
         ),
+        RowFacilities(detail?.facilities),
         Container(
           color: Colors.black38,
           height: 1,
@@ -55,7 +36,7 @@ class RoomGeneralFacilities extends StatelessWidget {
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Column(
               children: <Widget>[
@@ -66,7 +47,7 @@ class RoomGeneralFacilities extends StatelessWidget {
                 SizedBox(
                   height: 8.0,
                 ),
-                buttonDate(DateTime.now().add(Duration(days: 200))),
+                buttonDate(checkIn, context),
               ],
             ),
             Icon(
@@ -81,7 +62,7 @@ class RoomGeneralFacilities extends StatelessWidget {
                 SizedBox(
                   height: 8.0,
                 ),
-                buttonDate(DateTime.now().add(Duration(days: 201))),
+                buttonDate(checkOut, context),
               ],
             ),
             Container(
@@ -137,19 +118,35 @@ class RoomGeneralFacilities extends StatelessWidget {
     );
   }
 
-  Widget buttonDate(DateTime dateTime) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: Themes.dimGrey)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4.0),
-        child: Text(
-          '${DateHelper.formatDateRangeToString(dateTime)}',
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 12.0,
-              color: Themes.primaryBlue),
+  Widget buttonDate(DateTime dateTime, BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        final List<DateTime> pick = await dtf.showDatePicker(
+            context: context,
+            initialFirstDate: checkIn,
+            initialLastDate: checkOut,
+            firstDate: new DateTime(checkIn.year, checkIn.month, checkIn.day),
+            lastDate: new DateTime(2025));
+        if (pick != null && pick.length == 2) {
+          setState(() {
+            checkIn = pick[0];
+            checkOut = pick[1];
+          });
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: Themes.dimGrey)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4.0),
+          child: Text(
+            '${DateHelper.formatDateRangeToString(dateTime)}',
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12.0,
+                color: Themes.primaryBlue),
+          ),
         ),
       ),
     );
@@ -163,50 +160,24 @@ class RowFacilities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100.0,
-      width: 100.0,
-      child: ListView.builder(
+    return GridView.count(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: listFacility.length,
-        itemBuilder: (context, index) {
-          return singleFacility(index);
-        },
-      ),
-    );
-  }
-
-  Widget singleFacility(int index) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Visibility(
-            visible: false,
-            child: Image.asset(
-              '',
-              width: 25.0,
-              height: 25.0,
+        physics: ClampingScrollPhysics(),
+        crossAxisCount: 4,
+        childAspectRatio: 1.0,
+        padding: const EdgeInsets.all(4.0),
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+        children: List.generate(listFacility?.length, (index) {
+          return Center(
+            child: Bullet(
+              listFacility[index],
+              style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w600,
+                  color: Themes.dimGrey),
             ),
-          ),
-          Visibility(
-            visible: false,
-            child: SizedBox(
-              height: 5.0,
-            ),
-          ),
-          Text(
-            listFacility[index],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w500,
-                color: Themes.primaryBlue),
-          )
-        ],
-      ),
-    );
+          );
+        }));
   }
 }

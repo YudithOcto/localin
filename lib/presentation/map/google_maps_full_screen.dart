@@ -1,18 +1,22 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localin/model/service/user_location.dart';
 import 'package:localin/themes.dart';
 
-class CommunityGoogleMaps extends StatefulWidget {
+class GoogleMapFullScreen extends StatefulWidget {
   static const routeName = '/googlemaps';
+  static const targetLocation = 'targetLocation';
   @override
-  _CommunityGoogleMapsState createState() => _CommunityGoogleMapsState();
+  _GoogleMapFullScreenState createState() => _GoogleMapFullScreenState();
 }
 
-class _CommunityGoogleMapsState extends State<CommunityGoogleMaps> {
+class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
   GoogleMapController mapController;
   double latitude = -6.121435, longitude = 106.774124;
   Completer<GoogleMapController> _controller = Completer();
@@ -20,17 +24,28 @@ class _CommunityGoogleMapsState extends State<CommunityGoogleMaps> {
   bool isLocationEnabled = false;
   String currentAddress = '';
   Address address;
+  bool isInit = true;
 
   @override
-  void initState() {
-    super.initState();
-    getLocation();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      UserLocation location = routeArgs[GoogleMapFullScreen.targetLocation];
+      if (location != null) {
+        latitude = location?.latitude;
+        longitude = location?.longitude;
+        createMarker();
+      } else {
+        getLocation();
+      }
+      isInit = false;
+    }
   }
 
   void getLocation() async {
     isLocationEnabled = await Geolocator().isLocationServiceEnabled();
-    final String markerIdVal = 'userMarker';
-    final MarkerId markerId = MarkerId(markerIdVal);
     if (isLocationEnabled) {
       Position position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -39,16 +54,24 @@ class _CommunityGoogleMapsState extends State<CommunityGoogleMaps> {
     }
 
     setState(() {
-      if (mapController != null) {
-        mapController
-            .animateCamera(CameraUpdate.newLatLng(LatLng(latitude, longitude)));
-      }
-      final Marker marker = Marker(
-          draggable: true,
-          markerId: markerId,
-          position: LatLng(latitude, longitude));
-      markers[markerId] = marker;
+      createMarker();
     });
+  }
+
+  createMarker() {
+    final String markerIdVal = 'userMarker';
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    if (mapController != null) {
+      mapController
+          .animateCamera(CameraUpdate.newLatLng(LatLng(latitude, longitude)));
+    }
+    final Marker marker = Marker(
+        draggable: true,
+        markerId: markerId,
+        infoWindow: InfoWindow(title: 'HOTEL KEBON', snippet: "KEBON JERUK"),
+        position: LatLng(latitude, longitude));
+    markers[markerId] = marker;
   }
 
   updateMarkerPosition(CameraPosition _position) {
@@ -96,18 +119,23 @@ class _CommunityGoogleMapsState extends State<CommunityGoogleMaps> {
             },
             myLocationEnabled: isLocationEnabled,
             mapType: MapType.normal,
-            onCameraMove: ((_position) {
-              updateMarkerPosition(_position);
-            }),
-            onCameraIdle: (() {
-              _getAddressFromLatLng();
-            }),
+//            onCameraMove: ((_position) {
+//              updateMarkerPosition(_position);
+//            }),
+//            onCameraIdle: (() {
+//              _getAddressFromLatLng();
+//            }),
             initialCameraPosition: CameraPosition(
                 bearing: 15.0,
                 zoom: 15.0,
                 target: LatLng(latitude != null ? latitude : 0,
                     longitude != null ? longitude : 0)),
             markers: Set<Marker>.of(markers.values),
+            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+              new Factory<OneSequenceGestureRecognizer>(
+                () => new EagerGestureRecognizer(),
+              ),
+            ].toSet(),
           ),
           Positioned(
             top: 50.0,

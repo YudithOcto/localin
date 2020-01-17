@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
-import 'package:localin/utils/constants.dart';
+import 'package:html/parser.dart' as parser;
 import 'package:provider/provider.dart';
 
 class RoomDescription extends StatelessWidget {
@@ -17,7 +17,7 @@ class RoomDescription extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(left: 5.0, right: 5.0),
           child: Text(
-            '${detail?.description}',
+            '${parseHtml(detail?.description)}',
             style: TextStyle(
                 fontSize: 12.0,
                 color: Color(0xFF696969),
@@ -32,5 +32,10 @@ class RoomDescription extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  parseHtml(String data) {
+    final doc = parser.parse(data);
+    return parser.parse(doc.body.text).documentElement.text;
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
-import 'package:localin/presentation/community/pages/community_google_maps.dart';
+import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_createedit_provider.dart';
@@ -84,7 +84,7 @@ class CommunityCreateEditForm extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   var result = await Navigator.of(context)
-                      .pushNamed(CommunityGoogleMaps.routeName);
+                      .pushNamed(GoogleMapFullScreen.routeName);
                   if (result != null && result is Address) {
                     provider.locationController.text =
                         '${result.locality}, ${result.subAdminArea}';

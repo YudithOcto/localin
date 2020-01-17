@@ -1,20 +1,31 @@
+import 'dart:async';
+
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/utils/date_helper.dart';
 
 class HotelDetailProvider extends BaseModelProvider {
   Repository _repository;
   HotelDetailEntity hotelDetailEntity;
+  int _checkInTime = 0, _checkOutTime = 0, _roomTotal = 1, _hotelID = 0;
+  String _errorMessage = '';
+  StreamController<RoomBaseResponse> _roomController;
 
   HotelDetailProvider() {
     _repository = Repository();
+    _roomController = StreamController<RoomBaseResponse>.broadcast();
   }
 
   Future<HotelListBaseResponse> getHotelDetail(int hotelID) async {
+    _hotelID = hotelID;
     // TODO CHANGE TO LIVE CHECK IN AND CHECKOUT DONT BE 6 MONTH
     final checkInDev = DateTime.now().add(Duration(days: 200));
     final checkOutDev = DateTime.now().add(Duration(days: 201));
+    _checkInTime = checkInDev.toUtc().millisecondsSinceEpoch;
+    _checkOutTime = checkOutDev.toUtc().millisecondsSinceEpoch;
+    getRoomAvailability();
     print('${DateHelper.formatDateRangeToString(checkInDev)}');
 
     final response =
@@ -23,5 +34,41 @@ class HotelDetailProvider extends BaseModelProvider {
       hotelDetailEntity = response.singleHotelEntity;
     }
     return response;
+  }
+
+  Future<RoomBaseResponse> getRoomAvailability() async {
+    final result = await _repository.getRoomAvailability(
+        _hotelID, _checkInTime, _checkOutTime, _roomTotal);
+    if (result != null && result.error == null) {
+      _roomController.add(result);
+      return result;
+    } else {
+      _errorMessage = result.error;
+      return null;
+    }
+  }
+
+  void setRoomDateSearch(DateTime checkIn, DateTime checkOut) {
+    this._checkInTime = checkIn.millisecondsSinceEpoch;
+    this._checkOutTime = checkOut.millisecondsSinceEpoch;
+    print(DateHelper.formatFromTimeStamp(_checkOutTime));
+    getRoomAvailability();
+  }
+
+  void setRoomTotalSearch(int totalRoom) {
+    this._roomTotal = totalRoom;
+    getRoomAvailability();
+  }
+
+  int get checkInTime => _checkInTime;
+  int get checkOutTime => _checkOutTime;
+  int get roomTotal => _roomTotal;
+  String get errorMessage => _errorMessage;
+  Stream<RoomBaseResponse> get roomStream => _roomController.stream;
+
+  @override
+  void dispose() {
+    _roomController.close();
+    super.dispose();
   }
 }

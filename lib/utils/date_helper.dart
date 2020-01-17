@@ -12,4 +12,10 @@ class DateHelper {
     DateTime dateTime = DateTime.parse(value);
     return DateFormat('dd MMMM yyyy, hh:mm').format(dateTime);
   }
+
+  static String formatFromTimeStamp(int value) {
+    if (value == null) return '';
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(value);
+    return DateFormat('dd MMMM yyyy, hh:mm').format(dateTime);
+  }
 }

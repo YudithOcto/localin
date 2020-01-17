@@ -12,6 +12,7 @@ import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -449,8 +450,6 @@ class ApiProvider {
           'checkin': checkInDate.millisecondsSinceEpoch,
           'checkout': checkOutDate.millisecondsSinceEpoch,
           'room': 1,
-          'adult': 1,
-          'children': 0,
         },
         options: Options(headers: {'requiredToken': false}),
       );
@@ -460,6 +459,31 @@ class ApiProvider {
         return HotelListBaseResponse.withError(_handleError(error));
       } else {
         return HotelListBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<RoomBaseResponse> getRoomAvailabilityDetail(
+      int hotelId, int checkIn, int checkOut, int room) async {
+    try {
+      final result =
+          await _dio.get('${ApiConstant.kHotelRoomAvailability}/$hotelId',
+              queryParameters: {
+                'checkin': checkIn
+                    .toString()
+                    .substring(0, checkIn.toString().length - 3),
+                'checkout': checkOut
+                    .toString()
+                    .substring(0, checkOut.toString().length - 3),
+                'room': room,
+              },
+              options: Options(headers: {'requiredToken': false}));
+      return RoomBaseResponse.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RoomBaseResponse.withError(_handleError(error));
+      } else {
+        return RoomBaseResponse.withError(error.toString());
       }
     }
   }

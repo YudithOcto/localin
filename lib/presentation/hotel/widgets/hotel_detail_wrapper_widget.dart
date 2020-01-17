@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/home/gallery_photo_view.dart';
@@ -45,31 +46,39 @@ class HotelDetailWrapperWidget extends StatelessWidget {
                 },
                 child: Stack(
                   children: <Widget>[
-                    CachedNetworkImage(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).orientation ==
-                                Orientation.portrait
-                            ? size.height * 0.3
-                            : size.height * 0.6,
-                        imageUrl: provider?.hotelDetailEntity?.images?.first,
-                        fit: BoxFit.cover,
-                        fadeInCurve: Curves.bounceIn,
-                        placeholderFadeInDuration: Duration(milliseconds: 500),
-                        placeholder: (context, url) => Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                        errorWidget: (context, url, _) => Container(
-                              color: Colors.grey,
+                    CarouselSlider.builder(
+                      aspectRatio: 2.0,
+                      itemCount: provider.hotelDetailEntity.images.length,
+                      itemBuilder: (BuildContext context, int itemIndex) =>
+                          CachedNetworkImage(
                               width: double.infinity,
                               height: MediaQuery.of(context).orientation ==
                                       Orientation.portrait
                                   ? size.height * 0.3
                                   : size.height * 0.6,
-                              child: Icon(
-                                Icons.error,
-                                color: Colors.white,
-                              ),
-                            )),
+                              imageUrl: provider
+                                  ?.hotelDetailEntity?.images[itemIndex],
+                              fit: BoxFit.cover,
+                              fadeInCurve: Curves.bounceIn,
+                              placeholderFadeInDuration:
+                                  Duration(milliseconds: 500),
+                              placeholder: (context, url) => Container(
+                                    color: Colors.grey,
+                                  ),
+                              errorWidget: (context, url, _) => Container(
+                                    color: Colors.grey,
+                                    width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).orientation ==
+                                                Orientation.portrait
+                                            ? size.height * 0.3
+                                            : size.height * 0.6,
+                                    child: Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                  )),
+                    ),
                     Positioned(
                       bottom: 10.0,
                       right: 20.0,
@@ -128,7 +137,8 @@ class HotelDetailWrapperWidget extends StatelessWidget {
                     RoomGeneralFacilities(),
                     RoomType(),
                     RoomPropertyPolicies(),
-                    RoomRecommendedByProperty()
+                    Visibility(
+                        visible: false, child: RoomRecommendedByProperty())
                   ],
                 ),
               )
