@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
@@ -6,6 +5,7 @@ import 'package:localin/utils/date_helper.dart';
 
 class HotelDetailProvider extends BaseModelProvider {
   Repository _repository;
+  HotelDetailEntity hotelDetailEntity;
 
   HotelDetailProvider() {
     _repository = Repository();
@@ -19,6 +19,9 @@ class HotelDetailProvider extends BaseModelProvider {
 
     final response =
         await _repository.getHotelDetail(hotelID, checkInDev, checkOutDev);
+    if (response.error == null) {
+      hotelDetailEntity = response.singleHotelEntity;
+    }
     return response;
   }
 }

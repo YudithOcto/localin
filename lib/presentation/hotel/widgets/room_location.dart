@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class RoomLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -56,7 +59,7 @@ class RoomLocation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Beverly 90210 Serpong, Jl. Trimezia, Curug Sengareng, Kelapa Dua, Tangerang, Banten, Indonesia, 15810',
+                    '${detail?.street}',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Colors.black87,
@@ -66,7 +69,7 @@ class RoomLocation extends StatelessWidget {
                     height: 10.0,
                   ),
                   Text(
-                    'Batu Ceper, Kota Tangerang',
+                    '${detail?.shortAddress}',
                     style: kValueStyle.copyWith(
                         fontWeight: FontWeight.w500,
                         color: Themes.grey,

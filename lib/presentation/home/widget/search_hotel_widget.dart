@@ -133,13 +133,13 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 60.0),
-                  itemCount:
-                      snapshot.data != null && snapshot.data.hotelList != null
-                          ? snapshot.data?.hotelList?.length
-                          : 0,
+                  itemCount: snapshot.data != null &&
+                          snapshot.data.hotelDetailEntity != null
+                      ? snapshot.data?.hotelDetailEntity?.length
+                      : 0,
                   itemBuilder: (context, index) {
                     if (snapshot.data == null &&
-                        snapshot.data.hotelList == null) {
+                        snapshot.data.hotelDetailEntity == null) {
                       return Center(
                         child: Container(
                           child: Text('No Result'),
@@ -148,7 +148,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                     }
                     return HomeContentSearchHotel(
                       index: index,
-                      hotel: snapshot.data.hotelList[index],
+                      hotel: snapshot.data.hotelDetailEntity[index],
                     );
                   },
                 );

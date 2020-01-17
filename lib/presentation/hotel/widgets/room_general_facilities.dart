@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/facilities_model.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
+import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 class RoomGeneralFacilities extends StatelessWidget {
   createFacilityModel() {
@@ -34,7 +37,7 @@ class RoomGeneralFacilities extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    var list = createFacilityModel();
+    final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -44,7 +47,6 @@ class RoomGeneralFacilities extends StatelessWidget {
         SizedBox(
           height: 10.0,
         ),
-        RowFacilities(list),
         Container(
           color: Colors.black38,
           height: 1,
@@ -64,7 +66,7 @@ class RoomGeneralFacilities extends StatelessWidget {
                 SizedBox(
                   height: 8.0,
                 ),
-                buttonDate(),
+                buttonDate(DateTime.now().add(Duration(days: 200))),
               ],
             ),
             Icon(
@@ -73,13 +75,13 @@ class RoomGeneralFacilities extends StatelessWidget {
             ),
             Column(
               children: <Widget>[
-                Text('Check in',
+                Text('Check out',
                     style:
                         TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500)),
                 SizedBox(
                   height: 8.0,
                 ),
-                buttonDate(),
+                buttonDate(DateTime.now().add(Duration(days: 201))),
               ],
             ),
             Container(
@@ -135,7 +137,7 @@ class RoomGeneralFacilities extends StatelessWidget {
     );
   }
 
-  Widget buttonDate() {
+  Widget buttonDate(DateTime dateTime) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
@@ -143,7 +145,7 @@ class RoomGeneralFacilities extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4.0),
         child: Text(
-          '01 Nov, 2019',
+          '${DateHelper.formatDateRangeToString(dateTime)}',
           style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 12.0,
@@ -155,17 +157,25 @@ class RoomGeneralFacilities extends StatelessWidget {
 }
 
 class RowFacilities extends StatelessWidget {
-  final List<FacilitiesModel> listFacility;
+  final List<String> listFacility;
 
   RowFacilities(this.listFacility);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(listFacility.length, (index) {
+    return Container(
+      height: 100.0,
+      width: 100.0,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: listFacility.length,
+        itemBuilder: (context, index) {
           return singleFacility(index);
-        }));
+        },
+      ),
+    );
   }
 
   Widget singleFacility(int index) {
@@ -173,19 +183,25 @@ class RowFacilities extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Image.asset(
-            '${listFacility[index].icon}',
-            width: 25.0,
-            height: 25.0,
+          Visibility(
+            visible: false,
+            child: Image.asset(
+              '',
+              width: 25.0,
+              height: 25.0,
+            ),
           ),
-          SizedBox(
-            height: 5.0,
+          Visibility(
+            visible: false,
+            child: SizedBox(
+              height: 5.0,
+            ),
           ),
           Text(
-            listFacility[index].title,
+            listFacility[index],
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 10.0,
+                fontSize: 12.0,
                 fontWeight: FontWeight.w500,
                 color: Themes.primaryBlue),
           )

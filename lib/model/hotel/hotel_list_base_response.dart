@@ -2,26 +2,34 @@ class HotelListBaseResponse {
   String error;
   String message;
   int total;
-  List<HotelListEntity> hotelList;
-  HotelListBaseResponse({this.error, this.message, this.total, this.hotelList});
+  List<HotelDetailEntity> hotelDetailEntity;
+  HotelDetailEntity singleHotelEntity;
+
+  HotelListBaseResponse(
+      {this.error, this.message, this.total, this.hotelDetailEntity});
 
   HotelListBaseResponse.withError(String value)
       : error = value,
         message = null,
-        hotelList = null;
+        hotelDetailEntity = null;
 
   factory HotelListBaseResponse.fromJson(Map<String, dynamic> body) {
     return HotelListBaseResponse(
         message: body['message'],
         error: null,
         total: body['paging']['total'] ?? null,
-        hotelList: (body['data'] as List)
-            .map((v) => HotelListEntity.fromJson(v))
+        hotelDetailEntity: (body['data'] as List)
+            .map((v) => HotelDetailEntity.fromJson(v))
             .toList());
   }
+
+  HotelListBaseResponse.withJson(Map<String, dynamic> body)
+      : message = body['message'],
+        error = null,
+        singleHotelEntity = HotelDetailEntity.fromJson(body['data']);
 }
 
-class HotelListEntity {
+class HotelDetailEntity {
   int hotelId;
   String oyoId;
   String hotelName;
@@ -45,7 +53,7 @@ class HotelListEntity {
   List<String> restrictions;
   List<String> images;
 
-  HotelListEntity({
+  HotelDetailEntity({
     this.hotelId,
     this.oyoId,
     this.hotelName,
@@ -70,8 +78,13 @@ class HotelListEntity {
     this.images,
   });
 
-  factory HotelListEntity.fromJson(Map<String, dynamic> body) {
-    return HotelListEntity(
+  factory HotelDetailEntity.fromJson(Map<String, dynamic> body) {
+    List facilities = body['fasilitas'];
+    List images = body['image'];
+    List policies = body['policies'];
+    List restriction = body['restrictions'];
+    List availability = body['availability'];
+    return HotelDetailEntity(
         hotelId: body['hotel_id'],
         oyoId: body['oyoId'],
         hotelName: body['name'],
@@ -89,9 +102,23 @@ class HotelListEntity {
         category: body['category'],
         distance: body['distance'],
         discount: body['diskon'],
-        roomAvailability: (body['availability'] as List)
-            .map((value) => RoomAvailability.fromJson(value))
-            .toList());
+        facilities: facilities == null
+            ? null
+            : facilities.map((value) => value as String).toList(),
+        images: images == null
+            ? null
+            : images.map((value) => value as String).toList(),
+        policies: policies == null
+            ? null
+            : policies.map((value) => value as String).toList(),
+        restrictions: restriction == null
+            ? null
+            : restriction.map((value) => value as String).toList(),
+        roomAvailability: availability == null
+            ? null
+            : availability
+                .map((value) => RoomAvailability.fromJson(value))
+                .toList());
   }
 }
 

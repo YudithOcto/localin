@@ -10,7 +10,7 @@ class HomeContentSearchHotel extends StatelessWidget {
       fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
 
   final int index;
-  final HotelListEntity hotel;
+  final HotelDetailEntity hotel;
   HomeContentSearchHotel({this.index, this.hotel});
 
   @override

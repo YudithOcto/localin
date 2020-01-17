@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/bullet_text.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
+import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class RoomType extends StatelessWidget {
   final cardTextStyle = TextStyle(
       fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
   @override
   Widget build(BuildContext context) {
+    final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

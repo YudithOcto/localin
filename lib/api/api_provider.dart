@@ -444,7 +444,7 @@ class ApiProvider {
       int hotelId, DateTime checkInDate, DateTime checkOutDate) async {
     try {
       final result = await _dio.get(
-        ApiConstant.kHotelDetail,
+        '${ApiConstant.kHotelDetail}/$hotelId',
         queryParameters: {
           'checkin': checkInDate.millisecondsSinceEpoch,
           'checkout': checkOutDate.millisecondsSinceEpoch,
@@ -454,7 +454,7 @@ class ApiProvider {
         },
         options: Options(headers: {'requiredToken': false}),
       );
-      return HotelListBaseResponse.fromJson(result.data);
+      return HotelListBaseResponse.withJson(result.data);
     } catch (error) {
       if (error is DioError) {
         return HotelListBaseResponse.withError(_handleError(error));
