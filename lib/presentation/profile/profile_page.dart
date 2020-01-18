@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/profile/widgets/single_card.dart';
 import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/themes.dart';
@@ -39,12 +41,29 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-class Content extends StatelessWidget {
+class Content extends StatefulWidget {
+  @override
+  _ContentState createState() => _ContentState();
+}
+
+class _ContentState extends State<Content> {
+  bool isInit = true;
+  Future getUserArticle;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      getUserArticle = Provider.of<UserProfileProvider>(context, listen: false)
+          .getUserArticle();
+      isInit = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<UserProfileProvider>(context, listen: false);
-    return FutureBuilder(
-      future: state.getUserArticle(),
+    return FutureBuilder<List<ArticleDetail>>(
+      future: getUserArticle,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -55,11 +74,9 @@ class Content extends StatelessWidget {
                 separatorBuilder: (context, index) {
                   return Divider();
                 },
-                itemCount: state.article != null && state.article.isNotEmpty
-                    ? state.article.length
-                    : 0,
+                itemCount: snapshot?.data?.length,
                 itemBuilder: (context, index) {
-                  return SingleCard(index, state.article);
+                  return SingleCard(index, snapshot?.data);
                 },
               );
             },

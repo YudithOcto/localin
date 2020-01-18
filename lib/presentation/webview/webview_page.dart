@@ -62,33 +62,36 @@ class _WebViewPageState extends State<WebViewPage> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[WebViewPage.urlName];
-    return MaterialApp(
-      routes: {
-        '/': (_) => WebviewScaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: true,
-                leading: InkWell(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Icon(
-                    Icons.keyboard_backspace,
-                    color: Colors.white,
+    return Scaffold(
+      body: MaterialApp(
+        routes: {
+          '/': (_) => WebviewScaffold(
+                ignoreSSLErrors: true,
+                appBar: AppBar(
+                  automaticallyImplyLeading: true,
+                  leading: InkWell(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Icon(
+                      Icons.keyboard_backspace,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
+                withJavascript: true,
+                javascriptChannels: Set.from([
+                  JavascriptChannel(
+                      name: 'Print',
+                      onMessageReceived: (JavascriptMessage message) {
+                        print(message.message);
+                      })
+                ]),
+                hidden: true,
+                url: url,
+                displayZoomControls: true,
+                withZoom: true,
               ),
-              withJavascript: true,
-              javascriptChannels: Set.from([
-                JavascriptChannel(
-                    name: 'Print',
-                    onMessageReceived: (JavascriptMessage message) {
-                      print(message.message);
-                    })
-              ]),
-              hidden: true,
-              url: url,
-              displayZoomControls: true,
-              withZoom: false,
-            ),
-      },
+        },
+      ),
     );
   }
 }

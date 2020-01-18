@@ -125,10 +125,6 @@ class HotelDetailWrapperWidget extends StatelessWidget {
                     SizedBox(
                       height: 5.0,
                     ),
-                    rowStarReview(),
-                    SizedBox(
-                      height: 5.0,
-                    ),
                     Divider(
                       color: Colors.black54,
                     ),

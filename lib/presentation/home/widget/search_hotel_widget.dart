@@ -6,12 +6,13 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:provider/provider.dart';
 
 class SearchHotelWidget extends StatefulWidget {
-  final Function onSearchFocused;
+  final bool isHomePage;
 
-  SearchHotelWidget({this.onSearchFocused});
+  SearchHotelWidget({this.isHomePage});
 
   @override
   _SearchHotelWidgetState createState() => _SearchHotelWidgetState();
@@ -43,11 +44,13 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
 
   _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce.cancel();
-    _debounce = Timer(const Duration(milliseconds: 400), () {
-      setState(() {
-        hotelFuture = getHotel();
+    if (_searchController.text.isNotEmpty) {
+      _debounce = Timer(const Duration(milliseconds: 400), () {
+        setState(() {
+          hotelFuture = getHotel();
+        });
       });
-    });
+    }
   }
 
   Future<HotelListBaseResponse> getHotel() async {
@@ -81,7 +84,12 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      state.setRoomPage(false);
+                      if (widget.isHomePage) {
+                        state.setRoomPage(false);
+                      } else {
+                        Provider.of<BookingHistoryProvider>(context)
+                            .setRoomPage(false);
+                      }
                     },
                     child: Icon(
                       Icons.keyboard_backspace,
@@ -123,7 +131,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                 ),
               );
             } else {
-              if (snapshot.error != null) {
+              if (snapshot.hasError && snapshot.error != null) {
                 return Text('${snapshot.error}');
               } else {
                 return ListView.separated(

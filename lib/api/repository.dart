@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
@@ -9,6 +10,7 @@ import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
@@ -50,6 +52,17 @@ class Repository {
   Future<ArticleTagResponse> getArticleTags(String keyword) async {
     return apiProvider.getArticleTags(keyword);
   }
+
+  Future<ArticleCommentBaseResponse> getArticleComment(String articleId) {
+    return apiProvider.getArticleComment(articleId);
+  }
+
+  Future<ArticleCommentBaseResponse> publishArticleComment(
+      String articleId, String message) {
+    return apiProvider.publishArticleComment(articleId, message);
+  }
+
+  /// COMMUNITY
 
   Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {
     return apiProvider.getCommunityList(keyword);
@@ -121,6 +134,10 @@ class Repository {
       int hotelID, int checkIn, int checkOut, int roomTotal) {
     return apiProvider.getRoomAvailabilityDetail(
         hotelID, checkIn, checkOut, roomTotal);
+  }
+
+  Future<BookingHistoryBaseResponse> getBookingHistory(int offset, int limit) {
+    return apiProvider.getBookingHistory(offset, limit);
   }
 
   ///Dana

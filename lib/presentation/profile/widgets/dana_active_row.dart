@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/presentation/webview/webview_newest_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 
 import '../../../themes.dart';
 
 class DanaActiveRow extends StatelessWidget {
+  final DanaAccountDetail detail;
+
+  DanaActiveRow({this.detail});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,15 +42,21 @@ class DanaActiveRow extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(color: Themes.primaryBlue),
                 borderRadius: BorderRadius.circular(10.0)),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
-              child: Text(
-                'AKTIF',
-                style: kValueStyle.copyWith(
-                    color: Themes.primaryBlue,
-                    letterSpacing: -.5,
-                    fontWeight: FontWeight.bold),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed(WebViewNewestPage.routeName,
+                    arguments: {WebViewNewestPage.webViewUrl: detail.urlTopUp});
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
+                child: Text(
+                  'Top Up',
+                  style: kValueStyle.copyWith(
+                      color: Themes.primaryBlue,
+                      letterSpacing: -.5,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
@@ -51,14 +65,14 @@ class DanaActiveRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  '62********9123',
+                  '${detail?.maskDanaId}',
                   style: kValueStyle,
                 ),
                 SizedBox(
                   height: 5.0,
                 ),
                 Text(
-                  'Rp 21.500',
+                  '${getFormattedCurrency(detail?.balance)}',
                   style: kValueStyle.copyWith(color: Themes.primaryBlue),
                 )
               ],
@@ -67,5 +81,12 @@ class DanaActiveRow extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getFormattedCurrency(int value) {
+    if (value == null) return '';
+    if (value == 0) return 'IDR 0';
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return 'IDR ${formatter.format(value)}';
   }
 }

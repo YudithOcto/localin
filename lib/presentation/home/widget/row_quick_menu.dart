@@ -3,14 +3,20 @@ import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'circle_material_button.dart';
 
 class RowQuickMenu extends StatelessWidget {
+  final bool isHomePage;
+  RowQuickMenu({this.isHomePage});
+
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<HomeProvider>(context, listen: false);
+    final homeState = Provider.of<HomeProvider>(context, listen: false);
+    final historyState =
+        Provider.of<BookingHistoryProvider>(context, listen: false);
     return Container(
       margin: EdgeInsets.only(top: 60.0),
       child: Row(
@@ -23,7 +29,11 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Kamar',
                 onPressed: () {
-                  state.setRoomPage(true);
+                  if (isHomePage) {
+                    homeState.setRoomPage(true);
+                  } else {
+                    historyState.setRoomPage(true);
+                  }
                 },
                 icon: Icons.hotel,
               ),

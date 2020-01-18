@@ -5,13 +5,16 @@ import 'package:localin/presentation/home/widget/row_community.dart';
 import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 
 class HomeContentDefault extends StatelessWidget {
+  final bool isHomePage;
+  HomeContentDefault({this.isHomePage});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 50.0),
       child: Column(
         children: <Widget>[
-          RowQuickMenu(),
+          RowQuickMenu(isHomePage: isHomePage),
           containerDivider(25.0),
           RowCommunity(),
           containerDivider(5.0),

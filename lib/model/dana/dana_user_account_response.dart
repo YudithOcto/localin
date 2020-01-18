@@ -25,14 +25,16 @@ class DanaAccountDetail {
   String ott;
   int balance;
   String maskDanaId;
+  String urlTopUp;
 
-  DanaAccountDetail({this.ott, this.balance, this.maskDanaId});
+  DanaAccountDetail({this.ott, this.balance, this.maskDanaId, this.urlTopUp});
 
   factory DanaAccountDetail.fromJson(Map<String, dynamic> body) {
     return DanaAccountDetail(
       ott: body['OTT'],
       balance: body['BALANCE'],
       maskDanaId: body['MASK_DANA_ID'],
+      urlTopUp: body['url_topup'],
     );
   }
 }

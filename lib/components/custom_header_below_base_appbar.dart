@@ -23,16 +23,23 @@ class CustomHeaderBelowAppBar extends StatelessWidget {
       color: color,
       child: Row(
         children: <Widget>[
-          SizedBox(
-            width: 10.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(icon, color: iconColor),
+          Visibility(
+            visible: false,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 10.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(icon, color: iconColor),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(

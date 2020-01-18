@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_constant.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
@@ -11,6 +12,7 @@ import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/user/update_profile_model.dart';
@@ -72,7 +74,9 @@ class ApiProvider {
   }
 
   String convertResponseErrorMessage(Map<String, dynamic> body) {
-    return body['message'];
+    String message = body['message'];
+    String comment = body['komentar'][0];
+    return comment != null ? comment : message;
   }
 
   void setupLoggingInterceptor() async {
@@ -102,8 +106,9 @@ class ApiProvider {
 
   Future<UserBaseModel> getUserData(var bodyRequest) async {
     try {
-      var response = await _dio.post(ApiConstant.kLoginUrl, data: bodyRequest);
-      var baseModel = UserBaseModel.fromJson(response.data);
+      final response =
+          await _dio.post(ApiConstant.kLoginUrl, data: bodyRequest);
+      final baseModel = UserBaseModel.fromJson(response.data);
       sharedPreferences.setString(
           kUserCache, jsonEncode(baseModel.userModel.toJson()));
       return baseModel;
@@ -118,7 +123,7 @@ class ApiProvider {
 
   Future<String> userLogout() async {
     try {
-      var response = await _dio.get(ApiConstant.kLogoutUrl,
+      final response = await _dio.get(ApiConstant.kLogoutUrl,
           options: Options(headers: {'requiredToken': true}));
       sharedPreferences.clear();
       return response.toString();
@@ -137,9 +142,9 @@ class ApiProvider {
 
   Future<UserModel> getUserProfile() async {
     try {
-      var response = await _dio.get(ApiConstant.kProfile,
+      final response = await _dio.get(ApiConstant.kProfile,
           options: Options(headers: {'requiredToken': true}));
-      var model = UserModel.fromJson(response.data);
+      final model = UserModel.fromJson(response.data);
       sharedPreferences.setString(kUserCache, jsonEncode(model.toJson()));
       return model;
     } catch (error) {
@@ -153,9 +158,9 @@ class ApiProvider {
 
   Future<UpdateProfileModel> verifyUserAccount() async {
     try {
-      var response = await _dio.get(ApiConstant.kVerifyAccount,
+      final response = await _dio.get(ApiConstant.kVerifyAccount,
           options: Options(headers: {'requiredToken': true}));
-      var model = UpdateProfileModel.fromJson(response.data);
+      final model = UpdateProfileModel.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -168,9 +173,9 @@ class ApiProvider {
 
   Future<ArticleBaseResponse> getUserArticle() async {
     try {
-      var response = await _dio.get(ApiConstant.kUserArticle,
+      final response = await _dio.get(ApiConstant.kUserArticle,
           options: Options(headers: {'requiredToken': true}));
-      var model = ArticleBaseResponse.fromJson(response.data);
+      final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -183,7 +188,7 @@ class ApiProvider {
 
   Future<ArticleBaseResponse> getArticleList(int offset, int limit) async {
     try {
-      var response = await _dio.get(ApiConstant.kArticleList,
+      final response = await _dio.get(ApiConstant.kArticleList,
           queryParameters: {'limit': limit, 'page': offset},
           options: Options(headers: {'requiredToken': true}));
       var model = ArticleBaseResponse.fromJson(response.data);
@@ -199,7 +204,7 @@ class ApiProvider {
 
   Future<ArticleBaseResponse> createArticle(FormData form) async {
     try {
-      var response = await _dio.post(ApiConstant.kCreateArticle,
+      final response = await _dio.post(ApiConstant.kCreateArticle,
           options: Options(
             headers: {'requiredToken': true},
           ),
@@ -217,7 +222,7 @@ class ApiProvider {
 
   Future<ArticleTagResponse> getArticleTags(String keyword) async {
     try {
-      var response = await _dio.get(ApiConstant.kArticleTags,
+      final response = await _dio.get(ApiConstant.kArticleTags,
           queryParameters: {'keyword': keyword},
           options: Options(headers: {'requiredToken': true}));
       List result = response.data;
@@ -228,11 +233,44 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleCommentBaseResponse> getArticleComment(String articleId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kArticleComment}/$articleId',
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleCommentBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleCommentBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleCommentBaseResponse> publishArticleComment(
+      String articleId, String message) async {
+    FormData _formData = FormData.fromMap({'komentar': message});
+    try {
+      final response = await _dio.post(
+          '${ApiConstant.kArticleComment}/$articleId',
+          data: _formData,
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleCommentBaseResponse.publishResponse(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleCommentBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
   /// COMMUNITY
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
     try {
-      var response = await _dio.get(ApiConstant.kCommunity,
+      final response = await _dio.get(ApiConstant.kCommunity,
           queryParameters: {'search': '$search'},
           options: Options(headers: {'requiredToken': true}));
       var model = CommunityDetailBaseResponse.fromJson(response.data);
@@ -248,7 +286,7 @@ class ApiProvider {
 
   Future<CommunityDetailBaseResponse> getUserCommunityList() async {
     try {
-      var response = await _dio.get(ApiConstant.kUserCommunity,
+      final response = await _dio.get(ApiConstant.kUserCommunity,
           options: Options(headers: {'requiredToken': true}));
       var model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
@@ -264,7 +302,7 @@ class ApiProvider {
   Future<CommunityBaseResponseCategory> getCategoryListCommunity(
       String search) async {
     try {
-      var response = await _dio.get(ApiConstant.kSearchCategory,
+      final response = await _dio.get(ApiConstant.kSearchCategory,
           queryParameters: {'keyword': search},
           options: Options(headers: {'requiredToken': true}));
       var model = CommunityBaseResponseCategory.fromJson(response.data);
@@ -280,7 +318,7 @@ class ApiProvider {
 
   Future<CommunityDetailBaseResponse> createCommunity(FormData form) async {
     try {
-      var response = await _dio.post(ApiConstant.kCreateCommunity,
+      final response = await _dio.post(ApiConstant.kCreateCommunity,
           data: form, options: Options(headers: {'requiredToken': true}));
       return CommunityDetailBaseResponse.uploadSuccess(
           response.data['message']);
@@ -296,7 +334,7 @@ class ApiProvider {
   Future<CommunityDetailBaseResponse> editCommunity(
       FormData form, String communityID) async {
     try {
-      var response = await _dio.post(
+      final response = await _dio.post(
           '${ApiConstant.kEditCommunity}$communityID',
           data: form,
           options: Options(headers: {'requiredToken': true}));
@@ -312,7 +350,8 @@ class ApiProvider {
 
   Future<CommunityJoinResponse> joinCommunity(String communityId) async {
     try {
-      var response = await _dio.get('${ApiConstant.kJoinCommunity}$communityId',
+      final response = await _dio.get(
+          '${ApiConstant.kJoinCommunity}$communityId',
           options: Options(headers: {'requiredToken': true}));
       return CommunityJoinResponse.fromJson(response.data);
     } catch (error) {
@@ -326,7 +365,7 @@ class ApiProvider {
 
   Future<CommunityMemberResponse> getMemberCommunity(String communityId) async {
     try {
-      var response = await _dio.get(
+      final response = await _dio.get(
           '${ApiConstant.kMemberCommunity}$communityId',
           options: Options(headers: {'requiredToken': true}));
       return CommunityMemberResponse.fromJson(response.data);
@@ -342,7 +381,7 @@ class ApiProvider {
   Future<CommunityMemberResponse> approveMemberCommunity(
       String communityId, String memberId) async {
     try {
-      var response = await _dio.get(
+      final response = await _dio.get(
           '${ApiConstant.kMemberCommunity}$communityId/$memberId/approve',
           options: Options(headers: {'requiredToken': true}));
       return CommunityMemberResponse.fromJson(response.data);
@@ -358,7 +397,7 @@ class ApiProvider {
   Future<CommunityDetailBaseResponse> getCommunityListByCategoryId(
       String categoryId) async {
     try {
-      var response = await _dio.get(
+      final response = await _dio.get(
           '${ApiConstant.kSearchCategory}/$categoryId',
           options: Options(headers: {'requiredToken': true}));
       return CommunityDetailBaseResponse.fromJson(response.data);
@@ -374,7 +413,7 @@ class ApiProvider {
   Future<CommunityCommentBaseResponse> postComment(
       FormData data, String communityId) async {
     try {
-      var response = await _dio.post(
+      final response = await _dio.post(
           '${ApiConstant.kCommentCommunity}$communityId',
           data: data,
           options: Options(headers: {'requiredToken': true}));
@@ -391,7 +430,7 @@ class ApiProvider {
   Future<CommunityCommentBaseResponse> getCommentList(
       String communityId) async {
     try {
-      var response = await _dio.get(
+      final response = await _dio.get(
           '${ApiConstant.kCommentCommunity}$communityId',
           options: Options(headers: {'requiredToken': true}));
       return CommunityCommentBaseResponse.fromJson(response.data);
@@ -407,7 +446,7 @@ class ApiProvider {
   Future<void> createEventCommunity(
       String communityId, FormData formData) async {
     try {
-      var response = await _dio.post(
+      final response = await _dio.post(
           '${ApiConstant.kCreateEventCommunity}/$communityId',
           data: formData,
           options: Options(headers: {'requiredToken': true}));
@@ -422,7 +461,7 @@ class ApiProvider {
   Future<HotelListBaseResponse> getHotelList(
       String latitude, String longitude, String search) async {
     try {
-      var response = await _dio.get(ApiConstant.kHotel,
+      final response = await _dio.get(ApiConstant.kHotel,
           queryParameters: {
             'latitude': latitude,
             'longitude': longitude,
@@ -484,6 +523,22 @@ class ApiProvider {
         return RoomBaseResponse.withError(_handleError(error));
       } else {
         return RoomBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BookingHistoryBaseResponse> getBookingHistory(
+      int offset, int limit) async {
+    try {
+      final result = await _dio.get('${ApiConstant.kHotelHistory}',
+          queryParameters: {'page': offset, 'limit': limit},
+          options: Options(headers: {'requiredToken': true}));
+      return BookingHistoryBaseResponse.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BookingHistoryBaseResponse.withError();
+      } else {
+        return BookingHistoryBaseResponse.withError();
       }
     }
   }

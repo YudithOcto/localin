@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:localin/components/bullet_text.dart';
 import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
@@ -16,7 +18,7 @@ class RoomType extends StatefulWidget {
 
 class _RoomTypeState extends State<RoomType> {
   final cardTextStyle = TextStyle(
-      fontSize: 12.0, fontWeight: FontWeight.w600, color: Colors.black);
+      fontSize: 14.0, fontWeight: FontWeight.w600, color: Colors.black);
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +38,36 @@ class _RoomTypeState extends State<RoomType> {
                 child: CircularProgressIndicator(),
               );
             } else {
-              if (asyncSnapshot.hasData) {
+              if (asyncSnapshot.hasError || asyncSnapshot.data.error != null) {
+                return Center(
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.error),
+                      SizedBox(
+                        height: 4.0,
+                      ),
+                      Text('We have connection problem, please try again'),
+                    ],
+                  ),
+                );
+              } else if (asyncSnapshot.data.roomAvailability.isEmpty) {
+                return Center(
+                  child: Text(
+                    ' We could not find any room at this date. Please try other date.',
+                    style:
+                        TextStyle(fontSize: 11.0, fontWeight: FontWeight.w500),
+                  ),
+                );
+              } else {
                 return Column(
                   children: List.generate(
                       asyncSnapshot.data.roomAvailability.length, (index) {
                     return singleCardRoom(
-                        asyncSnapshot.data.roomAvailability[index]);
+                      asyncSnapshot?.data?.roomAvailability[index],
+                      discount: asyncSnapshot?.data?.discount,
+                    );
                   }),
                 );
-              } else {
-                return Container();
               }
             }
           },
@@ -60,7 +82,8 @@ class _RoomTypeState extends State<RoomType> {
     );
   }
 
-  Widget singleCardRoom(RoomAvailability roomDetail) {
+  Widget singleCardRoom(RoomAvailability roomDetail, {int discount = 0}) {
+    final provider = Provider.of<HotelDetailProvider>(context);
     return Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
@@ -70,13 +93,34 @@ class _RoomTypeState extends State<RoomType> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  'images/cafe.jpg',
-                  fit: BoxFit.fill,
+              CachedNetworkImage(
+                imageUrl: provider?.hotelDetailEntity?.images?.first,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    height: 100.0,
+                    width: 100.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.grey,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        )),
+                  );
+                },
+                placeholder: (context, index) => Container(
+                  color: Colors.grey,
                   width: 100.0,
                   height: 100.0,
+                ),
+                placeholderFadeInDuration: Duration(milliseconds: 300),
+                errorWidget: (_, url, index) => Container(
+                  color: Colors.grey,
+                  width: 100.0,
+                  height: 100.0,
+                  child: Center(
+                    child: Icon(Icons.error),
+                  ),
                 ),
               ),
               SizedBox(
@@ -97,8 +141,11 @@ class _RoomTypeState extends State<RoomType> {
                         height: 5.0,
                       ),
                       Column(
-                        children: List.generate(3, (index) {
-                          return rowRoomInformation();
+                        children: List.generate(
+                            provider.hotelDetailEntity?.restrictions?.length,
+                            (index) {
+                          return rowRoomInformation(
+                              provider.hotelDetailEntity?.restrictions[index]);
                         }),
                       ),
                       Visibility(
@@ -137,14 +184,17 @@ class _RoomTypeState extends State<RoomType> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Container(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        'Rp 275.000',
-                        style: cardTextStyle.copyWith(
-                          decoration: TextDecoration.lineThrough,
-                          fontSize: 11.0,
-                          color: Colors.black38,
+                    Visibility(
+                      visible: discount != null && discount > 0,
+                      child: Container(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          '${getFormattedCurrency(roomDetail?.sellingAmount)}',
+                          style: cardTextStyle.copyWith(
+                            decoration: TextDecoration.lineThrough,
+                            fontSize: 11.0,
+                            color: Colors.black38,
+                          ),
                         ),
                       ),
                     ),
@@ -152,18 +202,25 @@ class _RoomTypeState extends State<RoomType> {
                       height: 5.0,
                     ),
                     Text(
-                      'Rp 233.750',
+                      '${getFormattedCurrency(roomDetail.sellingAmount - discount)}',
                       style: cardTextStyle.copyWith(
                           fontSize: 14.0, color: Themes.primaryBlue),
                     ),
                     SizedBox(
-                      height: 5.0,
+                      height: 10.0,
                     ),
-                    RoundedButtonFill(
+                    RaisedButton(
                       onPressed: () {},
-                      title: 'Book Now',
-                      titleColor: Colors.white,
-                      backgroundColor: Themes.primaryBlue,
+                      color: Themes.primaryBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0)),
+                      child: Text(
+                        'Book Now',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ),
                     )
                   ],
                 ),
@@ -173,9 +230,15 @@ class _RoomTypeState extends State<RoomType> {
         ));
   }
 
-  Widget rowRoomInformation() {
+  String getFormattedCurrency(int value) {
+    if (value == null || value <= 0) return '';
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return 'Rp ${formatter.format(value)}';
+  }
+
+  Widget rowRoomInformation(String restriction) {
     return Bullet(
-      'Pay Now Only',
+      '$restriction',
       style: TextStyle(
           fontSize: 10.0, fontWeight: FontWeight.w500, color: Themes.dimGrey),
     );

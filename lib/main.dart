@@ -20,7 +20,12 @@ import 'package:localin/presentation/profile/edit_profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/presentation/webview/webview_newest_page.dart';
+import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/services/location_services.dart';
 import 'package:provider/provider.dart';
+
+import 'model/service/user_location.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,6 +40,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<HomeProvider>(
           create: (_) => HomeProvider(),
+        ),
+        ChangeNotifierProvider<BookingHistoryProvider>(
+          create: (_) => BookingHistoryProvider(),
+        ),
+        StreamProvider<UserLocation>(
+          create: (context) => LocationServices().locationStream,
         )
       ],
       child: MaterialApp(
@@ -69,6 +80,7 @@ class MyApp extends StatelessWidget {
           CreateArticlePage.routeName: (_) => CreateArticlePage(),
           GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
           WebViewPage.routeName: (_) => WebViewPage(),
+          WebViewNewestPage.routeName: (_) => WebViewNewestPage(),
         },
       ),
     );

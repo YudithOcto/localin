@@ -32,7 +32,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
           color: Colors.black38,
           height: 1,
           width: double.infinity,
-          margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
+          margin: EdgeInsets.only(bottom: 5.0),
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -161,23 +161,34 @@ class RowFacilities extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        crossAxisCount: 4,
-        childAspectRatio: 1.0,
-        padding: const EdgeInsets.all(4.0),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        children: List.generate(listFacility?.length, (index) {
-          return Center(
-            child: Bullet(
-              listFacility[index],
-              style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                  color: Themes.dimGrey),
+      shrinkWrap: true,
+      crossAxisCount: 3,
+      childAspectRatio: 2.0,
+      children: List.generate(listFacility.length, (index) {
+        return Center(
+          child: Container(
+            width: 120.0,
+            height: 30.0,
+            child: RaisedButton(
+              elevation: 3.0,
+              onPressed: () {},
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0)),
+              child: Text(
+                '${listFacility[index]}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 12.0,
+                    color: Themes.primaryBlue,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
-          );
-        }));
+          ),
+        );
+      }),
+    );
   }
 }
