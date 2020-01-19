@@ -32,25 +32,26 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    Future.delayed(Duration(seconds: 2)).then((value) async {
+    Future.delayed(Duration.zero).then((value) async {
       var userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
       if (userCache != null) {
         checkGps();
       } else {
-        Navigator.of(context).pushNamed(LoginPage.routeName);
+        Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       }
     });
   }
 
   checkGps() async {
-    final permissionStatus = await location.checkGeolocationPermissionStatus();
     final isGpsOn = await location.isLocationServiceEnabled();
 
-    if (permissionStatus == GeolocationStatus.granted && isGpsOn) {
-      Navigator.of(context).pushNamed(MainBottomNavigation.routeName);
+    if (isGpsOn) {
+      Navigator.of(context)
+          .pushReplacementNamed(MainBottomNavigation.routeName);
     } else if (!isGpsOn) {
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return AlertDialog(

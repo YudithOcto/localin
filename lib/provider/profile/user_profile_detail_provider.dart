@@ -29,9 +29,14 @@ class UserProfileProvider with ChangeNotifier {
   Future<DanaAccountDetail> getUserDanaStatus() async {
     final response = await _repository.getUserDanaStatus();
     if (response.error == null) {
-      _danaAccountDetail.add(response.data);
+      if (!_danaAccountDetail.isClosed) {
+        _danaAccountDetail.add(response.data);
+      }
       return response.data;
     } else {
+      if (!_danaAccountDetail.isClosed) {
+        _danaAccountDetail.add(null);
+      }
       return null;
     }
   }

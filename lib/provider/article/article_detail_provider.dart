@@ -31,6 +31,7 @@ class ArticleDetailProvider with ChangeNotifier {
       }
       return result.comments;
     } else {
+      _streamArticleDetail.add(null);
       throw Exception();
     }
   }

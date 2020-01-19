@@ -19,8 +19,8 @@ class CommunityCardWidget extends StatelessWidget {
             margin: EdgeInsets.only(left: 10.0),
             child: ListView.builder(
               shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              itemCount: detailList.length,
+              physics: ClampingScrollPhysics(),
+              itemCount: detailList.length ?? 0,
               itemBuilder: (context, index) {
                 return SingleCommunityCard(
                   total: detailList != null ? detailList.length : 0,
@@ -52,7 +52,9 @@ class SingleCommunityCard extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
           children: <Widget>[
             UpperCommunityCardRow(
               detail: detail,

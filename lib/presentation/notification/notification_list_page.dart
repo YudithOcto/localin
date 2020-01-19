@@ -7,8 +7,6 @@ import '../../themes.dart';
 class NotificationListPage extends StatefulWidget {
   static const routeName = 'notificationListPage';
 
-  const NotificationListPage({Key key}) : super(key: key);
-
   @override
   _NotificationListPageState createState() => _NotificationListPageState();
 }

@@ -13,8 +13,6 @@ const kValueStyle = TextStyle(
     fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key key}) : super(key: key);
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -74,7 +72,7 @@ class _ContentState extends State<Content> {
                 separatorBuilder: (context, index) {
                   return Divider();
                 },
-                itemCount: snapshot?.data?.length,
+                itemCount: snapshot?.data?.length ?? 0,
                 itemBuilder: (context, index) {
                   return SingleCard(index, snapshot?.data);
                 },

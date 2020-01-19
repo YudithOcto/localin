@@ -91,7 +91,7 @@ class ProfilePageRowCard extends StatelessWidget {
                 top: 5.0,
                 child: InkWell(
                   onTap: () async {
-                    var logout = await showDialog(
+                    final logout = await showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
@@ -125,7 +125,7 @@ class ProfilePageRowCard extends StatelessWidget {
                         });
                     if (logout != null && logout == 'success') {
                       if (authState.userModel.source == 'facebook.com') {
-                        var result = await authState.signOutFacebook();
+                        final result = await authState.signOutFacebook();
                         if (result == 'Success logout') {
                           Navigator.of(context)
                               .pushReplacementNamed(LoginPage.routeName);
@@ -133,7 +133,7 @@ class ProfilePageRowCard extends StatelessWidget {
                           showErrorMessageDialog(context, result);
                         }
                       } else {
-                        var result = await authState.signOutGoogle();
+                        final result = await authState.signOutGoogle();
                         if (result.contains('Success logout')) {
                           Navigator.of(context)
                               .pushReplacementNamed(LoginPage.routeName);

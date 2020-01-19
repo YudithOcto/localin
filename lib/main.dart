@@ -13,7 +13,7 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
-import 'package:localin/presentation/login/splash_screen.dart';
+import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/edit_profile_page.dart';

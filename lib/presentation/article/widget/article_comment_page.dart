@@ -24,17 +24,25 @@ class ArticleCommentPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: asyncSnapshot?.data?.length,
-                  itemBuilder: (context, index) {
-                    return CommentCard(
-                      commentDetail: asyncSnapshot?.data[index],
-                    );
-                  },
-                ),
-              );
+              if (asyncSnapshot.data.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Text('There is no comment yet'),
+                  ),
+                );
+              } else {
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: asyncSnapshot?.data?.length,
+                    itemBuilder: (context, index) {
+                      return CommentCard(
+                        commentDetail: asyncSnapshot?.data[index],
+                      );
+                    },
+                  ),
+                );
+              }
             }
           },
         ),

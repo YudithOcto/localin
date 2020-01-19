@@ -17,8 +17,6 @@ import '../../themes.dart';
 class BookingHistoryPage extends StatefulWidget {
   static const routeName = '/bookingHistoryPage';
 
-  const BookingHistoryPage({Key key}) : super(key: key);
-
   @override
   _BookingHistoryPageState createState() => _BookingHistoryPageState();
 }

@@ -28,23 +28,9 @@ class LocationServices {
   }
 
   checkLocationPermission() async {
-    final permissionStatus = await location.checkGeolocationPermissionStatus();
-    final isGpsOn = await location.isLocationServiceEnabled();
-
-    if (permissionStatus == GeolocationStatus.granted) {
-      if (isGpsOn) {
-        location.getCurrentPosition().then((position) {
-          _locationController.add(UserLocation(
-              latitude: position?.latitude, longitude: position?.longitude));
-        });
-      } else {
-        final lastKnownPosition = await location.getLastKnownPosition();
-        if (lastKnownPosition != null) {
-          _locationController.add(UserLocation(
-              latitude: lastKnownPosition?.latitude,
-              longitude: lastKnownPosition?.longitude));
-        }
-      }
-    }
+    location.getCurrentPosition().then((position) {
+      _locationController.add(UserLocation(
+          latitude: position?.latitude, longitude: position?.longitude));
+    });
   }
 }

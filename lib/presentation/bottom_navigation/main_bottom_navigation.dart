@@ -18,24 +18,12 @@ class MainBottomNavigation extends StatefulWidget {
 class _MainBottomNavigationState extends State<MainBottomNavigation> {
   int currentSelected = 0;
   final List<Widget> pages = [
-    HomePage(
-      key: PageStorageKey('homeKey'),
-    ),
-    CommunityFeedPage(
-      key: PageStorageKey('communityFeedKey'),
-    ),
-    BookingHistoryPage(
-      key: PageStorageKey('bookingHistoryKey'),
-    ),
-    NotificationListPage(
-      key: PageStorageKey('notificationKey'),
-    ),
-    ProfilePage(
-      key: PageStorageKey('profileKey'),
-    )
+    HomePage(),
+    CommunityFeedPage(),
+    BookingHistoryPage(),
+    NotificationListPage(),
+    ProfilePage()
   ];
-
-  final PageStorageBucket bucket = PageStorageBucket();
 
   void _selectedTab(int index) {
     onPageChanged(index);
@@ -46,10 +34,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: PageStorage(
-          bucket: bucket,
-          child: pages[currentSelected],
-        ),
+        body: pages[currentSelected],
         bottomNavigationBar: FloatingActionBottomAppBar(
           color: Colors.black,
           selectedColor: Colors.blue,

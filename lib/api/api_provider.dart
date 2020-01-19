@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_constant.dart';
@@ -131,9 +132,10 @@ class ApiProvider {
       return response.toString();
     } catch (error) {
       if (error is DioError) {
-        String logout = convertResponseErrorMessage(error.response.data);
+        String logout = error?.response?.data['message'];
         if (logout.contains('Success logout')) {
           sharedPreferences.clear();
+          return logout;
         }
         return _handleError(error);
       } else {
@@ -588,6 +590,7 @@ class ApiProvider {
     try {
       final result = await _dio.get(ApiConstant.kDanaMe,
           options: Options(headers: {'requiredToken': true}));
+      print(result);
       return DanaUserAccountResponse.fromJson(result.data);
     } catch (error) {
       return DanaUserAccountResponse.withError();

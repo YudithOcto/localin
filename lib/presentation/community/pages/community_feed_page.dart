@@ -9,8 +9,6 @@ import 'package:provider/provider.dart';
 import '../../../themes.dart';
 
 class CommunityFeedPage extends StatefulWidget {
-  const CommunityFeedPage({Key key}) : super(key: key);
-
   @override
   _CommunityFeedPageState createState() => _CommunityFeedPageState();
 }
