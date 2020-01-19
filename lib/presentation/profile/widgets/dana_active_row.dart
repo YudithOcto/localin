@@ -44,8 +44,8 @@ class DanaActiveRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0)),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed(WebViewNewestPage.routeName,
-                    arguments: {WebViewNewestPage.webViewUrl: detail.urlTopUp});
+                Navigator.of(context).pushNamed(WebViewPage.routeName,
+                    arguments: {WebViewPage.urlName: detail.urlTopUp});
               },
               child: Padding(
                 padding:

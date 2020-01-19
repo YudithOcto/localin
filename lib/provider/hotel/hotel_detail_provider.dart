@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
@@ -36,6 +37,12 @@ class HotelDetailProvider extends BaseModelProvider {
     return response;
   }
 
+  Future<BookHotelResponse> bookHotel(int roomCategoryId) async {
+    final result = await _repository.bookHotel(hotelDetailEntity.hotelId,
+        roomCategoryId, roomTotal * 2, roomTotal, _checkInTime, _checkOutTime);
+    return result;
+  }
+
   Future<RoomBaseResponse> getRoomAvailability() async {
     final result = await _repository.getRoomAvailability(
         _hotelID, _checkInTime, _checkOutTime, _roomTotal);
@@ -55,9 +62,18 @@ class HotelDetailProvider extends BaseModelProvider {
     getRoomAvailability();
   }
 
-  void setRoomTotalSearch(int totalRoom) {
-    this._roomTotal = totalRoom;
+  void increaseRoomTotal() {
+    this._roomTotal += 1;
+    notifyListeners();
     getRoomAvailability();
+  }
+
+  void decreaseRoomTotal() {
+    if (_roomTotal > 1) {
+      this._roomTotal -= 1;
+      notifyListeners();
+      getRoomAvailability();
+    }
   }
 
   int get checkInTime => _checkInTime;

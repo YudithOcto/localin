@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
+import 'package:localin/model/hotel/booking_detail.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
 import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
@@ -104,7 +105,7 @@ class AvailableHistoryContentWidget extends StatelessWidget {
             ),
           ),
         ),
-        PagewiseListView<BookingHistoryDetail>(
+        PagewiseListView<BookingDetail>(
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
           pageSize: pageSize,
@@ -119,7 +120,7 @@ class AvailableHistoryContentWidget extends StatelessWidget {
           showRetry: false,
           pageFuture: (pageIndex) {
             return Provider.of<BookingHistoryProvider>(context)
-                .getBookingHistory(pageIndex + 1, pageSize);
+                .getBookingHistoryList(pageIndex + 1, pageSize);
           },
         )
       ],

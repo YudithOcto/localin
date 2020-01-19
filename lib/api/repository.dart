@@ -10,6 +10,8 @@ import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/hotel/book_hotel_response.dart';
+import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
@@ -136,8 +138,19 @@ class Repository {
         hotelID, checkIn, checkOut, roomTotal);
   }
 
-  Future<BookingHistoryBaseResponse> getBookingHistory(int offset, int limit) {
-    return apiProvider.getBookingHistory(offset, limit);
+  Future<BookingHistoryBaseResponse> getBookingHistoryList(
+      int offset, int limit) {
+    return apiProvider.getBookingHistoryList(offset, limit);
+  }
+
+  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
+      int totalAdult, int totalRoom, int checkIn, int checkOut) {
+    return apiProvider.bookHotel(
+        hotelId, roomCategoryId, totalAdult, totalRoom, checkIn, checkOut);
+  }
+
+  Future<BookingDetailResponse> getBookingDetail(String bookingDetailId) {
+    return apiProvider.getHotelBookingDetail(bookingDetailId);
   }
 
   ///Dana

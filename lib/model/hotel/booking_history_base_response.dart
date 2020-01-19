@@ -1,7 +1,9 @@
+import 'package:localin/model/hotel/booking_detail.dart';
+
 class BookingHistoryBaseResponse {
   String error;
   String message;
-  List<BookingHistoryDetail> detail;
+  List<BookingDetail> detail;
 
   BookingHistoryBaseResponse({this.error, this.message, this.detail});
 
@@ -17,54 +19,6 @@ class BookingHistoryBaseResponse {
         message: body['message'],
         detail: detail == null
             ? null
-            : detail
-                .map((value) => BookingHistoryDetail.fromJson(value))
-                .toList());
-  }
-}
-
-class BookingHistoryDetail {
-  int hotelId;
-  String name;
-  String street;
-  String state;
-  String country;
-  String bookingId;
-  String invoiceCode;
-  String currencyCode;
-  int userPrice;
-  String checkIn;
-  String checkOut;
-  String status;
-
-  BookingHistoryDetail(
-      {this.hotelId,
-      this.name,
-      this.street,
-      this.state,
-      this.country,
-      this.bookingId,
-      this.invoiceCode,
-      this.currencyCode,
-      this.userPrice,
-      this.checkIn,
-      this.checkOut,
-      this.status});
-
-  factory BookingHistoryDetail.fromJson(Map<String, dynamic> body) {
-    return BookingHistoryDetail(
-      hotelId: body['hotel_id'],
-      name: body['name'],
-      street: body['street'],
-      state: body['state'],
-      country: body['country'],
-      bookingId: body['booking_id'],
-      invoiceCode: body['invoice_kode'],
-      currencyCode: body['currencyCode'],
-      userPrice: body['hargaUser'],
-      checkIn: body['checkin'],
-      checkOut: body['checkout'],
-      status: body['status'],
-    );
+            : detail.map((value) => BookingDetail.fromJson(value)).toList());
   }
 }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/presentation/hotel/widgets/location_detail_card.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_card.dart';
+import 'package:localin/utils/date_helper.dart';
 
 import '../../../themes.dart';
 
 class BookingProductDetailCard extends StatelessWidget {
+  final BookHotelDetailResponse detail;
+  BookingProductDetailCard({this.detail});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +28,8 @@ class BookingProductDetailCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              customText('Wed, 01 Jan'),
+              customText(
+                  '${DateHelper.formatDateBookingDetailShort(detail?.checkIn)}'),
               SizedBox(
                 width: 15.0,
               ),
@@ -42,7 +48,8 @@ class BookingProductDetailCard extends StatelessWidget {
               SizedBox(
                 width: 15.0,
               ),
-              customText('Thur, 02 Jan'),
+              customText(
+                  '${DateHelper.formatDateBookingDetailShort(detail?.checkOut)}'),
             ],
           ),
           customDivider(),

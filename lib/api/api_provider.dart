@@ -12,6 +12,8 @@ import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/hotel/book_hotel_response.dart';
+import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
@@ -527,7 +529,7 @@ class ApiProvider {
     }
   }
 
-  Future<BookingHistoryBaseResponse> getBookingHistory(
+  Future<BookingHistoryBaseResponse> getBookingHistoryList(
       int offset, int limit) async {
     try {
       final result = await _dio.get('${ApiConstant.kHotelHistory}',
@@ -539,6 +541,44 @@ class ApiProvider {
         return BookingHistoryBaseResponse.withError();
       } else {
         return BookingHistoryBaseResponse.withError();
+      }
+    }
+  }
+
+  Future<BookingDetailResponse> getHotelBookingDetail(String bookingId) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kHotelBooking}/$bookingId',
+          options: Options(headers: {'requiredToken': true}));
+      return BookingDetailResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BookingDetailResponse.withError(_handleError(error));
+      } else {
+        return BookingDetailResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
+      int totalAdult, int totalRoom, int checkIn, int checkOut) async {
+    FormData _formData = FormData.fromMap({
+      'hotel_id': hotelId,
+      'room_category': roomCategoryId,
+      'count_room': totalRoom,
+      'count_adult': totalAdult,
+      'checkin': checkIn.toString().substring(0, checkIn.toString().length - 3),
+      'checkout':
+          checkOut.toString().substring(0, checkOut.toString().length - 3),
+    });
+    try {
+      final result = await _dio.post('${ApiConstant.kHotelBooking}',
+          data: _formData, options: Options(headers: {'requiredToken': true}));
+      return BookHotelResponse.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BookHotelResponse.withError(_handleError(error));
+      } else {
+        return BookHotelResponse.withError(error.toString());
       }
     }
   }

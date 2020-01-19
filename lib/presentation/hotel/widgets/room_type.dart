@@ -2,10 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/components/bullet_text.dart';
-import 'package:localin/components/rounded_button_fill.dart';
-import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_availability.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/presentation/hotel/success_booking_page.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
@@ -23,7 +22,6 @@ class _RoomTypeState extends State<RoomType> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<HotelDetailProvider>(context);
-    final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -178,7 +176,6 @@ class _RoomTypeState extends State<RoomType> {
                 ),
               ),
               Container(
-                width: 80.0,
                 height: 100.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -210,7 +207,18 @@ class _RoomTypeState extends State<RoomType> {
                       height: 10.0,
                     ),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final response =
+                            await provider.bookHotel(roomDetail?.categoryId);
+                        if (response != null && response.error == null) {
+                          Navigator.of(context).pushReplacementNamed(
+                            SuccessBookingPage.routeName,
+                            arguments: {
+                              SuccessBookingPage.bookingData: response.detail
+                            },
+                          );
+                        }
+                      },
                       color: Themes.primaryBlue,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0)),

@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:localin/model/hotel/booking_detail.dart';
+import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
 class BookingInformationCard extends StatelessWidget {
+  final BookingDetailModel detail;
+
+  BookingInformationCard({this.detail});
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -37,22 +47,28 @@ class BookingInformationCard extends StatelessWidget {
                 'Pembelian Berhasil',
                 textAlign: TextAlign.center,
               ),
-              rowInformation('Booking iD', 'NKYF6429'),
-              rowInformation('Dibeli', 'Kamis, 02 Jan 2019'),
-              rowInformation('Metode Pembayaran', 'BCA'),
-              rowInformation('Rincian Harga', 'Rp 233.750'),
-              Container(
-                width: double.infinity,
-                height: 40.0,
-                margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                child: RaisedButton(
-                  onPressed: () {},
-                  elevation: 5.0,
-                  color: Themes.greyGainsBoro,
-                  child: Text(
-                    'Kirim Bukti Pembelian',
-                    style: kValueStyle.copyWith(
-                        color: Themes.primaryBlue, fontSize: 11.0),
+              rowInformation('Booking iD', '${detail?.bookingId}'),
+              rowInformation('Dibeli',
+                  '${DateHelper.formatDateBookingDetail(detail?.updatedAt)}'),
+              //rowInformation('Metode Pembayaran', 'BCA'),
+              rowInformation('Rincian Harga',
+                  '${getFormattedCurrency(detail?.userPrice)}'),
+              Visibility(
+                visible: false,
+                child: Container(
+                  width: double.infinity,
+                  height: 40.0,
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                  child: RaisedButton(
+                    onPressed: () {},
+                    elevation: 5.0,
+                    color: Themes.greyGainsBoro,
+                    child: Text(
+                      'Kirim Bukti Pembelian',
+                      style: kValueStyle.copyWith(
+                          color: Themes.primaryBlue, fontSize: 11.0),
+                    ),
                   ),
                 ),
               )
@@ -61,6 +77,13 @@ class BookingInformationCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String getFormattedCurrency(int value) {
+    if (value == null) return '';
+    if (value == 0) return 'IDR 0';
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return 'IDR ${formatter.format(value)}';
   }
 
   Widget rowInformation(String title, String value) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/bullet_text.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
@@ -17,7 +16,8 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
   DateTime checkOut = DateTime.now().add(Duration(days: 201));
   @override
   Widget build(BuildContext context) {
-    final detail = Provider.of<HotelDetailProvider>(context).hotelDetailEntity;
+    final state = Provider.of<HotelDetailProvider>(context);
+    final detail = state.hotelDetailEntity;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -79,30 +79,38 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
                 SizedBox(
                   height: 8.0,
                 ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.remove_circle_outline,
-                      color: Themes.dimGrey,
-                      size: 20.0,
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Text(
-                      '1',
-                      style:
-                          TextStyle(fontSize: 14.0, color: Themes.primaryBlue),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      Icons.add_circle_outline,
-                      size: 20.0,
-                      color: Themes.dimGrey,
-                    )
-                  ],
+                FittedBox(
+                  child: Row(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () => state.decreaseRoomTotal(),
+                        child: Icon(
+                          Icons.remove_circle_outline,
+                          color: Themes.dimGrey,
+                          size: 20.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        '${state.roomTotal}',
+                        style: TextStyle(
+                            fontSize: 14.0, color: Themes.primaryBlue),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      InkWell(
+                        onTap: () => state.increaseRoomTotal(),
+                        child: Icon(
+                          Icons.add_circle_outline,
+                          size: 20.0,
+                          color: Themes.dimGrey,
+                        ),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

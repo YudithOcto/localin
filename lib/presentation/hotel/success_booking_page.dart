@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/hotel/widgets/booking_information_card.dart';
+import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/presentation/hotel/widgets/booking_product_detail_card.dart';
 
 import '../../themes.dart';
 
 class SuccessBookingPage extends StatefulWidget {
   static const routeName = '/successBookingPage';
+  static const bookingData = 'bookingData';
   @override
   _SuccessBookingPageState createState() => _SuccessBookingPageState();
 }
@@ -13,6 +14,9 @@ class SuccessBookingPage extends StatefulWidget {
 class _SuccessBookingPageState extends State<SuccessBookingPage> {
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    BookHotelDetailResponse detail = routeArgs[SuccessBookingPage.bookingData];
     return Scaffold(
         backgroundColor: Themes.darkBlue,
         appBar: AppBar(
@@ -33,13 +37,15 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                BookingInformationCard(),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Icon(
-                    Icons.keyboard_backspace,
-                    color: Colors.white,
-                    size: 40.0,
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Icon(
+                      Icons.keyboard_backspace,
+                      color: Colors.white,
+                      size: 40.0,
+                    ),
                   ),
                 ),
                 Center(
@@ -53,7 +59,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                 ),
                 Center(
                   child: Text(
-                    'Success! Your stay is confirmed',
+                    '${detail?.status}',
                     style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.white,
@@ -65,7 +71,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                 ),
                 Center(
                   child: Text(
-                    'Booking ID: NYDHO123',
+                    'Booking ID: ${detail?.bookingId}',
                     style: TextStyle(
                         fontSize: 11.0,
                         color: Colors.white,
@@ -73,7 +79,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                   ),
                 ),
                 CustomRoundedButton(),
-                BookingProductDetailCard(),
+                BookingProductDetailCard(detail: detail),
               ],
             ),
           ),

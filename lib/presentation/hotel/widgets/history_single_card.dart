@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:localin/model/hotel/booking_detail.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
@@ -7,7 +8,7 @@ import 'package:localin/presentation/profile/profile_page.dart';
 import '../../../themes.dart';
 
 class HistorySingleCard extends StatelessWidget {
-  final BookingHistoryDetail detail;
+  final BookingDetail detail;
 
   HistorySingleCard({this.detail});
 
@@ -15,7 +16,8 @@ class HistorySingleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(BookingDetailPage.routeName);
+        Navigator.of(context).pushNamed(BookingDetailPage.routeName,
+            arguments: {BookingDetailPage.bookingId: detail?.bookingId});
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -76,21 +78,14 @@ class HistorySingleCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    detail?.status == 'Saved'
-                        ? Text(
-                            'Perlu Pembayaran',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Themes.red,
-                                fontSize: 12.0,
-                                letterSpacing: .5),
-                          )
-                        : Text(
-                            'Pembelian Berhasil',
-                            style: kTitleStyle.copyWith(
-                                color: Themes.green,
-                                fontWeight: FontWeight.w600),
-                          ),
+                    Text(
+                      '${detail?.status}',
+                      style: kTitleStyle.copyWith(
+                          color: detail?.status == 'confirm booking'
+                              ? Themes.green
+                              : Themes.red,
+                          fontWeight: FontWeight.w600),
+                    ),
                     Text(
                       '${getFormattedCurrency(detail?.userPrice)}',
                       style: kValueStyle.copyWith(color: Themes.primaryBlue),
