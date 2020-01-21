@@ -54,6 +54,7 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
     }
 
     setState(() {
+      _getAddressFromLatLng();
       createMarker();
     });
   }

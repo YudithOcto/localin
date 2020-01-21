@@ -4,6 +4,7 @@ import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/image_helper.dart';
 
 import '../../../themes.dart';
 
@@ -16,11 +17,14 @@ class ArticleSingleCard extends StatelessWidget {
       onTap: () => Navigator.of(context).pushNamed(ArticleDetailPage.routeName,
           arguments: {ArticleDetailPage.articleDetailModel: articleDetail}),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 15.0),
+        margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             upperRow(),
+            SizedBox(
+              height: 15.0,
+            ),
             bigImages(),
             Row(
               children: List.generate(articleDetail?.tags?.length, (index) {
@@ -42,19 +46,27 @@ class ArticleSingleCard extends StatelessWidget {
   Widget upperRow() {
     return Row(
       children: <Widget>[
-        articleDetail?.authorImage != null
-            ? CircleAvatar(
-                backgroundImage: NetworkImage(
-                  articleDetail?.authorImage,
-                ),
-                radius: 25.0,
-              )
-            : CircleAvatar(
-                radius: 25.0,
-                backgroundImage: AssetImage(
-                  'images/article_icon.png',
-                ),
-              ),
+        CachedNetworkImage(
+          imageUrl: articleDetail?.authorImage,
+          imageBuilder: (context, imageProvider) {
+            return CircleAvatar(
+              radius: 25.0,
+              backgroundImage: imageProvider,
+            );
+          },
+          errorWidget: (context, url, child) => CircleAvatar(
+            radius: 25.0,
+            backgroundColor: Colors.grey,
+            child: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+          ),
+          placeholder: (context, url) => CircleAvatar(
+            radius: 25.0,
+            backgroundColor: Colors.grey,
+          ),
+        ),
         SizedBox(
           width: 10.0,
         ),
@@ -76,7 +88,9 @@ class ArticleSingleCard extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Visibility(
-                    visible: articleDetail.tags.isNotEmpty,
+                    visible: articleDetail.tags != null &&
+                        articleDetail.tags.isNotEmpty &&
+                        articleDetail.tags.first.tagName.isNotEmpty,
                     child: Container(
                       decoration: BoxDecoration(
                           color: Themes.green,
@@ -91,8 +105,12 @@ class ArticleSingleCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 5.0,
+                  Visibility(
+                    visible: articleDetail.tags != null &&
+                        articleDetail.tags.isNotEmpty,
+                    child: SizedBox(
+                      width: 5.0,
+                    ),
                   ),
                   Text(
                     '${DateHelper.formatDateFromApi(articleDetail?.createdAt)}',
@@ -119,23 +137,29 @@ class ArticleSingleCard extends StatelessWidget {
   }
 
   Widget bigImages() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      width: double.infinity,
-      decoration: BoxDecoration(
-          image: articleDetail?.image != null
-              ? DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    articleDetail?.image,
-                    errorListener: () => Container(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  fit: BoxFit.cover)
-              : null,
-          color: Colors.grey,
-          borderRadius: BorderRadius.circular(8.0)),
-      height: 150.0,
+    return CachedNetworkImage(
+      imageUrl: ImageHelper.addSubFixHttp(articleDetail?.image),
+      placeholderFadeInDuration: Duration(milliseconds: 250),
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          width: double.infinity,
+          height: 150.0,
+          decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(4.0),
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+        );
+      },
+      placeholder: (context, url) => Container(
+        color: Colors.grey,
+        width: double.infinity,
+        height: 150.0,
+      ),
+      errorWidget: (_, url, child) => Container(
+        width: double.infinity,
+        height: 150.0,
+        color: Colors.grey,
+      ),
     );
   }
 

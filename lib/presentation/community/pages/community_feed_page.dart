@@ -67,9 +67,12 @@ class _ScrollContentState extends State<ScrollContent> {
             children: <Widget>[
               CircularProgressIndicator(),
               SizedBox(
-                height: 5.0,
+                height: 10.0,
               ),
-              Text('Loading Community Data'),
+              Text(
+                'Loading Community Data',
+                style: kValueStyle,
+              ),
             ],
           ));
         } else {
@@ -104,10 +107,12 @@ class _ScrollContentState extends State<ScrollContent> {
               ),
               provider.isSearchLoading
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: Container(
+                          margin: EdgeInsets.only(top: 25.0),
+                          child: CircularProgressIndicator()),
                     )
                   : CommunityCardWidget(
-                      detailList: provider.communityDetail.communityDetail,
+                      detailList: provider.communityDetail.communityDetailList,
                     ),
               CommunityBottomCard(),
             ],
@@ -125,32 +130,27 @@ class QuickMenuCommunity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<CommunityFeedProvider>(context);
-    return InkWell(
-      onTap: () {
-        provider.setCurrentQuickPicked(index, category.id);
-        if (index == 0) {
-          provider.searchCommunity('');
-        } else {
-          provider.searchCommunityBaseCategory(category.id);
-        }
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 4.0),
-        decoration: BoxDecoration(
-            color: provider.currentQuickPicked == index
-                ? Themes.silverGrey
-                : Themes.primaryBlue,
-            borderRadius: BorderRadius.circular(8.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            category?.categoryName,
-            style: kValueStyle.copyWith(
-                color: provider.currentQuickPicked == index
-                    ? Themes.primaryBlue
-                    : Colors.white,
-                fontWeight: FontWeight.w500),
-          ),
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: ActionChip(
+        backgroundColor: provider.currentQuickPicked == index
+            ? Themes.greyGainsBoro
+            : Themes.primaryBlue,
+        onPressed: () {
+          provider.setCurrentQuickPicked(index, category.id);
+          if (index == 0) {
+            provider.searchCommunity('');
+          } else {
+            provider.searchCommunityBaseCategory(category.id);
+          }
+        },
+        label: Text(
+          '${category?.categoryName}',
+          style: kValueStyle.copyWith(
+              fontSize: 11.0,
+              color: provider.currentQuickPicked == index
+                  ? Themes.primaryBlue
+                  : Colors.white),
         ),
       ),
     );

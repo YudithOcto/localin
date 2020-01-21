@@ -16,15 +16,16 @@ class CommunityFeedBottomRow extends StatelessWidget {
     var provider = Provider.of<CommunityFeedProvider>(context);
     return Row(
       children: <Widget>[
-        StarDisplay(
-          value: 4.0,
+        Icon(
+          Icons.star,
+          color: Themes.primaryBlue,
           size: 20.0,
         ),
         SizedBox(
           width: 5.0,
         ),
         Text(
-          '4.5',
+          '${detail?.ranting ?? 0}',
           textAlign: TextAlign.center,
           style: kValueStyle.copyWith(
               color: Themes.primaryBlue, fontWeight: FontWeight.w500),
@@ -40,7 +41,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: Themes.primaryBlue),
+                      border: Border.all(color: Themes.primaryBlue, width: 2.0),
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -65,6 +66,8 @@ class CommunityFeedBottomRow extends StatelessWidget {
                     provider.joinCommunity(detail?.id);
                   },
                   child: Container(
+                    height: 30.0,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: Themes.primaryBlue,
                         borderRadius: BorderRadius.circular(5.0)),
@@ -75,7 +78,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
                         'Gabung Komunitas',
                         style: kValueStyle.copyWith(
                             color: Colors.white,
-                            fontSize: 14.0,
+                            fontSize: 12.0,
                             fontWeight: FontWeight.w500),
                       ),
                     ),

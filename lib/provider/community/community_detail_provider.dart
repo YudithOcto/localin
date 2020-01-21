@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
@@ -13,11 +14,15 @@ import 'package:localin/utils/helper_permission.dart';
 class CommunityDetailProvider extends BaseModelProvider {
   CommunityDetail communityDetail;
   bool isSearchMemberPage = false;
+  bool sendCommentLoading = false;
   Repository _repository = Repository();
   HelperPermission _permissionHelper = HelperPermission();
-  CommunityDetailProvider({this.communityDetail});
   File attachmentFileImage, attachmentFileVideo;
   TextEditingController commentController = TextEditingController();
+
+  CommunityDetailProvider({this.communityDetail}) {
+    getCommunityDetail(communityDetail?.slug);
+  }
 
   @override
   void dispose() {
@@ -30,6 +35,11 @@ class CommunityDetailProvider extends BaseModelProvider {
     notifyListeners();
   }
 
+  void setSentCommentLoading(bool value) {
+    this.sendCommentLoading = value;
+    notifyListeners();
+  }
+
   Future<CommunityMemberResponse> approveMember(
       String communityId, String memberId) async {
     setState(ViewState.Busy);
@@ -39,17 +49,28 @@ class CommunityDetailProvider extends BaseModelProvider {
   }
 
   Future<CommunityJoinResponse> joinCommunity(String communityId) async {
+    setSentCommentLoading(true);
     final response = await _repository.joinCommunity(communityId);
     if (response != null && response.error == null) {
       communityDetail.isJoin = true;
       notifyListeners();
     }
+    setSentCommentLoading(true);
     return response;
   }
 
   Future<CommunityCommentBaseResponse> getCommentList(
       String communityId) async {
     final response = await _repository.getCommunityCommentList(communityId);
+    return response;
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityDetail(
+      String communityId) async {
+    final response = await _repository.getCommunityDetail(communityId);
+    if (response != null && response.error == null) {
+      communityDetail = response.detailCommunity;
+    }
     return response;
   }
 
@@ -74,6 +95,7 @@ class CommunityDetailProvider extends BaseModelProvider {
   }
 
   Future<CommunityCommentBaseResponse> postComment() async {
+    setSentCommentLoading(true);
     String type = attachmentFileImage != null
         ? 'image'
         : attachmentFileVideo != null ? 'video' : null;
@@ -99,6 +121,7 @@ class CommunityDetailProvider extends BaseModelProvider {
       attachmentFileImage = null;
       notifyListeners();
     }
+    setSentCommentLoading(false);
     return response;
   }
 }

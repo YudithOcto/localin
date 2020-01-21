@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
@@ -9,7 +10,7 @@ import '../../../themes.dart';
 class CommunityDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<CommunityDetailProvider>(context);
+    final provider = Provider.of<CommunityDetailProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,23 +24,23 @@ class CommunityDescription extends StatelessWidget {
             SizedBox(
               width: 5.0,
             ),
-            Container(
-              margin: EdgeInsets.only(left: 15.0, right: 10.0),
-              child: provider?.communityDetail?.logoUrl == null
-                  ? CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      backgroundImage: AssetImage('images/community_logo.png'),
-                    )
-                  : CircleAvatar(
-                      backgroundColor: Themes.primaryBlue,
-                      radius: 31.0,
-                      child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundColor: Colors.grey,
-                        backgroundImage: NetworkImage(
-                            '${provider?.communityDetail?.logoUrl}'),
-                      ),
-                    ),
+            CachedNetworkImage(
+              imageUrl: provider.communityDetail.logo ?? '',
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    backgroundImage: imageProvider,
+                  ),
+                );
+              },
+              errorWidget: (context, url, child) => Container(
+                margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey,
+                ),
+              ),
             ),
             SizedBox(
               width: 15.0,

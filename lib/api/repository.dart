@@ -70,6 +70,11 @@ class Repository {
     return apiProvider.getCommunityList(keyword);
   }
 
+  Future<CommunityDetailBaseResponse> getCommunityDetail(
+      String communityId) async {
+    return apiProvider.getCommunityDetail(communityId);
+  }
+
   Future<CommunityDetailBaseResponse> createCommunity(FormData data) async {
     return apiProvider.createCommunity(data);
   }

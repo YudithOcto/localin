@@ -60,7 +60,7 @@ class HomeProvider with ChangeNotifier {
     var response = await _repository.getCommunityList(search);
     if (response != null) {
       communityDetail.clear();
-      communityDetail.addAll(response.communityDetail);
+      communityDetail.addAll(response.communityDetailList);
     }
     return response;
   }

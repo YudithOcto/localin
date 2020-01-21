@@ -12,8 +12,8 @@ class RoomGeneralFacilities extends StatefulWidget {
 }
 
 class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
-  DateTime checkIn = DateTime.now().add(Duration(days: 200));
-  DateTime checkOut = DateTime.now().add(Duration(days: 201));
+  DateTime checkIn = DateTime.now();
+  DateTime checkOut = DateTime.now().add(Duration(days: 1));
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<HotelDetailProvider>(context);
@@ -133,12 +133,14 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
             context: context,
             initialFirstDate: checkIn,
             initialLastDate: checkOut,
-            firstDate: new DateTime(checkIn.year, checkIn.month, checkIn.day),
-            lastDate: new DateTime(2025));
+            firstDate: DateTime.now().subtract(Duration(days: 1)),
+            lastDate: DateTime(2025));
         if (pick != null && pick.length == 2) {
           setState(() {
             checkIn = pick[0];
             checkOut = pick[1];
+            Provider.of<HotelDetailProvider>(context)
+                .setRoomDateSearch(checkIn, checkOut);
           });
         }
       },

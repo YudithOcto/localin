@@ -6,7 +6,6 @@ import 'package:localin/model/dana/dana_user_account_response.dart';
 
 class UserProfileProvider with ChangeNotifier {
   Repository _repository = Repository();
-  List<ArticleDetail> article = List();
   StreamController<DanaAccountDetail> _danaAccountDetail;
 
   UserProfileProvider() {
@@ -15,15 +14,7 @@ class UserProfileProvider with ChangeNotifier {
 
   Future<List<ArticleDetail>> getUserArticle() async {
     final response = await _repository.getUserArticle();
-    article.clear();
-    article.insert(0, ArticleDetail());
-    if (response.data != null) {
-      article.addAll(response.data);
-      article.insert(article.length, ArticleDetail());
-    } else {
-      article.insert(article.length, ArticleDetail());
-    }
-    return article;
+    return response?.data ?? null;
   }
 
   Future<DanaAccountDetail> getUserDanaStatus() async {

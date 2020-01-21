@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/widget/community_detail_comment_section.dart';
@@ -22,9 +23,11 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
     CommunityDetail detail = routeArgs[CommunityDetailPage.communityModel];
     return ChangeNotifierProvider<CommunityDetailProvider>(
       create: (_) => CommunityDetailProvider(communityDetail: detail),
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: CommunityDetailColumn(),
+      child: SafeArea(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: CommunityDetailColumn(),
+          ),
         ),
       ),
     );
@@ -35,25 +38,33 @@ class CommunityDetailColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<CommunityDetailProvider>(context);
+    final size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () => _onBackPressed(context),
       child: Column(
         children: <Widget>[
           Stack(
             children: <Widget>[
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.3,
-                decoration: BoxDecoration(
+              CachedNetworkImage(
+                imageUrl:
+                    ImageHelper.addSubFixHttp(provider.communityDetail.cover),
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    width: double.infinity,
+                    height: size.height * 0.3,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image: imageProvider)),
+                  );
+                },
+                placeholder: (context, url) => Container(
+                  width: double.infinity,
+                  height: size.height * 0.3,
                   color: Colors.grey,
-                  image: provider?.communityDetail?.cover != null
-                      ? DecorationImage(
-                          image: NetworkImage(
-                            '${ImageHelper.addSubFixHttp(provider?.communityDetail?.cover)}',
-                          ),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
+                ),
+                errorWidget: (context, url, child) => Container(
+                  width: double.infinity,
+                  height: size.height * 0.3,
+                  color: Colors.grey,
                 ),
               ),
               Positioned(

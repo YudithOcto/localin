@@ -38,9 +38,9 @@ class ApiProvider {
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
         baseUrl: ApiConstant.kBaseUrl,
-        receiveTimeout: 7000,
+        receiveTimeout: 15000,
         maxRedirects: 3,
-        connectTimeout: 7000);
+        connectTimeout: 15000);
     _dio = Dio(options);
     sharedPreferences = await SharedPreferences.getInstance();
   }
@@ -78,7 +78,9 @@ class ApiProvider {
 
   String convertResponseErrorMessage(Map<String, dynamic> body) {
     String message = body['message'];
-    String comment = body['komentar'][0];
+    String comment = body['komentar'] != null && body['komentar'][0] != null
+        ? body['komentar'][0]
+        : null;
     return comment != null ? comment : message;
   }
 
@@ -277,7 +279,24 @@ class ApiProvider {
       final response = await _dio.get(ApiConstant.kCommunity,
           queryParameters: {'search': '$search'},
           options: Options(headers: {'requiredToken': true}));
-      var model = CommunityDetailBaseResponse.fromJson(response.data);
+      final model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> getCommunityDetail(
+      String communityId) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kCommunity}/$communityId',
+          options: Options(headers: {'requiredToken': true}));
+      final model =
+          CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {

@@ -69,10 +69,13 @@ class SingleCommunityCard extends StatelessWidget {
                       DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
-              imageUrl: detail?.cover,
-              fadeInCurve: Curves.easeIn,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              fadeOutDuration: Duration(milliseconds: 500),
+              imageUrl: ImageHelper.addSubFixHttp(detail?.cover),
+              placeholder: (context, url) => Container(
+                color: Colors.grey,
+                height: 200,
+                width: double.infinity,
+              ),
+              placeholderFadeInDuration: Duration(milliseconds: 500),
               errorWidget: (context, url, error) =>
                   Container(child: Icon(Icons.error)),
             ),

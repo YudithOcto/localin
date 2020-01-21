@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/bottom_company_information.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/presentation/profile/widgets/header_profile.dart';
 import 'package:localin/presentation/profile/widgets/single_card.dart';
 import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/themes.dart';
@@ -10,7 +12,7 @@ const kTitleStyle = TextStyle(
     fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
 
 const kValueStyle = TextStyle(
-    fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
+    fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w500);
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -60,27 +62,42 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ArticleDetail>>(
-      future: getUserArticle,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          return Consumer<UserProfileProvider>(
-            builder: (_, state, child) {
-              return ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Divider();
-                },
-                itemCount: snapshot?.data?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return SingleCard(index, snapshot?.data);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        HeaderProfile(),
+        FutureBuilder<List<ArticleDetail>>(
+          future: getUserArticle,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              if (snapshot.hasData && snapshot.data.isEmpty) {
+                return Center(
+                  child: Text(
+                    'You have no article at the moment',
+                    style:
+                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+                  ),
+                );
+              }
+              return Consumer<UserProfileProvider>(
+                builder: (_, state, child) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: snapshot?.data?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return SingleCard(index, snapshot?.data);
+                    },
+                  );
                 },
               );
-            },
-          );
-        }
-      },
+            }
+          },
+        ),
+        BottomCompanyInformation(),
+      ],
     );
   }
 }

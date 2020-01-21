@@ -52,7 +52,6 @@ class CircleMaterialButton extends StatelessWidget {
             child: Text(
               '$title',
               style: kValueStyle.copyWith(
-                color: Themes.darkGrey,
                 fontSize: 12.0,
               ),
             ),

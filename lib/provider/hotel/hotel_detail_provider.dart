@@ -5,10 +5,10 @@ import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
-import 'package:localin/utils/date_helper.dart';
 
 class HotelDetailProvider extends BaseModelProvider {
   Repository _repository;
+  bool _bookingLoading = false;
   HotelDetailEntity hotelDetailEntity;
   int _checkInTime = 0, _checkOutTime = 0, _roomTotal = 1, _hotelID = 0;
   String _errorMessage = '';
@@ -21,13 +21,11 @@ class HotelDetailProvider extends BaseModelProvider {
 
   Future<HotelListBaseResponse> getHotelDetail(int hotelID) async {
     _hotelID = hotelID;
-    // TODO CHANGE TO LIVE CHECK IN AND CHECKOUT DONT BE 6 MONTH
     final checkInDev = DateTime.now().add(Duration(days: 200));
     final checkOutDev = DateTime.now().add(Duration(days: 201));
     _checkInTime = checkInDev.toUtc().millisecondsSinceEpoch;
     _checkOutTime = checkOutDev.toUtc().millisecondsSinceEpoch;
     getRoomAvailability();
-    print('${DateHelper.formatDateRangeToString(checkInDev)}');
 
     final response =
         await _repository.getHotelDetail(hotelID, checkInDev, checkOutDev);
@@ -38,8 +36,10 @@ class HotelDetailProvider extends BaseModelProvider {
   }
 
   Future<BookHotelResponse> bookHotel(int roomCategoryId) async {
+    setBookingLoading(true);
     final result = await _repository.bookHotel(hotelDetailEntity.hotelId,
         roomCategoryId, roomTotal * 2, roomTotal, _checkInTime, _checkOutTime);
+    setBookingLoading(false);
     return result;
   }
 
@@ -50,6 +50,7 @@ class HotelDetailProvider extends BaseModelProvider {
       _roomController.add(result);
       return result;
     } else {
+      _roomController.add(null);
       _errorMessage = result.error;
       return null;
     }
@@ -58,7 +59,6 @@ class HotelDetailProvider extends BaseModelProvider {
   void setRoomDateSearch(DateTime checkIn, DateTime checkOut) {
     this._checkInTime = checkIn.millisecondsSinceEpoch;
     this._checkOutTime = checkOut.millisecondsSinceEpoch;
-    print(DateHelper.formatFromTimeStamp(_checkOutTime));
     getRoomAvailability();
   }
 
@@ -76,9 +76,15 @@ class HotelDetailProvider extends BaseModelProvider {
     }
   }
 
+  void setBookingLoading(bool value) {
+    this._bookingLoading = value;
+    notifyListeners();
+  }
+
   int get checkInTime => _checkInTime;
   int get checkOutTime => _checkOutTime;
   int get roomTotal => _roomTotal;
+  bool get loading => _bookingLoading;
   String get errorMessage => _errorMessage;
   Stream<RoomBaseResponse> get roomStream => _roomController.stream;
 

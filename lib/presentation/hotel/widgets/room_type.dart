@@ -57,15 +57,26 @@ class _RoomTypeState extends State<RoomType> {
                   ),
                 );
               } else {
-                return Column(
-                  children: List.generate(
-                      asyncSnapshot.data.roomAvailability.length, (index) {
-                    return singleCardRoom(
-                      asyncSnapshot?.data?.roomAvailability[index],
-                      discount: asyncSnapshot?.data?.discount,
-                    );
-                  }),
-                );
+                return provider.loading
+                    ? Center(
+                        child: Container(
+                          height: 20.0,
+                          width: 20.0,
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Column(
+                        children: List.generate(
+                            asyncSnapshot.data.roomAvailability.length,
+                            (index) {
+                          return singleCardRoom(
+                            asyncSnapshot?.data?.roomAvailability[index],
+                            discount: asyncSnapshot?.data?.discount,
+                          );
+                        }),
+                      );
               }
             }
           },
@@ -139,6 +150,7 @@ class _RoomTypeState extends State<RoomType> {
                         height: 5.0,
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(
                             provider.hotelDetailEntity?.restrictions?.length,
                             (index) {
@@ -217,6 +229,26 @@ class _RoomTypeState extends State<RoomType> {
                               SuccessBookingPage.bookingData: response.detail
                             },
                           );
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: Text('Booking Hotel'),
+                                    content: Text('${response?.error}'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        color: Themes.primaryBlue,
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text(
+                                          'Ok',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.white),
+                                        ),
+                                      )
+                                    ],
+                                  ));
                         }
                       },
                       color: Themes.primaryBlue,

@@ -24,13 +24,14 @@ class _CommunityDetailCommentSectionState
   @override
   void initState() {
     super.initState();
-    var provider = Provider.of<CommunityDetailProvider>(context, listen: false);
+    final provider =
+        Provider.of<CommunityDetailProvider>(context, listen: false);
     comment = provider.getCommentList(provider.communityDetail.id);
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<CommunityDetailProvider>(context);
+    final provider = Provider.of<CommunityDetailProvider>(context);
     return Column(
       children: <Widget>[
         CommunityDescription(),
@@ -39,33 +40,45 @@ class _CommunityDetailCommentSectionState
           child: Container(
             margin: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                StarDisplay(
-                  value: 4.0,
-                  size: 25.0,
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.star,
+                      color: Themes.primaryBlue,
+                    ),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Text(
+                      '${provider.communityDetail.ranting ?? 0}',
+                      textAlign: TextAlign.center,
+                      style: kValueStyle.copyWith(
+                          color: Themes.primaryBlue,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  '4.5',
-                  textAlign: TextAlign.center,
-                  style: kValueStyle.copyWith(
-                      color: Themes.primaryBlue, fontWeight: FontWeight.w500),
-                ),
-                Expanded(
-                  child: Visibility(
-                    visible: !provider.communityDetail.isJoin,
+                Visibility(
+                  visible: !provider.communityDetail.isJoin,
+                  child: InkWell(
+                    onTap: () =>
+                        provider.joinCommunity(provider.communityDetail.id),
                     child: Container(
+                      decoration: BoxDecoration(
+                          color: Themes.primaryBlue,
+                          borderRadius: BorderRadius.circular(4.0)),
                       alignment: Alignment.centerRight,
-                      child: RoundedButtonFill(
-                        onPressed: () {
-                          provider.joinCommunity(provider.communityDetail.id);
-                        },
-                        height: 30.0,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12.0,
-                        title: 'Gabung Komunitas',
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Gabung Komunitas',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
                   ),
@@ -114,7 +127,11 @@ class _CommunityDetailCommentSectionState
                   } else {
                     return Container(
                         margin: EdgeInsets.only(top: 35.0),
-                        child: Text('No Comments yet on this community page'));
+                        child: Text(
+                          'No Comments yet on this community page',
+                          style: TextStyle(
+                              fontSize: 12.0, fontWeight: FontWeight.w500),
+                        ));
                   }
                 }
               }

@@ -82,6 +82,7 @@ class _HeaderProfileState extends State<HeaderProfile> {
         Container(
           height: 1.0,
           width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
           color: Colors.black26,
         ),
       ],

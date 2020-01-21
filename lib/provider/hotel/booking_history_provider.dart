@@ -16,7 +16,7 @@ class BookingHistoryProvider extends ChangeNotifier {
   Future<List<BookingDetail>> getBookingHistoryList(
       int offset, int limit) async {
     final result = await _repository.getBookingHistoryList(offset, limit);
-    if (result != null && result?.detail != null) {
+    if (result != null && result?.detail != null && result?.detail.isNotEmpty) {
       return result.detail;
     } else {
       throw Exception();

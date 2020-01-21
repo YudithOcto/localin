@@ -3,7 +3,6 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
 import 'package:localin/model/hotel/booking_detail.dart';
-import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
 import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
 import 'package:localin/presentation/hotel/widgets/history_single_card.dart';

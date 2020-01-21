@@ -105,7 +105,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                 ),
                 Expanded(
                   child: Text(
-                    '${widget.model.follower} follower',
+                    '${widget.model.follower} Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
                         fontSize: 11.0, color: Themes.primaryBlue),
@@ -144,8 +144,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         colors: [
-                          Themes.primaryBlue,
-                          Colors.lightBlueAccent,
+                          Themes.red,
+                          Colors.red,
                         ],
                       ),
                       borderRadius: BorderRadius.circular(12.0)),
@@ -155,8 +155,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                       '${widget.model.categoryName}',
                       style: Constants.kValueStyle.copyWith(
                           color: Colors.white,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600),
+                          fontSize: 11.0,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -173,11 +173,15 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
               Icon(
                 Icons.star,
                 color: Themes.primaryBlue,
+                size: 15.0,
+              ),
+              SizedBox(
+                width: 3.0,
               ),
               Text(
-                '4.8',
+                '${widget.model.ranting ?? 0}',
                 style: kValueStyle.copyWith(
-                    fontSize: 15.0, color: Themes.primaryBlue),
+                    fontSize: 12.0, color: Themes.primaryBlue),
               ),
               SizedBox(
                 width: 10.0,
@@ -199,8 +203,10 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                         }
                       },
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Themes.primaryBlue),
+                            border: Border.all(
+                                color: Themes.primaryBlue, width: 2.0),
                             borderRadius: BorderRadius.circular(5.0)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -221,9 +227,10 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                     Visibility(
                       visible: widget.model.isJoin == false ? true : false,
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color: Themes.primaryBlue,
-                            borderRadius: BorderRadius.circular(5.0)),
+                            borderRadius: BorderRadius.circular(4.0)),
                         child: InkWell(
                           onTap: () {
                             setState(() {
@@ -231,14 +238,14 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                             });
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 4.0),
+                            padding: const EdgeInsets.all(6.0),
                             child: Text(
                               'Gabung Komunitas',
-                              style: Constants.kValueStyle.copyWith(
+                              style: kValueStyle.copyWith(
                                   color: Colors.white,
-                                  fontSize: 12.0,
+                                  fontSize: 11.0,
                                   fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),

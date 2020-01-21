@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/provider/auth_provider.dart';
@@ -31,21 +32,27 @@ class ProfilePageRowCard extends StatelessWidget {
             children: <Widget>[
               Positioned(
                 top: 20.0,
-                child: authState.userModel.imageProfile.isNotEmpty
-                    ? CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage:
-                            NetworkImage(authState.userModel.imageProfile),
-                      )
-                    : CircleAvatar(
-                        radius: 50.0,
-                        backgroundColor: Colors.grey,
-                        child: Icon(
-                          Icons.person,
-                          size: 50.0,
-                          color: Colors.white,
-                        ),
-                      ),
+                child: CachedNetworkImage(
+                  imageUrl: authState?.userModel?.imageProfile,
+                  imageBuilder: (context, imageProvider) {
+                    return CircleAvatar(
+                      radius: 50.0,
+                      backgroundImage: imageProvider,
+                    );
+                  },
+                  placeholder: (context, url) => CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    radius: 50.0,
+                  ),
+                  errorWidget: (context, url, child) => CircleAvatar(
+                    radius: 50.0,
+                    backgroundColor: Colors.blue,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
               Positioned(
                 bottom: 25.0,
