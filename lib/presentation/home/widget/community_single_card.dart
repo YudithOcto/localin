@@ -35,8 +35,9 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
               });
 
               if (result == 'refresh') {
-                /// refresh data
-                print(widget.index);
+                setState(() {
+                  widget.model.isJoin = !widget.model.isJoin;
+                });
               }
             },
             child: Row(
@@ -50,6 +51,9 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                     fit: BoxFit.cover,
                     fadeInCurve: Curves.easeInOut,
                     fadeOutDuration: Duration(milliseconds: 300),
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey,
+                    ),
                     errorWidget: (context, url, error) =>
                         Container(child: Icon(Icons.error)),
                   ),

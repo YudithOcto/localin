@@ -25,6 +25,7 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
   String currentAddress = '';
   Address address;
   bool isInit = true;
+  bool isFromHotel = false;
 
   @override
   void didChangeDependencies() {
@@ -37,6 +38,8 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
         latitude = location?.latitude;
         longitude = location?.longitude;
         createMarker();
+        _getAddressFromLatLng();
+        isFromHotel = true;
       } else {
         getLocation();
       }
@@ -54,8 +57,8 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
     }
 
     setState(() {
-      _getAddressFromLatLng();
       createMarker();
+      _getAddressFromLatLng();
     });
   }
 
@@ -70,7 +73,8 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
     final Marker marker = Marker(
         draggable: true,
         markerId: markerId,
-        infoWindow: InfoWindow(title: 'HOTEL KEBON', snippet: "KEBON JERUK"),
+        infoWindow:
+            InfoWindow(title: '$currentAddress', snippet: '$currentAddress'),
         position: LatLng(latitude, longitude));
     markers[markerId] = marker;
   }
@@ -110,76 +114,86 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-            onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
-              _controller.complete(controller);
-            },
-            myLocationEnabled: isLocationEnabled,
-            mapType: MapType.normal,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+                _controller.complete(controller);
+              },
+              myLocationEnabled: isLocationEnabled,
+              mapType: MapType.normal,
 //            onCameraMove: ((_position) {
 //              updateMarkerPosition(_position);
 //            }),
-//            onCameraIdle: (() {
-//              _getAddressFromLatLng();
-//            }),
-            initialCameraPosition: CameraPosition(
-                bearing: 15.0,
-                zoom: 15.0,
-                target: LatLng(latitude != null ? latitude : 0,
-                    longitude != null ? longitude : 0)),
-            markers: Set<Marker>.of(markers.values),
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-              new Factory<OneSequenceGestureRecognizer>(
-                () => new EagerGestureRecognizer(),
-              ),
-            ].toSet(),
-          ),
-          Positioned(
-            top: 50.0,
-            left: 25.0,
-            right: 25.0,
-            child: Container(
-              height: 50.0,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 20.0),
-              child: RaisedButton(
-                color: Colors.white,
-                elevation: 5.0,
-                onPressed: () async {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0)),
-                child: Text(
-                  '$currentAddress',
-                  overflow: TextOverflow.visible,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 12.0, color: Colors.black),
+//              onCameraIdle: (() {
+//                setState(() {
+//                  _getAddressFromLatLng();
+//                });
+//              }),
+              initialCameraPosition: CameraPosition(
+                  bearing: 15.0,
+                  zoom: 15.0,
+                  target: LatLng(latitude != null ? latitude : 0,
+                      longitude != null ? longitude : 0)),
+              markers: Set<Marker>.of(markers.values),
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                new Factory<OneSequenceGestureRecognizer>(
+                  () => new EagerGestureRecognizer(),
+                ),
+              ].toSet(),
+            ),
+            Positioned(
+              top: 50.0,
+              left: 25.0,
+              right: 25.0,
+              child: Visibility(
+                visible: !isFromHotel,
+                child: Container(
+                  height: 50.0,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(top: 20.0),
+                  child: RaisedButton(
+                    color: Colors.white,
+                    elevation: 5.0,
+                    onPressed: () async {},
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0)),
+                    child: Text(
+                      '$currentAddress',
+                      overflow: TextOverflow.visible,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 12.0, color: Colors.black),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0.0,
-            left: 20.0,
-            right: 20.0,
-            child: RaisedButton(
-              onPressed: () {
-                Navigator.of(context).pop(address);
-              },
-              color: Themes.primaryBlue,
-              child: Text(
-                'Apply',
-                style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
+            Positioned(
+              bottom: 0.0,
+              left: 20.0,
+              right: 20.0,
+              child: Visibility(
+                visible: !isFromHotel,
+                child: RaisedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(address);
+                  },
+                  color: Themes.primaryBlue,
+                  child: Text(
+                    'Apply',
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

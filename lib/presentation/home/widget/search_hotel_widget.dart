@@ -140,7 +140,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                   },
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
-                  padding: EdgeInsets.only(bottom: 60.0),
+                  padding: EdgeInsets.only(bottom: 20.0),
                   itemCount: snapshot.data != null &&
                           snapshot.data.hotelDetailEntity != null
                       ? snapshot.data?.hotelDetailEntity?.length

@@ -1,12 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/components/bottom_company_information.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/date_helper.dart';
 
 import '../../../themes.dart';
-import 'header_profile.dart';
 
 class SingleCard extends StatelessWidget {
   final int index;
@@ -28,23 +27,31 @@ class SingleCard extends StatelessWidget {
         },
         child: Row(
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: articleModel[index]?.image != null
-                  ? Hero(
-                      tag: articleModel[index].image,
-                      child: Image.network(
-                        articleModel[index].image,
-                        fit: BoxFit.fitHeight,
-                        height: 90.0,
-                        width: 150.0,
-                      ),
-                    )
-                  : Container(
-                      width: 150.0,
-                      height: 90.0,
+            CachedNetworkImage(
+              imageUrl: articleModel[index]?.image ?? '',
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: 90.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
                       color: Colors.grey,
-                    ),
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.grey),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                );
+              },
+              errorWidget: (context, url, child) => Container(
+                color: Colors.grey,
+                height: 90.0,
+                width: 150.0,
+                child: Icon(Icons.error),
+              ),
+              placeholder: (context, url) => Container(
+                color: Colors.grey,
+                height: 90.0,
+                width: 150.0,
+              ),
             ),
             SizedBox(
               width: 10.0,

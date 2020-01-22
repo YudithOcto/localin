@@ -36,7 +36,8 @@ class _RoomTypeState extends State<RoomType> {
                 child: CircularProgressIndicator(),
               );
             } else {
-              if (asyncSnapshot.hasError || asyncSnapshot.data.error != null) {
+              if (asyncSnapshot.hasError ||
+                  asyncSnapshot?.data?.error != null) {
                 return Center(
                   child: Column(
                     children: <Widget>[
@@ -48,7 +49,8 @@ class _RoomTypeState extends State<RoomType> {
                     ],
                   ),
                 );
-              } else if (asyncSnapshot.data.roomAvailability.isEmpty) {
+              } else if (asyncSnapshot.hasData &&
+                  asyncSnapshot.data.roomAvailability.isEmpty) {
                 return Center(
                   child: Text(
                     ' We could not find any room at this date. Please try other date.',
@@ -69,7 +71,7 @@ class _RoomTypeState extends State<RoomType> {
                       )
                     : Column(
                         children: List.generate(
-                            asyncSnapshot.data.roomAvailability.length,
+                            asyncSnapshot.data?.roomAvailability?.length ?? 0,
                             (index) {
                           return singleCardRoom(
                             asyncSnapshot?.data?.roomAvailability[index],

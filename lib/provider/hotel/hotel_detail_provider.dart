@@ -21,8 +21,8 @@ class HotelDetailProvider extends BaseModelProvider {
 
   Future<HotelListBaseResponse> getHotelDetail(int hotelID) async {
     _hotelID = hotelID;
-    final checkInDev = DateTime.now().add(Duration(days: 200));
-    final checkOutDev = DateTime.now().add(Duration(days: 201));
+    final checkInDev = DateTime.now();
+    final checkOutDev = DateTime.now().add(Duration(days: 1));
     _checkInTime = checkInDev.toUtc().millisecondsSinceEpoch;
     _checkOutTime = checkOutDev.toUtc().millisecondsSinceEpoch;
     getRoomAvailability();

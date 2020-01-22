@@ -62,8 +62,7 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListView(
       children: <Widget>[
         HeaderProfile(),
         FutureBuilder<List<ArticleDetail>>(

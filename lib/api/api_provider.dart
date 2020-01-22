@@ -490,7 +490,7 @@ class ApiProvider {
             'longitude': longitude,
             'keyword': search,
             'page': 0,
-            'limit': 10,
+            'limit': 6,
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);

@@ -20,53 +20,49 @@ class RoomLocation extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Stack(
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image.asset(
-                      'images/static_map_image.png',
-                      width: 100.0,
-                      height: 100.0,
-                      fit: BoxFit.fill,
+            InkWell(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(GoogleMapFullScreen.routeName, arguments: {
+                  GoogleMapFullScreen.targetLocation: UserLocation(
+                      latitude: double.parse(detail?.latitude),
+                      longitude: double.parse(detail?.longitude)),
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Stack(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.asset(
+                        'images/static_map_image.png',
+                        width: 100.0,
+                        height: 100.0,
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: Container(
-                      alignment: FractionalOffset.center,
-                      height: 25.0,
-                      decoration: BoxDecoration(
-                          color: Themes.primaryBlue,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(12.0),
-                              bottomRight: Radius.circular(12.0))),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                              GoogleMapFullScreen.routeName,
-                              arguments: {
-                                GoogleMapFullScreen.targetLocation:
-                                    UserLocation(
-                                        latitude:
-                                            double.parse(detail?.latitude),
-                                        longitude:
-                                            double.parse(detail?.longitude)),
-                              });
-                        },
+                    Positioned(
+                      bottom: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: Container(
+                        alignment: FractionalOffset.center,
+                        height: 25.0,
+                        decoration: BoxDecoration(
+                            color: Themes.primaryBlue,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(12.0),
+                                bottomRight: Radius.circular(12.0))),
                         child: Text(
                           'Lihat di Peta',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white, fontSize: 11.0),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
             Expanded(

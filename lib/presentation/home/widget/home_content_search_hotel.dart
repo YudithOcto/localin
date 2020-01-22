@@ -59,7 +59,9 @@ class HomeContentSearchHotel extends StatelessWidget {
                       Text(
                         '${hotel.shortAddress}',
                         style: cardTextStyle.copyWith(
-                            color: Colors.black38, fontSize: 11.0),
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black38,
+                            fontSize: 11.0),
                       ),
                       SizedBox(
                         height: 5.0,
@@ -77,7 +79,9 @@ class HomeContentSearchHotel extends StatelessWidget {
                           Text(
                             '${hotel.distance}',
                             style: cardTextStyle.copyWith(
-                                color: Colors.black38, fontSize: 11.0),
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                                fontSize: 11.0),
                           ),
                         ],
                       ),
@@ -94,6 +98,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                         '${hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty ? getFormattedCurrency(hotel?.roomAvailability?.first?.sellingAmount) : ''}',
                         style: cardTextStyle.copyWith(
                           decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.w500,
                           fontSize: 11.0,
                           color: Colors.black38,
                         ),
@@ -116,7 +121,9 @@ class HomeContentSearchHotel extends StatelessWidget {
                       child: Text(
                         '/Room/Night',
                         style: cardTextStyle.copyWith(
-                            fontSize: 11.0, color: Colors.black38),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 11.0,
+                            color: Colors.black38),
                       ),
                     ),
                   ],

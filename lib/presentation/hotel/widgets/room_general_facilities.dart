@@ -172,6 +172,7 @@ class RowFacilities extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
       crossAxisCount: 3,
       childAspectRatio: 2.0,
       children: List.generate(listFacility.length, (index) {
