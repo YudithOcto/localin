@@ -33,7 +33,8 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
     if (isInit) {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      UserLocation location = routeArgs[GoogleMapFullScreen.targetLocation];
+      UserLocation location =
+          routeArgs[GoogleMapFullScreen.targetLocation] ?? null;
       if (location != null) {
         latitude = location?.latitude;
         longitude = location?.longitude;
@@ -125,14 +126,16 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
               },
               myLocationEnabled: isLocationEnabled,
               mapType: MapType.normal,
-//            onCameraMove: ((_position) {
-//              updateMarkerPosition(_position);
-//            }),
-//              onCameraIdle: (() {
-//                setState(() {
-//                  _getAddressFromLatLng();
-//                });
-//              }),
+              onCameraMove: ((_position) {
+                if (!isFromHotel) {
+                  updateMarkerPosition(_position);
+                }
+              }),
+              onCameraIdle: (() {
+                setState(() {
+                  _getAddressFromLatLng();
+                });
+              }),
               initialCameraPosition: CameraPosition(
                   bearing: 15.0,
                   zoom: 15.0,

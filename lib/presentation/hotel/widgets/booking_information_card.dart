@@ -47,7 +47,7 @@ class BookingInformationCard extends StatelessWidget {
                 'Pembelian Berhasil',
                 textAlign: TextAlign.center,
               ),
-              rowInformation('Booking iD', '${detail?.bookingId}'),
+              rowInformation('Booking iD', '${detail?.invoiceCode}'),
               rowInformation('Dibeli',
                   '${DateHelper.formatDateBookingDetail(detail?.updatedAt)}'),
               //rowInformation('Metode Pembayaran', 'BCA'),

@@ -1,170 +1,220 @@
-import 'dart:async';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/provider/hotel/search_hotel_provider.dart';
+import 'package:localin/themes.dart';
+import 'package:localin/utils/custom_date_range_picker.dart' as dtf;
 
 import 'package:flutter/material.dart';
-import 'package:localin/api/repository.dart';
-import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
-class SearchHotelWidget extends StatefulWidget {
+class SearchHotelWidget extends StatelessWidget {
   final bool isHomePage;
 
   SearchHotelWidget({this.isHomePage});
 
   @override
-  _SearchHotelWidgetState createState() => _SearchHotelWidgetState();
-}
-
-class _SearchHotelWidgetState extends State<SearchHotelWidget> {
-  Repository _repository;
-  TextEditingController _searchController;
-  Timer _debounce;
-  Future hotelFuture;
-  bool isInit = true;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (isInit) {
-      hotelFuture = getHotel();
-      isInit = false;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _repository = Repository();
-    _searchController = TextEditingController();
-    _searchController.addListener(_onSearchChanged);
-  }
-
-  _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
-    if (_searchController.text.isNotEmpty) {
-      _debounce = Timer(const Duration(milliseconds: 400), () {
-        setState(() {
-          hotelFuture = getHotel();
-        });
-      });
-    }
-  }
-
-  Future<HotelListBaseResponse> getHotel() async {
-    final location = Provider.of<UserLocation>(context);
-    HotelListBaseResponse result = await _repository.getHotelList(
-        '${location?.latitude}',
-        '${location?.longitude}',
-        '${_searchController.text}');
-    return result;
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    if (_debounce != null && _debounce.isActive) {
-      _debounce.cancel();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var state = Provider.of<HomeProvider>(context, listen: false);
+    final state = Provider.of<HomeProvider>(context, listen: false);
+    final location = Provider.of<UserLocation>(context);
+    final searchProvider = Provider.of<SearchHotelProvider>(context);
+    searchProvider.setUserLocation(location);
+    final _pageLoadController = PagewiseLoadController<HotelDetailEntity>(
+        pageSize: 6,
+        pageFuture: (pageIndex) => searchProvider.getHotel(pageIndex * 6, 6));
+
     return Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
-          child: Column(
+          child: Row(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      if (widget.isHomePage) {
-                        state.setRoomPage(false);
-                      } else {
-                        Provider.of<BookingHistoryProvider>(context)
-                            .setRoomPage(false);
-                      }
+              InkWell(
+                onTap: () {
+                  if (isHomePage) {
+                    state.setRoomPage(false);
+                  } else {
+                    Provider.of<BookingHistoryProvider>(context)
+                        .setRoomPage(false);
+                  }
+                },
+                child: Icon(
+                  Icons.keyboard_backspace,
+                  color: Colors.black45,
+                  size: 30.0,
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Container(
+                  height: 40.0,
+                  child: TextFormField(
+                    controller: searchProvider.searchController,
+                    onChanged: (value) async {
+                      Future.delayed(Duration(milliseconds: 1500), () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        _pageLoadController.reset();
+                      });
                     },
-                    child: Icon(
-                      Icons.keyboard_backspace,
-                      color: Colors.black45,
-                      size: 30.0,
-                    ),
+                    decoration: InputDecoration(
+                        hintText: 'Cari hotel dekat sini',
+                        contentPadding: EdgeInsets.all(5.0),
+                        hintStyle:
+                            TextStyle(fontSize: 12.0, color: Colors.black38),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16.0))),
                   ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                          hintText: 'Cari hotel dekat sini',
-                          hintStyle:
-                              TextStyle(fontSize: 12.0, color: Colors.black38),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16.0))),
-                    ),
-                  )
-                ],
+                ),
               )
             ],
           ),
         ),
-        FutureBuilder<HotelListBaseResponse>(
-          future: hotelFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              if (snapshot.hasError && snapshot.error != null) {
-                return Text('${snapshot.error}');
-              } else {
-                return ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  padding: EdgeInsets.only(bottom: 20.0),
-                  itemCount: snapshot.data != null &&
-                          snapshot.data.hotelDetailEntity != null
-                      ? snapshot.data?.hotelDetailEntity?.length
-                      : 0,
-                  itemBuilder: (context, index) {
-                    if (snapshot.data == null &&
-                        snapshot.data.hotelDetailEntity == null) {
-                      return Center(
-                        child: Container(
-                          child: Text('No Result'),
+        Container(
+          margin: EdgeInsets.only(left: 15.0, right: 15.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Text(
+                    'Check in',
+                    style:
+                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  buttonDate(searchProvider.selectedCheckIn, context),
+                ],
+              ),
+              SizedBox(
+                width: 5.0,
+              ),
+              Icon(
+                Icons.arrow_forward,
+                color: Themes.silverGrey,
+              ),
+              SizedBox(
+                width: 5.0,
+              ),
+              Column(
+                children: <Widget>[
+                  Text('Check out',
+                      style: TextStyle(
+                          fontSize: 12.0, fontWeight: FontWeight.w500)),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  buttonDate(searchProvider.selectedCheckOut, context),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
+                color: Themes.darkGrey,
+                width: 1.0,
+                height: 50.0,
+              ),
+              Column(
+                children: <Widget>[
+                  Text('Room(s)',
+                      style: TextStyle(
+                          fontSize: 12.0, fontWeight: FontWeight.w500)),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  FittedBox(
+                    child: Row(
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () => searchProvider.decreaseRoomTotal(),
+                          child: Icon(
+                            Icons.remove_circle_outline,
+                            color: Themes.dimGrey,
+                            size: 25.0,
+                          ),
                         ),
-                      );
-                    }
-                    return HomeContentSearchHotel(
-                      index: index,
-                      hotel: snapshot.data.hotelDetailEntity[index],
-                    );
-                  },
-                );
-              }
-            }
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          '${searchProvider.userTotalPickedRoom}',
+                          style: TextStyle(
+                              fontSize: 14.0, color: Themes.primaryBlue),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        InkWell(
+                          onTap: () => searchProvider.increaseRoomTotal(),
+                          child: Icon(
+                            Icons.add_circle_outline,
+                            size: 25.0,
+                            color: Themes.dimGrey,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        PagewiseListView(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, item, index) {
+            return HomeContentSearchHotel(
+              index: index,
+              hotel: item,
+            );
           },
+          pageLoadController: _pageLoadController,
         )
       ],
+    );
+  }
+
+  Widget buttonDate(DateTime dateTime, BuildContext context) {
+    final provider = Provider.of<SearchHotelProvider>(context);
+    return InkWell(
+      onTap: () async {
+        final List<DateTime> pick = await dtf.showDatePicker(
+            context: context,
+            initialFirstDate: provider.selectedCheckIn,
+            initialLastDate: provider.selectedCheckOut,
+            firstDate: new DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day),
+            lastDate: new DateTime(2025));
+        if (pick != null && pick.length == 2) {
+          provider.setSelectedDate(pick[0], pick[1]);
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: Themes.dimGrey)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
+          child: Text(
+            '${DateHelper.formatDateRangeToString(dateTime)}',
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12.0,
+                color: Themes.primaryBlue),
+          ),
+        ),
+      ),
     );
   }
 }

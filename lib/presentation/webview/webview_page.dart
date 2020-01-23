@@ -67,10 +67,17 @@ class _WebViewPageState extends State<WebViewPage> {
         routes: {
           '/': (_) => WebviewScaffold(
                 ignoreSSLErrors: true,
+                enableAppScheme: true,
                 appBar: AppBar(
                   automaticallyImplyLeading: true,
                   leading: InkWell(
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () async {
+                      if (await flutterWebviewPlugin.canGoBack()) {
+                        flutterWebviewPlugin.goBack();
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
                     child: Icon(
                       Icons.keyboard_backspace,
                       color: Colors.white,

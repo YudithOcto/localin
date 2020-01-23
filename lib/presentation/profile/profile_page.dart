@@ -62,41 +62,52 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        HeaderProfile(),
-        FutureBuilder<List<ArticleDetail>>(
-          future: getUserArticle,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              if (snapshot.hasData && snapshot.data.isEmpty) {
-                return Center(
-                  child: Text(
-                    'You have no article at the moment',
-                    style:
-                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
-                  ),
-                );
-              }
-              return Consumer<UserProfileProvider>(
-                builder: (_, state, child) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemCount: snapshot?.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return SingleCard(index, snapshot?.data);
-                    },
-                  );
-                },
-              );
-            }
-          },
-        ),
-        BottomCompanyInformation(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height * 0.55,
+            child: ListView(
+              children: <Widget>[
+                HeaderProfile(),
+                FutureBuilder<List<ArticleDetail>>(
+                  future: getUserArticle,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        return Center(
+                          child: Text(
+                            'You have no article at the moment',
+                            style: TextStyle(
+                                fontSize: 12.0, fontWeight: FontWeight.w500),
+                          ),
+                        );
+                      }
+                      return Consumer<UserProfileProvider>(
+                        builder: (_, state, child) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: snapshot?.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return SingleCard(index, snapshot?.data);
+                            },
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          BottomCompanyInformation(),
+        ],
+      ),
     );
   }
 }

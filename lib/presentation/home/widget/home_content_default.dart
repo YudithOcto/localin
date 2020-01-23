@@ -6,7 +6,8 @@ import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 
 class HomeContentDefault extends StatelessWidget {
   final bool isHomePage;
-  HomeContentDefault({this.isHomePage});
+  final VoidCallback onSearchBarPressed;
+  HomeContentDefault({this.isHomePage, this.onSearchBarPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,10 @@ class HomeContentDefault extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 50.0),
       child: Column(
         children: <Widget>[
-          RowQuickMenu(isHomePage: isHomePage),
+          RowQuickMenu(
+            isHomePage: isHomePage,
+            onPressed: onSearchBarPressed,
+          ),
           containerDivider(25.0),
           RowCommunity(),
           containerDivider(5.0),

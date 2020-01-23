@@ -17,13 +17,25 @@ class MainBottomNavigation extends StatefulWidget {
 
 class _MainBottomNavigationState extends State<MainBottomNavigation> {
   int currentSelected = 0;
-  final List<Widget> pages = [
-    HomePage(),
-    CommunityFeedPage(),
-    BookingHistoryPage(),
-    NotificationListPage(),
-    ProfilePage()
-  ];
+  List<Widget> pages = [];
+  bool isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      pages = [
+        HomePage(
+          valueChanged: _selectedTab,
+        ),
+        CommunityFeedPage(),
+        BookingHistoryPage(),
+        NotificationListPage(),
+        ProfilePage()
+      ];
+      isInit = false;
+    }
+  }
 
   void _selectedTab(int index) {
     onPageChanged(index);

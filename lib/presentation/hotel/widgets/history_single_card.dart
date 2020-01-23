@@ -39,7 +39,7 @@ class HistorySingleCard extends StatelessWidget {
                         style: kTitleStyle,
                       ),
                       TextSpan(
-                          text: '${detail?.bookingId}',
+                          text: '${detail?.invoiceCode}',
                           style: TextStyle(
                               fontSize: 12.0,
                               fontWeight: FontWeight.w600,

@@ -10,6 +10,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
+  final ValueChanged<int> valueChanged;
+  HomePage({this.valueChanged});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -37,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                   notifyParent: () {
                     setState(() {});
                   },
-                  expandedHeight: MediaQuery.of(context).size.height * 0.5,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.4,
                 ),
                 pinned: false,
               ),
@@ -49,6 +52,9 @@ class _HomePageState extends State<HomePage> {
                           )
                         : HomeContentDefault(
                             isHomePage: true,
+                            onSearchBarPressed: () {
+                              widget.valueChanged(4);
+                            },
                           ),
                     childCount: 1),
               )

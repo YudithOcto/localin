@@ -77,7 +77,7 @@ class _HeaderProfileState extends State<HeaderProfile> {
             ? DescriptionColumn()
             : Container(),
         SizedBox(
-          height: 40.0,
+          height: 20.0,
         ),
         Container(
           height: 1.0,

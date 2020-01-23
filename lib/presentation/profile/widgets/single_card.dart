@@ -15,7 +15,7 @@ class SingleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 8.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 15.0, 8.0, 8.0),
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(

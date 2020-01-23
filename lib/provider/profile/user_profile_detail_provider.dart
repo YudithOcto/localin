@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileProvider with ChangeNotifier {
   Repository _repository = Repository();
@@ -18,6 +19,7 @@ class UserProfileProvider with ChangeNotifier {
   }
 
   Future<DanaAccountDetail> getUserDanaStatus() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
     final response = await _repository.getUserDanaStatus();
     if (response.error == null) {
       if (!_danaAccountDetail.isClosed) {

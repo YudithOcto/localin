@@ -128,8 +128,8 @@ class Repository {
 
   ///Hotel
   Future<HotelListBaseResponse> getHotelList(
-      String latitude, String longitude, String keyword) {
-    return apiProvider.getHotelList(latitude, longitude, keyword);
+      String latitude, String longitude, String keyword, int page, int limit) {
+    return apiProvider.getHotelList(latitude, longitude, keyword, page, limit);
   }
 
   Future<HotelListBaseResponse> getHotelDetail(

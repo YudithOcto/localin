@@ -84,7 +84,9 @@ class CommunityCreateEditForm extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   var result = await Navigator.of(context)
-                      .pushNamed(GoogleMapFullScreen.routeName);
+                      .pushNamed(GoogleMapFullScreen.routeName, arguments: {
+                    GoogleMapFullScreen.targetLocation: null,
+                  });
                   if (result != null && result is Address) {
                     provider.locationController.text =
                         '${result.locality}, ${result.subAdminArea}';

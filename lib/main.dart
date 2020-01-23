@@ -22,6 +22,7 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,9 @@ class MyApp extends StatelessWidget {
         ),
         StreamProvider<UserLocation>(
           create: (context) => LocationServices().locationStream,
+        ),
+        ChangeNotifierProvider<SearchHotelProvider>(
+          create: (_) => SearchHotelProvider(),
         )
       ],
       child: MaterialApp(

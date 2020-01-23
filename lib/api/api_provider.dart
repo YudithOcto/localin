@@ -481,16 +481,16 @@ class ApiProvider {
   }
 
   /// Hotel
-  Future<HotelListBaseResponse> getHotelList(
-      String latitude, String longitude, String search) async {
+  Future<HotelListBaseResponse> getHotelList(String latitude, String longitude,
+      String search, int page, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kHotel,
           queryParameters: {
             'latitude': latitude,
             'longitude': longitude,
             'keyword': search,
-            'page': 0,
-            'limit': 6,
+            'page': page,
+            'limit': limit,
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);
