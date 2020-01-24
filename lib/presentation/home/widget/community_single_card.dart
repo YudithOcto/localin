@@ -123,21 +123,35 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
           ),
           Stack(
             children: <Widget>[
-              CachedNetworkImage(
-                imageUrl: widget.model?.cover,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: double.infinity,
-                  height: 200.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: imageProvider)),
+              InkWell(
+                onTap: () async {
+                  var result = await Navigator.of(context)
+                      .pushNamed(CommunityDetailPage.routeName, arguments: {
+                    CommunityDetailPage.communityModel: widget.model,
+                  });
+
+                  if (result == 'refresh') {
+                    setState(() {
+                      widget.model.isJoin = !widget.model.isJoin;
+                    });
+                  }
+                },
+                child: CachedNetworkImage(
+                  imageUrl: widget.model?.cover,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: double.infinity,
+                    height: 200.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        image: DecorationImage(
+                            fit: BoxFit.cover, image: imageProvider)),
+                  ),
+                  fadeInCurve: Curves.easeIn,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  fadeOutDuration: Duration(milliseconds: 500),
+                  errorWidget: (context, url, error) =>
+                      Container(child: Icon(Icons.error)),
                 ),
-                fadeInCurve: Curves.easeIn,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                fadeOutDuration: Duration(milliseconds: 500),
-                errorWidget: (context, url, error) =>
-                    Container(child: Icon(Icons.error)),
               ),
               Positioned(
                 top: 10.0,

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
@@ -13,32 +14,27 @@ class ArticleSingleCard extends StatelessWidget {
   ArticleSingleCard(this.articleDetail);
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(ArticleDetailPage.routeName,
-          arguments: {ArticleDetailPage.articleDetailModel: articleDetail}),
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            upperRow(),
-            SizedBox(
-              height: 15.0,
-            ),
-            bigImages(),
-            Row(
-              children: List.generate(articleDetail?.tags?.length, (index) {
-                return Text(
-                  '#${articleDetail?.tags[index]?.tagName}',
-                  style:
-                      kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
-                );
-              }),
-            ),
-            rowBottomIcon(),
-            Divider()
-          ],
-        ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          upperRow(),
+          SizedBox(
+            height: 15.0,
+          ),
+          bigImages(context),
+          Row(
+            children: List.generate(articleDetail?.tags?.length, (index) {
+              return Text(
+                '#${articleDetail?.tags[index]?.tagName}',
+                style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
+              );
+            }),
+          ),
+          rowBottomIcon(context),
+          Divider()
+        ],
       ),
     );
   }
@@ -136,34 +132,44 @@ class ArticleSingleCard extends StatelessWidget {
     );
   }
 
-  Widget bigImages() {
-    return CachedNetworkImage(
-      imageUrl: ImageHelper.addSubFixHttp(articleDetail?.image),
-      placeholderFadeInDuration: Duration(milliseconds: 250),
-      imageBuilder: (context, imageProvider) {
-        return Container(
+  Widget bigImages(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(ArticleDetailPage.routeName, arguments: {
+          ArticleDetailPage.articleDetailModel: articleDetail,
+          ArticleDetailPage.commentPage: false,
+        });
+      },
+      child: CachedNetworkImage(
+        imageUrl: ImageHelper.addSubFixHttp(articleDetail?.image),
+        placeholderFadeInDuration: Duration(milliseconds: 250),
+        imageBuilder: (context, imageProvider) {
+          return Container(
+            width: double.infinity,
+            height: 150.0,
+            decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(4.0),
+                image:
+                    DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+          );
+        },
+        placeholder: (context, url) => Container(
+          color: Colors.grey,
           width: double.infinity,
           height: 150.0,
-          decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(4.0),
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
-        );
-      },
-      placeholder: (context, url) => Container(
-        color: Colors.grey,
-        width: double.infinity,
-        height: 150.0,
-      ),
-      errorWidget: (_, url, child) => Container(
-        width: double.infinity,
-        height: 150.0,
-        color: Colors.grey,
+        ),
+        errorWidget: (_, url, child) => Container(
+          width: double.infinity,
+          height: 150.0,
+          color: Colors.grey,
+        ),
       ),
     );
   }
 
-  Widget rowBottomIcon() {
+  Widget rowBottomIcon(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
       child: Row(
@@ -173,13 +179,30 @@ class ArticleSingleCard extends StatelessWidget {
             Icons.favorite_border,
             color: Colors.grey,
           ),
-          ImageIcon(
-            ExactAssetImage('images/ic_chat.png'),
-            color: Colors.black,
+          InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(ArticleDetailPage.routeName, arguments: {
+                ArticleDetailPage.articleDetailModel: articleDetail,
+                ArticleDetailPage.commentPage: true,
+              });
+            },
+            child: ImageIcon(
+              ExactAssetImage('images/ic_chat.png'),
+              color: Colors.black,
+            ),
           ),
-          Icon(
-            Icons.share,
-            color: Colors.grey,
+          InkWell(
+            onTap: () {
+              Share.text(
+                  'Localin',
+                  'This is my text to share with other applications.',
+                  'text/plain');
+            },
+            child: Icon(
+              Icons.share,
+              color: Colors.grey,
+            ),
           ),
           Icon(
             Icons.bookmark_border,

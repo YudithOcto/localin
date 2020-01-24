@@ -38,6 +38,9 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
   }
 
   void _selectedTab(int index) {
+    if (Provider.of<HomeProvider>(context).isRoomPage) {
+      Provider.of<HomeProvider>(context).setRoomPage(false);
+    }
     onPageChanged(index);
   }
 

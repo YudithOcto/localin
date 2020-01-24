@@ -12,6 +12,8 @@ import '../../../themes.dart';
 class ArticleDetailPage extends StatefulWidget {
   static const routeName = '/articleDetailPage';
   static const articleDetailModel = '/articleDetailModel';
+  static const commentPage = '/commentPage';
+
   @override
   _ArticleDetailPageState createState() => _ArticleDetailPageState();
 }
@@ -23,6 +25,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     ArticleDetail articleModel =
         routeArgs[ArticleDetailPage.articleDetailModel];
+    bool openCommentPage = routeArgs[ArticleDetailPage.commentPage];
     return ChangeNotifierProvider<ArticleDetailProvider>(
       create: (_) => ArticleDetailProvider(articleModel),
       child: Scaffold(
@@ -36,13 +39,58 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             height: 50.0,
           ),
         ),
-        body: Content(),
+        body: Content(
+          openCommentPage: openCommentPage,
+        ),
       ),
     );
   }
 }
 
-class Content extends StatelessWidget {
+class Content extends StatefulWidget {
+  final bool openCommentPage;
+  Content({this.openCommentPage});
+
+  @override
+  _ContentState createState() => _ContentState();
+}
+
+class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  bool isInit = true;
+
+  final tabs = [
+    Tab(
+      text: "Deskripsi",
+    ),
+    Tab(text: "Komentar"),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(vsync: this, length: tabs.length);
+    print(widget.openCommentPage);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      if (widget.openCommentPage) {
+        print(widget.openCommentPage);
+        _tabController.animateTo((_tabController.index + 1) % 2);
+      }
+      isInit = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<ArticleDetailProvider>(context);
@@ -80,17 +128,13 @@ class Content extends StatelessWidget {
                 pinned: true,
                 delegate: _SliverAppBarDelegate(
                   TabBar(
+                    controller: _tabController,
                     labelColor: Themes.primaryBlue,
                     labelStyle:
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                     unselectedLabelColor: Colors.grey,
                     indicatorColor: Themes.primaryBlue,
-                    tabs: [
-                      Tab(
-                        text: "Deskripsi",
-                      ),
-                      Tab(text: "Komentar"),
-                    ],
+                    tabs: tabs,
                   ),
                 ),
               ),

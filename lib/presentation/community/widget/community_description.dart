@@ -56,21 +56,33 @@ class CommunityDescription extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Icon(
-                      Icons.location_on,
-                      color: Themes.primaryBlue,
-                      size: 8.0,
+                    Visibility(
+                      visible: provider.communityDetail.address != null,
+                      child: Icon(
+                        Icons.location_on,
+                        color: Themes.primaryBlue,
+                        size: 8.0,
+                      ),
                     ),
-                    SizedBox(
-                      width: 5.0,
+                    Visibility(
+                      visible: provider.communityDetail.address != null,
+                      child: SizedBox(
+                        width: 5.0,
+                      ),
                     ),
-                    Text(
-                      'Kebon Nanas, Kota Tangerang',
-                      style: kValueStyle.copyWith(
-                          fontSize: 10.0, color: Colors.black38),
+                    Visibility(
+                      visible: provider.communityDetail.address != null,
+                      child: Text(
+                        '${provider.communityDetail?.address}',
+                        style: kValueStyle.copyWith(
+                            fontSize: 10.0, color: Colors.black38),
+                      ),
                     ),
-                    SizedBox(
-                      width: 5.0,
+                    Visibility(
+                      visible: provider.communityDetail.address != null,
+                      child: SizedBox(
+                        width: 5.0,
+                      ),
                     ),
                     Container(
                       decoration: BoxDecoration(
