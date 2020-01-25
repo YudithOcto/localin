@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/hotel/booking_detail_response.dart';
 
 import '../../../themes.dart';
 
 class LocationDetailCard extends StatelessWidget {
+  final BookingDetailModel detail;
+  LocationDetailCard({this.detail});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,7 +51,7 @@ class LocationDetailCard extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                'Beverly 90210 Serpong, Jl. Trimezia, Curug Sengareng, Kelapa Dua, Tangerang, Banten, Indonesia, 15810',
+                '${detail?.street}',
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.black87,

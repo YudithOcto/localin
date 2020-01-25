@@ -8,8 +8,8 @@ class BookingDetail {
   String invoiceCode;
   String currencyCode;
   int userPrice;
-  int checkIn;
-  int checkOut;
+  String checkIn;
+  String checkOut;
   String status;
   String updatedAt;
 

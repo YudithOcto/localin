@@ -113,16 +113,6 @@ class ArticleSingleCard extends StatelessWidget {
                     style: kValueStyle.copyWith(
                         fontSize: 11.0, color: Colors.black45),
                   ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      margin: EdgeInsets.only(right: 5.0),
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.black45,
-                      ),
-                    ),
-                  )
                 ],
               )
             ],

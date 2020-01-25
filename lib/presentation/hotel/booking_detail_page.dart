@@ -72,7 +72,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 fontSize: 20.0, color: Colors.black),
                           ),
                         ),
-                        BookingProductDetailCard(),
+                        BookingProductDetailCard(
+                          detail: snapshot?.data?.data,
+                        ),
                         SizedBox(
                           height: 10.0,
                         ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:localin/model/hotel/booking_detail_response.dart';
 
 import '../../../themes.dart';
 
 class RoomDetailCard extends StatelessWidget {
+  final BookingDetailModel detail;
+  RoomDetailCard({this.detail});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -16,7 +20,7 @@ class RoomDetailCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'RedDoorz Apartment near Summarecon Mall Serpong',
+                  '${detail?.name}',
                   style: TextStyle(
                       fontSize: 14.0,
                       color: Colors.black,
@@ -26,7 +30,7 @@ class RoomDetailCard extends StatelessWidget {
                   height: 5.0,
                 ),
                 Text(
-                  'Kelapa Dua kAb. Tangerang',
+                  '${detail?.state}',
                   style: TextStyle(fontSize: 11.0, color: Colors.black38),
                 ),
                 SizedBox(
@@ -42,7 +46,8 @@ class RoomDetailCard extends StatelessWidget {
                     SizedBox(
                       width: 5.0,
                     ),
-                    blueCard('Price', 'Rp 233.750'),
+                    blueCard(
+                        'Price', '${getFormattedCurrency(detail?.userPrice)}'),
                   ],
                 )
               ],
@@ -63,6 +68,13 @@ class RoomDetailCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String getFormattedCurrency(int value) {
+    if (value == null) return '';
+    if (value == 0) return 'IDR 0';
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return 'IDR ${formatter.format(value)}';
   }
 
   Widget blueCard(String title, String value) {

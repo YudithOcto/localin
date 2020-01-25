@@ -79,7 +79,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                   ),
                 ),
                 CustomRoundedButton(),
-                BookingProductDetailCard(detail: detail),
+                //BookingProductDetailCard(detail: detail),
               ],
             ),
           ),

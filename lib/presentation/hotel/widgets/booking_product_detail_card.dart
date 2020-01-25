@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/hotel/book_hotel_response.dart';
+import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/hotel/widgets/location_detail_card.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_card.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -7,7 +7,7 @@ import 'package:localin/utils/date_helper.dart';
 import '../../../themes.dart';
 
 class BookingProductDetailCard extends StatelessWidget {
-  final BookHotelDetailResponse detail;
+  final BookingDetailModel detail;
   BookingProductDetailCard({this.detail});
 
   @override
@@ -29,7 +29,7 @@ class BookingProductDetailCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               customText(
-                  '${DateHelper.formatDateBookingDetailShort(detail?.checkIn)}'),
+                  '${DateHelper.formatFromTimeStampShort(detail?.checkIn)}'),
               SizedBox(
                 width: 15.0,
               ),
@@ -49,13 +49,15 @@ class BookingProductDetailCard extends StatelessWidget {
                 width: 15.0,
               ),
               customText(
-                  '${DateHelper.formatDateBookingDetailShort(detail?.checkOut)}'),
+                  '${DateHelper.formatFromTimeStampShort(detail?.checkOut)}'),
             ],
           ),
           customDivider(),
-          RoomDetailCard(),
+          RoomDetailCard(detail: detail),
           customDivider(),
-          LocationDetailCard(),
+          LocationDetailCard(
+            detail: detail,
+          ),
         ],
       ),
     );
@@ -82,12 +84,12 @@ class BookingProductDetailCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Want to save more on this booking?',
+              Text('Seleseikan pembayaran anda dalam',
                   style: TextStyle(
                       fontSize: 12.0,
                       color: Colors.white,
-                      fontWeight: FontWeight.w500)),
-              Icon(Icons.keyboard_arrow_right, color: Colors.white)
+                      fontWeight: FontWeight.w600)),
+              Text('')
             ],
           ),
         ),

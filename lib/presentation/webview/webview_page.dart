@@ -62,6 +62,7 @@ class _WebViewPageState extends State<WebViewPage> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[WebViewPage.urlName];
+    flutterWebviewPlugin.resize(Rect.fromLTRB(50, 50, 50, 50));
     return Scaffold(
       body: MaterialApp(
         routes: {

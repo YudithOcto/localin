@@ -34,6 +34,7 @@ class BookingDetailModel {
   int checkOut;
   String status;
   String updatedAt;
+  String createdAt;
 
   BookingDetailModel(
       {this.hotelId,
@@ -49,6 +50,7 @@ class BookingDetailModel {
       this.checkIn,
       this.checkOut,
       this.status,
+      this.createdAt,
       this.updatedAt});
 
   factory BookingDetailModel.fromJson(Map<String, dynamic> body) {
@@ -66,6 +68,7 @@ class BookingDetailModel {
       checkOut: body['checkout'],
       checkIn: body['checkin'],
       status: body['status'],
+      createdAt: body['created_at'],
       updatedAt: body['updated_at'],
     );
   }

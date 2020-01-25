@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
+import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
 import 'package:provider/provider.dart';
@@ -125,11 +126,13 @@ class CommunityDescription extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed(
-                        CommunityCreateEditPage.routeName,
-                        arguments: {
-                          CommunityCreateEditPage.isUpdatePage: true,
-                        });
+                    Navigator.of(context)
+                        .pushNamed(CommunityCreateEventPage.routeName);
+//                    Navigator.of(context).pushNamed(
+//                        CommunityCreateEditPage.routeName,
+//                        arguments: {
+//                          CommunityCreateEditPage.isUpdatePage: true,
+//                        });
                   },
                   child: Icon(
                     Icons.settings,
