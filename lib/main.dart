@@ -9,6 +9,7 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
+import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
@@ -86,6 +87,7 @@ class MyApp extends StatelessWidget {
           GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
           WebViewPage.routeName: (_) => WebViewPage(),
           WebViewNewestPage.routeName: (_) => WebViewNewestPage(),
+          InputPhoneNumber.routeName: (_) => InputPhoneNumber(),
           PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
         },
       ),

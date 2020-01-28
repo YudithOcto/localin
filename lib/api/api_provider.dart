@@ -177,6 +177,38 @@ class ApiProvider {
     }
   }
 
+  Future<UserBaseModel> verifyPhoneRequestCode(int phone) async {
+    try {
+      final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
+          options: Options(headers: {'requiredToken': true}),
+          data: FormData.fromMap({'handphone': phone}));
+      return UserBaseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return UserBaseModel.withError(_handleError(error));
+      } else {
+        return UserBaseModel(error: error);
+      }
+    }
+  }
+
+  Future<UserBaseModel> verifyPhoneCodeVerification(int smsCode) async {
+    try {
+      final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
+          options: Options(headers: {'requiredToken': true}),
+          data: FormData.fromMap({'kode': smsCode}));
+      return UserBaseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return UserBaseModel.withError(_handleError(error));
+      } else {
+        return UserBaseModel(error: error);
+      }
+    }
+  }
+
+  /// Article
+
   Future<ArticleBaseResponse> getUserArticle() async {
     try {
       final response = await _dio.get(ApiConstant.kUserArticle,

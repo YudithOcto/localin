@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -49,9 +50,8 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Event',
                 onPressed: () {
-                  Navigator.of(context).pushNamed(EmptyPage.routeName);
-//                  Navigator.of(context)
-//                      .pushNamed(PhoneVerificationPage.routeName);
+                  //Navigator.of(context).pushNamed(EmptyPage.routeName);
+                  Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
                 },
                 icon: Icons.confirmation_number,
               ),
@@ -64,7 +64,9 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Atraksi',
                 onPressed: () {
-                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                  Navigator.of(context)
+                      .pushNamed(PhoneVerificationPage.routeName);
+                  //Navigator.of(context).pushNamed(EmptyPage.routeName);
                 },
                 icon: Icons.beach_access,
               ),

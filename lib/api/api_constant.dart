@@ -4,6 +4,9 @@ class ApiConstant {
   static const String kLogoutUrl = 'v1/logout';
   static const String kUpdateProfile = 'v1/member/update';
   static const String kVerifyAccount = 'v1/member/update/identitas';
+  static const String kVerifyPhoneNumberRequest = 'v1/member/update/handphone';
+  static const String kVerifyPhoneNumberInputCodeVerification =
+      'v1/member/update/handphone-verifikasi';
   static const String kProfile = 'v1/member/me';
 
   /// COMMUNITY

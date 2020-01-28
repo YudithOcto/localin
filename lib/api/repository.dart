@@ -39,6 +39,14 @@ class Repository {
     return apiProvider.verifyUserAccount();
   }
 
+  Future<UserBaseModel> verifyPhoneRequestCode(int phoneNumber) async {
+    return apiProvider.verifyPhoneRequestCode(phoneNumber);
+  }
+
+  Future<UserBaseModel> verifyPhoneVerificationCode(int smsCode) async {
+    return apiProvider.verifyPhoneCodeVerification(smsCode);
+  }
+
   Future<ArticleBaseResponse> getUserArticle() async {
     return apiProvider.getUserArticle();
   }

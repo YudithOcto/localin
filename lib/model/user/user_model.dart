@@ -11,6 +11,7 @@ class UserModel {
   String username;
   String email;
   String error;
+  String handphone;
 
   UserModel(
       {this.id,
@@ -24,7 +25,8 @@ class UserModel {
       this.apiToken,
       this.username,
       this.error,
-      this.email});
+      this.email,
+      this.handphone});
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
     return UserModel(
@@ -39,6 +41,7 @@ class UserModel {
       apiToken: body['api_token'],
       username: body['nama'],
       email: body['email'],
+      handphone: body['handphone'],
     );
   }
 
