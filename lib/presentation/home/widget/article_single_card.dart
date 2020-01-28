@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
+import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
@@ -165,9 +167,17 @@ class ArticleSingleCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Icon(
-            Icons.favorite_border,
-            color: Colors.grey,
+          InkWell(
+            onTap: () {
+              final response = Provider.of<HomeProvider>(context)
+                  .likeArticle(articleDetail.id);
+              print(response);
+              ///TODO
+            },
+            child: Icon(
+              Icons.favorite_border,
+              color: Colors.grey,
+            ),
           ),
           InkWell(
             onTap: () {

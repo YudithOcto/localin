@@ -55,7 +55,10 @@ class SearchHotelProvider extends BaseModelProvider {
         '${_userLocation?.longitude}',
         '${_searchController.text}',
         page,
-        limit);
+        limit,
+        _selectedCheckIn,
+        _selectedCheckOut,
+        _userRoomTotal);
     return result.hotelDetailEntity;
   }
 

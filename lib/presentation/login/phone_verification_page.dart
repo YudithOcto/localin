@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:countdown_flutter/countdown_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,44 @@ class PhoneVerificationPage extends StatefulWidget {
 }
 
 class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
+  Timer _timer;
+  bool _enable = true;
+  int _seconds = 10;
+  String _verifyStr = '';
+
+  @override
+  void dispose() {
+    _cancelTimer();
+    super.dispose();
+  }
+
+  void _cancelTimer() {
+    _timer?.cancel();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_seconds == 0) {
+        _cancelTimer();
+        _seconds = 120;
+        _enable = true;
+        _verifyStr = 'Resend';
+        setState(() {});
+        return;
+      }
+
+      _enable = false;
+      _seconds--;
+      _verifyStr = '${_seconds}s';
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    _startTimer();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +92,16 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                     flex: 1,
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: Countdown(
-                        duration: Duration(minutes: 2),
-                        builder: (context, remaining) => Text(
-                          '0${remaining.inMinutes}:${remaining.inSeconds % 60}',
+                      child: InkWell(
+                        onTap: () {
+                          if (_enable) {
+                            _startTimer();
+                          }
+                        },
+                        child: Text(
+                          '$_verifyStr',
                           style: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w500),
+                              fontSize: 16.0, fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),
@@ -72,8 +113,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               ),
               InkWell(
                 onTap: () {
-                  setState(() {
-                  });
+                  setState(() {});
                 },
                 child: Text(
                   'Kirim Lagi',

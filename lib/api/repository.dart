@@ -47,6 +47,14 @@ class Repository {
     return apiProvider.verifyPhoneCodeVerification(smsCode);
   }
 
+  Future<ArticleBaseResponse> likeArticle(String articleId) async {
+    return apiProvider.likeArticle(articleId);
+  }
+
+  Future<ArticleBaseResponse> bookmarkArticle(String articleId) async {
+    return apiProvider.bookmarkArticle(articleId);
+  }
+
   Future<ArticleBaseResponse> getUserArticle() async {
     return apiProvider.getUserArticle();
   }
@@ -136,13 +144,22 @@ class Repository {
 
   ///Hotel
   Future<HotelListBaseResponse> getHotelList(
-      String latitude, String longitude, String keyword, int page, int limit) {
-    return apiProvider.getHotelList(latitude, longitude, keyword, page, limit);
+      String latitude,
+      String longitude,
+      String keyword,
+      int page,
+      int limit,
+      DateTime checkIn,
+      DateTime checkout,
+      int total) {
+    return apiProvider.getHotelList(
+        latitude, longitude, keyword, page, limit, checkIn, checkout, total);
   }
 
   Future<HotelListBaseResponse> getHotelDetail(
-      int hotelId, DateTime checkInDate, DateTime checkOutDate) {
-    return apiProvider.getHotelDetail(hotelId, checkInDate, checkOutDate);
+      int hotelId, DateTime checkInDate, DateTime checkOutDate, int roomTotal) {
+    return apiProvider.getHotelDetail(
+        hotelId, checkInDate, checkOutDate, roomTotal);
   }
 
   Future<RoomBaseResponse> getRoomAvailability(

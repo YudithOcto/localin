@@ -304,6 +304,27 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleBaseResponse> likeArticle(String articleId) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kArticleLike}/$articleId',
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleBaseResponse.fromJson(response.data);
+    } catch (error) {
+      return ArticleBaseResponse.withError(error.toString());
+    }
+  }
+
+  Future<ArticleBaseResponse> bookmarkArticle(String articleId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kArticleBookmark}/$articleId',
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleBaseResponse.fromJson(response.data);
+    } catch (error) {
+      return ArticleBaseResponse.withError(error.toString());
+    }
+  }
+
   /// COMMUNITY
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
@@ -513,8 +534,15 @@ class ApiProvider {
   }
 
   /// Hotel
-  Future<HotelListBaseResponse> getHotelList(String latitude, String longitude,
-      String search, int page, int limit) async {
+  Future<HotelListBaseResponse> getHotelList(
+      String latitude,
+      String longitude,
+      String search,
+      int page,
+      int limit,
+      DateTime checkInDate,
+      DateTime checkOutDate,
+      int total) async {
     try {
       final response = await _dio.get(ApiConstant.kHotel,
           queryParameters: {
@@ -523,6 +551,13 @@ class ApiProvider {
             'keyword': search,
             'page': page,
             'limit': limit,
+            'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
+                0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
+            'checkout': checkOutDate.millisecondsSinceEpoch
+                .toString()
+                .substring(0,
+                    checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+            'room': total,
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);
@@ -535,15 +570,17 @@ class ApiProvider {
     }
   }
 
-  Future<HotelListBaseResponse> getHotelDetail(
-      int hotelId, DateTime checkInDate, DateTime checkOutDate) async {
+  Future<HotelListBaseResponse> getHotelDetail(int hotelId,
+      DateTime checkInDate, DateTime checkOutDate, int roomTotal) async {
     try {
       final result = await _dio.get(
         '${ApiConstant.kHotelDetail}/$hotelId',
         queryParameters: {
-          'checkin': checkInDate.millisecondsSinceEpoch,
-          'checkout': checkOutDate.millisecondsSinceEpoch,
-          'room': 1,
+          'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
+              0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
+          'checkout': checkOutDate.millisecondsSinceEpoch.toString().substring(
+              0, checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+          'room': roomTotal,
         },
         options: Options(headers: {'requiredToken': false}),
       );

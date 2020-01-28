@@ -10,9 +10,12 @@ class ArticleBaseResponse {
 
   factory ArticleBaseResponse.fromJson(Map<String, dynamic> body) {
     List article = body['data'];
+    final pagination = body['pagination'];
     return ArticleBaseResponse(
       message: body['message'],
-      total: body['pagination']['total'] ?? null,
+      total: pagination != null && pagination['total'] != null
+          ? pagination['total']
+          : null,
       data: article.map((value) => ArticleDetail.fromJson(value)).toList(),
     );
   }

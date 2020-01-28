@@ -54,6 +54,7 @@ class HotelDetailEntity {
   List<String> policies;
   List<String> restrictions;
   List<String> images;
+  String image;
 
   HotelDetailEntity({
     this.hotelId,
@@ -78,6 +79,7 @@ class HotelDetailEntity {
     this.policies,
     this.restrictions,
     this.images,
+    this.image,
   });
 
   factory HotelDetailEntity.fromJson(Map<String, dynamic> body) {
@@ -104,6 +106,7 @@ class HotelDetailEntity {
         category: body['category'],
         distance: body['distance'],
         discount: body['diskon'],
+        image: body['images'],
         facilities: facilities == null
             ? null
             : facilities.map((value) => value as String).toList(),

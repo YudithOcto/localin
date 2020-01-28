@@ -27,8 +27,8 @@ class HotelDetailProvider extends BaseModelProvider {
     _checkOutTime = checkOutDev.toUtc().millisecondsSinceEpoch;
     getRoomAvailability();
 
-    final response =
-        await _repository.getHotelDetail(hotelID, checkInDev, checkOutDev);
+    final response = await _repository.getHotelDetail(
+        hotelID, checkInDev, checkOutDev, _roomTotal);
     if (response.error == null) {
       hotelDetailEntity = response.singleHotelEntity;
     }
