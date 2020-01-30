@@ -6,6 +6,8 @@ import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
+import 'input_phone_number.dart';
+
 class LoginPage extends StatefulWidget {
   static const routeName = '/loginpage';
   @override
@@ -63,9 +65,13 @@ class Content extends StatelessWidget {
                     if (result != null &&
                         authState.errorMessage != null &&
                         authState.errorMessage.isEmpty) {
-                      Navigator.of(context).pushNamed(
-                          MainBottomNavigation.routeName,
-                          arguments: {'user': result});
+                      if (result.handphone != null && result.handphone.isNotEmpty) {
+                        Navigator.of(context).pushNamed(
+                            MainBottomNavigation.routeName,
+                            arguments: {'user': result});
+                      } else {
+                        Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
+                      }
                     } else {
                       showErrorMessageDialog(context, authState.errorMessage);
                     }

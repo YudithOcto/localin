@@ -177,12 +177,12 @@ class ApiProvider {
     }
   }
 
-  Future<UserBaseModel> verifyPhoneRequestCode(int phone) async {
+  Future<UserBaseModel> userPhoneRequestCode(int phone) async {
     try {
       final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
           options: Options(headers: {'requiredToken': true}),
           data: FormData.fromMap({'handphone': phone}));
-      return UserBaseModel.fromJson(response.data);
+      return UserBaseModel.verificationPhoneFromJson(response.data);
     } catch (error) {
       if (error is DioError) {
         return UserBaseModel.withError(_handleError(error));

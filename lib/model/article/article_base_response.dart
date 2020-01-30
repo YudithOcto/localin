@@ -13,6 +13,7 @@ class ArticleBaseResponse {
     final pagination = body['pagination'];
     return ArticleBaseResponse(
       message: body['message'],
+      error: null,
       total: pagination != null && pagination['total'] != null
           ? pagination['total']
           : null,

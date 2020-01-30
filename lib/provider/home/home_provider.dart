@@ -32,6 +32,11 @@ class HomeProvider with ChangeNotifier {
     return response;
   }
 
+  Future<ArticleBaseResponse> bookmarkArticle(String articleId) async {
+    final response = await _repository.bookmarkArticle(articleId);
+    return response;
+  }
+
   void setRoomPage(bool value) {
     this.isRoomPage = value;
     notifyListeners();

@@ -50,8 +50,8 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Event',
                 onPressed: () {
-                  //Navigator.of(context).pushNamed(EmptyPage.routeName);
-                  Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                  //Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
                 },
                 icon: Icons.confirmation_number,
               ),
@@ -64,9 +64,9 @@ class RowQuickMenu extends StatelessWidget {
               child: CircleMaterialButton(
                 title: 'Atraksi',
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(PhoneVerificationPage.routeName);
-                  //Navigator.of(context).pushNamed(EmptyPage.routeName);
+//                  Navigator.of(context)
+//                      .pushNamed(PhoneVerificationPage.routeName);
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
                 },
                 icon: Icons.beach_access,
               ),

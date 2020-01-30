@@ -11,9 +11,15 @@ import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class ArticleSingleCard extends StatelessWidget {
+class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
   ArticleSingleCard(this.articleDetail);
+
+  @override
+  _ArticleSingleCardState createState() => _ArticleSingleCardState();
+}
+
+class _ArticleSingleCardState extends State<ArticleSingleCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,9 +33,9 @@ class ArticleSingleCard extends StatelessWidget {
           ),
           bigImages(context),
           Row(
-            children: List.generate(articleDetail?.tags?.length, (index) {
+            children: List.generate(widget.articleDetail?.tags?.length, (index) {
               return Text(
-                '#${articleDetail?.tags[index]?.tagName}',
+                '#${widget.articleDetail?.tags[index]?.tagName}',
                 style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
               );
             }),
@@ -45,7 +51,7 @@ class ArticleSingleCard extends StatelessWidget {
     return Row(
       children: <Widget>[
         CachedNetworkImage(
-          imageUrl: articleDetail?.authorImage,
+          imageUrl: widget.articleDetail?.authorImage,
           imageBuilder: (context, imageProvider) {
             return CircleAvatar(
               radius: 25.0,
@@ -75,7 +81,7 @@ class ArticleSingleCard extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(right: 20.0),
                 child: Text(
-                  '${articleDetail?.title}',
+                  '${widget.articleDetail?.title}',
                   overflow: TextOverflow.ellipsis,
                   style: kValueStyle,
                 ),
@@ -86,9 +92,9 @@ class ArticleSingleCard extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Visibility(
-                    visible: articleDetail.tags != null &&
-                        articleDetail.tags.isNotEmpty &&
-                        articleDetail.tags.first.tagName.isNotEmpty,
+                    visible: widget.articleDetail.tags != null &&
+                        widget.articleDetail.tags.isNotEmpty &&
+                        widget.articleDetail.tags.first.tagName.isNotEmpty,
                     child: Container(
                       decoration: BoxDecoration(
                           color: Themes.green,
@@ -96,7 +102,7 @@ class ArticleSingleCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          '${articleDetail.tags.isNotEmpty ? articleDetail?.tags?.first?.tagName : ''}',
+                          '${widget.articleDetail.tags.isNotEmpty ? widget.articleDetail?.tags?.first?.tagName : ''}',
                           style: kValueStyle.copyWith(
                               color: Colors.white, fontSize: 10.0),
                         ),
@@ -104,14 +110,14 @@ class ArticleSingleCard extends StatelessWidget {
                     ),
                   ),
                   Visibility(
-                    visible: articleDetail.tags != null &&
-                        articleDetail.tags.isNotEmpty,
+                    visible: widget.articleDetail.tags != null &&
+                        widget.articleDetail.tags.isNotEmpty,
                     child: SizedBox(
                       width: 5.0,
                     ),
                   ),
                   Text(
-                    '${DateHelper.formatDateFromApi(articleDetail?.createdAt)}',
+                    '${DateHelper.formatDateFromApi(widget.articleDetail?.createdAt)}',
                     style: kValueStyle.copyWith(
                         fontSize: 11.0, color: Colors.black45),
                   ),
@@ -129,12 +135,12 @@ class ArticleSingleCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context)
             .pushNamed(ArticleDetailPage.routeName, arguments: {
-          ArticleDetailPage.articleDetailModel: articleDetail,
+          ArticleDetailPage.articleDetailModel: widget.articleDetail,
           ArticleDetailPage.commentPage: false,
         });
       },
       child: CachedNetworkImage(
-        imageUrl: ImageHelper.addSubFixHttp(articleDetail?.image),
+        imageUrl: ImageHelper.addSubFixHttp(widget.articleDetail?.image),
         placeholderFadeInDuration: Duration(milliseconds: 250),
         imageBuilder: (context, imageProvider) {
           return Container(
@@ -168,22 +174,28 @@ class ArticleSingleCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           InkWell(
-            onTap: () {
-              final response = Provider.of<HomeProvider>(context)
-                  .likeArticle(articleDetail.id);
-              print(response);
-              ///TODO
+            onTap: () async {
+              final response = await Provider.of<HomeProvider>(context)
+                  .likeArticle(widget.articleDetail.id);
+              if (response.error != null) {
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('${response?.error}'),));
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('${response?.message}'),duration: Duration(milliseconds: 1000),));
+                setState(() {
+                  widget.articleDetail?.isLike = widget.articleDetail?.isLike == 0 ? 1 : 0;
+                });
+              }
             },
-            child: Icon(
+            child: widget.articleDetail?.isLike == 0 ? Icon(
               Icons.favorite_border,
               color: Colors.grey,
-            ),
+            ) : Icon(Icons.favorite, color: Colors.red,),
           ),
           InkWell(
             onTap: () {
               Navigator.of(context)
                   .pushNamed(ArticleDetailPage.routeName, arguments: {
-                ArticleDetailPage.articleDetailModel: articleDetail,
+                ArticleDetailPage.articleDetailModel: widget.articleDetail,
                 ArticleDetailPage.commentPage: true,
               });
             },
@@ -204,10 +216,23 @@ class ArticleSingleCard extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          Icon(
-            Icons.bookmark_border,
-            color: Colors.grey,
+          InkWell(
+            onTap: () async {
+              final response = await Provider.of<HomeProvider>(context).likeArticle(widget.articleDetail.id);
+              if (response.error != null) {
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('${response?.error}'),));
+
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('${response?.message}'),));
+
+              }
+            },
+            child: widget.articleDetail?.isBookmark == 0 ? Icon(
+              Icons.bookmark_border,
+              color: Colors.grey,
+            ) : Icon(Icons.bookmark, color: Colors.grey,),
           ),
+
         ],
       ),
     );

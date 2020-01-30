@@ -39,8 +39,8 @@ class Repository {
     return apiProvider.verifyUserAccount();
   }
 
-  Future<UserBaseModel> verifyPhoneRequestCode(int phoneNumber) async {
-    return apiProvider.verifyPhoneRequestCode(phoneNumber);
+  Future<UserBaseModel> userPhoneRequestCode(int phoneNumber) async {
+    return apiProvider.userPhoneRequestCode(phoneNumber);
   }
 
   Future<UserBaseModel> verifyPhoneVerificationCode(int smsCode) async {

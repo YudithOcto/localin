@@ -72,6 +72,11 @@ class AuthProvider extends BaseModelProvider {
     return model;
   }
 
+  Future<void> clearUserCache() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    sf.clear();
+  }
+
   void setUserModel(UserModel model) {
     this.userModel = model;
     notifyListeners();

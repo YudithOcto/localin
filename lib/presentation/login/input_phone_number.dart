@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:localin/api/repository.dart';
+import 'package:localin/model/user/user_base_model.dart';
+import 'package:localin/presentation/login/phone_verification_page.dart';
 
 class InputPhoneNumber extends StatefulWidget {
   static const routeName = '/phoneVerify';
@@ -7,10 +10,16 @@ class InputPhoneNumber extends StatefulWidget {
 }
 
 class _InputPhoneNumberState extends State<InputPhoneNumber> {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool autoValidate = false;
+  String _phoneNumber = '';
+  Repository _repository = Repository();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 5.0,
@@ -22,7 +31,7 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -38,20 +47,79 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text('Masukkan No Hp'),
             ),
-            Row(
-              children: <Widget>[
-                Text('+62'),
-                SizedBox(
-                  width: 20.0,
-                ),
-                Expanded(
-                  child: TextFormField(),
-                )
-              ],
+            Form(
+              key: formKey,
+              autovalidate: autoValidate,
+              child: Row(
+                children: <Widget>[
+                  Text('+62'),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      validator: (value) =>
+                          value.isEmpty ? 'This field required' : null,
+                      textInputAction: TextInputAction.go,
+                      keyboardType: TextInputType.phone,
+                      onSaved: (value) {
+                        _phoneNumber = value;
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Builder(
+              builder: (ctx) => RaisedButton(
+                onPressed: () async {
+                  if (validateInput()) {
+                    final result = await userPhoneRequest();
+                    if (result.error == null) {
+                      Navigator.of(ctx).pushNamed(
+                          PhoneVerificationPage.routeName,
+                          arguments: {
+                            PhoneVerificationPage.phone: _phoneNumber,
+                          });
+                    } else {
+                      Scaffold.of(ctx).showSnackBar(SnackBar(
+                        content: Text('${result?.error}'),
+                      ));
+                    }
+                  }
+                },
+                color: Colors.blue,
+                child: Text('Submit'),
+              ),
             )
           ],
         ),
       ),
     );
+  }
+
+  Future<UserBaseModel> userPhoneRequest() async {
+    if (!_phoneNumber.startsWith('0')) {
+      _phoneNumber = '0$_phoneNumber';
+    }
+    final response =
+        await _repository.userPhoneRequestCode(int.parse(_phoneNumber));
+    return response;
+  }
+
+  bool validateInput() {
+    var form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else {
+      setState(() {
+        autoValidate = true;
+      });
+      return false;
+    }
   }
 }

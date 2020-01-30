@@ -2,6 +2,7 @@ import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/themes.dart';
@@ -36,7 +37,12 @@ class _SplashScreenState extends State<SplashScreen>
       var userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
       if (userCache != null) {
-        checkGps();
+        if (userCache.handphone != null && userCache.handphone.isNotEmpty) {
+          checkGps();
+        } else {
+          Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
+        }
+
       } else {
         Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       }
