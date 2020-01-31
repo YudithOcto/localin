@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/model.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
@@ -14,16 +15,19 @@ class CreateArticleProvider extends BaseModelProvider {
   Repository _repository = Repository();
   HelperPermission _permissionHelper = HelperPermission();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController contentController = TextEditingController();
-  TextEditingController tagsController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+  final TextEditingController tagsController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
   File attachmentImage;
   ArticleTagResponse tagResponse;
   TagModel userChosenTag;
   bool autoValidate = false;
+  Address address;
 
   @override
   void dispose() {
+    locationController.dispose();
     titleController.dispose();
     contentController.dispose();
     tagsController.dispose();
@@ -92,7 +96,10 @@ class CreateArticleProvider extends BaseModelProvider {
             : null,
         'tag[]': tagsController.text != null && tagsController.text.isNotEmpty
             ? tagsController.text
-            : null
+            : null,
+        'lat': address?.coordinates?.latitude,
+        'long': address?.coordinates?.longitude,
+        'address': '${address.locality}, ${address.subAdminArea}',
       },
     );
     var result = await _repository.createArticle(formData);
@@ -105,6 +112,11 @@ class CreateArticleProvider extends BaseModelProvider {
   void setChosenTag(TagModel model) {
     this.userChosenTag = model;
     this.tagsController.text = model.tagName;
+    notifyListeners();
+  }
+
+  void setAddress(Address value) {
+    this.address = value;
     notifyListeners();
   }
 }

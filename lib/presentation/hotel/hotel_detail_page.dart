@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 class HotelDetailPage extends StatefulWidget {
   static const routeName = '/roomDetailPage';
   static const hotelId = '/hotelId';
+  static const check_in_time = '/checkinTime';
+  static const check_out_time = '/checkoutTime';
 
   @override
   _HotelDetailPageState createState() => _HotelDetailPageState();
@@ -19,14 +21,18 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     int detail = routeArgs[HotelDetailPage.hotelId];
+    DateTime checkIn = routeArgs[HotelDetailPage.check_in_time];
+    DateTime checkOut = routeArgs[HotelDetailPage.check_out_time];
     return ChangeNotifierProvider<HotelDetailProvider>(
-      create: (_) => HotelDetailProvider(),
+      create: (_) => HotelDetailProvider(checkIn, checkOut),
       child: Scaffold(
         appBar: BaseAppBar(
           appBar: AppBar(),
         ),
         body: ScrollContent(
           hotelId: detail,
+          checkIn: checkIn,
+          checkOut: checkOut,
         ),
       ),
     );
@@ -35,7 +41,8 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
 
 class ScrollContent extends StatefulWidget {
   final int hotelId;
-  ScrollContent({this.hotelId});
+  final DateTime checkIn, checkOut;
+  ScrollContent({this.hotelId, this.checkIn, this.checkOut});
 
   @override
   _ScrollContentState createState() => _ScrollContentState();

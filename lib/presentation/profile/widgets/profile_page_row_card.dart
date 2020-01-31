@@ -134,16 +134,18 @@ class ProfilePageRowCard extends StatelessWidget {
                       if (authState.userModel.source == 'facebook.com') {
                         final result = await authState.signOutFacebook();
                         if (result == 'Success logout') {
-                          Navigator.of(context)
-                              .pushReplacementNamed(LoginPage.routeName);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              LoginPage.routeName,
+                              (Route<dynamic> route) => false);
                         } else {
                           showErrorMessageDialog(context, result);
                         }
                       } else {
                         final result = await authState.signOutGoogle();
                         if (result.contains('Success logout')) {
-                          Navigator.of(context)
-                              .pushReplacementNamed(LoginPage.routeName);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              LoginPage.routeName,
+                              (Route<dynamic> route) => false);
                         } else {
                           showErrorMessageDialog(context, result);
                         }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
+import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/custom_date_range_picker.dart' as dtf;
@@ -12,8 +13,6 @@ class RoomGeneralFacilities extends StatefulWidget {
 }
 
 class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
-  DateTime checkIn = DateTime.now();
-  DateTime checkOut = DateTime.now().add(Duration(days: 1));
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<HotelDetailProvider>(context);
@@ -47,7 +46,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
                 SizedBox(
                   height: 8.0,
                 ),
-                buttonDate(checkIn, context),
+                buttonDate(state.checkInDate, context),
               ],
             ),
             Icon(
@@ -62,7 +61,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
                 SizedBox(
                   height: 8.0,
                 ),
-                buttonDate(checkOut, context),
+                buttonDate(state.checkOutDate, context),
               ],
             ),
             Container(
@@ -126,21 +125,22 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
     );
   }
 
-  Widget buttonDate(DateTime dateTime, BuildContext context) {
+  Widget buttonDate(DateTime value, BuildContext context) {
+    final state = Provider.of<HotelDetailProvider>(context);
     return InkWell(
       onTap: () async {
         final List<DateTime> pick = await dtf.showDatePicker(
             context: context,
-            initialFirstDate: checkIn,
-            initialLastDate: checkOut,
+            initialFirstDate: state.checkInDate,
+            initialLastDate: state.checkOutDate,
             firstDate: DateTime.now().subtract(Duration(days: 1)),
             lastDate: DateTime(2025));
         if (pick != null && pick.length == 2) {
           setState(() {
-            checkIn = pick[0];
-            checkOut = pick[1];
+            state.setCheckInDate(pick[0]);
+            state.setCheckOutDate(pick[1]);
             Provider.of<HotelDetailProvider>(context)
-                .setRoomDateSearch(checkIn, checkOut);
+                .setRoomDateSearch(state.checkInDate, state.checkOutDate);
           });
         }
       },
@@ -151,7 +151,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4.0),
           child: Text(
-            '${DateHelper.formatDateRangeToString(dateTime)}',
+            '${DateHelper.formatDateRangeToString(value)}',
             style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 12.0,

@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:localin/provider/community/community_event_provider.dart';
 import 'package:localin/utils/custom_date_range_picker.dart' as dtf;
 import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class CommunityEventFormDateTime extends StatefulWidget {
-  @override
-  _CommunityEventFormDateTimeState createState() =>
-      _CommunityEventFormDateTimeState();
-}
-
-class _CommunityEventFormDateTimeState
-    extends State<CommunityEventFormDateTime> {
-  TimeOfDay beginningEventTime = TimeOfDay.now();
-  TimeOfDay endEventTime = TimeOfDay.now();
-  DateTime dateTime = DateTime.now();
-  DateTime selectedBeginningEvent = DateTime.now();
-  DateTime selectedEndEvent = DateTime.now().add(Duration(days: 1));
+class CommunityEventFormDateTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<CommunityEventProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -43,21 +34,19 @@ class _CommunityEventFormDateTimeState
                 onPressed: () async {
                   final List<DateTime> pick = await dtf.showDatePicker(
                       context: context,
-                      initialFirstDate: DateTime.now(),
-                      initialLastDate: DateTime.now().add(Duration(days: 1)),
+                      initialFirstDate: provider.startEventDate,
+                      initialLastDate: provider.endEventDate,
                       firstDate: new DateTime(DateTime.now().year,
                           DateTime.now().month, DateTime.now().day),
                       lastDate: new DateTime(2025));
                   if (pick != null && pick.length == 2) {
-                    setState(() {
-                      selectedBeginningEvent = pick[0];
-                      selectedEndEvent = pick[1];
-                    });
+                    provider.setStartDate(pick[0]);
+                    provider.setEndDate(pick[1]);
                   }
                 },
                 color: Themes.primaryBlue,
                 child: Text(
-                  DateHelper.formatDateRangeToString(selectedBeginningEvent),
+                  DateHelper.formatDateRangeToString(provider.startEventDate),
                   style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
@@ -75,11 +64,11 @@ class _CommunityEventFormDateTimeState
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 onPressed: () async {
-                  selectBeginningTime();
+                  selectBeginningTime(provider, context);
                 },
                 color: Themes.primaryBlue,
                 child: Text(
-                  formattedTime(beginningEventTime),
+                  formattedTime(provider.startEventTime, context),
                   style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
@@ -110,21 +99,19 @@ class _CommunityEventFormDateTimeState
                 onPressed: () async {
                   final List<DateTime> pick = await dtf.showDatePicker(
                       context: context,
-                      initialFirstDate: DateTime.now(),
-                      initialLastDate: DateTime.now().add(Duration(days: 1)),
+                      initialFirstDate: provider.startEventDate,
+                      initialLastDate: provider.endEventDate,
                       firstDate: new DateTime(DateTime.now().year,
                           DateTime.now().month, DateTime.now().day),
                       lastDate: new DateTime(2025));
                   if (pick != null && pick.length == 2) {
-                    setState(() {
-                      selectedBeginningEvent = pick[0];
-                      selectedEndEvent = pick[1];
-                    });
+                    provider.setStartDate(pick[0]);
+                    provider.setEndDate(pick[1]);
                   }
                 },
                 color: Themes.primaryBlue,
                 child: Text(
-                  DateHelper.formatDateRangeToString(selectedEndEvent),
+                  DateHelper.formatDateRangeToString(provider.endEventDate),
                   style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
@@ -142,11 +129,11 @@ class _CommunityEventFormDateTimeState
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 onPressed: () async {
-                  selectEndTime();
+                  selectEndTime(provider, context);
                 },
                 color: Themes.primaryBlue,
                 child: Text(
-                  formattedTime(endEventTime),
+                  formattedTime(provider.endEventTime, context),
                   style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w600,
@@ -160,32 +147,43 @@ class _CommunityEventFormDateTimeState
     );
   }
 
-  String formattedTime(TimeOfDay timeOfDay) {
+  String formattedTime(TimeOfDay timeOfDay, BuildContext context) {
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
     final String formattedTimeOfDay = localizations.formatTimeOfDay(timeOfDay);
     return formattedTimeOfDay;
   }
 
-  Future<Null> selectBeginningTime() async {
-    var picked =
+  Future<Null> selectBeginningTime(
+      CommunityEventProvider provider, BuildContext context) async {
+    final picked =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
     if (picked != null) {
-      setState(() {
-        beginningEventTime = picked;
-      });
+      provider.setStartTime(picked);
     }
   }
 
-  Future<Null> selectEndTime() async {
-    var picked =
+  Future<Null> selectEndTime(
+      CommunityEventProvider provider, BuildContext context) async {
+    final picked =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
     if (picked != null) {
-      setState(() {
-        endEventTime = picked;
-      });
+      if (picked.hour > provider.startEventTime.hour) {
+        provider.setEndTime(picked);
+      } else {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('You cannot set time before this'),
+            duration: Duration(milliseconds: 200),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        );
+      }
     }
   }
 }

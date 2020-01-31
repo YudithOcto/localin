@@ -12,7 +12,8 @@ class HomeContentSearchHotel extends StatelessWidget {
 
   final int index;
   final HotelDetailEntity hotel;
-  HomeContentSearchHotel({this.index, this.hotel});
+  final DateTime checkIn, checkout;
+  HomeContentSearchHotel({this.index, this.hotel, this.checkIn, this.checkout});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,12 @@ class HomeContentSearchHotel extends StatelessWidget {
       visible: hotel?.roomAvailability?.isNotEmpty,
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(HotelDetailPage.routeName,
-              arguments: {HotelDetailPage.hotelId: hotel.hotelId});
+          Navigator.of(context)
+              .pushNamed(HotelDetailPage.routeName, arguments: {
+            HotelDetailPage.hotelId: hotel.hotelId,
+            HotelDetailPage.check_in_time: checkIn,
+            HotelDetailPage.check_out_time: checkout,
+          });
         },
         child: Container(
           margin: EdgeInsets.only(

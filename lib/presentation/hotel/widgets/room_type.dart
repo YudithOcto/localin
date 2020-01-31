@@ -206,35 +206,37 @@ class _RoomTypeState extends State<RoomType> {
                     ),
                     RaisedButton(
                       onPressed: () async {
-                        final response =
-                            await provider.bookHotel(roomDetail?.categoryId);
-                        if (response != null && response.error == null) {
-                          Navigator.of(context).pushReplacementNamed(
-                            SuccessBookingPage.routeName,
-                            arguments: {
-                              SuccessBookingPage.bookingData: response.detail
-                            },
-                          );
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: Text('Booking Hotel'),
-                                    content: Text('${response?.error}'),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        color: Themes.primaryBlue,
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child: Text(
-                                          'Ok',
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              color: Colors.white),
-                                        ),
-                                      )
-                                    ],
-                                  ));
+                        final dialog = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Book'),
+                                content: Text(
+                                    'Are you sure you want to booking this room ? '),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text(
+                                      'Cancel',
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop('');
+                                    },
+                                  ),
+                                  FlatButton(
+                                    color: Themes.primaryBlue,
+                                    child: Text(
+                                      'Ok',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop('success');
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                        if (dialog != null && dialog == 'success') {
+                          bookRoom(roomDetail?.categoryId, provider);
                         }
                       },
                       color: Themes.primaryBlue,
@@ -254,6 +256,33 @@ class _RoomTypeState extends State<RoomType> {
             ],
           ),
         ));
+  }
+
+  bookRoom(int categoryId, HotelDetailProvider provider) async {
+    final response = await provider.bookHotel(categoryId);
+    if (response != null && response.error == null) {
+      Navigator.of(context).pushReplacementNamed(
+        SuccessBookingPage.routeName,
+        arguments: {SuccessBookingPage.bookingData: response.detail},
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Booking Hotel'),
+                content: Text('${response?.error}'),
+                actions: <Widget>[
+                  FlatButton(
+                    color: Themes.primaryBlue,
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      'Ok',
+                      style: TextStyle(fontSize: 12.0, color: Colors.white),
+                    ),
+                  )
+                ],
+              ));
+    }
   }
 
   String getFormattedCurrency(int value) {

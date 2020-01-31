@@ -58,12 +58,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   @override
-  void initState() {
-    _startTimer();
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
@@ -71,6 +65,12 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       _phoneNumber = routeArgs[PhoneVerificationPage.phone];
       _isBackButtonActive = routeArgs[PhoneVerificationPage.isBackButtonActive];
+      if (!_isBackButtonActive) {
+        userVerifyPhoneRequest();
+        _startTimer();
+      } else {
+        _startTimer();
+      }
     }
   }
 
@@ -86,12 +86,8 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  if (_isBackButtonActive) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context)
-                        .pushReplacementNamed(InputPhoneNumber.routeName);
-                  }
+                  Navigator.of(context)
+                      .pushReplacementNamed(InputPhoneNumber.routeName);
                 },
                 child: Icon(
                   Icons.keyboard_backspace,
@@ -113,7 +109,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                 height: 15.0,
               ),
               Text(
-                'Masukkan kode yang kami SMS ke nomor HP-mu yang terdaftar di',
+                'Masukkan kode yang kami SMS ke nomor HP-mu yang terdaftar di ${_phoneNumber.startsWith('0') ? _phoneNumber : '0$_phoneNumber'}',
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
               ),
               Row(
@@ -219,6 +215,12 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                                   duration: Duration(milliseconds: 1000),
                                 ),
                               );
+                            } else {
+                              SnackBar(
+                                content: Text(
+                                    'Anda diharuskan menunggu $_verifyStr detik lagi'),
+                                duration: Duration(milliseconds: 1000),
+                              );
                             }
                           }
                         },
@@ -248,8 +250,14 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   Future<UserBaseModel> verifySmsCode() async {
-    final response =
-        await _repository.verifyPhoneVerificationCode(int.parse(_smsCode));
+    var response;
+    try {
+      response =
+          await _repository.verifyPhoneVerificationCode(int.parse(_smsCode));
+    } catch (error) {
+      response = UserBaseModel.withError('Kode sms tidak boleh kosong');
+    }
+
     return response;
   }
 

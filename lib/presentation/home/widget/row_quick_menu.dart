@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
@@ -13,6 +15,7 @@ import 'circle_material_button.dart';
 
 class RowQuickMenu extends StatelessWidget {
   final bool isHomePage;
+  final Repository _repository = Repository();
   final Function onPressed;
   RowQuickMenu({this.isHomePage, this.onPressed});
 
@@ -91,14 +94,16 @@ class RowQuickMenu extends StatelessWidget {
               fadeDirection: FadeDirection.right,
               child: CircleMaterialButton(
                 title: 'DANA',
-                onPressed: () {
-                  onPressed();
-//                  if (Provider.of<AuthProvider>(context).userModel.status ==
-//                      'verified_identitas') {
-//
-//                  } else {
-//                    Navigator.of(context).pushNamed(EmptyPage.routeName);
-//                  }
+                onPressed: () async {
+                  final result = await _repository.getUserDanaStatus();
+                  if (result != null && result.data.urlTopUp.isNotEmpty) {
+                    Navigator.of(context)
+                        .pushNamed(WebViewPage.routeName, arguments: {
+                      WebViewPage.urlName: result.data.urlTopUp,
+                    });
+                  } else {
+                    onPressed();
+                  }
                 },
                 imageAsset: 'images/quick_dana_logo.png',
               ),

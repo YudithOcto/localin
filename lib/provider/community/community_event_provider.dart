@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/utils/helper_permission.dart';
@@ -15,6 +17,7 @@ class CommunityEventProvider extends BaseModelProvider {
   TextEditingController eventCityController = TextEditingController();
   TextEditingController eventPaymentController = TextEditingController();
   Repository _repository = Repository();
+  double latitude = 0.0, longitude = 0.0;
   HelperPermission _permissionHelper = HelperPermission();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool autoValidate = false;
@@ -24,6 +27,7 @@ class CommunityEventProvider extends BaseModelProvider {
   TimeOfDay startEventTime = TimeOfDay.now();
   TimeOfDay endEventTime = TimeOfDay.now();
   bool paymentNeeded = false;
+  final format = DateFormat('yyyy-MM-dd');
 
   @override
   void dispose() {
@@ -57,6 +61,52 @@ class CommunityEventProvider extends BaseModelProvider {
 
   void setPaymentStatus(bool paymentStatus) {
     this.paymentNeeded = paymentStatus;
+    notifyListeners();
+  }
+
+  Future<void> createEvent() async {
+    FormData formData = FormData.fromMap({
+      'judul': eventTitleController.text ?? null,
+      'deskripsi': eventDescriptionController.text ?? null,
+      'start_date': format.format(startEventDate),
+      'end_date': format.format(endEventDate),
+      'start_time':
+          '${startEventTime.hour}:${startEventTime.minute}:${startEventTime.minute % 60}',
+      'end_time':
+          '${endEventTime.hour}:${endEventTime.minute}:${endEventTime.minute % 60}',
+      'alamat': eventAddressController.text ?? null,
+      'kecamatan': eventDistrictController.text ?? null,
+      'kota': eventCityController.text ?? null,
+      'tipe': 'public',
+      'biaya': eventPaymentController.text ?? null,
+      'latitude': latitude,
+      'longitude': longitude,
+      'lampiran_tipe': 'image',
+      'lampiran': attachmentImage != null
+          ? MultipartFile.fromFileSync(attachmentImage.path,
+              filename: attachmentImage.path)
+          : null,
+    });
+    print(formData);
+  }
+
+  void setStartDate(DateTime value) {
+    this.startEventDate = value;
+    notifyListeners();
+  }
+
+  void setEndDate(DateTime value) {
+    this.endEventDate = value;
+    notifyListeners();
+  }
+
+  void setStartTime(TimeOfDay value) {
+    this.startEventTime = value;
+    notifyListeners();
+  }
+
+  void setEndTime(TimeOfDay value) {
+    this.endEventTime = value;
     notifyListeners();
   }
 }

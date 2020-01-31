@@ -16,25 +16,26 @@ class HotelDetailProvider extends BaseModelProvider {
       _hotelID = 0,
       discount = 0;
   String _errorMessage = '';
+  DateTime _selectedCheckIn, _selectedCheckOut;
   StreamController<RoomState> _roomState;
   List<RoomAvailability> roomAvailability = [];
 
-  HotelDetailProvider() {
+  HotelDetailProvider(DateTime checkIn, DateTime checkOut) {
     _repository = Repository();
     _roomState = StreamController<RoomState>.broadcast();
+    _selectedCheckIn = checkIn;
+    _selectedCheckOut = checkOut;
   }
 
   Future<HotelListBaseResponse> getHotelDetail(int hotelID) async {
     _hotelID = hotelID;
-    final checkInDev = DateTime.now();
-    final checkOutDev = DateTime.now().add(Duration(days: 1));
-    _checkInTime = checkInDev.millisecondsSinceEpoch;
-    _checkOutTime = checkOutDev.millisecondsSinceEpoch;
+    _checkInTime = _selectedCheckIn.millisecondsSinceEpoch;
+    _checkOutTime = _selectedCheckOut.millisecondsSinceEpoch;
 
     getRoomAvailability();
 
     final response = await _repository.getHotelDetail(
-        hotelID, checkInDev, checkOutDev, _roomTotal);
+        hotelID, _selectedCheckIn, _selectedCheckOut, _roomTotal);
     if (response.error == null) {
       hotelDetailEntity = response.singleHotelEntity;
     }
@@ -89,9 +90,21 @@ class HotelDetailProvider extends BaseModelProvider {
     notifyListeners();
   }
 
+  void setCheckInDate(DateTime value) {
+    _selectedCheckIn = value;
+    notifyListeners();
+  }
+
+  void setCheckOutDate(DateTime value) {
+    _selectedCheckOut = value;
+    notifyListeners();
+  }
+
   int get checkInTime => _checkInTime;
   int get checkOutTime => _checkOutTime;
   int get roomTotal => _roomTotal;
+  DateTime get checkInDate => _selectedCheckIn;
+  DateTime get checkOutDate => _selectedCheckOut;
   bool get loading => _bookingLoading;
   String get errorMessage => _errorMessage;
   Stream<RoomState> get roomState => _roomState.stream;

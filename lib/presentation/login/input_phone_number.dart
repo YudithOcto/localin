@@ -79,7 +79,7 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                   if (validateInput()) {
                     final result = await userPhoneRequest();
                     if (result.error == null) {
-                      Navigator.of(ctx).pushNamed(
+                      Navigator.of(ctx).pushReplacementNamed(
                           PhoneVerificationPage.routeName,
                           arguments: {
                             PhoneVerificationPage.phone: _phoneNumber,

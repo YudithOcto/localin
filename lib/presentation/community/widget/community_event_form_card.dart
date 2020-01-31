@@ -6,6 +6,8 @@ import 'package:localin/presentation/community/widget/community_heading_title_wi
 import 'package:localin/provider/community/community_event_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../themes.dart';
+
 class CommunityEventFormCard extends StatefulWidget {
   @override
   _CommunityEventFormCardState createState() => _CommunityEventFormCardState();
@@ -267,7 +269,9 @@ class _CommunityEventFormCardState extends State<CommunityEventFormCard> {
             width: double.infinity,
             height: 50.0,
             child: RoundedButtonFill(
-              onPressed: () {},
+              onPressed: () {
+                provider.createEvent();
+              },
               needCenter: true,
               fontSize: 18.0,
               title: 'Buat Acara',
@@ -279,34 +283,101 @@ class _CommunityEventFormCardState extends State<CommunityEventFormCard> {
   }
 
   Widget dashBorder() {
+    final provider = Provider.of<CommunityEventProvider>(context);
     return Container(
       alignment: Alignment.center,
-      child: DottedBorder(
-        borderType: BorderType.RRect,
-        dashPattern: <double>[5, 5],
-        color: Colors.black26,
-        radius: Radius.circular(12),
-        padding: EdgeInsets.all(6),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: <Widget>[
-                Icon(
-                  Icons.photo_camera,
-                  size: 50.0,
-                  color: Colors.grey,
+      child: InkWell(
+        onTap: () {
+          showDialogImagePicker(context, provider);
+        },
+        child: provider.attachmentImage != null
+            ? Image.file(
+                provider.attachmentImage,
+                scale: 5.0,
+                fit: BoxFit.cover,
+              )
+            : DottedBorder(
+                borderType: BorderType.RRect,
+                dashPattern: <double>[5, 5],
+                color: Colors.black26,
+                radius: Radius.circular(12),
+                padding: EdgeInsets.all(6),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      children: <Widget>[
+                        Icon(
+                          Icons.photo_camera,
+                          size: 50.0,
+                          color: Colors.grey,
+                        ),
+                        Text(
+                          'Drop files here',
+                          style:
+                              TextStyle(fontSize: 12.0, color: Colors.black38),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-                Text(
-                  'Drop files here',
-                  style: TextStyle(fontSize: 12.0, color: Colors.black38),
-                )
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
+  }
+
+  void showDialogImagePicker(
+      BuildContext context, CommunityEventProvider providerState) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Event'),
+            content: Text('Please choose 1 of your preferences'),
+            actions: <Widget>[
+              RaisedButton(
+                color: Themes.primaryBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0)),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  var request = await providerState.getImageFromStorage();
+                  if (request.isNotEmpty) {
+                    print(request);
+                  }
+                },
+                elevation: 5.0,
+                child: Text(
+                  'Image Gallery',
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+              ),
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0)),
+                color: Themes.primaryBlue,
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  var request = await providerState.getImageFromCamera();
+                  if (request.isEmpty) {
+                    print(request);
+                  }
+                },
+                elevation: 5.0,
+                child: Text(
+                  'Camera',
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

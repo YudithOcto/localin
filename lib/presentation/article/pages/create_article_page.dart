@@ -1,7 +1,9 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/model.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
+import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/provider/article/create_article_provider.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/themes.dart';
@@ -74,6 +76,35 @@ class ScrollContent extends StatelessWidget {
                       fontSize: 12.0,
                       fontWeight: FontWeight.w600,
                       color: Themes.lightGrey),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+              child: InkWell(
+                onTap: () async {
+                  var result = await Navigator.of(context)
+                      .pushNamed(GoogleMapFullScreen.routeName, arguments: {
+                    GoogleMapFullScreen.targetLocation: null,
+                  });
+                  if (result != null && result is Address) {
+                    state.locationController.text =
+                        '${result.locality}, ${result.subAdminArea}';
+                    state.setAddress(result);
+                  }
+                },
+                child: TextFormField(
+                  enabled: false,
+                  validator: (value) =>
+                      value.isEmpty ? 'location is required' : null,
+                  controller: state.locationController,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                      hintStyle:
+                          TextStyle(fontSize: 12.0, color: Colors.black45),
+                      hintText: 'set lokasi',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0))),
                 ),
               ),
             ),

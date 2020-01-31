@@ -177,6 +177,8 @@ class SearchHotelWidget extends StatelessWidget {
             return HomeContentSearchHotel(
               index: index,
               hotel: item,
+              checkIn: searchProvider.selectedCheckIn,
+              checkout: searchProvider.selectedCheckOut,
             );
           },
           pageLoadController: _pageLoadController,

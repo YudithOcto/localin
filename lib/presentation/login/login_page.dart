@@ -163,15 +163,14 @@ class Content extends StatelessWidget {
                         if (result.handphone != null &&
                             result.handphone.isNotEmpty) {
                           Navigator.of(context).pushNamed(
-                              MainBottomNavigation.routeName,
-                              arguments: {'user': result});
-                        } else {
-                          Navigator.of(context).pushNamed(
                               PhoneVerificationPage.routeName,
                               arguments: {
                                 PhoneVerificationPage.phone: result.handphone,
                                 PhoneVerificationPage.isBackButtonActive: false,
                               });
+                        } else {
+                          Navigator.of(context)
+                              .pushNamed(InputPhoneNumber.routeName);
                         }
                       }
                     }

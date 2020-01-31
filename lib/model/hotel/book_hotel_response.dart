@@ -9,7 +9,7 @@ class BookHotelResponse {
     return BookHotelResponse(
       error: null,
       message: body['message'],
-      detail: BookHotelDetailResponse.fromJson(body['data']),
+      detail: BookHotelDetailResponse.fromJson(body),
     );
   }
 
