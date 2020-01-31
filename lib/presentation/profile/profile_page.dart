@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bottom_company_information.dart';
-import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/profile/widgets/header_profile.dart';
 import 'package:localin/presentation/profile/widgets/single_card.dart';

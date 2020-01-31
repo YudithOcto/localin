@@ -12,21 +12,28 @@ class UserModel {
   String email;
   String error;
   String handphone;
+  int points;
+  int views;
+  int posts;
 
-  UserModel(
-      {this.id,
-      this.address,
-      this.shortBio,
-      this.imageProfile,
-      this.imageIdentity,
-      this.identityNo,
-      this.status,
-      this.source,
-      this.apiToken,
-      this.username,
-      this.error,
-      this.email,
-      this.handphone});
+  UserModel({
+    this.id,
+    this.address,
+    this.shortBio,
+    this.imageProfile,
+    this.imageIdentity,
+    this.identityNo,
+    this.status,
+    this.source,
+    this.apiToken,
+    this.username,
+    this.error,
+    this.email,
+    this.handphone,
+    this.points,
+    this.views,
+    this.posts,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
     return UserModel(
@@ -42,6 +49,9 @@ class UserModel {
       username: body['nama'],
       email: body['email'],
       handphone: body['handphone'],
+      points: body['point'] ?? 0,
+      views: body['views'] ?? 0,
+      posts: body['posts'] ?? 0,
     );
   }
 
@@ -62,6 +72,7 @@ class UserModel {
     map['api_token'] = apiToken;
     map['nama'] = username;
     map['email'] = email;
+    map['handphone'] = handphone;
     return map;
   }
 }

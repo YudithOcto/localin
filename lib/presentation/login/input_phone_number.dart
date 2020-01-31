@@ -83,6 +83,7 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                           PhoneVerificationPage.routeName,
                           arguments: {
                             PhoneVerificationPage.phone: _phoneNumber,
+                            PhoneVerificationPage.isBackButtonActive: true,
                           });
                     } else {
                       Scaffold.of(ctx).showSnackBar(SnackBar(
@@ -103,10 +104,9 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
 
   Future<UserBaseModel> userPhoneRequest() async {
     if (!_phoneNumber.startsWith('0')) {
-      _phoneNumber = '0$_phoneNumber';
+      this._phoneNumber = '0$_phoneNumber';
     }
-    final response =
-        await _repository.userPhoneRequestCode(int.parse(_phoneNumber));
+    final response = await _repository.userPhoneRequestCode(_phoneNumber);
     return response;
   }
 

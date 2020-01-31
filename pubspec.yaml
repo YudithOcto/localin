@@ -34,7 +34,7 @@ dependencies:
   html: ^0.14.0+3
   carousel_slider: ^1.4.1
   esys_flutter_share: ^1.0.2
-  count_down_timer: ^0.0.6
+  firebase_messaging: ^6.0.9
 
 dev_dependencies:
   flutter_test:

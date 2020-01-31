@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
@@ -15,6 +16,7 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/presentation/profile/other_profile_page.dart';
 import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
@@ -28,12 +30,28 @@ import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:provider/provider.dart';
 
+import 'model/firebase/message.dart';
 import 'model/service/user_location.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  final List<Message> messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    registerNotification();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -89,8 +107,25 @@ class MyApp extends StatelessWidget {
           WebViewNewestPage.routeName: (_) => WebViewNewestPage(),
           InputPhoneNumber.routeName: (_) => InputPhoneNumber(),
           PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
+          OtherProfilePage.routeName: (_) => OtherProfilePage(),
         },
       ),
     );
+  }
+
+  void registerNotification() {
+    _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
+      print(message);
+      return;
+    }, onResume: (Map<String, dynamic> message) {
+      print(message);
+      return;
+    }, onLaunch: (Map<String, dynamic> message) {
+      print(message);
+      return;
+    });
+
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
   }
 }

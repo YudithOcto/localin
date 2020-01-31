@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/user/user_base_model.dart';
+import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +13,7 @@ import '../../themes.dart';
 class PhoneVerificationPage extends StatefulWidget {
   static const routeName = '/phoneVerificationPage';
   static const phone = '/phone';
+  static const isBackButtonActive = '/activateBackButton';
   @override
   _PhoneVerificationPageState createState() => _PhoneVerificationPageState();
 }
@@ -21,7 +24,10 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   String _verifyStr = '', _phoneNumber = '', _smsCode = '';
   Repository _repository = Repository();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  bool autoValidate = false, _isInit = true, _enable = true;
+  bool autoValidate = false,
+      _isInit = true,
+      _enable = true,
+      _isBackButtonActive = true;
 
   @override
   void dispose() {
@@ -64,6 +70,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       _phoneNumber = routeArgs[PhoneVerificationPage.phone];
+      _isBackButtonActive = routeArgs[PhoneVerificationPage.isBackButtonActive];
     }
   }
 
@@ -79,7 +86,12 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pop();
+                  if (_isBackButtonActive) {
+                    Navigator.of(context).pop();
+                  } else {
+                    Navigator.of(context)
+                        .pushReplacementNamed(InputPhoneNumber.routeName);
+                  }
                 },
                 child: Icon(
                   Icons.keyboard_backspace,
@@ -150,15 +162,17 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                         onPressed: () async {
                           if (validateInput()) {
                             final response = await verifySmsCode();
-                            if (response?.error == null) {
+                            if (response.isError != null && !response.isError) {
                               Scaffold.of(ctx).showSnackBar(
                                 SnackBar(
                                   content: Text('${response?.message}'),
                                   duration: Duration(milliseconds: 1000),
                                 ),
                               );
-
-                              /// TODO: call api get me, update cache on auth provider, then redirect to homepage
+                              Provider.of<AuthProvider>(context)
+                                  .updateUserModelAndCache(_phoneNumber);
+                              Navigator.of(context).pushReplacementNamed(
+                                  MainBottomNavigation.routeName);
                             } else {
                               Scaffold.of(ctx).showSnackBar(
                                 SnackBar(
@@ -229,8 +243,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     if (!_phoneNumber.startsWith('0')) {
       _phoneNumber = '0$_phoneNumber';
     }
-    final response =
-        await _repository.userPhoneRequestCode(int.parse(_phoneNumber));
+    final response = await _repository.userPhoneRequestCode(_phoneNumber);
     return response;
   }
 

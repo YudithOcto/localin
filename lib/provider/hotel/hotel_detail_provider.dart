@@ -3,28 +3,34 @@ import 'dart:async';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
-import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/hotel/room_availability.dart';
 import 'package:localin/provider/base_model_provider.dart';
 
 class HotelDetailProvider extends BaseModelProvider {
   Repository _repository;
   bool _bookingLoading = false;
   HotelDetailEntity hotelDetailEntity;
-  int _checkInTime = 0, _checkOutTime = 0, _roomTotal = 1, _hotelID = 0;
+  int _checkInTime = 0,
+      _checkOutTime = 0,
+      _roomTotal = 1,
+      _hotelID = 0,
+      discount = 0;
   String _errorMessage = '';
-  StreamController<RoomBaseResponse> _roomController;
+  StreamController<RoomState> _roomState;
+  List<RoomAvailability> roomAvailability = [];
 
   HotelDetailProvider() {
     _repository = Repository();
-    _roomController = StreamController<RoomBaseResponse>.broadcast();
+    _roomState = StreamController<RoomState>.broadcast();
   }
 
   Future<HotelListBaseResponse> getHotelDetail(int hotelID) async {
     _hotelID = hotelID;
     final checkInDev = DateTime.now();
     final checkOutDev = DateTime.now().add(Duration(days: 1));
-    _checkInTime = checkInDev.toUtc().millisecondsSinceEpoch;
-    _checkOutTime = checkOutDev.toUtc().millisecondsSinceEpoch;
+    _checkInTime = checkInDev.millisecondsSinceEpoch;
+    _checkOutTime = checkOutDev.millisecondsSinceEpoch;
+
     getRoomAvailability();
 
     final response = await _repository.getHotelDetail(
@@ -43,16 +49,18 @@ class HotelDetailProvider extends BaseModelProvider {
     return result;
   }
 
-  Future<RoomBaseResponse> getRoomAvailability() async {
+  Future<void> getRoomAvailability() async {
+    _roomState.add(RoomState.Busy);
+    roomAvailability.clear();
     final result = await _repository.getRoomAvailability(
         _hotelID, _checkInTime, _checkOutTime, _roomTotal);
     if (result != null && result.error == null) {
-      _roomController.add(result);
-      return result;
+      _roomState.add(RoomState.DataRetrieved);
+      discount = result.discount ?? 0;
+      roomAvailability.addAll(result.roomAvailability);
     } else {
-      _roomController.add(null);
+      _roomState.add(RoomState.DataError);
       _errorMessage = result.error;
-      return null;
     }
   }
 
@@ -86,11 +94,13 @@ class HotelDetailProvider extends BaseModelProvider {
   int get roomTotal => _roomTotal;
   bool get loading => _bookingLoading;
   String get errorMessage => _errorMessage;
-  Stream<RoomBaseResponse> get roomStream => _roomController.stream;
+  Stream<RoomState> get roomState => _roomState.stream;
 
   @override
   void dispose() {
-    _roomController.close();
+    _roomState.close();
     super.dispose();
   }
 }
+
+enum RoomState { Busy, DataRetrieved, DataError }

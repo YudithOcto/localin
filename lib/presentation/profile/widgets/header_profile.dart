@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/presentation/profile/widgets/dana_active_row.dart';
 import 'package:localin/presentation/profile/widgets/profile_page_row_card.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/profile/user_profile_detail_provider.dart';
+import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 import 'connect_dana_account_page.dart';
@@ -17,11 +19,16 @@ class HeaderProfile extends StatefulWidget {
 }
 
 class _HeaderProfileState extends State<HeaderProfile> {
+  bool isInit = true;
+
   @override
-  void initState() {
-    Provider.of<UserProfileProvider>(context, listen: false)
-        .getUserDanaStatus();
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      Provider.of<UserProfileProvider>(context, listen: false)
+          .getUserDanaStatus();
+      isInit = false;
+    }
   }
 
   @override
@@ -58,11 +65,58 @@ class _HeaderProfileState extends State<HeaderProfile> {
                     asyncSnapshot.data.maskDanaId == null) {
                   return RowConnectDana(
                     onPressed: () async {
-                      var result = await Navigator.of(context)
-                          .pushNamed(ConnectDanaAccountPage.routeName);
-                      if (result != null && result == 'success') {
-                        Provider.of<UserProfileProvider>(context)
-                            .getUserDanaStatus();
+                      if (authState.userModel.handphone != null &&
+                          authState.userModel.handphone.isNotEmpty) {
+                        final result =
+                            await provider.authenticateUserDanaAccount(
+                                authState.userModel.handphone);
+                        if (result.urlRedirect.isNotEmpty && !result.error) {
+                          final response = await Navigator.of(context)
+                              .pushNamed(WebViewPage.routeName, arguments: {
+                            WebViewPage.urlName: result.urlRedirect
+                          });
+                          if (response != null && response == 'success') {
+                            final dialogResult = await showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('DANA'),
+                                    content: Text(
+                                      'Connect to dana success',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        color: Themes.primaryBlue,
+                                        onPressed: () => Navigator.of(context)
+                                            .pop('success'),
+                                        child: Text(
+                                          'Ok',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                });
+
+                            if (dialogResult == 'success') {
+                              Provider.of<UserProfileProvider>(context)
+                                  .getUserDanaStatus();
+                            }
+                          }
+                        }
+                      } else {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text('No Phone number on your account'),
+                          duration: Duration(milliseconds: 1500),
+                        ));
                       }
                     },
                   );

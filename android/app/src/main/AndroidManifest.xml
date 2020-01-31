@@ -34,6 +34,10 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
 
         </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
@@ -54,6 +58,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDSMoJYaboHxFynVBo8t6G-3vyIQpQNlKs"/>
     </application>
 </manifest>

@@ -35,11 +35,15 @@ class Repository {
     return apiProvider.getUserProfile();
   }
 
+  Future<UserModel> getOtherUserProfile(String profileId) async {
+    return apiProvider.getOtherUserProfile(profileId);
+  }
+
   Future<UpdateProfileModel> verifyUserAccount() async {
     return apiProvider.verifyUserAccount();
   }
 
-  Future<UserBaseModel> userPhoneRequestCode(int phoneNumber) async {
+  Future<UserBaseModel> userPhoneRequestCode(String phoneNumber) async {
     return apiProvider.userPhoneRequestCode(phoneNumber);
   }
 

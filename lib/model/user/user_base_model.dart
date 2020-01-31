@@ -3,10 +3,10 @@ import 'package:localin/model/user/user_model.dart';
 class UserBaseModel {
   String error;
   String message;
-  String codeExpired;
   UserModel userModel;
+  bool isError;
 
-  UserBaseModel({this.error, this.userModel});
+  UserBaseModel({this.error, this.userModel, this.isError, this.message});
 
   UserBaseModel.fromJson(Map<String, dynamic> body)
       : userModel = UserModel.fromJson(body['data']),
@@ -16,6 +16,11 @@ class UserBaseModel {
       : userModel = UserModel(),
         error = value;
 
-  UserBaseModel.verificationPhoneFromJson(Map<String, dynamic> body) :
-      message = body['message'], codeExpired = body['data']['batas_akhir'], error = null;
+  UserBaseModel.verificationPhoneFromJson(Map<String, dynamic> body)
+      : message = body['message'],
+        isError = body['error'];
+
+  UserBaseModel.requestSmsCodeFromJson(Map<String, dynamic> body)
+      : message = body['text'],
+        error = null;
 }

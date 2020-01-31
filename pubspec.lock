@@ -71,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  count_down_timer:
-    dependency: "direct main"
-    description:
-      name: count_down_timer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6"
   crypto:
     dependency: transitive
     description:
@@ -169,6 +162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+1"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.9"
   flutter:
     dependency: "direct main"
     description: flutter

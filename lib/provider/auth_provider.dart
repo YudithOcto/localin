@@ -82,6 +82,16 @@ class AuthProvider extends BaseModelProvider {
     notifyListeners();
   }
 
+  void updateUserModelAndCache(String phone) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    if (userModel != null) {
+      userModel.handphone = phone;
+      sf.remove(kUserCache);
+      sf.setString(kUserCache, jsonEncode(userModel.toJson()));
+    }
+    notifyListeners();
+  }
+
   Future<String> signOutFacebook() async {
     await SocialSignIn().facebookLogout();
     var result = await _repository.userLogout();

@@ -7,6 +7,7 @@ class ArticleDetail {
   String description;
   String image;
   String createdAt;
+  String createdBy;
   String updatedAt;
   String author;
   String authorImage;
@@ -14,17 +15,21 @@ class ArticleDetail {
   int isLike;
   int isBookmark;
 
-  ArticleDetail(
-      {this.id,
-      this.title,
-      this.slug,
-      this.description,
-      this.image,
-      this.createdAt,
-      this.updatedAt,
-      this.author,
-      this.authorImage,
-      this.tags, this.isLike, this.isBookmark});
+  ArticleDetail({
+    this.id,
+    this.title,
+    this.slug,
+    this.description,
+    this.image,
+    this.createdAt,
+    this.updatedAt,
+    this.author,
+    this.authorImage,
+    this.tags,
+    this.isLike,
+    this.isBookmark,
+    this.createdBy,
+  });
 
   factory ArticleDetail.fromJson(Map<String, dynamic> body) {
     List tags = body['tags'];
@@ -35,6 +40,7 @@ class ArticleDetail {
       description: body['deskripsi'],
       image: body['gambar'],
       createdAt: body['created_at'],
+      createdBy: body['created_by'],
       updatedAt: body['updated_at'],
       author: body['penulis'],
       authorImage: body['penulis_avatar'],

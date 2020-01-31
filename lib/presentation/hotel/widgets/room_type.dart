@@ -28,16 +28,15 @@ class _RoomTypeState extends State<RoomType> {
         RoomDetailTitle(
           title: 'Room Type',
         ),
-        StreamBuilder<RoomBaseResponse>(
-          stream: provider.roomStream,
+        StreamBuilder<RoomState>(
+          stream: provider.roomState,
           builder: (context, asyncSnapshot) {
-            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            if (asyncSnapshot.data == RoomState.Busy) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             } else {
-              if (asyncSnapshot.hasError ||
-                  asyncSnapshot?.data?.error != null) {
+              if (asyncSnapshot.data == RoomState.DataError) {
                 return Center(
                   child: Column(
                     children: <Widget>[
@@ -49,36 +48,21 @@ class _RoomTypeState extends State<RoomType> {
                     ],
                   ),
                 );
-              } else if (asyncSnapshot.hasData &&
-                  asyncSnapshot.data.roomAvailability.isEmpty) {
-                return Center(
-                  child: Text(
-                    ' We could not find any room at this date. Please try other date.',
-                    style:
-                        TextStyle(fontSize: 11.0, fontWeight: FontWeight.w500),
-                  ),
-                );
               } else {
-                return provider.loading
-                    ? Center(
-                        child: Container(
-                          height: 20.0,
-                          width: 20.0,
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                          ),
-                        ),
-                      )
-                    : Column(
-                        children: List.generate(
-                            asyncSnapshot.data?.roomAvailability?.length ?? 0,
-                            (index) {
-                          return singleCardRoom(
-                            asyncSnapshot?.data?.roomAvailability[index],
-                            discount: asyncSnapshot?.data?.discount,
-                          );
-                        }),
-                      );
+                if (provider.roomAvailability.isNotEmpty) {
+                  return Column(
+                    children: List.generate(provider.roomAvailability.length,
+                        (index) {
+                      return singleCardRoom(provider.roomAvailability[index],
+                          discount: provider.discount);
+                    }),
+                  );
+                } else {
+                  return Center(
+                    child: Text(
+                        'Kita tidak menemukan kamar di tanggal ini. Silahkan mencari di tanggal lain'),
+                  );
+                }
               }
             }
           },

@@ -8,6 +8,7 @@ class ApiConstant {
   static const String kVerifyPhoneNumberInputCodeVerification =
       'v1/member/update/handphone-verifikasi';
   static const String kProfile = 'v1/member/me';
+  static const String kOtherUserProfile = 'v1/member/profile';
 
   /// COMMUNITY
   static const String kCommunity = 'v1/komunitas';

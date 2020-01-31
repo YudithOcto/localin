@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/login/phone_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/themes.dart';
@@ -65,12 +66,17 @@ class Content extends StatelessWidget {
                     if (result != null &&
                         authState.errorMessage != null &&
                         authState.errorMessage.isEmpty) {
-                      if (result.handphone != null && result.handphone.isNotEmpty) {
+                      if (result.handphone != null &&
+                          result.handphone.isNotEmpty) {
                         Navigator.of(context).pushNamed(
-                            MainBottomNavigation.routeName,
-                            arguments: {'user': result});
+                            PhoneVerificationPage.routeName,
+                            arguments: {
+                              PhoneVerificationPage.phone: result.handphone,
+                              PhoneVerificationPage.isBackButtonActive: false,
+                            });
                       } else {
-                        Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
+                        Navigator.of(context)
+                            .pushNamed(InputPhoneNumber.routeName);
                       }
                     } else {
                       showErrorMessageDialog(context, authState.errorMessage);
@@ -154,8 +160,19 @@ class Content extends StatelessWidget {
                       if (authState.errorMessage.isNotEmpty) {
                         showErrorMessageDialog(context, authState.errorMessage);
                       } else {
-                        Navigator.of(context)
-                            .pushNamed(MainBottomNavigation.routeName);
+                        if (result.handphone != null &&
+                            result.handphone.isNotEmpty) {
+                          Navigator.of(context).pushNamed(
+                              MainBottomNavigation.routeName,
+                              arguments: {'user': result});
+                        } else {
+                          Navigator.of(context).pushNamed(
+                              PhoneVerificationPage.routeName,
+                              arguments: {
+                                PhoneVerificationPage.phone: result.handphone,
+                                PhoneVerificationPage.isBackButtonActive: false,
+                              });
+                        }
                       }
                     }
                     //

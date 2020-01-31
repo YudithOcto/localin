@@ -162,6 +162,21 @@ class ApiProvider {
     }
   }
 
+  Future<UserModel> getOtherUserProfile(String userProfileId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kOtherUserProfile}/$userProfileId',
+          options: Options(headers: {'requiredToken': true}));
+      return UserModel.fromJson(response.data['data']);
+    } catch (error) {
+      if (error is DioError) {
+        return UserModel.withError(_handleError(error));
+      } else {
+        return UserModel.withError(error);
+      }
+    }
+  }
+
   Future<UpdateProfileModel> verifyUserAccount() async {
     try {
       final response = await _dio.get(ApiConstant.kVerifyAccount,
@@ -177,12 +192,12 @@ class ApiProvider {
     }
   }
 
-  Future<UserBaseModel> userPhoneRequestCode(int phone) async {
+  Future<UserBaseModel> userPhoneRequestCode(String phone) async {
     try {
       final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
           options: Options(headers: {'requiredToken': true}),
           data: FormData.fromMap({'handphone': phone}));
-      return UserBaseModel.verificationPhoneFromJson(response.data);
+      return UserBaseModel.requestSmsCodeFromJson(jsonDecode(response.data));
     } catch (error) {
       if (error is DioError) {
         return UserBaseModel.withError(_handleError(error));
@@ -194,10 +209,11 @@ class ApiProvider {
 
   Future<UserBaseModel> verifyPhoneCodeVerification(int smsCode) async {
     try {
-      final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
+      final response = await _dio.post(
+          ApiConstant.kVerifyPhoneNumberInputCodeVerification,
           options: Options(headers: {'requiredToken': true}),
           data: FormData.fromMap({'kode': smsCode}));
-      return UserBaseModel.fromJson(response.data);
+      return UserBaseModel.verificationPhoneFromJson(response.data);
     } catch (error) {
       if (error is DioError) {
         return UserBaseModel.withError(_handleError(error));

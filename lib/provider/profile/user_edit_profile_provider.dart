@@ -102,7 +102,7 @@ class UserEditProfileProvider with ChangeNotifier {
   }
 
   Future<UserModel> updateNewProfileData() async {
-    var response = await _repository.getUserProfile();
+    final response = await _repository.getUserProfile();
     return response;
   }
 

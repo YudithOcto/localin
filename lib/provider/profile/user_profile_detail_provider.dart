@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +34,13 @@ class UserProfileProvider with ChangeNotifier {
       }
       return null;
     }
+  }
+
+  Future<DanaActivateBaseResponse> authenticateUserDanaAccount(
+      String phone) async {
+    final body = {'handphone': phone};
+    final result = await _repository.activateDana(FormData.fromMap(body));
+    return result;
   }
 
   Stream<DanaAccountDetail> get danaAccountStream => _danaAccountDetail.stream;

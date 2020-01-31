@@ -5,8 +5,10 @@ import 'package:localin/presentation/profile/widgets/connect_dana_account_page.d
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/presentation/profile/widgets/edit_profile_row_card.dart';
 import 'package:localin/presentation/profile/widgets/row_connect_dana.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/profile/user_edit_profile_provider.dart';
+import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -109,9 +111,61 @@ class ScrollContentPage extends StatelessWidget {
                   ),
                 ),
                 RowConnectDana(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(ConnectDanaAccountPage.routeName);
+                  onPressed: () async {
+                    if (authState.userModel.handphone != null &&
+                        authState.userModel.handphone.isNotEmpty) {
+                      final result =
+                          await Provider.of<UserProfileProvider>(context)
+                              .authenticateUserDanaAccount(
+                                  authState.userModel.handphone);
+                      if (result.urlRedirect.isNotEmpty && !result.error) {
+                        final response = await Navigator.of(context)
+                            .pushNamed(WebViewPage.routeName, arguments: {
+                          WebViewPage.urlName: result.urlRedirect
+                        });
+                        if (response != null && response == 'success') {
+                          final dialogResult = await showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('DANA'),
+                                  content: Text(
+                                    'Connect to dana success',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      color: Themes.primaryBlue,
+                                      onPressed: () =>
+                                          Navigator.of(context).pop('success'),
+                                      child: Text(
+                                        'Ok',
+                                        style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              });
+
+                          if (dialogResult == 'success') {
+                            Provider.of<UserProfileProvider>(context)
+                                .getUserDanaStatus();
+                          }
+                        }
+                      }
+                    } else {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('No Phone number on your account'),
+                        duration: Duration(milliseconds: 1500),
+                      ));
+                    }
                   },
                 ),
                 //SocialLoginCard(),
@@ -303,7 +357,7 @@ class RowSaveButton extends StatelessWidget {
             onPressed: () async {
               var progressValue = await state.updateProfileData();
               if (progressValue == '100%') {
-                var response = await state.updateNewProfileData();
+                final response = await state.updateNewProfileData();
                 if (response != null) {
                   Provider.of<AuthProvider>(context).setUserModel(response);
                   Navigator.of(context).pop();
