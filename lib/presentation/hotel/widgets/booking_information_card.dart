@@ -30,11 +30,14 @@ class BookingInformationCard extends StatelessWidget {
           top: -15.0,
           left: 0.0,
           right: 0.0,
-          child: Image.asset(
-            'images/success_icon.png',
-            fit: BoxFit.contain,
-            height: 30.0,
-            width: 20.0,
+          child: Visibility(
+            visible: detail?.status?.contains('confirm booking') ?? false,
+            child: Image.asset(
+              'images/success_icon.png',
+              fit: BoxFit.contain,
+              height: 30.0,
+              width: 20.0,
+            ),
           ),
         ),
         Positioned(
@@ -44,7 +47,7 @@ class BookingInformationCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                'Pembelian Berhasil',
+                '${detail.status.contains('confirm booking') ? 'Pembelian Berhasil' : detail?.status}',
                 textAlign: TextAlign.center,
               ),
               rowInformation('Booking iD', '${detail?.invoiceCode}'),

@@ -20,6 +20,7 @@ class ApiConstant {
   static const String kUserCommunity = 'v1/komunitas/me';
   static const String kCommentCommunity = 'v1/komunitas/komentar/';
   static const String kCreateEventCommunity = 'v1/komunitas/event/';
+  static const String kEventCategory = 'v1/komunitas/event/kategori';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';
@@ -28,7 +29,7 @@ class ApiConstant {
   static const String kArticleTags = 'v1/artikel/tags';
   static const String kArticleComment = 'v1/artikel/komentar';
   static const String kArticleLike = 'v1/artikel/like';
-  static const String kArticleBookmark = 'v1/artikel/bookmar';
+  static const String kArticleBookmark = 'v1/artikel/bookmark';
 
   /// Hotel
   static const String kHotel = 'v1/hotel';

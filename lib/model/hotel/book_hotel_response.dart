@@ -1,3 +1,5 @@
+import 'package:localin/model/hotel/booking_detail_response.dart';
+
 class BookHotelResponse {
   String error;
   String message;
@@ -36,24 +38,31 @@ class BookHotelDetailResponse {
   int finalAmount;
   int userPrice;
   String cancellationPolicy;
+  String expiredAt;
+  String hotelImage;
+  HotelDetailModel hotelDetail;
 
-  BookHotelDetailResponse(
-      {this.bookingId,
-      this.memberId,
-      this.hotelId,
-      this.roomId,
-      this.roomCount,
-      this.adultCount,
-      this.checkIn,
-      this.checkOut,
-      this.status,
-      this.responseId,
-      this.invoiceCode,
-      this.currencyCode,
-      this.entityId,
-      this.finalAmount,
-      this.userPrice,
-      this.cancellationPolicy});
+  BookHotelDetailResponse({
+    this.bookingId,
+    this.memberId,
+    this.hotelId,
+    this.roomId,
+    this.roomCount,
+    this.adultCount,
+    this.checkIn,
+    this.checkOut,
+    this.status,
+    this.responseId,
+    this.invoiceCode,
+    this.currencyCode,
+    this.entityId,
+    this.finalAmount,
+    this.userPrice,
+    this.cancellationPolicy,
+    this.expiredAt,
+    this.hotelImage,
+    this.hotelDetail,
+  });
 
   factory BookHotelDetailResponse.fromJson(Map<String, dynamic> body) {
     return BookHotelDetailResponse(
@@ -73,6 +82,11 @@ class BookHotelDetailResponse {
       finalAmount: body['finalAmount'],
       userPrice: body['hargaUser'],
       cancellationPolicy: body['cancellationPolicy'],
+      expiredAt: body['expired_at'] ?? null,
+      hotelImage: body['hotel_image'] ?? null,
+      hotelDetail: body['hotel_detail'] != null
+          ? HotelDetailModel.fromJson(body['hotel_detail'])
+          : null,
     );
   }
 }

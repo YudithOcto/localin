@@ -1,14 +1,54 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/hotel/widgets/location_detail_card.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_card.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class BookingProductDetailCard extends StatelessWidget {
+class BookingProductDetailCard extends StatefulWidget {
   final BookingDetailModel detail;
   BookingProductDetailCard({this.detail});
+
+  @override
+  _BookingProductDetailCardState createState() =>
+      _BookingProductDetailCardState();
+}
+
+class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
+  Timer _timer;
+  String currentDifference = '';
+
+  void setTimer() {
+    DateTime later = DateTime.parse(widget.detail.expiredAt);
+    Timer.periodic(Duration(seconds: 1), (ctx) {
+      DateTime now = DateTime.now();
+      setState(() {
+        currentDifference =
+            '${later.difference(now).inMinutes.toString().padLeft(2, '0')}:${(later.difference(now).inSeconds % 60).toString().padLeft(2, '0')}';
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.detail.status == 'Saved') {
+      setTimer();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_timer != null && _timer.isActive) {
+      _timer.cancel();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +57,14 @@ class BookingProductDetailCard extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
       child: Column(
         children: <Widget>[
-          customGreenIcon(),
+          Visibility(
+              visible: widget.detail.status == 'Saved',
+              child: customGreenIcon()),
           SizedBox(
             height: 10.0,
           ),
-          customText('Person 1'),
+          customText(
+              '${Provider.of<AuthProvider>(context).userModel.username}'),
           SizedBox(
             height: 5.0,
           ),
@@ -29,7 +72,7 @@ class BookingProductDetailCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               customText(
-                  '${DateHelper.formatFromTimeStampShort(detail?.checkIn)}'),
+                  '${DateHelper.formatFromTimeStampShort(widget.detail.checkIn * 1000)}'),
               SizedBox(
                 width: 15.0,
               ),
@@ -49,14 +92,14 @@ class BookingProductDetailCard extends StatelessWidget {
                 width: 15.0,
               ),
               customText(
-                  '${DateHelper.formatFromTimeStampShort(detail?.checkOut)}'),
+                  '${DateHelper.formatFromTimeStampShort(widget.detail.checkOut * 1000)}'),
             ],
           ),
           customDivider(),
-          RoomDetailCard(detail: detail),
+          RoomDetailCard(detail: widget.detail),
           customDivider(),
           LocationDetailCard(
-            detail: detail,
+            detail: widget.detail,
           ),
         ],
       ),
@@ -89,7 +132,10 @@ class BookingProductDetailCard extends StatelessWidget {
                       fontSize: 12.0,
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
-              Text('')
+              Text(
+                '$currentDifference',
+                style: TextStyle(fontSize: 12.0, color: Colors.white),
+              )
             ],
           ),
         ),

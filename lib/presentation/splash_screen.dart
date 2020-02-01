@@ -6,7 +6,9 @@ import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -34,15 +36,18 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration.zero).then((value) async {
-      var userCache =
+      final userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
+      final save = await SharedPreferences.getInstance();
+      bool isUserVerify = save.getBool(kUserVerify);
       if (userCache != null) {
-        if (userCache.handphone != null && userCache.handphone.isNotEmpty) {
+        if (userCache.handphone != null &&
+            userCache.handphone.isNotEmpty &&
+            isUserVerify) {
           checkGps();
         } else {
           Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
         }
-
       } else {
         Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       }

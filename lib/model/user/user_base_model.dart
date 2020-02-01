@@ -21,6 +21,5 @@ class UserBaseModel {
         isError = body['error'];
 
   UserBaseModel.requestSmsCodeFromJson(Map<String, dynamic> body)
-      : message = body['text'],
-        error = null;
+      : message = body['message'];
 }

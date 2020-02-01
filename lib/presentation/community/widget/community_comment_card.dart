@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
@@ -18,9 +19,16 @@ class CommunityCommentCard extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                child: Icon(Icons.person),
+              CachedNetworkImage(
+                imageUrl: '${commentDetail?.createdAvatar}',
+                imageBuilder: (context, imageProvider) {
+                  return CircleAvatar(
+                    backgroundImage: imageProvider,
+                  );
+                },
+                errorWidget: (ctx, item, child) => CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
               ),
               SizedBox(
                 width: 10.0,
@@ -29,7 +37,7 @@ class CommunityCommentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Person 1',
+                    '${commentDetail?.createdName}',
                     style: kValueStyle.copyWith(color: Themes.primaryBlue),
                   ),
                   Text(
@@ -70,16 +78,27 @@ class CommunityCommentCard extends StatelessWidget {
           SizedBox(
             height: 10.0,
           ),
-          Container(
-            height: 150.0,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.grey,
-              image: DecorationImage(
-                  image: NetworkImage('${commentDetail?.attachment}'),
-                  fit: BoxFit.cover),
+          CachedNetworkImage(
+            imageUrl: '${commentDetail?.attachment}',
+            errorWidget: (context, item, child) => Container(
+              height: 150.0,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.grey,
+              ),
             ),
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                height: 150.0,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.grey,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover)),
+              );
+            },
           ),
           SizedBox(
             height: 10.0,
@@ -87,64 +106,40 @@ class CommunityCommentCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    '112 suka',
-                    style: kValueStyle.copyWith(
-                        fontSize: 12.0, color: Colors.black54),
+                  Icon(
+                    Icons.thumb_up,
+                    color: Themes.primaryBlue,
                   ),
                   SizedBox(
-                    height: 5.0,
+                    width: 10.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.thumb_up,
-                        color: Themes.primaryBlue,
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        'Sukai',
-                        style: kValueStyle.copyWith(
-                            color: Themes.primaryBlue, fontSize: 12.0),
-                      )
-                    ],
-                  ),
+                  Text(
+                    '0 Sukai',
+                    style: kValueStyle.copyWith(
+                        color: Themes.primaryBlue, fontSize: 12.0),
+                  )
                 ],
               ),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    '87 Komentar',
-                    style: kValueStyle.copyWith(
-                        fontSize: 12.0, color: Colors.black54),
+                  Icon(
+                    Icons.comment,
+                    color: Themes.primaryBlue,
                   ),
                   SizedBox(
-                    height: 5.0,
+                    width: 10.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.comment,
-                        color: Themes.primaryBlue,
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        'Komentari',
-                        style: kValueStyle.copyWith(
-                            color: Themes.primaryBlue, fontSize: 12.0),
-                      )
-                    ],
-                  ),
+                  Text(
+                    '0 Komentar',
+                    style: kValueStyle.copyWith(
+                        color: Themes.primaryBlue, fontSize: 12.0),
+                  )
                 ],
-              )
+              ),
             ],
           ),
           SizedBox(

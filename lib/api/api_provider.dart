@@ -197,7 +197,7 @@ class ApiProvider {
       final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
           options: Options(headers: {'requiredToken': true}),
           data: FormData.fromMap({'handphone': phone}));
-      return UserBaseModel.requestSmsCodeFromJson(jsonDecode(response.data));
+      return UserBaseModel.requestSmsCodeFromJson(response.data);
     } catch (error) {
       if (error is DioError) {
         return UserBaseModel.withError(_handleError(error));
@@ -667,14 +667,17 @@ class ApiProvider {
 
   Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
       int totalAdult, int totalRoom, int checkIn, int checkOut) async {
+    final incheck =
+        checkIn.toString().substring(0, checkIn.toString().length - 3);
+    final outcheck =
+        checkOut.toString().substring(0, checkOut.toString().length - 3);
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
       'count_room': totalRoom,
       'count_adult': totalAdult,
-      'checkin': checkIn.toString().substring(0, checkIn.toString().length - 3),
-      'checkout':
-          checkOut.toString().substring(0, checkOut.toString().length - 3),
+      'checkin': incheck,
+      'checkout': outcheck,
     });
     try {
       final result = await _dio.post('${ApiConstant.kHotelBooking}',

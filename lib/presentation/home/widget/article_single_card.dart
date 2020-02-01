@@ -193,7 +193,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
               } else {
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text('${response?.message}'),
-                  duration: Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: 300),
                 ));
                 setState(() {
                   widget.articleDetail?.isLike =
@@ -239,7 +239,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
           InkWell(
             onTap: () async {
               final response = await Provider.of<HomeProvider>(context)
-                  .likeArticle(widget.articleDetail.id);
+                  .bookmarkArticle(widget.articleDetail.id);
               if (response.error != null) {
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text('${response?.error}'),
@@ -247,7 +247,12 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
               } else {
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text('${response?.message}'),
+                  duration: Duration(milliseconds: 300),
                 ));
+                setState(() {
+                  widget.articleDetail?.isBookmark =
+                      widget.articleDetail?.isBookmark == 0 ? 1 : 0;
+                });
               }
             },
             child: widget.articleDetail?.isBookmark == 0

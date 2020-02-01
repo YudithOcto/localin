@@ -14,6 +14,7 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
   bool autoValidate = false;
   String _phoneNumber = '';
   Repository _repository = Repository();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,68 +33,87 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: <Widget>[
-            Container(
-              width: size.width * 0.4,
-              height: size.height * 0.2,
-              child: Image.asset(
-                'images/phone_auth.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('Masukkan No Hp'),
-            ),
-            Form(
-              key: formKey,
-              autovalidate: autoValidate,
-              child: Row(
-                children: <Widget>[
-                  Text('+62'),
-                  SizedBox(
-                    width: 20.0,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: size.width * 0.4,
+                  height: size.height * 0.2,
+                  child: Image.asset(
+                    'images/phone_auth.png',
+                    fit: BoxFit.cover,
                   ),
-                  Expanded(
-                    child: TextFormField(
-                      validator: (value) =>
-                          value.isEmpty ? 'This field required' : null,
-                      textInputAction: TextInputAction.go,
-                      keyboardType: TextInputType.phone,
-                      onSaved: (value) {
-                        _phoneNumber = value;
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Builder(
-              builder: (ctx) => RaisedButton(
-                onPressed: () async {
-                  if (validateInput()) {
-                    final result = await userPhoneRequest();
-                    if (result.error == null) {
-                      Navigator.of(ctx).pushReplacementNamed(
-                          PhoneVerificationPage.routeName,
-                          arguments: {
-                            PhoneVerificationPage.phone: _phoneNumber,
-                            PhoneVerificationPage.isBackButtonActive: true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text('Masukkan No Hp'),
+                ),
+                Form(
+                  key: formKey,
+                  autovalidate: autoValidate,
+                  child: Row(
+                    children: <Widget>[
+                      Text('+62'),
+                      SizedBox(
+                        width: 20.0,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          validator: (value) =>
+                              value.isEmpty ? 'This field required' : null,
+                          textInputAction: TextInputAction.go,
+                          keyboardType: TextInputType.phone,
+                          onSaved: (value) {
+                            _phoneNumber = value;
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Builder(
+                  builder: (ctx) => RaisedButton(
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      if (validateInput()) {
+                        final result = await userPhoneRequest();
+                        if (result.error == null) {
+                          setState(() {
+                            _isLoading = false;
                           });
-                    } else {
-                      Scaffold.of(ctx).showSnackBar(SnackBar(
-                        content: Text('${result?.error}'),
-                      ));
-                    }
-                  }
-                },
-                color: Colors.blue,
-                child: Text('Submit'),
+                          Navigator.of(ctx).pushReplacementNamed(
+                              PhoneVerificationPage.routeName,
+                              arguments: {
+                                PhoneVerificationPage.phone: _phoneNumber,
+                                PhoneVerificationPage.isBackButtonActive: true,
+                              });
+                        } else {
+                          Scaffold.of(ctx).showSnackBar(SnackBar(
+                            content: Text('${result?.error}'),
+                          ));
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      }
+                    },
+                    color: Colors.blue,
+                    child: Text('Submit'),
+                  ),
+                )
+              ],
+            ),
+            Visibility(
+              visible: _isLoading,
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
             )
           ],

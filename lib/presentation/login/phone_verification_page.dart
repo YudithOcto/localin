@@ -6,7 +6,9 @@ import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/input_phone_number.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../themes.dart';
 
@@ -159,6 +161,9 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                           if (validateInput()) {
                             final response = await verifySmsCode();
                             if (response.isError != null && !response.isError) {
+                              final save =
+                                  await SharedPreferences.getInstance();
+                              save.setBool(kUserVerify, true);
                               Scaffold.of(ctx).showSnackBar(
                                 SnackBar(
                                   content: Text('${response?.message}'),

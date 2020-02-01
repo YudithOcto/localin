@@ -32,24 +32,29 @@ class CommunityCommentBaseResponse {
 }
 
 class CommunityComment {
-  CommunityComment(
-      {this.id,
-      this.commentContent,
-      this.status,
-      this.createdBy,
-      this.publishedBy,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.attachment,
-      this.type,
-      this.parentId,
-      this.childComment});
+  CommunityComment({
+    this.id,
+    this.commentContent,
+    this.status,
+    this.createdBy,
+    this.publishedBy,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.attachment,
+    this.type,
+    this.parentId,
+    this.childComment,
+    this.createdName,
+    this.createdAvatar,
+  });
 
   String id;
   String commentContent;
   String status;
   String createdBy;
+  String createdName;
+  String createdAvatar;
   String publishedBy;
   String createdAt;
   String updatedAt;
@@ -73,6 +78,8 @@ class CommunityComment {
       type: body['tipe'],
       parentId: body['parent_id'],
       childComment: body['komentar_child'],
+      createdAvatar: body['created_avatar'],
+      createdName: body['created_name'],
     );
   }
 }

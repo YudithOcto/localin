@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -31,21 +32,19 @@ class RoomDetailCard extends StatelessWidget {
                 ),
                 Text(
                   '${detail?.state}',
-                  style: TextStyle(fontSize: 11.0, color: Colors.black38),
+                  style: TextStyle(
+                      fontSize: 11.0,
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
                   height: 10.0,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     blueCard('Guests', '1'),
-                    SizedBox(
-                      width: 5.0,
-                    ),
                     blueCard('Rooms', '1 RedDoors Room'),
-                    SizedBox(
-                      width: 5.0,
-                    ),
                     blueCard(
                         'Price', '${getFormattedCurrency(detail?.userPrice)}'),
                   ],
@@ -56,13 +55,25 @@ class RoomDetailCard extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.asset(
-              'images/cafe.jpg',
-              width: 100.0,
+          child: CachedNetworkImage(
+            imageUrl: '${detail?.hotelImage}',
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover)),
+              );
+            },
+            errorWidget: (ctx, item, child) => Container(
               height: 100.0,
-              fit: BoxFit.fill,
+              width: 100.0,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
             ),
           ),
         ),
@@ -79,7 +90,6 @@ class RoomDetailCard extends StatelessWidget {
 
   Widget blueCard(String title, String value) {
     return Container(
-      height: 40.0,
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
           color: Themes.primaryBlue, borderRadius: BorderRadius.circular(4.0)),

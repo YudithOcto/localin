@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'input_phone_number.dart';
 
@@ -66,6 +67,8 @@ class Content extends StatelessWidget {
                     if (result != null &&
                         authState.errorMessage != null &&
                         authState.errorMessage.isEmpty) {
+                      final save = await SharedPreferences.getInstance();
+                      save.setBool(kUserVerify, false);
                       if (result.handphone != null &&
                           result.handphone.isNotEmpty) {
                         Navigator.of(context).pushNamed(
@@ -155,11 +158,13 @@ class Content extends StatelessWidget {
                 child: RaisedButton(
                   elevation: 5.0,
                   onPressed: () async {
-                    var result = await authState.signInWithGoogle();
+                    final result = await authState.signInWithGoogle();
                     if (result != null) {
                       if (authState.errorMessage.isNotEmpty) {
                         showErrorMessageDialog(context, authState.errorMessage);
                       } else {
+                        final save = await SharedPreferences.getInstance();
+                        save.setBool(kUserVerify, false);
                         if (result.handphone != null &&
                             result.handphone.isNotEmpty) {
                           Navigator.of(context).pushNamed(

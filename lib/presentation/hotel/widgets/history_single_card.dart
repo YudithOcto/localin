@@ -60,9 +60,11 @@ class HistorySingleCard extends StatelessWidget {
                         color: Themes.primaryBlue,
                       ),
                       widthDivider(),
-                      Text(
-                        '${detail?.name}',
-                        style: kValueStyle,
+                      Expanded(
+                        child: Text(
+                          '${detail?.name}',
+                          style: kValueStyle,
+                        ),
                       ),
                       widthDivider(),
                       Text(

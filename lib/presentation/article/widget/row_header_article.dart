@@ -1,3 +1,4 @@
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/article/article_detail_provider.dart';
@@ -42,11 +43,33 @@ class RowHeaderArticle extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Icon(Icons.share),
+                  InkWell(
+                      onTap: () {
+                        Share.text(
+                            'Localin',
+                            'This is my text to share with other applications.',
+                            'text/plain');
+                      },
+                      child: Icon(Icons.share)),
                   SizedBox(
                     width: 10.0,
                   ),
-                  Icon(Icons.bookmark_border),
+                  state?.articleModel?.isBookmark == 0
+                      ? InkWell(
+                          onTap: () async {
+                            final response = await state.bookmarkArticle();
+                            if (response.error != null) {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text('${response?.error}'),
+                              ));
+                            } else {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text('${response?.message}'),
+                              ));
+                            }
+                          },
+                          child: Icon(Icons.bookmark_border))
+                      : Icon(Icons.bookmark),
                 ],
               )
             ],

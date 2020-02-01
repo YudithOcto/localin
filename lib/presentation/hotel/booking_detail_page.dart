@@ -78,29 +78,6 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         SizedBox(
                           height: 10.0,
                         ),
-                        RaisedButton(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide(
-                                  color: Themes.primaryBlue, width: 2.0)),
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text(
-                                'BATALKAN PEMESANAN',
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    color: Themes.primaryBlue,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
                       ],
                     ),
                   )

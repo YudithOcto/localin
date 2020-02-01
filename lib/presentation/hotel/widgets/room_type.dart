@@ -260,7 +260,9 @@ class _RoomTypeState extends State<RoomType> {
 
   bookRoom(int categoryId, HotelDetailProvider provider) async {
     final response = await provider.bookHotel(categoryId);
-    if (response != null && response.error == null) {
+    if (response != null &&
+        response.error == null &&
+        response.detail.status == 'saved') {
       Navigator.of(context).pushReplacementNamed(
         SuccessBookingPage.routeName,
         arguments: {SuccessBookingPage.bookingData: response.detail},
@@ -270,7 +272,8 @@ class _RoomTypeState extends State<RoomType> {
           context: context,
           builder: (context) => AlertDialog(
                 title: Text('Booking Hotel'),
-                content: Text('${response?.error}'),
+                content: Text(
+                    '${response?.error != null ? response?.error : 'there something error'}'),
                 actions: <Widget>[
                   FlatButton(
                     color: Themes.primaryBlue,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
+import 'package:localin/model/service/user_location.dart';
+import 'package:localin/presentation/map/google_maps_full_screen.dart';
 
 import '../../../themes.dart';
 
@@ -18,13 +20,25 @@ class LocationDetailCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Stack(
                 children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image.asset(
-                      'images/static_map_image.png',
-                      width: 100.0,
-                      height: 100.0,
-                      fit: BoxFit.fill,
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(GoogleMapFullScreen.routeName, arguments: {
+                        GoogleMapFullScreen.targetLocation: UserLocation(
+                          latitude: double.parse(detail?.hotelDetail?.latitude),
+                          longitude:
+                              double.parse(detail?.hotelDetail?.longitude),
+                        )
+                      });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.asset(
+                        'images/static_map_image.png',
+                        width: 100.0,
+                        height: 100.0,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -74,7 +88,9 @@ class LocationDetailCard extends StatelessWidget {
             SizedBox(
               width: 10.0,
             ),
-            Expanded(child: customButtonWithBorder('Call Hotel', Icons.call)),
+            Expanded(
+                child:
+                    customButtonWithBorder('Batalkan Pesanan', Icons.cancel)),
             SizedBox(
               width: 20.0,
             ),
@@ -95,12 +111,15 @@ class LocationDetailCard extends StatelessWidget {
           side: BorderSide(color: Themes.primaryBlue, width: 2.0)),
       onPressed: () {},
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
             icon,
             color: Themes.primaryBlue,
             size: 15.0,
+          ),
+          SizedBox(
+            width: 10.0,
           ),
           Text(
             title,

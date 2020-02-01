@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
 
@@ -51,6 +52,11 @@ class ArticleDetailProvider with ChangeNotifier {
     } else {
       return result.message;
     }
+  }
+
+  Future<ArticleBaseResponse> bookmarkArticle() async {
+    final response = await _repository.bookmarkArticle(articleModel.id);
+    return response;
   }
 
   TextEditingController get commentController => _commentController;
