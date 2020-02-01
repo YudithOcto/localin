@@ -186,7 +186,6 @@ class ProfilePageRowCard extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
-          height: 55.0,
           decoration: BoxDecoration(
               border: Border.all(color: Themes.primaryBlue),
               borderRadius: BorderRadius.circular(8.0)),

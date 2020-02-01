@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/hotel/widgets/location_detail_card.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_card.dart';
@@ -22,15 +23,29 @@ class BookingProductDetailCard extends StatefulWidget {
 class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
   Timer _timer;
   String currentDifference = '';
+  bool _isEnabled = true;
 
   void setTimer() {
     DateTime later = DateTime.parse(widget.detail.expiredAt);
-    Timer.periodic(Duration(seconds: 1), (ctx) {
+    _timer = Timer.periodic(Duration(seconds: 1), (ctx) {
       DateTime now = DateTime.now();
-      setState(() {
-        currentDifference =
-            '${later.difference(now).inMinutes.toString().padLeft(2, '0')}:${(later.difference(now).inSeconds % 60).toString().padLeft(2, '0')}';
-      });
+      if (later.difference(now).inSeconds >= 0) {
+        if (mounted) {
+          setState(() {
+            currentDifference =
+                '${later.difference(now).inMinutes.toString().padLeft(2, '0')}:${(later.difference(now).inSeconds % 60).toString().padLeft(2, '0')}';
+          });
+        }
+      } else {
+        if (_timer != null && _timer.isActive) {
+          _timer.cancel();
+        }
+        if (mounted) {
+          setState(() {
+            _isEnabled = false;
+          });
+        }
+      }
     });
   }
 
@@ -99,8 +114,27 @@ class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
           RoomDetailCard(detail: widget.detail),
           customDivider(),
           LocationDetailCard(
-            detail: widget.detail,
-          ),
+              detail: widget.detail,
+              enabled: _isEnabled,
+              onPressed: () async {
+                final response =
+                    await Repository().cancelBooking(widget?.detail?.bookingId);
+                if (response.error) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('${response?.message}'),
+                  ));
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('${response?.message}'),
+                  ));
+                  setState(() {
+                    _isEnabled = false;
+                  });
+                  if (_timer != null && _timer.isActive) {
+                    _timer.cancel();
+                  }
+                }
+              }),
         ],
       ),
     );

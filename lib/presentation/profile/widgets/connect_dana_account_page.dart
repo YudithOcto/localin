@@ -172,8 +172,7 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
   }
 
   Future<DanaActivateBaseResponse> authenticateUserDanaAccount() async {
-    final body = {'handphone': phoneController.text};
-    final result = await _repository.activateDana(FormData.fromMap(body));
+    final result = await _repository.activateDana(phoneController.text);
     return result;
   }
 }

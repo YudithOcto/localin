@@ -7,8 +7,6 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
-
-import 'connect_dana_account_page.dart';
 import '../edit_profile_page.dart';
 import 'row_connect_dana.dart';
 import 'description_column.dart';

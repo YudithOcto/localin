@@ -63,7 +63,10 @@ class Content extends StatelessWidget {
                 child: RaisedButton(
                   elevation: 5.0,
                   onPressed: () async {
-                    var result = await authState.signInWithFacebook();
+                    SharedPreferences sf =
+                        await SharedPreferences.getInstance();
+                    final result = await authState
+                        .signInWithFacebook(sf.getString('tokenFirebase'));
                     if (result != null &&
                         authState.errorMessage != null &&
                         authState.errorMessage.isEmpty) {
@@ -158,7 +161,10 @@ class Content extends StatelessWidget {
                 child: RaisedButton(
                   elevation: 5.0,
                   onPressed: () async {
-                    final result = await authState.signInWithGoogle();
+                    SharedPreferences sf =
+                        await SharedPreferences.getInstance();
+                    final result = await authState
+                        .signInWithGoogle(sf.getString('tokenFirebase'));
                     if (result != null) {
                       if (authState.errorMessage.isNotEmpty) {
                         showErrorMessageDialog(context, authState.errorMessage);

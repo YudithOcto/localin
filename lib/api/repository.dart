@@ -11,10 +11,13 @@ import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
+import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
+import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -177,14 +180,24 @@ class Repository {
     return apiProvider.getBookingHistoryList(offset, limit);
   }
 
-  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
-      int totalAdult, int totalRoom, int checkIn, int checkOut) {
-    return apiProvider.bookHotel(
-        hotelId, roomCategoryId, totalAdult, totalRoom, checkIn, checkOut);
+  Future<BookHotelResponse> bookHotel(
+      int hotelId,
+      int roomCategoryId,
+      int totalAdult,
+      int totalRoom,
+      int checkIn,
+      int checkOut,
+      String roomName) {
+    return apiProvider.bookHotel(hotelId, roomCategoryId, totalAdult, totalRoom,
+        checkIn, checkOut, roomName);
   }
 
   Future<BookingDetailResponse> getBookingDetail(String bookingDetailId) {
     return apiProvider.getHotelBookingDetail(bookingDetailId);
+  }
+
+  Future<BookingCancelResponse> cancelBooking(String bookingId) {
+    return apiProvider.cancelBooking(bookingId);
   }
 
   ///Dana
@@ -192,7 +205,16 @@ class Repository {
     return apiProvider.getUserDanaStatus();
   }
 
-  Future<DanaActivateBaseResponse> activateDana(FormData data) {
-    return apiProvider.activateDanaAccount(data);
+  Future<DanaActivateBaseResponse> activateDana(String phone) {
+    return apiProvider.activateDanaAccount(phone);
+  }
+
+  Future<BookingPaymentResponse> bookingPayment(String bookingId) {
+    return apiProvider.bookingPayment(bookingId);
+  }
+
+  /// NOTIFICATION
+  Future<NotificationModel> getNotificationList() {
+    return apiProvider.getNotificationList();
   }
 }

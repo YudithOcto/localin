@@ -112,6 +112,7 @@ class AvailableHistoryContentWidget extends StatelessWidget {
             );
           },
           noItemsFoundBuilder: (context) => EmptyHistoryContentWidget(),
+          errorBuilder: (context, index) => EmptyHistoryContentWidget(),
           showRetry: false,
           pageFuture: (pageIndex) {
             return Provider.of<BookingHistoryProvider>(context)

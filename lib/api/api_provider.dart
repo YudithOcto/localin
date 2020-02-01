@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_constant.dart';
@@ -14,10 +13,13 @@ import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
+import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
+import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -38,9 +40,9 @@ class ApiProvider {
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
         baseUrl: ApiConstant.kBaseUrl,
-        receiveTimeout: 15000,
+        receiveTimeout: 20000,
         maxRedirects: 3,
-        connectTimeout: 15000);
+        connectTimeout: 20000);
     _dio = Dio(options);
     sharedPreferences = await SharedPreferences.getInstance();
   }
@@ -665,12 +667,18 @@ class ApiProvider {
     }
   }
 
-  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
-      int totalAdult, int totalRoom, int checkIn, int checkOut) async {
-    final incheck =
-        checkIn.toString().substring(0, checkIn.toString().length - 3);
-    final outcheck =
-        checkOut.toString().substring(0, checkOut.toString().length - 3);
+  Future<BookHotelResponse> bookHotel(
+      int hotelId,
+      int roomCategoryId,
+      int totalAdult,
+      int totalRoom,
+      int checkIn,
+      int checkOut,
+      String roomName) async {
+    int incheck = int.parse(
+        checkIn.toString().substring(0, checkIn.toString().length - 3));
+    int outcheck = int.parse(
+        checkOut.toString().substring(0, checkOut.toString().length - 3));
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
@@ -678,6 +686,7 @@ class ApiProvider {
       'count_adult': totalAdult,
       'checkin': incheck,
       'checkout': outcheck,
+      'room_name': roomName,
     });
     try {
       final result = await _dio.post('${ApiConstant.kHotelBooking}',
@@ -688,6 +697,21 @@ class ApiProvider {
         return BookHotelResponse.withError(_handleError(error));
       } else {
         return BookHotelResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BookingCancelResponse> cancelBooking(String bookingId) async {
+    try {
+      final result = await _dio.get(
+          '${ApiConstant.kHotelBooking}/$bookingId/cancel',
+          options: Options(headers: {'requiredToken': true}));
+      return BookingCancelResponse.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BookingCancelResponse.withError(_handleError(error));
+      } else {
+        return BookingCancelResponse.withError(error.toString());
       }
     }
   }
@@ -704,16 +728,45 @@ class ApiProvider {
     }
   }
 
-  Future<DanaActivateBaseResponse> activateDanaAccount(FormData body) async {
+  Future<DanaActivateBaseResponse> activateDanaAccount(String phone) async {
     try {
-      final response = await _dio.post(ApiConstant.kDanaPhoneActivate,
-          data: body, options: Options(headers: {'requiredToken': true}));
+      final response = await _dio.get(ApiConstant.kDanaPhoneActivate,
+          options: Options(
+              extra: {'handphone': phone}, headers: {'requiredToken': true}));
       return DanaActivateBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
         return DanaActivateBaseResponse.withError(_handleError(error));
       } else {
         return DanaActivateBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BookingPaymentResponse> bookingPayment(String bookingId) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kDanaPayment}/$bookingId',
+          options: Options(headers: {'requiredToken': true}));
+      return BookingPaymentResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BookingPaymentResponse.withError(_handleError(error));
+      } else {
+        return BookingPaymentResponse.withError(error.toString());
+      }
+    }
+  }
+  
+  Future<NotificationModel> getNotificationList() async {
+    try {
+      final response = await _dio.get(ApiConstant.kNotificationList,
+          options: Options(headers: {'requiredToken': true}));
+      return NotificationModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return NotificationModel.withError(_handleError(error));
+      } else {
+        return NotificationModel.withError(error.toString());
       }
     }
   }

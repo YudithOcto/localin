@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 
 import '../../../themes.dart';
 
 class LocationDetailCard extends StatelessWidget {
   final BookingDetailModel detail;
-  LocationDetailCard({this.detail});
+  final bool enabled;
+  final Function onPressed;
+  LocationDetailCard({this.detail, this.enabled, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +88,35 @@ class LocationDetailCard extends StatelessWidget {
               width: 20.0,
             ),
             Expanded(
-                child: customButtonWithBorder('Direction', Icons.call_made)),
+                child: customButtonWithBorder(
+                    'Batalkan Pesanan', Icons.cancel, context, Colors.white,
+                    onPressed: onPressed)),
             SizedBox(
               width: 10.0,
             ),
             Expanded(
-                child:
-                    customButtonWithBorder('Batalkan Pesanan', Icons.cancel)),
+                child: customButtonWithBorder('Bayar', Icons.payment, context,
+                    !enabled ? Colors.grey : Colors.blue, onPressed: () async {
+              if (enabled) {
+                final response =
+                    await Repository().bookingPayment(detail?.bookingId);
+                if (response.error) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('${response.message}'),
+                  ));
+                } else {
+                  Navigator.of(context)
+                      .pushNamed(WebViewPage.routeName, arguments: {
+                    WebViewPage.urlName: response?.urlRedirect,
+                  });
+                }
+              } else {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      'masa pembayaran sudah terlewati. Silahkan pesan lagi'),
+                ));
+              }
+            })),
             SizedBox(
               width: 20.0,
             ),
@@ -103,19 +129,23 @@ class LocationDetailCard extends StatelessWidget {
     );
   }
 
-  Widget customButtonWithBorder(String title, IconData icon) {
+  Widget customButtonWithBorder(
+      String title, IconData icon, BuildContext context, Color color,
+      {@required Function onPressed}) {
     return RaisedButton(
-      color: Colors.white,
+      color: color,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
-          side: BorderSide(color: Themes.primaryBlue, width: 2.0)),
-      onPressed: () {},
+          side: BorderSide(
+              color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+              width: 2.0)),
+      onPressed: onPressed,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
             icon,
-            color: Themes.primaryBlue,
+            color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
             size: 15.0,
           ),
           SizedBox(
@@ -125,7 +155,7 @@ class LocationDetailCard extends StatelessWidget {
             title,
             style: TextStyle(
                 fontSize: 12.0,
-                color: Themes.primaryBlue,
+                color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
                 fontWeight: FontWeight.w600),
           )
         ],

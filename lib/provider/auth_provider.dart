@@ -13,18 +13,20 @@ class AuthProvider extends BaseModelProvider {
   UserModel userModel = UserModel();
   String errorMessage;
 
-  Future<UserBaseModel> getUserFromApi(UserRequest userRequest) async {
-    var result = await _repository.getUserLogin(userRequest);
+  Future<UserBaseModel> getUserFromApi(
+      UserRequest userRequest, String token) async {
+    userRequest.fcmToken = token;
+    final result = await _repository.getUserLogin(userRequest);
     return result;
   }
 
-  Future<UserModel> signInWithFacebook() async {
+  Future<UserModel> signInWithFacebook(String token) async {
     setState(ViewState.Busy);
     UserBaseModel signInToApiResult;
     var signInFacebookResult = await SocialSignIn().signInFacebook();
     if (signInFacebookResult != null && signInFacebookResult.length > 1) {
-      signInToApiResult =
-          await getUserFromApi(UserRequest.fromJson(signInFacebookResult));
+      signInToApiResult = await getUserFromApi(
+          UserRequest.fromJson(signInFacebookResult), token);
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
     } else {
@@ -34,13 +36,13 @@ class AuthProvider extends BaseModelProvider {
     return userModel;
   }
 
-  Future<UserModel> signInWithGoogle() async {
+  Future<UserModel> signInWithGoogle(String token) async {
     setState(ViewState.Busy);
     UserBaseModel signInToApiResult;
     var signInGoogleResult = await SocialSignIn().signInWithGoogle();
     if (signInGoogleResult != null && signInGoogleResult.length > 1) {
       signInToApiResult =
-          await getUserFromApi(UserRequest.fromJson(signInGoogleResult));
+          await getUserFromApi(UserRequest.fromJson(signInGoogleResult), token);
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
     } else {
@@ -83,6 +85,16 @@ class AuthProvider extends BaseModelProvider {
   }
 
   void updateUserModelAndCache(String phone) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    if (userModel != null) {
+      userModel.handphone = phone;
+      sf.remove(kUserCache);
+      sf.setString(kUserCache, jsonEncode(userModel.toJson()));
+    }
+    notifyListeners();
+  }
+
+  void updateUserModelVerifyStatus(String phone) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     if (userModel != null) {
       userModel.handphone = phone;

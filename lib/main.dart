@@ -29,6 +29,7 @@ import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/firebase/message.dart';
 import 'model/service/user_location.dart';
@@ -127,5 +128,13 @@ class _MyAppState extends State<MyApp> {
 
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
+    getToken();
+  }
+
+  void getToken() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    _firebaseMessaging.getToken().then((token) {
+      sf.setString('tokenFirebase', token);
+    });
   }
 }

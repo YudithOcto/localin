@@ -40,6 +40,10 @@ class ApiConstant {
 
   /// DANA
   static const String kDanaMe = 'payment/dana/me';
-  static const String kDanaPhoneActivate = 'v1/member/update/handphone';
+  static const String kDanaPhoneActivate = 'payment/dana/aktifasi';
   static const String kDanaAuth = 'payment/dana/auth';
+  static const String kDanaPayment = 'payment/dana';
+
+  /// NOTIFICATION
+  static const String kNotificationList = 'v1/member/notifications';
 }

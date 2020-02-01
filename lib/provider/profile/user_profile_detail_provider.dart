@@ -38,8 +38,7 @@ class UserProfileProvider with ChangeNotifier {
 
   Future<DanaActivateBaseResponse> authenticateUserDanaAccount(
       String phone) async {
-    final body = {'handphone': phone};
-    final result = await _repository.activateDana(FormData.fromMap(body));
+    final result = await _repository.activateDana(phone);
     return result;
   }
 

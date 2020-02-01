@@ -12,21 +12,37 @@ import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
-class SearchHotelWidget extends StatelessWidget {
+class SearchHotelWidget extends StatefulWidget {
   final bool isHomePage;
 
   SearchHotelWidget({this.isHomePage});
 
   @override
+  _SearchHotelWidgetState createState() => _SearchHotelWidgetState();
+}
+
+class _SearchHotelWidgetState extends State<SearchHotelWidget> {
+  bool isInit = true;
+  PagewiseLoadController _pageLoadController;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      final location = Provider.of<UserLocation>(context);
+      Provider.of<SearchHotelProvider>(context).setUserLocation(location);
+      _pageLoadController = PagewiseLoadController<HotelDetailEntity>(
+          pageSize: 6,
+          pageFuture: (pageIndex) => Provider.of<SearchHotelProvider>(context)
+              .getHotel(pageIndex * 6, 6));
+      isInit = false;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = Provider.of<HomeProvider>(context, listen: false);
-    final location = Provider.of<UserLocation>(context);
     final searchProvider = Provider.of<SearchHotelProvider>(context);
-    searchProvider.setUserLocation(location);
-    final _pageLoadController = PagewiseLoadController<HotelDetailEntity>(
-        pageSize: 6,
-        pageFuture: (pageIndex) => searchProvider.getHotel(pageIndex * 6, 6));
-
     return Column(
       children: <Widget>[
         Container(
@@ -35,7 +51,7 @@ class SearchHotelWidget extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  if (isHomePage) {
+                  if (widget.isHomePage) {
                     state.setRoomPage(false);
                   } else {
                     Provider.of<BookingHistoryProvider>(context)
@@ -82,6 +98,7 @@ class SearchHotelWidget extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(left: 15.0, right: 15.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Column(
@@ -107,16 +124,18 @@ class SearchHotelWidget extends StatelessWidget {
               SizedBox(
                 width: 5.0,
               ),
-              Column(
-                children: <Widget>[
-                  Text('Check out',
-                      style: TextStyle(
-                          fontSize: 12.0, fontWeight: FontWeight.w500)),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  buttonDate(searchProvider.selectedCheckOut, context),
-                ],
+              Flexible(
+                child: Column(
+                  children: <Widget>[
+                    Text('Check out',
+                        style: TextStyle(
+                            fontSize: 12.0, fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    buttonDate(searchProvider.selectedCheckOut, context),
+                  ],
+                ),
               ),
               Container(
                 margin: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
@@ -136,7 +155,12 @@ class SearchHotelWidget extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         InkWell(
-                          onTap: () => searchProvider.decreaseRoomTotal(),
+                          onTap: () {
+                            Future.delayed(Duration(seconds: 1), () {
+                              searchProvider.decreaseRoomTotal();
+                              _pageLoadController.reset();
+                            });
+                          },
                           child: Icon(
                             Icons.remove_circle_outline,
                             color: Themes.dimGrey,
@@ -200,6 +224,7 @@ class SearchHotelWidget extends StatelessWidget {
             lastDate: new DateTime(2025));
         if (pick != null && pick.length == 2) {
           provider.setSelectedDate(pick[0], pick[1]);
+          _pageLoadController.reset();
         }
       },
       child: Container(

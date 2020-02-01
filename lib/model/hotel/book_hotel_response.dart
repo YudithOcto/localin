@@ -11,7 +11,7 @@ class BookHotelResponse {
     return BookHotelResponse(
       error: null,
       message: body['message'],
-      detail: BookHotelDetailResponse.fromJson(body),
+      detail: BookHotelDetailResponse.fromJson(body['data']),
     );
   }
 
@@ -24,12 +24,12 @@ class BookHotelResponse {
 class BookHotelDetailResponse {
   String bookingId;
   String memberId;
-  String hotelId;
-  String roomId;
-  String roomCount;
-  String adultCount;
-  String checkIn;
-  String checkOut;
+  int hotelId;
+  int roomId;
+  int roomCount;
+  int adultCount;
+  int checkIn;
+  int checkOut;
   String status;
   String responseId;
   String invoiceCode;
@@ -41,6 +41,7 @@ class BookHotelDetailResponse {
   String expiredAt;
   String hotelImage;
   HotelDetailModel hotelDetail;
+  String roomName;
 
   BookHotelDetailResponse({
     this.bookingId,
@@ -62,6 +63,7 @@ class BookHotelDetailResponse {
     this.expiredAt,
     this.hotelImage,
     this.hotelDetail,
+    this.roomName,
   });
 
   factory BookHotelDetailResponse.fromJson(Map<String, dynamic> body) {
@@ -82,6 +84,7 @@ class BookHotelDetailResponse {
       finalAmount: body['finalAmount'],
       userPrice: body['hargaUser'],
       cancellationPolicy: body['cancellationPolicy'],
+      roomName: body['room_name'],
       expiredAt: body['expired_at'] ?? null,
       hotelImage: body['hotel_image'] ?? null,
       hotelDetail: body['hotel_detail'] != null

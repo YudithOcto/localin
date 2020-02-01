@@ -42,10 +42,17 @@ class HotelDetailProvider extends BaseModelProvider {
     return response;
   }
 
-  Future<BookHotelResponse> bookHotel(int roomCategoryId) async {
+  Future<BookHotelResponse> bookHotel(
+      int roomCategoryId, String roomName) async {
     setBookingLoading(true);
-    final result = await _repository.bookHotel(hotelDetailEntity.hotelId,
-        roomCategoryId, roomTotal * 2, roomTotal, _checkInTime, _checkOutTime);
+    final result = await _repository.bookHotel(
+        hotelDetailEntity.hotelId,
+        roomCategoryId,
+        roomTotal * 2,
+        roomTotal,
+        _checkInTime,
+        _checkOutTime,
+        roomName);
     setBookingLoading(false);
     return result;
   }

@@ -4,13 +4,16 @@ class UserRequest {
   String userName;
   String userSource;
   String userPhoto;
+  String fcmToken;
 
-  UserRequest(
-      {this.userId,
-      this.userEmail,
-      this.userName,
-      this.userSource,
-      this.userPhoto});
+  UserRequest({
+    this.userId,
+    this.userEmail,
+    this.userName,
+    this.userSource,
+    this.userPhoto,
+    this.fcmToken,
+  });
 
   factory UserRequest.fromJson(Map<String, dynamic> body) {
     return UserRequest(

@@ -236,7 +236,8 @@ class _RoomTypeState extends State<RoomType> {
                               );
                             });
                         if (dialog != null && dialog == 'success') {
-                          bookRoom(roomDetail?.categoryId, provider);
+                          bookRoom(roomDetail?.categoryId, provider,
+                              roomDetail?.categoryName);
                         }
                       },
                       color: Themes.primaryBlue,
@@ -258,11 +259,12 @@ class _RoomTypeState extends State<RoomType> {
         ));
   }
 
-  bookRoom(int categoryId, HotelDetailProvider provider) async {
-    final response = await provider.bookHotel(categoryId);
+  bookRoom(
+      int categoryId, HotelDetailProvider provider, String roomName) async {
+    final response = await provider.bookHotel(categoryId, roomName);
     if (response != null &&
         response.error == null &&
-        response.detail.status == 'saved') {
+        response.detail.status == 'Saved') {
       Navigator.of(context).pushReplacementNamed(
         SuccessBookingPage.routeName,
         arguments: {SuccessBookingPage.bookingData: response.detail},

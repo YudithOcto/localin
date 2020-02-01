@@ -17,39 +17,41 @@ class BottomCompanyInformation extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-                  child: Image.asset(
-                    'images/localin_logo_white.png',
-                    fit: BoxFit.cover,
-                    height: 30.0,
+          Flexible(
+            child: Container(
+              margin: EdgeInsets.only(left: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+                    child: Image.asset(
+                      'images/localin_logo_white.png',
+                      fit: BoxFit.cover,
+                      height: 30.0,
+                    ),
                   ),
-                ),
-                Text(
-                  'Copyright @ 2019 PT. Lokal Karya Nusantara. All Right deserved.',
-                  style:
-                      kValueStyle.copyWith(fontSize: 9.0, color: Colors.white),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 5.0),
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width * 0.55,
-                  height: 4.0,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Text(
-                    Constants.kAddress,
+                  Text(
+                    'Copyright @ 2019 PT. Lokal Karya Nusantara. All Right deserved.',
                     style: kValueStyle.copyWith(
                         fontSize: 9.0, color: Colors.white),
                   ),
-                )
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5.0),
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    height: 4.0,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Text(
+                      Constants.kAddress,
+                      style: kValueStyle.copyWith(
+                          fontSize: 9.0, color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Row(
@@ -61,45 +63,48 @@ class BottomCompanyInformation extends StatelessWidget {
                 width: 3.0,
                 color: Colors.grey,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text(
-                    'About Us',
-                    style: kValueStyle,
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    'Career',
-                    style: kValueStyle,
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    'Contact',
-                    style: kValueStyle,
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    'Terms & Condition',
-                    style: kValueStyle,
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    'Maps',
-                    style: kValueStyle,
-                  ),
-                ],
+              FittedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Text(
+                      'About Us',
+                      style: kValueStyle,
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      'Career',
+                      style: kValueStyle,
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      'Contact',
+                      style: kValueStyle,
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      'Terms & Condition',
+                      overflow: TextOverflow.ellipsis,
+                      style: kValueStyle,
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      'Maps',
+                      style: kValueStyle,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 width: 15.0,

@@ -37,8 +37,10 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     super.dispose();
   }
 
-  void _cancelTimer() {
-    _timer?.cancel();
+  _cancelTimer() {
+    if (_timer != null && _timer.isActive) {
+      _timer?.cancel();
+    }
   }
 
   void _startTimer() {
@@ -48,14 +50,19 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         _seconds = 120;
         _enable = true;
         _verifyStr = '';
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
+
         return;
       }
 
       _enable = false;
       _seconds--;
       _verifyStr = '${_seconds}s';
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -174,6 +181,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                                   .updateUserModelAndCache(_phoneNumber);
                               Navigator.of(context).pushReplacementNamed(
                                   MainBottomNavigation.routeName);
+                              _cancelTimer();
                             } else {
                               Scaffold.of(ctx).showSnackBar(
                                 SnackBar(

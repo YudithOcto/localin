@@ -37,6 +37,8 @@ class BookingDetailModel {
   String createdAt;
   String expiredAt;
   String hotelImage;
+  String roomName;
+  int guestCount;
   HotelDetailModel hotelDetail;
 
   BookingDetailModel({
@@ -58,6 +60,8 @@ class BookingDetailModel {
     this.hotelImage,
     this.hotelDetail,
     this.expiredAt,
+    this.roomName,
+    this.guestCount,
   });
 
   factory BookingDetailModel.fromJson(Map<String, dynamic> body) {
@@ -78,6 +82,8 @@ class BookingDetailModel {
       createdAt: body['created_at'],
       updatedAt: body['updated_at'],
       hotelImage: body['hotel_image'],
+      guestCount: body['adult_count'],
+      roomName: body['room_name'],
       hotelDetail: HotelDetailModel.fromJson(body['hotel_detail']),
       expiredAt: body['expired_at'],
     );
@@ -91,6 +97,8 @@ class HotelDetailModel {
   String latitude;
   String longitude;
   String category;
+  String street;
+  String state;
 
   HotelDetailModel(
       {this.hotelId,
@@ -98,16 +106,20 @@ class HotelDetailModel {
       this.name,
       this.latitude,
       this.longitude,
-      this.category});
+      this.category,
+      this.street,
+      this.state});
 
   factory HotelDetailModel.fromJson(Map<String, dynamic> body) {
     return HotelDetailModel(
-      hotelId: body['hotel_id'] ?? null,
-      oyoId: body['oyoId'] ?? null,
-      name: body['name'] ?? null,
-      latitude: body['latitude'] ?? null,
-      longitude: body['longitude'] ?? null,
-      category: body['category'] ?? null,
+      hotelId: body['hotel_id'],
+      oyoId: body['oyoId'],
+      name: body['name'],
+      latitude: body['latitude'],
+      longitude: body['longitude'],
+      category: body['category'],
+      street: body['street'],
+      state: body['state'],
     );
   }
 }

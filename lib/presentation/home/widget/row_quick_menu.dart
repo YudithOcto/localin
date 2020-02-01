@@ -96,7 +96,7 @@ class RowQuickMenu extends StatelessWidget {
                 title: 'DANA',
                 onPressed: () async {
                   final result = await _repository.getUserDanaStatus();
-                  if (result != null && result.data.urlTopUp.isNotEmpty) {
+                  if (result != null && result.data != null) {
                     Navigator.of(context)
                         .pushNamed(WebViewPage.routeName, arguments: {
                       WebViewPage.urlName: result.data.urlTopUp,

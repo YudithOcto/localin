@@ -79,7 +79,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 5.0, top: 15.0),
+            margin: EdgeInsets.only(bottom: 5.0, top: 10.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[

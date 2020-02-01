@@ -58,7 +58,7 @@ class _RowCommunityState extends State<RowCommunity> {
                         return Container(
                           height: Orientation.portrait ==
                                   MediaQuery.of(context).orientation
-                              ? MediaQuery.of(context).size.height * 0.45
+                              ? MediaQuery.of(context).size.height * 0.5
                               : MediaQuery.of(context).size.height * 0.9,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
