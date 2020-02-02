@@ -21,6 +21,7 @@ import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/edit_profile_page.dart';
+import 'package:localin/presentation/webview/webview_flutter.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -109,6 +110,7 @@ class _MyAppState extends State<MyApp> {
           InputPhoneNumber.routeName: (_) => InputPhoneNumber(),
           PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
           OtherProfilePage.routeName: (_) => OtherProfilePage(),
+          WebviewFlutter.routeName: (_) => WebviewFlutter(),
         },
       ),
     );

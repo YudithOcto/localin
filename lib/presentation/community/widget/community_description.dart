@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
@@ -26,7 +25,7 @@ class CommunityDescription extends StatelessWidget {
               width: 5.0,
             ),
             CachedNetworkImage(
-              imageUrl: provider.communityDetail.logo ?? '',
+              imageUrl: provider?.communityDetail?.logo ?? '',
               imageBuilder: (context, imageProvider) {
                 return Container(
                   margin: EdgeInsets.only(left: 10.0, top: 10.0),
@@ -58,7 +57,7 @@ class CommunityDescription extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Visibility(
-                      visible: provider.communityDetail.address != null,
+                      visible: provider?.communityDetail?.address != null,
                       child: Icon(
                         Icons.location_on,
                         color: Themes.primaryBlue,
@@ -66,13 +65,13 @@ class CommunityDescription extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: provider.communityDetail.address != null,
+                      visible: provider?.communityDetail?.address != null,
                       child: SizedBox(
                         width: 5.0,
                       ),
                     ),
                     Visibility(
-                      visible: provider.communityDetail.address != null,
+                      visible: provider?.communityDetail?.address != null,
                       child: Text(
                         '${provider.communityDetail?.address}',
                         style: kValueStyle.copyWith(
@@ -80,7 +79,7 @@ class CommunityDescription extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: provider.communityDetail.address != null,
+                      visible: provider?.communityDetail?.address != null,
                       child: SizedBox(
                         width: 5.0,
                       ),

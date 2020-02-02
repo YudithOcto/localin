@@ -21,7 +21,7 @@ class SingleCard extends StatelessWidget {
           Navigator.of(context).pushNamed(
             ArticleDetailPage.routeName,
             arguments: {
-              ArticleDetailPage.articleDetailModel: articleModel[index],
+              ArticleDetailPage.articleId: articleModel[index].slug,
               ArticleDetailPage.commentPage: false,
             },
           );

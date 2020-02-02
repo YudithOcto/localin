@@ -3,6 +3,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
+import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 
 import '../../../themes.dart';
@@ -105,10 +106,15 @@ class LocationDetailCard extends StatelessWidget {
                     content: Text('${response.message}'),
                   ));
                 } else {
-                  Navigator.of(context)
+                  final result = await Navigator.of(context)
                       .pushNamed(WebViewPage.routeName, arguments: {
                     WebViewPage.urlName: response?.urlRedirect,
                   });
+                  if (result != null) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('$result'),
+                    ));
+                  }
                 }
               } else {
                 Scaffold.of(context).showSnackBar(SnackBar(

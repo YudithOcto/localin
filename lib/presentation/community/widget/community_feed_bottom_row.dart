@@ -37,7 +37,9 @@ class CommunityFeedBottomRow extends StatelessWidget {
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-                      arguments: {CommunityDetailPage.communityModel: detail});
+                      arguments: {
+                        CommunityDetailPage.communitySlug: detail.slug
+                      });
                 },
                 child: Container(
                   decoration: BoxDecoration(

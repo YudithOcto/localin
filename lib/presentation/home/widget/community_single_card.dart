@@ -31,7 +31,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             onTap: () async {
               var result = await Navigator.of(context)
                   .pushNamed(CommunityDetailPage.routeName, arguments: {
-                CommunityDetailPage.communityModel: widget.model,
+                CommunityDetailPage.communitySlug: widget.model.slug,
               });
 
               if (result == 'refresh') {
@@ -127,7 +127,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                 onTap: () async {
                   var result = await Navigator.of(context)
                       .pushNamed(CommunityDetailPage.routeName, arguments: {
-                    CommunityDetailPage.communityModel: widget.model,
+                    CommunityDetailPage.communitySlug: widget.model.slug,
                   });
 
                   if (result == 'refresh') {
@@ -213,7 +213,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                         var result = await Navigator.of(context).pushNamed(
                             CommunityDetailPage.routeName,
                             arguments: {
-                              CommunityDetailPage.communityModel: widget.model,
+                              CommunityDetailPage.communitySlug:
+                                  widget.model.slug,
                             });
 
                         if (result == 'refresh') {

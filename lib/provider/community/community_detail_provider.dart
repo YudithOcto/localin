@@ -13,6 +13,7 @@ import 'package:localin/utils/helper_permission.dart';
 
 class CommunityDetailProvider extends BaseModelProvider {
   CommunityDetail communityDetail;
+  String communitySlug;
   bool isSearchMemberPage = false;
   bool sendCommentLoading = false;
   Repository _repository = Repository();
@@ -20,8 +21,8 @@ class CommunityDetailProvider extends BaseModelProvider {
   File attachmentFileImage, attachmentFileVideo;
   TextEditingController commentController = TextEditingController();
 
-  CommunityDetailProvider({this.communityDetail}) {
-    getCommunityDetail(communityDetail?.slug);
+  CommunityDetailProvider({this.communitySlug}) {
+    getCommunityDetail(communitySlug);
   }
 
   @override
@@ -70,6 +71,7 @@ class CommunityDetailProvider extends BaseModelProvider {
     final response = await _repository.getCommunityDetail(communityId);
     if (response != null && response.error == null) {
       communityDetail = response.detailCommunity;
+      notifyListeners();
     }
     return response;
   }

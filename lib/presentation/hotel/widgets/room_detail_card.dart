@@ -43,8 +43,8 @@ class RoomDetailCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    blueCard('Guests', '1'),
-                    blueCard('Rooms', '1 RedDoors Room'),
+                    blueCard('Guests', '${detail?.guestCount}'),
+                    Flexible(child: blueCard('Rooms', '${detail?.roomName}')),
                     blueCard(
                         'Price', '${getFormattedCurrency(detail?.userPrice)}'),
                   ],
@@ -90,6 +90,7 @@ class RoomDetailCard extends StatelessWidget {
 
   Widget blueCard(String title, String value) {
     return Container(
+      margin: EdgeInsets.only(left: 5.0, right: 5.0),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
           color: Themes.primaryBlue, borderRadius: BorderRadius.circular(4.0)),

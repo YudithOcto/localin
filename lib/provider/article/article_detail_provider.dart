@@ -12,9 +12,11 @@ class ArticleDetailProvider with ChangeNotifier {
   TextEditingController _commentController;
   StreamController<List<ArticleCommentDetail>> _streamArticleDetail;
   List<ArticleCommentDetail> commentDetail = List();
+  String articleId = '';
 
-  ArticleDetailProvider(ArticleDetail model) {
-    this.articleModel = model;
+  ArticleDetailProvider(String articleId) {
+    //this.articleModel = model;
+    this.articleId = articleId;
     _repository = Repository();
     _commentController = TextEditingController();
     _streamArticleDetail =
@@ -34,6 +36,17 @@ class ArticleDetailProvider with ChangeNotifier {
     } else {
       _streamArticleDetail.add(null);
       throw Exception();
+    }
+  }
+
+  Future<ArticleBaseResponse> getArticleDetail() async {
+    final result = await _repository.getArticleDetail(articleId);
+    if (result != null && result.detail != null) {
+      articleModel = result.detail;
+      notifyListeners();
+      return result;
+    } else {
+      return null;
     }
   }
 

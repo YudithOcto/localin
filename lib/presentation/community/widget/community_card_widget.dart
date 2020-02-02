@@ -48,7 +48,7 @@ class SingleCommunityCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-            arguments: {CommunityDetailPage.communityModel: detail});
+            arguments: {CommunityDetailPage.communitySlug: detail.slug});
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
@@ -100,7 +100,7 @@ class UpperCommunityCardRow extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-            arguments: {CommunityDetailPage.communityModel: detail});
+            arguments: {CommunityDetailPage.communitySlug: detail.slug});
       },
       child: Column(
         children: <Widget>[

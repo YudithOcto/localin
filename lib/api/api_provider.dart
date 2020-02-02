@@ -258,6 +258,21 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleBaseResponse> getArticleDetail(String articleId) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kArticleList}/$articleId',
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.withJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
   Future<ArticleBaseResponse> createArticle(FormData form) async {
     try {
       final response = await _dio.post(ApiConstant.kCreateArticle,
@@ -756,10 +771,11 @@ class ApiProvider {
       }
     }
   }
-  
-  Future<NotificationModel> getNotificationList() async {
+
+  Future<NotificationModel> getNotificationList(int offset, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kNotificationList,
+          queryParameters: {'page': offset, 'limit': limit},
           options: Options(headers: {'requiredToken': true}));
       return NotificationModel.fromJson(response.data);
     } catch (error) {

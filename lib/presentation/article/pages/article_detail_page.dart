@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/widget/article_comment_page.dart';
 import 'package:localin/presentation/article/widget/article_reader_page.dart';
@@ -11,7 +12,7 @@ import '../../../themes.dart';
 
 class ArticleDetailPage extends StatefulWidget {
   static const routeName = '/articleDetailPage';
-  static const articleDetailModel = '/articleDetailModel';
+  static const articleId = '/articleId';
   static const commentPage = '/commentPage';
 
   @override
@@ -23,11 +24,9 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    ArticleDetail articleModel =
-        routeArgs[ArticleDetailPage.articleDetailModel];
-    bool openCommentPage = routeArgs[ArticleDetailPage.commentPage];
+    String articleId = routeArgs[ArticleDetailPage.articleId];
     return ChangeNotifierProvider<ArticleDetailProvider>(
-      create: (_) => ArticleDetailProvider(articleModel),
+      create: (_) => ArticleDetailProvider(articleId),
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -39,10 +38,38 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             height: 50.0,
           ),
         ),
-        body: Content(
-          openCommentPage: openCommentPage,
-        ),
+        body: LoadingPage(),
       ),
+    );
+  }
+}
+
+class LoadingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<ArticleBaseResponse>(
+      future: Provider.of<ArticleDetailProvider>(context, listen: false)
+          .getArticleDetail(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          if (snapshot.data != null) {
+            final routeArgs = ModalRoute.of(context).settings.arguments
+                as Map<String, dynamic>;
+            bool openCommentPage = routeArgs[ArticleDetailPage.commentPage];
+            return Content(
+              openCommentPage: openCommentPage,
+            );
+          } else {
+            return Center(
+              child: Text('Tidak menemukan artikel'),
+            );
+          }
+        }
+      },
     );
   }
 }
@@ -70,7 +97,6 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: tabs.length);
-    print(widget.openCommentPage);
   }
 
   @override
@@ -78,7 +104,6 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
     super.didChangeDependencies();
     if (isInit) {
       if (widget.openCommentPage) {
-        print(widget.openCommentPage);
         _tabController.animateTo((_tabController.index + 1) % 2);
       }
       isInit = false;
@@ -98,6 +123,7 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       body: DefaultTabController(
+        initialIndex: widget.openCommentPage ? 1 : 0,
         length: 2,
         child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

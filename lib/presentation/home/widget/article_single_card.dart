@@ -144,7 +144,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
       onTap: () {
         Navigator.of(context)
             .pushNamed(ArticleDetailPage.routeName, arguments: {
-          ArticleDetailPage.articleDetailModel: widget.articleDetail,
+          ArticleDetailPage.articleId: widget.articleDetail?.slug,
           ArticleDetailPage.commentPage: false,
         });
       },
@@ -215,7 +215,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
             onTap: () {
               Navigator.of(context)
                   .pushNamed(ArticleDetailPage.routeName, arguments: {
-                ArticleDetailPage.articleDetailModel: widget.articleDetail,
+                ArticleDetailPage.articleId: widget.articleDetail?.slug,
                 ArticleDetailPage.commentPage: true,
               });
             },

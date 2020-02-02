@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/community/widget/community_comment_card.dart';
 import 'package:localin/presentation/community/widget/community_description.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
-import 'package:localin/utils/star_display.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -26,7 +24,7 @@ class _CommunityDetailCommentSectionState
     super.initState();
     final provider =
         Provider.of<CommunityDetailProvider>(context, listen: false);
-    comment = provider.getCommentList(provider.communityDetail.id);
+    comment = provider.getCommentList(provider?.communityDetail?.id);
   }
 
   @override
@@ -52,7 +50,7 @@ class _CommunityDetailCommentSectionState
                       width: 5.0,
                     ),
                     Text(
-                      '${provider.communityDetail.ranting ?? 0}',
+                      '${provider.communityDetail?.ranting ?? 0}',
                       textAlign: TextAlign.center,
                       style: kValueStyle.copyWith(
                           color: Themes.primaryBlue,
@@ -61,10 +59,12 @@ class _CommunityDetailCommentSectionState
                   ],
                 ),
                 Visibility(
-                  visible: !provider.communityDetail.isJoin,
+                  visible: provider != null && provider.communityDetail != null
+                      ? !provider.communityDetail.isJoin
+                      : false,
                   child: InkWell(
                     onTap: () =>
-                        provider.joinCommunity(provider.communityDetail.id),
+                        provider.joinCommunity(provider?.communityDetail?.id),
                     child: Container(
                       decoration: BoxDecoration(
                           color: Themes.primaryBlue,
@@ -90,7 +90,7 @@ class _CommunityDetailCommentSectionState
         CommunityFormInput(
           onRefresh: () {
             setState(() {
-              comment = provider.getCommentList(provider.communityDetail.id);
+              comment = provider.getCommentList(provider?.communityDetail?.id);
             });
           },
         ),

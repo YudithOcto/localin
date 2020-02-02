@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class CommunityDetailPage extends StatefulWidget {
   static const routeName = '/communityProfile';
-  static const communityModel = '/communityModel';
+  static const communitySlug = '/communitySlug';
 
   @override
   _CommunityDetailPageState createState() => _CommunityDetailPageState();
@@ -20,9 +20,9 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    CommunityDetail detail = routeArgs[CommunityDetailPage.communityModel];
+    String slug = routeArgs[CommunityDetailPage.communitySlug];
     return ChangeNotifierProvider<CommunityDetailProvider>(
-      create: (_) => CommunityDetailProvider(communityDetail: detail),
+      create: (_) => CommunityDetailProvider(communitySlug: slug),
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
@@ -47,7 +47,7 @@ class CommunityDetailColumn extends StatelessWidget {
             children: <Widget>[
               CachedNetworkImage(
                 imageUrl:
-                    ImageHelper.addSubFixHttp(provider.communityDetail.cover),
+                    ImageHelper.addSubFixHttp(provider?.communityDetail?.cover),
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     width: double.infinity,

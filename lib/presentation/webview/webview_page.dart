@@ -66,8 +66,6 @@ class _WebViewPageState extends State<WebViewPage> {
       body: MaterialApp(
         routes: {
           '/': (_) => WebviewScaffold(
-                ignoreSSLErrors: true,
-                enableAppScheme: true,
                 appBar: AppBar(
                   automaticallyImplyLeading: true,
                   leading: InkWell(
@@ -88,9 +86,15 @@ class _WebViewPageState extends State<WebViewPage> {
                 javascriptChannels: Set.from([
                   JavascriptChannel(
                       name: 'Print',
-                      onMessageReceived: (JavascriptMessage message) {
-                        print(message.message);
-                      })
+                      onMessageReceived: (JavascriptMessage data) {
+                        if (data.message.contains(
+                            'Pembayaran sukses dan sedang di verifikasi')) {
+                          Future.delayed(Duration(milliseconds: 1200), () {
+                            Navigator.of(context).pop('${data.message}');
+                            flutterWebviewPlugin.close();
+                          });
+                        }
+                      }),
                 ]),
                 hidden: true,
                 url: url,

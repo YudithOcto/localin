@@ -1,18 +1,20 @@
 class NotificationModel {
   bool error;
   String message;
-  NotificationDetailModel data;
+  List<NotificationDetailModel> data;
 
   NotificationModel({this.error, this.message, this.data});
 
   factory NotificationModel.fromJson(Map<String, dynamic> body) {
+    List notification = body['data'];
     return NotificationModel(
-      error: body['error'],
-      message: body['message'],
-      data: NotificationDetailModel.fromJson(
-        body['data'],
-      ),
-    );
+        error: body['error'],
+        message: body['message'],
+        data: notification != null
+            ? notification
+                .map((value) => NotificationDetailModel.fromJson(value))
+                .toList()
+            : null);
   }
 
   NotificationModel.withError(String value)

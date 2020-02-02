@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
+import 'package:localin/presentation/webview/in_app_browser.dart';
+import 'package:localin/presentation/webview/webview_flutter.dart';
+import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -387,6 +391,7 @@ class SuccessRoomDetail extends StatelessWidget {
 class LocationDetail extends StatelessWidget {
   final BookHotelDetailResponse detail;
   final bool isEnabled;
+  final MyInAppBrowser browser = new MyInAppBrowser();
   final Function onPressed;
   LocationDetail({this.detail, this.isEnabled, @required this.onPressed});
   @override
@@ -482,10 +487,16 @@ class LocationDetail extends StatelessWidget {
                     content: Text('${response.message}'),
                   ));
                 } else {
-                  Navigator.of(context)
+                  final result = await Navigator.of(context)
                       .pushNamed(WebViewPage.routeName, arguments: {
                     WebViewPage.urlName: response?.urlRedirect,
                   });
+                  if (result != null) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('$result'),
+                    ));
+                    Navigator.of(context).pop();
+                  }
                 }
               } else {
                 Scaffold.of(context).showSnackBar(SnackBar(

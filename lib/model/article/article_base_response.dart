@@ -5,6 +5,7 @@ class ArticleBaseResponse {
   String message;
   int total;
   List<ArticleDetail> data;
+  ArticleDetail detail;
 
   ArticleBaseResponse({this.error, this.message, this.total, this.data});
 
@@ -20,6 +21,11 @@ class ArticleBaseResponse {
       data: article.map((value) => ArticleDetail.fromJson(value)).toList(),
     );
   }
+
+  ArticleBaseResponse.withJson(Map<String, dynamic> body)
+      : error = null,
+        message = body['message'],
+        detail = ArticleDetail.fromJson(body['data']);
 
   ArticleBaseResponse.withError(String error) : error = error;
 }

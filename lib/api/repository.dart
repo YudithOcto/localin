@@ -87,6 +87,10 @@ class Repository {
     return apiProvider.publishArticleComment(articleId, message);
   }
 
+  Future<ArticleBaseResponse> getArticleDetail(String articleId) {
+    return apiProvider.getArticleDetail(articleId);
+  }
+
   /// COMMUNITY
 
   Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {
@@ -214,7 +218,7 @@ class Repository {
   }
 
   /// NOTIFICATION
-  Future<NotificationModel> getNotificationList() {
-    return apiProvider.getNotificationList();
+  Future<NotificationModel> getNotificationList(int offset, int limit) {
+    return apiProvider.getNotificationList(offset, limit);
   }
 }
