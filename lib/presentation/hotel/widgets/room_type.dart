@@ -275,7 +275,7 @@ class _RoomTypeState extends State<RoomType> {
           builder: (context) => AlertDialog(
                 title: Text('Booking Hotel'),
                 content: Text(
-                    '${response?.error != null ? response?.error : 'there something error'}'),
+                    '${response?.error != null ? response?.error : 'Booking Tidak Berhasil, Kamar Sudah Habis'}'),
                 actions: <Widget>[
                   FlatButton(
                     color: Themes.primaryBlue,

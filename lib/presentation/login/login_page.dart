@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
@@ -17,6 +18,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+  }
+
+  void getToken() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    FirebaseMessaging().getToken().then((token) {
+      sf.setString('tokenFirebase', token);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

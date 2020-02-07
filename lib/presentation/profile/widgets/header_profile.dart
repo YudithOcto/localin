@@ -119,7 +119,18 @@ class _HeaderProfileState extends State<HeaderProfile> {
                     },
                   );
                 } else {
-                  return DanaActiveRow(detail: asyncSnapshot.data);
+                  return DanaActiveRow(
+                    detail: asyncSnapshot.data,
+                    isNeedRefresh: (isNeedRefresh) {
+                      if (isNeedRefresh) {
+                        setState(() {
+                          Provider.of<UserProfileProvider>(context,
+                                  listen: false)
+                              .getUserDanaStatus();
+                        });
+                      }
+                    },
+                  );
                 }
               }
             }

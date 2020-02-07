@@ -16,7 +16,7 @@ class BookHotelResponse {
   }
 
   BookHotelResponse.withError(String value)
-      : error = value,
+      : error = 'Booking Tidak Berhasil, Kamar Sudah Habis',
         message = null,
         detail = null;
 }

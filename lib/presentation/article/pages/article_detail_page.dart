@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_base_response.dart';
-import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/widget/article_comment_page.dart';
 import 'package:localin/presentation/article/widget/article_reader_page.dart';
 import 'package:localin/presentation/article/widget/row_header_article.dart';

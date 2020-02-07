@@ -13,16 +13,13 @@ class WebViewPage extends StatefulWidget {
 class _WebViewPageState extends State<WebViewPage> {
   final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
-  StreamSubscription _onDestroy;
+//  StreamSubscription _onDestroy;
   StreamSubscription<String> _onUrlChanged;
-  StreamSubscription<WebViewStateChanged> _onStateChanged;
+//  StreamSubscription<WebViewStateChanged> _onStateChanged;
 
   @override
   void dispose() {
-    // Every listener should be canceled, the same should be done with this stream.
-    _onDestroy.cancel();
     _onUrlChanged.cancel();
-    _onStateChanged.cancel();
     flutterWebviewPlugin.dispose();
     super.dispose();
   }
@@ -32,18 +29,18 @@ class _WebViewPageState extends State<WebViewPage> {
     super.initState();
 
     flutterWebviewPlugin.close();
-
-    // Add a listener to on destroy WebView, so you can make came actions.
-    _onDestroy = flutterWebviewPlugin.onDestroy.listen((_) {
-      print("destroy");
-    });
-
-    _onStateChanged =
-        flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
-      print("onStateChanged: ${state.type} ${state.url}");
-    });
-
-    // Add a listener to on url changed
+//
+//    // Add a listener to on destroy WebView, so you can make came actions.
+//    _onDestroy = flutterWebviewPlugin.onDestroy.listen((_) {
+//      print("destroy");
+//    });
+//
+//    _onStateChanged =
+//        flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
+//      print("onStateChanged: ${state.type} ${state.url}");
+//    });
+//
+//    // Add a listener to on url changed
     _onUrlChanged = flutterWebviewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
         setState(() {
@@ -89,7 +86,7 @@ class _WebViewPageState extends State<WebViewPage> {
                       onMessageReceived: (JavascriptMessage data) {
                         if (data.message.contains(
                             'Pembayaran sukses dan sedang di verifikasi')) {
-                          Future.delayed(Duration(milliseconds: 1200), () {
+                          Future.delayed(Duration(milliseconds: 2000), () {
                             Navigator.of(context).pop('${data.message}');
                             flutterWebviewPlugin.close();
                           });
@@ -99,6 +96,10 @@ class _WebViewPageState extends State<WebViewPage> {
                 hidden: true,
                 url: url,
                 displayZoomControls: true,
+                withOverviewMode: true,
+                useWideViewPort: true,
+                clearCache: true,
+                clearCookies: true,
                 withZoom: true,
               ),
         },

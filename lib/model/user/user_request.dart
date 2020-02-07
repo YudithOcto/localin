@@ -31,6 +31,7 @@ class UserRequest {
     map['user_name'] = userName;
     map['source'] = userSource;
     map['user_photo'] = userPhoto;
+    map['fcm_token'] = fcmToken;
     return map;
   }
 }

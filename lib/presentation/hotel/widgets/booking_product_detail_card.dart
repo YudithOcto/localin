@@ -13,7 +13,8 @@ import '../../../themes.dart';
 
 class BookingProductDetailCard extends StatefulWidget {
   final BookingDetailModel detail;
-  BookingProductDetailCard({this.detail});
+  final Function onPressed;
+  BookingProductDetailCard({this.detail, this.onPressed});
 
   @override
   _BookingProductDetailCardState createState() =>
@@ -24,6 +25,7 @@ class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
   Timer _timer;
   String currentDifference = '';
   bool _isEnabled = true;
+  bool isLoading = false;
 
   void setTimer() {
     DateTime later = DateTime.parse(widget.detail.expiredAt);
@@ -70,71 +72,97 @@ class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
-      child: Column(
+      child: Stack(
         children: <Widget>[
-          Visibility(
-              visible: widget.detail.status == 'Saved',
-              child: customGreenIcon()),
-          SizedBox(
-            height: 10.0,
-          ),
-          customText(
-              '${Provider.of<AuthProvider>(context).userModel.username}'),
-          SizedBox(
-            height: 5.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
             children: <Widget>[
-              customText(
-                  '${DateHelper.formatFromTimeStampShort(widget.detail.checkIn * 1000)}'),
+              Visibility(
+                  visible: widget.detail.status == 'Saved',
+                  child: customGreenIcon()),
               SizedBox(
-                width: 15.0,
+                height: 10.0,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.circular(2.0)),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    '1N',
-                    style: TextStyle(fontSize: 10.0),
+              customText(
+                  '${Provider.of<AuthProvider>(context).userModel.username}'),
+              SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  customText(
+                      '${DateHelper.formatFromTimeStampShort(widget.detail.checkIn * 1000)}'),
+                  SizedBox(
+                    width: 15.0,
                   ),
-                ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(2.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        '1N',
+                        style: TextStyle(fontSize: 10.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15.0,
+                  ),
+                  customText(
+                      '${DateHelper.formatFromTimeStampShort(widget.detail.checkOut * 1000)}'),
+                ],
               ),
-              SizedBox(
-                width: 15.0,
-              ),
-              customText(
-                  '${DateHelper.formatFromTimeStampShort(widget.detail.checkOut * 1000)}'),
+              customDivider(),
+              RoomDetailCard(detail: widget.detail),
+              customDivider(),
+              LocationDetailCard(
+                  detail: widget.detail,
+                  enabled: _isEnabled,
+                  onSuccess: (isSuccess) {
+                    if (isSuccess) {
+                      if (_timer != null && _timer.isActive) {
+                        _timer.cancel();
+                      }
+                      setState(() {
+                        widget.detail.status = 'Confirm Booking';
+                        widget.onPressed();
+                      });
+                    }
+                  },
+                  onPressed: () async {
+                    final response = await Repository()
+                        .cancelBooking(widget?.detail?.bookingId);
+                    if (response.error) {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('${response?.message}'),
+                      ));
+                    } else {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('${response?.message}'),
+                      ));
+                      widget.detail.status = 'Cancelled Booking';
+                      _isEnabled = false;
+                      widget.onPressed();
+
+                      if (_timer != null && _timer.isActive) {
+                        _timer.cancel();
+                      }
+                    }
+                  }),
             ],
           ),
-          customDivider(),
-          RoomDetailCard(detail: widget.detail),
-          customDivider(),
-          LocationDetailCard(
-              detail: widget.detail,
-              enabled: _isEnabled,
-              onPressed: () async {
-                final response =
-                    await Repository().cancelBooking(widget?.detail?.bookingId);
-                if (response.error) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('${response?.message}'),
-                  ));
-                } else {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('${response?.message}'),
-                  ));
-                  setState(() {
-                    _isEnabled = false;
-                  });
-                  if (_timer != null && _timer.isActive) {
-                    _timer.cancel();
-                  }
-                }
-              }),
+          Positioned(
+            bottom: 0.0,
+            top: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Visibility(
+              visible: isLoading,
+              child: CircularProgressIndicator(),
+            ),
+          )
         ],
       ),
     );

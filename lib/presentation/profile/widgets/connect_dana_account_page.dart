@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
@@ -123,7 +122,7 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
         final response = await Navigator.of(context).pushNamed(
             WebViewPage.routeName,
             arguments: {WebViewPage.urlName: result.urlRedirect});
-        if (response != null && response == 'success') {
+        if (response != null && response.toString().contains('sukses')) {
           showDialog(
               context: context,
               builder: (context) {

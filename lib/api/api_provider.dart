@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:localin/api/api_constant.dart';
+import 'package:localin/main.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
@@ -23,6 +25,7 @@ import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,7 +67,8 @@ class ApiProvider {
         errorDescription = "Receive timeout in connection with API server";
         break;
       case DioErrorType.RESPONSE:
-        errorDescription = error.response.data != null
+        errorDescription = error.response.data != null &&
+                error.response.data.toString().isNotEmpty
             ? convertResponseErrorMessage(error.response.data)
             : 'Request failed with status cide ${error.response.statusCode}';
         break;
@@ -87,20 +91,33 @@ class ApiProvider {
   }
 
   void setupLoggingInterceptor() async {
-    _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      print('send request：path:${options.uri}');
-      if (options.headers.containsKey("requiredToken")) {
-        String token = await getToken();
-        print(token);
-        options.headers.clear();
-        var header = {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        };
-        options.headers.addAll(header);
-      }
-    }));
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (RequestOptions options) async {
+          print('send request：path:${options.uri}, ${options.data}');
+          if (options.headers.containsKey("requiredToken")) {
+            String token = await getToken();
+            print(token);
+            options.headers.clear();
+            var header = {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            };
+            options.headers.addAll(header);
+          }
+        },
+        onError: (DioError e) async {
+          sharedPreferences = await SharedPreferences.getInstance();
+          if (e.response.statusCode == 401) {
+            sharedPreferences.clear();
+            if (navigator != null && navigator.currentState != null) {
+              navigator.currentState.pushNamedAndRemoveUntil(
+                  LoginPage.routeName, (Route<dynamic> route) => false);
+            }
+          }
+        },
+      ),
+    );
   }
 
   getToken() async {

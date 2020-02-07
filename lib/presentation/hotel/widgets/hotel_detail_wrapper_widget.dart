@@ -25,133 +25,117 @@ class HotelDetailWrapperWidget extends StatelessWidget {
           physics: platform == TargetPlatform.android
               ? ClampingScrollPhysics()
               : BouncingScrollPhysics(),
-          child: Stack(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GalleryPhotoView(
-                            galleryItems: provider.hotelDetailEntity.images,
-                            backgroundDecoration: const BoxDecoration(
-                              color: Colors.black,
-                            ),
-                            initialIndex: 0,
-                            scrollDirection: Axis.horizontal,
-                          ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GalleryPhotoView(
+                        galleryItems: provider.hotelDetailEntity.images,
+                        backgroundDecoration: const BoxDecoration(
+                          color: Colors.black,
                         ),
-                      );
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        CarouselSlider.builder(
-                          aspectRatio: 2.0,
-                          itemCount: provider.hotelDetailEntity.images.length,
-                          itemBuilder: (BuildContext context, int itemIndex) =>
-                              CachedNetworkImage(
-                                  width: double.infinity,
-                                  height: MediaQuery.of(context).orientation ==
-                                          Orientation.portrait
-                                      ? size.height * 0.3
-                                      : size.height * 0.6,
-                                  imageUrl: provider
-                                      ?.hotelDetailEntity?.images[itemIndex],
-                                  fit: BoxFit.cover,
-                                  fadeInCurve: Curves.bounceIn,
-                                  placeholderFadeInDuration:
-                                      Duration(milliseconds: 500),
-                                  placeholder: (context, url) => Container(
-                                        color: Colors.grey,
-                                      ),
-                                  errorWidget: (context, url, _) => Container(
-                                        color: Colors.grey,
-                                        width: double.infinity,
-                                        height: MediaQuery.of(context)
-                                                    .orientation ==
+                        initialIndex: 0,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+                  );
+                },
+                child: Stack(
+                  children: <Widget>[
+                    CarouselSlider.builder(
+                      aspectRatio: 2.0,
+                      itemCount: provider.hotelDetailEntity.images.length,
+                      itemBuilder: (BuildContext context, int itemIndex) =>
+                          CachedNetworkImage(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).orientation ==
+                                      Orientation.portrait
+                                  ? size.height * 0.3
+                                  : size.height * 0.6,
+                              imageUrl: provider
+                                  ?.hotelDetailEntity?.images[itemIndex],
+                              fit: BoxFit.cover,
+                              fadeInCurve: Curves.bounceIn,
+                              placeholderFadeInDuration:
+                                  Duration(milliseconds: 500),
+                              placeholder: (context, url) => Container(
+                                    color: Colors.grey,
+                                  ),
+                              errorWidget: (context, url, _) => Container(
+                                    color: Colors.grey,
+                                    width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).orientation ==
                                                 Orientation.portrait
                                             ? size.height * 0.3
                                             : size.height * 0.6,
-                                        child: Icon(
-                                          Icons.error,
-                                          color: Colors.white,
-                                        ),
-                                      )),
-                        ),
-                        Positioned(
-                          bottom: 10.0,
-                          right: 20.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Themes.primaryBlue.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(4.0)),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Lihat ${provider.hotelDetailEntity.images?.length} photos',
-                                style: kValueStyle.copyWith(
-                                    color: Colors.white, fontSize: 12.0),
-                              ),
-                            ),
+                                    child: Icon(
+                                      Icons.error,
+                                      color: Colors.white,
+                                    ),
+                                  )),
+                    ),
+                    Positioned(
+                      bottom: 10.0,
+                      right: 20.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Themes.primaryBlue.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4.0)),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Lihat ${provider.hotelDetailEntity.images?.length} photos',
+                            style: kValueStyle.copyWith(
+                                color: Colors.white, fontSize: 12.0),
                           ),
                         ),
-                        Positioned(
-                          top: 20.0,
-                          left: 15.0,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Icon(
-                              Icons.keyboard_backspace,
-                              color: Colors.white,
-                              size: 25.0,
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          '${provider?.hotelDetailEntity?.hotelName}',
-                          style: kValueStyle.copyWith(fontSize: 16.0),
+                    Positioned(
+                      top: 20.0,
+                      left: 15.0,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Icon(
+                          Icons.keyboard_backspace,
+                          color: Colors.white,
+                          size: 25.0,
                         ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Divider(
-                          color: Colors.black54,
-                        ),
-                        RoomLocation(),
-                        RoomDescription(),
-                        RoomGeneralFacilities(),
-                        RoomType(),
-                        RoomPropertyPolicies(),
-                        Visibility(
-                            visible: false, child: RoomRecommendedByProperty())
-                      ],
-                    ),
-                  )
-                ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-              Positioned(
-                bottom: MediaQuery.of(context).size.height * 0.3,
-                left: 0.0,
-                right: 0.0,
-                child: Visibility(
-                  visible: provider.loading,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '${provider?.hotelDetailEntity?.hotelName}',
+                      style: kValueStyle.copyWith(fontSize: 16.0),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Divider(
+                      color: Colors.black54,
+                    ),
+                    RoomLocation(),
+                    RoomDescription(),
+                    RoomGeneralFacilities(),
+                    RoomType(),
+                    RoomPropertyPolicies(),
+                    Visibility(
+                        visible: false, child: RoomRecommendedByProperty())
+                  ],
                 ),
               )
             ],

@@ -9,15 +9,20 @@ import '../../../themes.dart';
 
 class HistorySingleCard extends StatelessWidget {
   final BookingDetail detail;
+  final Function onPressed;
 
-  HistorySingleCard({this.detail});
+  HistorySingleCard({this.detail, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(BookingDetailPage.routeName,
+      onTap: () async {
+        final result = await Navigator.of(context).pushNamed(
+            BookingDetailPage.routeName,
             arguments: {BookingDetailPage.bookingId: detail?.bookingId});
+        if (result != null && result == 'refresh') {
+          onPressed();
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

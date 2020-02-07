@@ -8,7 +8,6 @@ import 'package:localin/provider/base_model_provider.dart';
 
 class HotelDetailProvider extends BaseModelProvider {
   Repository _repository;
-  bool _bookingLoading = false;
   HotelDetailEntity hotelDetailEntity;
   int _checkInTime = 0,
       _checkOutTime = 0,
@@ -44,7 +43,7 @@ class HotelDetailProvider extends BaseModelProvider {
 
   Future<BookHotelResponse> bookHotel(
       int roomCategoryId, String roomName) async {
-    setBookingLoading(true);
+    _roomState.add(RoomState.Busy);
     final result = await _repository.bookHotel(
         hotelDetailEntity.hotelId,
         roomCategoryId,
@@ -53,7 +52,7 @@ class HotelDetailProvider extends BaseModelProvider {
         _checkInTime,
         _checkOutTime,
         roomName);
-    setBookingLoading(false);
+    _roomState.add(RoomState.DataRetrieved);
     return result;
   }
 
@@ -92,11 +91,6 @@ class HotelDetailProvider extends BaseModelProvider {
     }
   }
 
-  void setBookingLoading(bool value) {
-    this._bookingLoading = value;
-    notifyListeners();
-  }
-
   void setCheckInDate(DateTime value) {
     _selectedCheckIn = value;
     notifyListeners();
@@ -112,7 +106,6 @@ class HotelDetailProvider extends BaseModelProvider {
   int get roomTotal => _roomTotal;
   DateTime get checkInDate => _selectedCheckIn;
   DateTime get checkOutDate => _selectedCheckOut;
-  bool get loading => _bookingLoading;
   String get errorMessage => _errorMessage;
   Stream<RoomState> get roomState => _roomState.stream;
 

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 
 import '../../../themes.dart';
 
 class DanaActiveRow extends StatelessWidget {
   final DanaAccountDetail detail;
+  final Function(bool) isNeedRefresh;
 
-  DanaActiveRow({this.detail});
+  DanaActiveRow({this.detail, this.isNeedRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +43,13 @@ class DanaActiveRow extends StatelessWidget {
                 border: Border.all(color: Themes.primaryBlue),
                 borderRadius: BorderRadius.circular(10.0)),
             child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(WebViewPage.routeName,
+              onTap: () async {
+                final result = await Navigator.of(context).pushNamed(
+                    WebViewPage.routeName,
                     arguments: {WebViewPage.urlName: detail.urlTopUp});
+                if (result != null) {
+                  isNeedRefresh(true);
+                }
               },
               child: Padding(
                 padding:

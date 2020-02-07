@@ -35,8 +35,30 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   }
 }
 
-class AvailableHistoryContentWidget extends StatelessWidget {
-  final int pageSize = 4;
+class AvailableHistoryContentWidget extends StatefulWidget {
+  @override
+  _AvailableHistoryContentWidgetState createState() =>
+      _AvailableHistoryContentWidgetState();
+}
+
+class _AvailableHistoryContentWidgetState
+    extends State<AvailableHistoryContentWidget> {
+  final int pageSize = 10;
+  PagewiseLoadController _pageLoadController;
+  bool isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      _pageLoadController = PagewiseLoadController<BookingDetail>(
+          pageSize: pageSize,
+          pageFuture: (pageIndex) =>
+              Provider.of<BookingHistoryProvider>(context)
+                  .getBookingHistoryList(pageIndex + 1, pageSize));
+      isInit = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,19 +127,17 @@ class AvailableHistoryContentWidget extends StatelessWidget {
         PagewiseListView<BookingDetail>(
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
-          pageSize: pageSize,
           itemBuilder: (context, item, index) {
             return HistorySingleCard(
               detail: item,
+              onPressed: () {
+                _pageLoadController.reset();
+              },
             );
           },
           noItemsFoundBuilder: (context) => EmptyHistoryContentWidget(),
-          errorBuilder: (context, index) => EmptyHistoryContentWidget(),
           showRetry: false,
-          pageFuture: (pageIndex) {
-            return Provider.of<BookingHistoryProvider>(context)
-                .getBookingHistoryList(pageIndex + 1, pageSize);
-          },
+          pageLoadController: _pageLoadController,
         )
       ],
     );

@@ -3,6 +3,7 @@ import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
+import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/notification/notification_provider.dart';
@@ -95,6 +96,10 @@ class SingleCardNotification extends StatelessWidget {
             });
             break;
           case 'komunitas':
+            Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
+                arguments: {
+                  CommunityDetailPage.communitySlug: detailModel?.typeId
+                });
             break;
         }
       },

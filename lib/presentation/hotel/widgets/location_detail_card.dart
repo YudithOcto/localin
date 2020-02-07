@@ -3,17 +3,23 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
-import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 
 import '../../../themes.dart';
 
-class LocationDetailCard extends StatelessWidget {
+class LocationDetailCard extends StatefulWidget {
   final BookingDetailModel detail;
   final bool enabled;
   final Function onPressed;
-  LocationDetailCard({this.detail, this.enabled, this.onPressed});
+  final Function(bool) onSuccess;
+  LocationDetailCard(
+      {this.detail, this.enabled, this.onPressed, this.onSuccess});
 
+  @override
+  _LocationDetailCardState createState() => _LocationDetailCardState();
+}
+
+class _LocationDetailCardState extends State<LocationDetailCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,9 +36,10 @@ class LocationDetailCard extends StatelessWidget {
                       Navigator.of(context)
                           .pushNamed(GoogleMapFullScreen.routeName, arguments: {
                         GoogleMapFullScreen.targetLocation: UserLocation(
-                          latitude: double.parse(detail?.hotelDetail?.latitude),
-                          longitude:
-                              double.parse(detail?.hotelDetail?.longitude),
+                          latitude: double.parse(
+                              widget.detail?.hotelDetail?.latitude),
+                          longitude: double.parse(
+                              widget.detail?.hotelDetail?.longitude),
                         )
                       });
                     },
@@ -70,7 +77,7 @@ class LocationDetailCard extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                '${detail?.street}',
+                '${widget.detail?.street}',
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.black87,
@@ -89,40 +96,48 @@ class LocationDetailCard extends StatelessWidget {
               width: 20.0,
             ),
             Expanded(
-                child: customButtonWithBorder(
-                    'Batalkan Pesanan', Icons.cancel, context, Colors.white,
-                    onPressed: onPressed)),
+                child: Visibility(
+              visible: !(widget.detail?.status == 'Cancelled Booking'),
+              child: customButtonWithBorder(
+                  'Batalkan Pesanan', Icons.cancel, context, Colors.white,
+                  onPressed: widget.onPressed),
+            )),
             SizedBox(
               width: 10.0,
             ),
             Expanded(
-                child: customButtonWithBorder('Bayar', Icons.payment, context,
-                    !enabled ? Colors.grey : Colors.blue, onPressed: () async {
-              if (enabled) {
-                final response =
-                    await Repository().bookingPayment(detail?.bookingId);
-                if (response.error) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('${response.message}'),
-                  ));
-                } else {
-                  final result = await Navigator.of(context)
-                      .pushNamed(WebViewPage.routeName, arguments: {
-                    WebViewPage.urlName: response?.urlRedirect,
-                  });
-                  if (result != null) {
+                child: Visibility(
+              visible: widget.detail?.status == 'Saved',
+              child: customButtonWithBorder('Bayar', Icons.payment, context,
+                  !widget.enabled ? Colors.grey : Colors.blue,
+                  onPressed: () async {
+                if (widget.enabled) {
+                  final response = await Repository()
+                      .bookingPayment(widget.detail?.bookingId);
+                  if (response.error) {
                     Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text('$result'),
+                      content: Text('${response.message}'),
                     ));
+                  } else {
+                    final result = await Navigator.of(context)
+                        .pushNamed(WebViewPage.routeName, arguments: {
+                      WebViewPage.urlName: response?.urlRedirect,
+                    });
+                    if (result != null) {
+                      widget.onSuccess(true);
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('$result'),
+                      ));
+                    }
                   }
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        'masa pembayaran sudah terlewati. Silahkan pesan lagi'),
+                  ));
                 }
-              } else {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      'masa pembayaran sudah terlewati. Silahkan pesan lagi'),
-                ));
-              }
-            })),
+              }),
+            )),
             SizedBox(
               width: 20.0,
             ),

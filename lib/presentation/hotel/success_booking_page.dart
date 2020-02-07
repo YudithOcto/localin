@@ -2,15 +2,11 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
-import 'package:localin/presentation/webview/in_app_browser.dart';
-import 'package:localin/presentation/webview/webview_flutter.dart';
-import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -32,6 +28,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
   String currentDifference = '';
   bool _isEnabled = true;
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
+  bool isNeedRefresh = false;
 
   @override
   void didChangeDependencies() {
@@ -195,6 +192,13 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                         return LocationDetail(
                           detail: detail,
                           isEnabled: _isEnabled,
+                          onSuccess: (isSuccess) {
+                            if (isSuccess) {
+                              setState(() {
+                                detail.status = 'Confirm Booking';
+                              });
+                            }
+                          },
                           onPressed: () async {
                             final response = await Repository()
                                 .cancelBooking(detail?.bookingId);
@@ -210,7 +214,9 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                                 _timer.cancel();
                               }
                               setState(() {
+                                isNeedRefresh = true;
                                 _isEnabled = false;
+                                detail.status = 'Cancelled Booking';
                               });
                             }
                           },
@@ -391,9 +397,11 @@ class SuccessRoomDetail extends StatelessWidget {
 class LocationDetail extends StatelessWidget {
   final BookHotelDetailResponse detail;
   final bool isEnabled;
-  final MyInAppBrowser browser = new MyInAppBrowser();
   final Function onPressed;
-  LocationDetail({this.detail, this.isEnabled, @required this.onPressed});
+  final Function(bool) onSuccess;
+  LocationDetail(
+      {this.detail, this.isEnabled, @required this.onPressed, this.onSuccess});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -469,42 +477,47 @@ class LocationDetail extends StatelessWidget {
               width: 20.0,
             ),
             Expanded(
-                child: customButtonWithBorder(
-                    isEnabled, 'Batalkan Pesanan', Icons.cancel, Colors.white,
-                    onPressed: onPressed)),
+                child: Visibility(
+              visible: !(detail.status == 'Cancelled Booking'),
+              child: customButtonWithBorder(
+                  isEnabled, 'Batalkan Pesanan', Icons.cancel, Colors.white,
+                  onPressed: onPressed),
+            )),
             SizedBox(
               width: 10.0,
             ),
             Expanded(
-                child: customButtonWithBorder(isEnabled, 'Bayar', Icons.payment,
-                    !isEnabled ? Colors.grey : Colors.blue,
-                    onPressed: () async {
-              if (isEnabled) {
-                final response =
-                    await Repository().bookingPayment(detail?.bookingId);
-                if (response.error) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('${response.message}'),
-                  ));
-                } else {
-                  final result = await Navigator.of(context)
-                      .pushNamed(WebViewPage.routeName, arguments: {
-                    WebViewPage.urlName: response?.urlRedirect,
-                  });
-                  if (result != null) {
+                child: Visibility(
+              visible: detail?.status == 'Saved' && isEnabled,
+              child: customButtonWithBorder(isEnabled, 'Bayar', Icons.payment,
+                  !isEnabled ? Colors.grey : Colors.blue, onPressed: () async {
+                if (isEnabled) {
+                  final response =
+                      await Repository().bookingPayment(detail?.bookingId);
+                  if (response.error) {
                     Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text('$result'),
+                      content: Text('${response.message}'),
                     ));
-                    Navigator.of(context).pop();
+                  } else {
+                    final result = await Navigator.of(context)
+                        .pushNamed(WebViewPage.routeName, arguments: {
+                      WebViewPage.urlName: response?.urlRedirect,
+                    });
+                    if (result != null) {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('$result'),
+                      ));
+                      onSuccess(true);
+                    }
                   }
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        'masa pembayaran sudah terlewati. Silahkan pesan lagi'),
+                  ));
                 }
-              } else {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      'masa pembayaran sudah terlewati. Silahkan pesan lagi'),
-                ));
-              }
-            })),
+              }),
+            )),
             SizedBox(
               width: 20.0,
             ),

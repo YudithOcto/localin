@@ -21,11 +21,9 @@ import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/edit_profile_page.dart';
-import 'package:localin/presentation/webview/webview_flutter.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
-import 'package:localin/presentation/webview/webview_newest_page.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/services/location_services.dart';
@@ -36,6 +34,7 @@ import 'model/firebase/message.dart';
 import 'model/service/user_location.dart';
 
 void main() => runApp(MyApp());
+final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -75,6 +74,7 @@ class _MyAppState extends State<MyApp> {
         )
       ],
       child: MaterialApp(
+        navigatorKey: navigator,
         title: 'Localin App',
         theme: ThemeData(
             primarySwatch: Colors.blue,
@@ -106,11 +106,9 @@ class _MyAppState extends State<MyApp> {
           CreateArticlePage.routeName: (_) => CreateArticlePage(),
           GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
           WebViewPage.routeName: (_) => WebViewPage(),
-          WebViewNewestPage.routeName: (_) => WebViewNewestPage(),
           InputPhoneNumber.routeName: (_) => InputPhoneNumber(),
           PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
           OtherProfilePage.routeName: (_) => OtherProfilePage(),
-          WebviewFlutter.routeName: (_) => WebviewFlutter(),
         },
       ),
     );
