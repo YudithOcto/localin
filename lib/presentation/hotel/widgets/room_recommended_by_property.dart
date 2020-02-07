@@ -33,14 +33,14 @@ class RoomRecommendedByProperty extends StatelessWidget {
       child: Stack(
         overflow: Overflow.visible,
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.asset(
-              'images/cafe.jpg',
-              fit: BoxFit.fill,
-              width: 150.0,
-            ),
-          ),
+//          ClipRRect(
+//            borderRadius: BorderRadius.circular(8.0),
+//            child: Image.asset(
+//              'images/cafe.jpg',
+//              fit: BoxFit.fill,
+//              width: 150.0,
+//            ),
+//          ),
           Positioned(
             top: 70.0,
             child: Container(

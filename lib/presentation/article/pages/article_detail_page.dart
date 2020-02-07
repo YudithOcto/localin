@@ -43,12 +43,30 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
 }
 
-class LoadingPage extends StatelessWidget {
+class LoadingPage extends StatefulWidget {
+  @override
+  _LoadingPageState createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> {
+  bool isInit = true;
+  Future getArticleDetail;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      getArticleDetail =
+          Provider.of<ArticleDetailProvider>(context, listen: false)
+              .getArticleDetail();
+      isInit = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ArticleBaseResponse>(
-      future: Provider.of<ArticleDetailProvider>(context, listen: false)
-          .getArticleDetail(),
+      future: getArticleDetail,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -128,27 +146,50 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
+                backgroundColor: Colors.white,
                 expandedHeight: orientation == Orientation.portrait
                     ? width * 0.5
                     : width * 0.3,
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Hero(
-                    tag: state?.articleModel?.image,
-                    child: CachedNetworkImage(
-                      imageUrl: state?.articleModel?.image,
-                      fit: BoxFit.fitWidth,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+                  collapseMode: CollapseMode.pin,
+                  background: Column(
+                    children: <Widget>[
+                      Hero(
+                        tag: state?.articleModel?.image,
+                        child: CachedNetworkImage(
+                          imageUrl: state?.articleModel?.image,
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                      RowHeaderArticle(),
+                    ],
                   ),
                 ),
+//                bottom: PreferredSize(
+//                  preferredSize: Size.fromHeight(50.0),
+//                  child: Container(
+//                    color: Colors.white,
+//                    child: TabBar(
+//                      controller: _tabController,
+//                      labelColor: Themes.primaryBlue,
+//                      labelStyle: TextStyle(
+//                          fontSize: 16.0, fontWeight: FontWeight.w600),
+//                      unselectedLabelColor: Colors.grey,
+//                      indicatorColor: Themes.primaryBlue,
+//                      tabs: tabs,
+//                    ),
+//                  ),
+//                ),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (_, index) => RowHeaderArticle(),
-                    childCount: 1),
-              ),
+//              SliverList(
+//                delegate: SliverChildBuilderDelegate(
+//                    (_, index) => RowHeaderArticle(),
+//                    childCount: 1),
+//              ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _SliverAppBarDelegate(
@@ -166,6 +207,7 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
             ];
           },
           body: TabBarView(
+            controller: _tabController,
             children: <Widget>[
               ArticleReaderPage(),
               ArticleCommentPage(),

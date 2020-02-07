@@ -34,6 +34,7 @@ class ArticleCommentPage extends StatelessWidget {
                 return Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
                     itemCount: asyncSnapshot?.data?.length,
                     itemBuilder: (context, index) {
                       return CommentCard(

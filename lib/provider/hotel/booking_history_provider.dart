@@ -4,22 +4,34 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_detail.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
+import 'package:localin/model/hotel/booking_history_base_response.dart';
 
 class BookingHistoryProvider extends ChangeNotifier {
   Repository _repository;
   bool _showSearchHotel = false;
+  int _offset = 1, _total = 10;
+  int totalPage = 0;
+  List<BookingDetail> historyList = [];
 
   BookingHistoryProvider() {
     _repository = Repository();
   }
 
-  Future<List<BookingDetail>> getBookingHistoryList(
-      int offset, int limit) async {
-    final result = await _repository.getBookingHistoryList(offset, limit);
-    if (result != null && result?.detail != null && result?.detail.isNotEmpty) {
-      return result.detail;
+  void resetParams() {
+    _offset = 1;
+    historyList = [];
+  }
+
+  Future<BookingHistoryBaseResponse> getBookingHistoryList() async {
+    final result = await _repository.getBookingHistoryList(_offset, _total);
+    if (result != null && result?.detail != null && result.detail.isNotEmpty) {
+      _offset += 1;
+      totalPage = result.total;
+      historyList.addAll(result.detail);
+      notifyListeners();
+      return result;
     } else {
-      throw Exception();
+      return null;
     }
   }
 
