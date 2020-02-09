@@ -34,6 +34,8 @@ dependencies:
   carousel_slider: ^1.4.1
   esys_flutter_share: ^1.0.2
   firebase_messaging: ^6.0.9
+  flutter_local_notifications: ^1.1.5+1
+  flutter_image_compress: ^0.6.5+1
 
 dev_dependencies:
   flutter_test:

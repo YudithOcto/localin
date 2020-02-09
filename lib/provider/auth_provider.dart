@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:localin/api/repository.dart';
 import 'package:localin/api/social_sign_in.dart';
+import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
 import 'package:localin/model/user/user_request.dart';
@@ -113,6 +114,12 @@ class AuthProvider extends BaseModelProvider {
   Future<String> signOutGoogle() async {
     await SocialSignIn().signOutGoogle();
     var result = await _repository.userLogout();
+    return result;
+  }
+
+  Future<DanaActivateBaseResponse> authenticateUserDanaAccount(
+      String phone) async {
+    final result = await _repository.activateDana(phone);
     return result;
   }
 }

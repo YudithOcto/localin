@@ -84,7 +84,7 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                       });
                       if (validateInput()) {
                         final result = await userPhoneRequest();
-                        if (result.error == null) {
+                        if (result != null && result.error == null) {
                           setState(() {
                             _isLoading = false;
                           });

@@ -3,10 +3,13 @@ import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../themes.dart';
 import 'circle_material_button.dart';
 
 class RowQuickMenu extends StatelessWidget {
@@ -98,7 +101,61 @@ class RowQuickMenu extends StatelessWidget {
                       WebViewPage.urlName: result.data.urlTopUp,
                     });
                   } else {
-                    onPressed();
+                    final authState =
+                        Provider.of<AuthProvider>(context, listen: false);
+                    if (authState.userModel.handphone != null &&
+                        authState.userModel.handphone.isNotEmpty) {
+                      final result =
+                          await authState.authenticateUserDanaAccount(
+                              authState.userModel.handphone);
+                      if (result.urlRedirect.isNotEmpty && !result.error) {
+                        final response = await Navigator.of(context)
+                            .pushNamed(WebViewPage.routeName, arguments: {
+                          WebViewPage.urlName: result.urlRedirect
+                        });
+                        if (response != null && response == 'success') {
+                          final dialogResult = await showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('DANA'),
+                                  content: Text(
+                                    'Connect to dana success',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      color: Themes.primaryBlue,
+                                      onPressed: () =>
+                                          Navigator.of(context).pop('success'),
+                                      child: Text(
+                                        'Ok',
+                                        style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              });
+
+                          if (dialogResult == 'success') {
+                            Provider.of<UserProfileProvider>(context)
+                                .getUserDanaStatus();
+                          }
+                        }
+                      }
+                    } else {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('No Phone number on your account'),
+                        duration: Duration(milliseconds: 1500),
+                      ));
+                    }
                   }
                 },
                 imageAsset: 'images/quick_dana_logo.png',

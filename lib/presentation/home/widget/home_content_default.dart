@@ -19,8 +19,8 @@ class HomeContentDefault extends StatelessWidget {
             onPressed: onSearchBarPressed,
           ),
           containerDivider(25.0),
-          RowCommunity(),
-          containerDivider(5.0),
+          //RowCommunity(),
+          //containerDivider(5.0),
           RowArticle()
         ],
       ),

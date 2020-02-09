@@ -69,9 +69,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _scrollListener() {
-    if (Provider.of<HomeProvider>(context).isRoomPage &&
-        controller.offset >= controller.position.maxScrollExtent) {
-      Provider.of<SearchHotelProvider>(context).getHotel();
+    if (Provider.of<HomeProvider>(context).isRoomPage) {
+      final searchProvider =
+          Provider.of<SearchHotelProvider>(context, listen: false);
+      if (controller.offset >= controller.position.maxScrollExtent &&
+          !searchProvider.isLoading) {
+        searchProvider.setLoading();
+        searchProvider.getHotel();
+      }
+    } else {
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      if (controller.offset >= controller.position.maxScrollExtent &&
+          !homeProvider.isLoading &&
+          homeProvider.articleDetail != null &&
+          homeProvider.total > homeProvider.articleDetail.length) {
+        Provider.of<HomeProvider>(context, listen: false).getArticleList();
+      }
     }
   }
 
@@ -128,26 +141,4 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
   }
-
-//  getLocation() async {
-//    var result = await Provider.of<HomeProvider>(context).locationPermission();
-//    if (result.isNotEmpty) {
-//      showDialog(
-//          context: context,
-//          builder: (context) {
-//            return AlertDialog(
-//              content: Text('You need to activate GPS'),
-//              actions: <Widget>[
-//                RaisedButton(
-//                  elevation: 5.0,
-//                  child: Text('Ok'),
-//                  onPressed: () {
-//                    PermissionHandler().openAppSettings();
-//                  },
-//                ),
-//              ],
-//            );
-//          });
-//    }
-//  }
 }

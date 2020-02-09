@@ -11,13 +11,14 @@ class SearchHotelProvider extends BaseModelProvider {
   TextEditingController _searchController;
   Timer _debounce;
   int _userRoomTotal = 1;
-  int _offset = 1, limit = 10, totalPage = 0;
+  int _offset = 1, limit = 5, totalPage = 0;
   UserLocation _userLocation = UserLocation();
   DateTime _selectedCheckIn = DateTime.now();
   DateTime _selectedCheckOut = DateTime.now().add(Duration(days: 1));
   final StreamController<SearchViewState> stateController =
       StreamController<SearchViewState>();
   List<HotelDetailEntity> hotelDetailList = [];
+  bool isLoading = false;
 
   TextEditingController get searchController => _searchController;
   DateTime get selectedCheckIn => _selectedCheckIn;
@@ -39,6 +40,11 @@ class SearchHotelProvider extends BaseModelProvider {
     if (_searchController.text.isNotEmpty) {
       _debounce = Timer(const Duration(milliseconds: 400), () {});
     }
+  }
+
+  void setLoading() {
+    isLoading = !isLoading;
+    notifyListeners();
   }
 
   @override
@@ -87,6 +93,7 @@ class SearchHotelProvider extends BaseModelProvider {
 //        }
 //        return comparing;
 //      });
+      isLoading = false;
       notifyListeners();
     }
     return result.hotelDetailEntity;

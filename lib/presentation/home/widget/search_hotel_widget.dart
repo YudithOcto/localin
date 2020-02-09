@@ -31,19 +31,16 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
-      final location = Provider.of<UserLocation>(context);
-      Provider.of<SearchHotelProvider>(context).setUserLocation(location);
-      Provider.of<SearchHotelProvider>(context).getHotel().then((value) {
+      final location = Provider.of<UserLocation>(context, listen: false);
+      Provider.of<SearchHotelProvider>(context, listen: false)
+          .setUserLocation(location);
+      Provider.of<SearchHotelProvider>(context, listen: false)
+          .resetAndCallApi()
+          .then((value) {
         isLoading = false;
       });
       isInit = false;
     }
-  }
-
-  @override
-  void dispose() {
-    Provider.of<SearchHotelProvider>(context).resetParams();
-    super.dispose();
   }
 
   @override
@@ -228,7 +225,11 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
             ),
           ),
           isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: CircularProgressIndicator(),
+                ))
               : ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),

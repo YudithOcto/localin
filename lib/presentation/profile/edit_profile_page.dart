@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bottom_company_information.dart';
 import 'package:localin/components/social_button.dart';
-import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/presentation/profile/widgets/edit_profile_row_card.dart';
 import 'package:localin/presentation/profile/widgets/row_connect_dana.dart';
@@ -183,12 +182,16 @@ class ScrollContentPage extends StatelessWidget {
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('${state.progress}'),
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.blue,
+                          ),
                           SizedBox(
                             height: 10.0,
                           ),
-                          CircularProgressIndicator(
-                            backgroundColor: Colors.blue,
+                          Text(
+                            '${state.progress}',
+                            style:
+                                TextStyle(fontSize: 12.0, color: Colors.white),
                           ),
                         ],
                       )

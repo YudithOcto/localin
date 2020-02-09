@@ -137,6 +137,7 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final state = Provider.of<ArticleDetailProvider>(context);
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       body: DefaultTabController(
@@ -148,8 +149,8 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
               SliverAppBar(
                 backgroundColor: Colors.white,
                 expandedHeight: orientation == Orientation.portrait
-                    ? width * 0.5
-                    : width * 0.3,
+                    ? height * 0.45
+                    : height * 0.55,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: Column(
@@ -159,6 +160,8 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                         child: CachedNetworkImage(
                           imageUrl: state?.articleModel?.image,
                           fit: BoxFit.fitWidth,
+                          width: width,
+                          height: height * 0.3,
                           placeholder: (context, url) =>
                               CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
@@ -64,6 +65,12 @@ class ColumnContent extends StatelessWidget {
                 detailModel: item,
               );
             },
+            noItemsFoundBuilder: (context) => Center(
+              child: Text(
+                'Tidak ada notifikasi',
+                textAlign: TextAlign.center,
+              ),
+            ),
             showRetry: false,
             pageFuture: (pageIndex) {
               return Provider.of<NotificationProvider>(context)
@@ -109,9 +116,22 @@ class SingleCardNotification extends StatelessWidget {
           SizedBox(
             width: 15.0,
           ),
-          Icon(
-            Icons.people,
-            color: Themes.primaryBlue,
+          CachedNetworkImage(
+            imageUrl: detailModel?.icon ?? '',
+            imageBuilder: (context, imageProvider) {
+              return CircleAvatar(
+                backgroundImage: imageProvider,
+              );
+            },
+            errorWidget: (context, item, child) => CircleAvatar(
+              child: Icon(
+                Icons.people,
+              ),
+            ),
+            placeholderFadeInDuration: Duration(milliseconds: 400),
+            placeholder: (context, child) => CircleAvatar(
+              backgroundColor: Colors.grey,
+            ),
           ),
           SizedBox(width: 15.0),
           Expanded(

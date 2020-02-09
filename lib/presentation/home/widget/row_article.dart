@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pagewise/flutter_pagewise.dart';
-import 'package:localin/model/article/article_base_response.dart';
-import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/home/widget/article_single_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -13,7 +10,17 @@ class RowArticle extends StatefulWidget {
 }
 
 class _RowArticleState extends State<RowArticle> {
-  final int pageSize = 6;
+  bool isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      Provider.of<HomeProvider>(context, listen: false)
+          .resetAndGetArticleList();
+      isInit = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,7 @@ class _RowArticleState extends State<RowArticle> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(left: 15.0, top: 15.0),
+          margin: EdgeInsets.only(left: 15.0, top: 5.0),
           child: Text(
             'Yang Terjadi Di Sekitarmu',
             style: kValueStyle.copyWith(fontSize: 24.0),
@@ -31,18 +38,34 @@ class _RowArticleState extends State<RowArticle> {
         SizedBox(
           height: 10.0,
         ),
-        PagewiseListView<ArticleDetail>(
-          shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          pageSize: pageSize,
-          itemBuilder: (context, item, index) {
-            return ArticleSingleCard(item);
-          },
-          pageFuture: (pageIndex) {
-            return Provider.of<HomeProvider>(context, listen: false)
-                .getArticleList(pageIndex + 1, pageSize);
-          },
-        )
+        Provider.of<HomeProvider>(context).isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<HomeProvider>(
+                builder: (context, provider, child) {
+                  return ListView.builder(
+                    itemCount: provider.articleDetail != null &&
+                            provider.articleDetail.isNotEmpty
+                        ? provider.articleDetail.length + 1
+                        : 0,
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      print(
+                          '${provider.total}, $index, ${provider.articleDetail.length}');
+                      if (index == provider.total) {
+                        return Container();
+                      } else if (provider.articleDetail.length == index) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return ArticleSingleCard(provider?.articleDetail[index]);
+                    },
+                  );
+                },
+              )
       ],
     );
   }

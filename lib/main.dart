@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
@@ -33,11 +34,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'model/firebase/message.dart';
 import 'model/service/user_location.dart';
 
-void main() => runApp(MyApp());
+main() {
+  runApp(MyApp());
+}
+
 final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+
   @override
   _MyAppState createState() => _MyAppState();
 }

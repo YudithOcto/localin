@@ -75,11 +75,11 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       _phoneNumber = routeArgs[PhoneVerificationPage.phone];
       _isBackButtonActive = routeArgs[PhoneVerificationPage.isBackButtonActive];
       if (!_isBackButtonActive) {
-        userVerifyPhoneRequest();
         _startTimer();
       } else {
         _startTimer();
       }
+      _isInit = false;
     }
   }
 
@@ -255,6 +255,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   Future<UserBaseModel> userVerifyPhoneRequest() async {
+    print('COUNT');
     if (!_phoneNumber.startsWith('0')) {
       _phoneNumber = '0$_phoneNumber';
     }

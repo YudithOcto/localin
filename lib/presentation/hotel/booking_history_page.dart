@@ -153,7 +153,8 @@ class _AvailableHistoryContentWidgetState
                       physics: ClampingScrollPhysics(),
                       itemCount: provider.historyList.length + 1 ?? 0,
                       itemBuilder: (context, index) {
-                        if (provider.historyList != null) {
+                        if (provider.historyList != null &&
+                            provider.historyList.isNotEmpty) {
                           if (index == provider.historyList.length) {
                             return Center(child: CircularProgressIndicator());
                           } else if (provider.totalPage <=

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,10 +49,12 @@ class UserEditProfileProvider with ChangeNotifier {
     if (isCameraPermissionGranted) {
       isProfileNeedUpdate = true;
       if (verify) {
-        idFile = await ImagePicker.pickImage(source: ImageSource.camera);
+        idFile = await ImagePicker.pickImage(
+            source: ImageSource.camera, imageQuality: 0);
         if (idFile != null) notifyListeners();
       } else {
-        imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+        imageFile = await ImagePicker.pickImage(
+            source: ImageSource.camera, imageQuality: 0);
         if (imageFile != null) notifyListeners();
       }
       return '';
@@ -127,23 +130,51 @@ class UserEditProfileProvider with ChangeNotifier {
 
   Future<String> verifyAccount() async {
     Dio dio = Dio();
-    String imagePath = idFile?.path ?? '';
+    final tempDir = await path_provider.getTemporaryDirectory();
+    final targetPath = tempDir.absolute.path + "/temp.jpg";
+    final imgFile = await testCompressAndGetFile(
+        (idFile != null ? idFile : imageFile != null ? imageFile : null),
+        targetPath);
+
     FormData formData = FormData.fromMap({
-      'photo_identitas': imagePath.isNotEmpty
-          ? MultipartFile.fromFileSync(imagePath,
-              filename: '${user.username}photo${DateTime.now()}')
-          : null,
+      'photo_identitas': MultipartFile.fromFileSync(imgFile.path,
+          filename: '${user.username}photo${DateTime.now()}'),
       'nomor': idCardController.text,
     });
-    var header = {
+    final header = {
       'Authorization': 'Bearer ${user.apiToken}',
     };
     Options options = Options(headers: header, contentType: 'application/json');
-    await dio.post('${ApiConstant.kBaseUrl}${ApiConstant.kVerifyAccount}',
-        options: options, data: formData, onSendProgress: (send, total) {
-      progress = ((send / total) * 100).toStringAsFixed(0) + '%';
-      notifyListeners();
-    });
+    try {
+      final response = await dio.post(
+          '${ApiConstant.kBaseUrl}${ApiConstant.kVerifyAccount}',
+          options: options,
+          data: formData, onSendProgress: (send, total) {
+        progress = ((send / total) * 100).toStringAsFixed(0) + '%';
+        notifyListeners();
+      });
+      print(response.data);
+    } catch (error) {
+      print(error);
+    }
+
     return progress;
+  }
+
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
+    print("testCompressAndGetFile");
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 0,
+      minWidth: 1024,
+      minHeight: 1024,
+      rotate: 90,
+    );
+
+    print(file.lengthSync());
+    print(result.lengthSync());
+
+    return result;
   }
 }
