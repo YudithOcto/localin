@@ -111,7 +111,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                 height: 15.0,
               ),
               Text(
-                'Kode Verifikasi Telat Dikirim!',
+                'Kode Verifikasi Telah Dikirim!',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.0),
               ),
               SizedBox(

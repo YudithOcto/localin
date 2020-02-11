@@ -261,7 +261,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('Seleseikan pembayaran anda dalam',
+            Text('Selesaikan pembayaran anda dalam',
                 style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.white,
@@ -318,10 +318,13 @@ class SuccessRoomDetail extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    blueCard('Guests', '${detail?.adultCount}'),
+                    Flexible(
+                        child: blueCard('Guests', '${detail?.adultCount}')),
                     Flexible(child: blueCard('Rooms', '${detail?.roomName}')),
-                    blueCard(
-                        'Price', '${getFormattedCurrency(detail?.userPrice)}'),
+                    Flexible(
+                      child: blueCard('Price',
+                          '${getFormattedCurrency(detail?.userPrice)}'),
+                    ),
                   ],
                 )
               ],
@@ -376,6 +379,8 @@ class SuccessRoomDetail extends StatelessWidget {
           children: <Widget>[
             Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 11.0, color: Colors.white),
             ),
             SizedBox(
@@ -552,12 +557,14 @@ class LocationDetail extends StatelessWidget {
           SizedBox(
             width: 10.0,
           ),
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: 12.0,
-                color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
-                fontWeight: FontWeight.w600),
+          Flexible(
+            child: Text(
+              title,
+              style: TextStyle(
+                  fontSize: 12.0,
+                  color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+                  fontWeight: FontWeight.w600),
+            ),
           )
         ],
       ),

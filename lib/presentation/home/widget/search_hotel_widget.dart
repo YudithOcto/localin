@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/themes.dart';
@@ -37,7 +38,9 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
       Provider.of<SearchHotelProvider>(context, listen: false)
           .resetAndCallApi()
           .then((value) {
-        isLoading = false;
+        setState(() {
+          isLoading = false;
+        });
       });
       isInit = false;
     }
@@ -124,18 +127,20 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'Check in',
-                      style: TextStyle(
-                          fontSize: 12.0, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    buttonDate(searchProvider.selectedCheckIn, context),
-                  ],
+                Flexible(
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        'Check in',
+                        style: TextStyle(
+                            fontSize: 12.0, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      buttonDate(searchProvider.selectedCheckIn, context),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: 5.0,
@@ -166,60 +171,62 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                   width: 1.0,
                   height: 50.0,
                 ),
-                Column(
-                  children: <Widget>[
-                    Text('Room(s)',
-                        style: TextStyle(
-                            fontSize: 12.0, fontWeight: FontWeight.w500)),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    FittedBox(
-                      child: Row(
-                        children: <Widget>[
-                          InkWell(
-                            onTap: () {
-                              Future.delayed(Duration(seconds: 1), () async {
-                                searchProvider.decreaseRoomTotal();
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                final response =
-                                    await searchProvider.resetAndCallApi();
-                                if (response != null) {
-                                  isLoading = false;
-                                }
-                              });
-                            },
-                            child: Icon(
-                              Icons.remove_circle_outline,
-                              color: Themes.dimGrey,
-                              size: 25.0,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            '${searchProvider.userTotalPickedRoom}',
-                            style: TextStyle(
-                                fontSize: 14.0, color: Themes.primaryBlue),
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          InkWell(
-                            onTap: () => searchProvider.increaseRoomTotal(),
-                            child: Icon(
-                              Icons.add_circle_outline,
-                              size: 25.0,
-                              color: Themes.dimGrey,
-                            ),
-                          )
-                        ],
+                Flexible(
+                  child: Column(
+                    children: <Widget>[
+                      Text('Room(s)',
+                          style: TextStyle(
+                              fontSize: 12.0, fontWeight: FontWeight.w500)),
+                      SizedBox(
+                        height: 8.0,
                       ),
-                    )
-                  ],
+                      FittedBox(
+                        child: Row(
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () {
+                                Future.delayed(Duration(seconds: 1), () async {
+                                  searchProvider.decreaseRoomTotal();
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  final response =
+                                      await searchProvider.resetAndCallApi();
+                                  if (response != null) {
+                                    isLoading = false;
+                                  }
+                                });
+                              },
+                              child: Icon(
+                                Icons.remove_circle_outline,
+                                color: Themes.dimGrey,
+                                size: 25.0,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              '${searchProvider.userTotalPickedRoom}',
+                              style: TextStyle(
+                                  fontSize: 14.0, color: Themes.primaryBlue),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            InkWell(
+                              onTap: () => searchProvider.increaseRoomTotal(),
+                              child: Icon(
+                                Icons.add_circle_outline,
+                                size: 25.0,
+                                color: Themes.dimGrey,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -228,7 +235,10 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
               ? Center(
                   child: Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Themes.primaryBlue),
+                  ),
                 ))
               : ListView.builder(
                   shrinkWrap: true,
@@ -237,11 +247,12 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                   itemCount: searchProvider.hotelDetailList.length + 1 ?? 0,
                   itemBuilder: (context, index) {
                     if (searchProvider.hotelDetailList != null &&
-                        searchProvider.hotelDetailList.length > 0) {
-                      if (index == searchProvider.hotelDetailList.length) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (index == searchProvider.totalPage) {
+                        searchProvider.hotelDetailList.isNotEmpty) {
+                      if (index == searchProvider.totalPage) {
                         return Container();
+                      } else if (index ==
+                          searchProvider.hotelDetailList.length) {
+                        return Center(child: CircularProgressIndicator());
                       }
                       return HomeContentSearchHotel(
                         index: index,
@@ -250,7 +261,13 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                         checkout: searchProvider.selectedCheckOut,
                       );
                     } else {
-                      return Container();
+                      return Container(
+                        margin: EdgeInsets.only(top: 40.0),
+                        child: Center(
+                          child: Text(
+                              'Kita tidak dapat menemukan hotel di dekatmu'),
+                        ),
+                      );
                     }
                   },
                 )
@@ -287,12 +304,13 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
             border: Border.all(color: Themes.dimGrey)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
-          child: Text(
+          child: AutoSizeText(
             '${DateHelper.formatDateRangeToString(dateTime)}',
+            minFontSize: 7.0,
+            maxFontSize: 14.0,
+            maxLines: 1,
             style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 12.0,
-                color: Themes.primaryBlue),
+                fontWeight: FontWeight.w600, color: Themes.primaryBlue),
           ),
         ),
       ),

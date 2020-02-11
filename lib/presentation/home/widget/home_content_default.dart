@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/home/widget/row_article.dart';
-import 'package:localin/presentation/home/widget/row_community.dart';
 import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 
 class HomeContentDefault extends StatelessWidget {

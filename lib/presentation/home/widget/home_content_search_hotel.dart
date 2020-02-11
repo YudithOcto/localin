@@ -18,7 +18,9 @@ class HomeContentSearchHotel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: hotel?.roomAvailability?.isNotEmpty,
+      visible: hotel != null &&
+          hotel.roomAvailability != null &&
+          hotel.roomAvailability.isNotEmpty,
       child: InkWell(
         onTap: () {
           Navigator.of(context)

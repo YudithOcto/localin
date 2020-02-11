@@ -6,6 +6,7 @@ import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
 import 'package:localin/presentation/hotel/widgets/history_single_card.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -64,9 +65,19 @@ class _AvailableHistoryContentWidgetState
   _listener() {
     final provider =
         Provider.of<BookingHistoryProvider>(context, listen: false);
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
+    if (provider.historyList != null &&
+        provider.historyList.isNotEmpty &&
+        _controller.offset >= _controller.position.maxScrollExtent &&
         provider.historyList.length < provider.totalPage) {
       provider.getBookingHistoryList();
+    } else {
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      if (_controller.offset >= _controller.position.maxScrollExtent &&
+          !homeProvider.isLoading &&
+          homeProvider.articleDetail != null &&
+          homeProvider.total > homeProvider.articleDetail.length) {
+        Provider.of<HomeProvider>(context, listen: false).getArticleList();
+      }
     }
   }
 
@@ -155,21 +166,21 @@ class _AvailableHistoryContentWidgetState
                       itemBuilder: (context, index) {
                         if (provider.historyList != null &&
                             provider.historyList.isNotEmpty) {
-                          if (index == provider.historyList.length) {
-                            return Center(child: CircularProgressIndicator());
-                          } else if (provider.totalPage <=
-                              provider.historyList.length) {
+                          if (index == provider.totalPage) {
                             return Container();
+                          } else if (index == provider.historyList.length) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            return HistorySingleCard(
+                              detail: provider.historyList[index],
+                              onPressed: () {
+                                Provider.of<BookingHistoryProvider>(context)
+                                    .resetParams();
+                                Provider.of<BookingHistoryProvider>(context)
+                                    .getBookingHistoryList();
+                              },
+                            );
                           }
-                          return HistorySingleCard(
-                            detail: provider.historyList[index],
-                            onPressed: () {
-                              Provider.of<BookingHistoryProvider>(context)
-                                  .resetParams();
-                              Provider.of<BookingHistoryProvider>(context)
-                                  .getBookingHistoryList();
-                            },
-                          );
                         } else {
                           return EmptyHistoryContentWidget();
                         }
