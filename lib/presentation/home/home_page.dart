@@ -1,6 +1,7 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
 import 'package:localin/presentation/home/widget/home_header_card.dart';
@@ -106,6 +107,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     checkGps();
     controller = new ScrollController();
     controller.addListener(_scrollListener);
+    print(DateTime.now().timeZoneName);
+    print(DateTime.now().timeZoneOffset.inHours);
+    getFlutterTimezone();
+  }
+
+  getFlutterTimezone() async {
+    try {
+      print(await FlutterNativeTimezone.getLocalTimezone());
+    } catch (error) {}
   }
 
   @override

@@ -38,6 +38,7 @@ dependencies:
   flutter_image_compress: ^0.6.5+1
   auto_size_text: ^2.1.0
   firebase_crashlytics: ^0.1.2+5
+  flutter_native_timezone: ^1.0.4
 
 dev_dependencies:
   flutter_test:

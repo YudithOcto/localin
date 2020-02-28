@@ -66,9 +66,16 @@ class ColumnContent extends StatelessWidget {
               );
             },
             noItemsFoundBuilder: (context) => Center(
-              child: Text(
-                'Tidak ada notifikasi',
-                textAlign: TextAlign.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    'images/no_notification_image.jpeg',
+                    width: 250.0,
+                    height: 250.0,
+                  ),
+                  Text('Belum Ada Notifikasi Apapun Untuk Kamu'),
+                ],
               ),
             ),
             showRetry: false,

@@ -6,6 +6,7 @@ import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/notification/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 import 'floating_action_bottom_app_bar.dart';
 
@@ -52,7 +53,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
         body: pages[currentSelected],
         bottomNavigationBar: FloatingActionBottomAppBar(
           color: Colors.black,
-          selectedColor: Colors.blue,
+          selectedColor: Themes.primaryBlue,
           onTabSelected: _selectedTab,
           selectedTabIndex: currentSelected,
           items: [
