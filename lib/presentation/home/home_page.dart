@@ -107,15 +107,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     checkGps();
     controller = new ScrollController();
     controller.addListener(_scrollListener);
-    print(DateTime.now().timeZoneName);
-    print(DateTime.now().timeZoneOffset.inHours);
-    getFlutterTimezone();
-  }
-
-  getFlutterTimezone() async {
-    try {
-      print(await FlutterNativeTimezone.getLocalTimezone());
-    } catch (error) {}
   }
 
   @override

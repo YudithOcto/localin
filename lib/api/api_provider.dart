@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:localin/api/api_constant.dart';
 import 'package:localin/main.dart';
 import 'package:localin/model/article/article_base_response.dart';
@@ -27,6 +28,7 @@ import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiProvider {
@@ -48,6 +50,14 @@ class ApiProvider {
         connectTimeout: 20000);
     _dio = Dio(options);
     sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  Future<String> getFlutterTimezone() async {
+    try {
+      return await FlutterNativeTimezone.getLocalTimezone();
+    } catch (error) {
+      return DateTime.now().timeZoneName;
+    }
   }
 
   String _handleError(DioError error) {
@@ -601,6 +611,8 @@ class ApiProvider {
             'keyword': search,
             'page': page,
             'limit': limit,
+//            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
+//            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
                 0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
             'checkout': checkOutDate.millisecondsSinceEpoch
@@ -608,6 +620,7 @@ class ApiProvider {
                 .substring(0,
                     checkOutDate.millisecondsSinceEpoch.toString().length - 3),
             'room': total,
+            //'timezone': await getFlutterTimezone(),
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);
@@ -626,10 +639,13 @@ class ApiProvider {
       final result = await _dio.get(
         '${ApiConstant.kHotelDetail}/$hotelId',
         queryParameters: {
-          'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-              0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-          'checkout': checkOutDate.millisecondsSinceEpoch.toString().substring(
-              0, checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+//          'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
+//              0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
+//          'checkout': checkOutDate.millisecondsSinceEpoch.toString().substring(
+//              0, checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+          'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
+          'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
+          'timezone': await getFlutterTimezone(),
           'room': roomTotal,
         },
         options: Options(headers: {'requiredToken': false}),
@@ -645,17 +661,14 @@ class ApiProvider {
   }
 
   Future<RoomBaseResponse> getRoomAvailabilityDetail(
-      int hotelId, int checkIn, int checkOut, int room) async {
+      int hotelId, DateTime checkIn, DateTime checkOut, int room) async {
     try {
       final result =
           await _dio.get('${ApiConstant.kHotelRoomAvailability}/$hotelId',
               queryParameters: {
-                'checkin': checkIn
-                    .toString()
-                    .substring(0, checkIn.toString().length - 3),
-                'checkout': checkOut
-                    .toString()
-                    .substring(0, checkOut.toString().length - 3),
+                'checkin': DateHelper.formatDateRangeForOYO(checkIn),
+                'checkout': DateHelper.formatDateRangeForOYO(checkOut),
+                'timezone': await getFlutterTimezone(),
                 'room': room,
               },
               options: Options(headers: {'requiredToken': false}));
@@ -704,20 +717,23 @@ class ApiProvider {
       int roomCategoryId,
       int totalAdult,
       int totalRoom,
-      int checkIn,
-      int checkOut,
+      DateTime checkIn,
+      DateTime checkOut,
       String roomName) async {
-    int incheck = int.parse(
-        checkIn.toString().substring(0, checkIn.toString().length - 3));
-    int outcheck = int.parse(
-        checkOut.toString().substring(0, checkOut.toString().length - 3));
+//    int incheck = int.parse(
+//        checkIn.toString().substring(0, checkIn.toString().length - 3));
+//    int outcheck = int.parse(
+//        checkOut.toString().substring(0, checkOut.toString().length - 3));
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
       'count_room': totalRoom,
       'count_adult': totalAdult,
-      'checkin': incheck,
-      'checkout': outcheck,
+//      'checkin': incheck,
+//      'checkout': outcheck,
+      'checkin': DateHelper.formatDateRangeForOYO(checkIn),
+      'checkout': DateHelper.formatDateRangeForOYO(checkOut),
+      'timezone': await getFlutterTimezone(),
       'room_name': roomName,
     });
     try {

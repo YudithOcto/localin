@@ -91,7 +91,7 @@ class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   customText(
-                      '${DateHelper.formatFromTimeStampShort(widget.detail.checkIn * 1000)}'),
+                      '${DateHelper.formatDateBookingDetailShort(widget?.detail?.requestCheckInDate)}'),
                   SizedBox(
                     width: 15.0,
                   ),
@@ -111,7 +111,7 @@ class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
                     width: 15.0,
                   ),
                   customText(
-                      '${DateHelper.formatFromTimeStampShort(widget.detail.checkOut * 1000)}'),
+                      '${DateHelper.formatDateBookingDetailShort(widget?.detail?.requestCheckOutDate)}'),
                 ],
               ),
               customDivider(),

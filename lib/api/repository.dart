@@ -174,7 +174,7 @@ class Repository {
   }
 
   Future<RoomBaseResponse> getRoomAvailability(
-      int hotelID, int checkIn, int checkOut, int roomTotal) {
+      int hotelID, DateTime checkIn, DateTime checkOut, int roomTotal) {
     return apiProvider.getRoomAvailabilityDetail(
         hotelID, checkIn, checkOut, roomTotal);
   }
@@ -189,8 +189,8 @@ class Repository {
       int roomCategoryId,
       int totalAdult,
       int totalRoom,
-      int checkIn,
-      int checkOut,
+      DateTime checkIn,
+      DateTime checkOut,
       String roomName) {
     return apiProvider.bookHotel(hotelId, roomCategoryId, totalAdult, totalRoom,
         checkIn, checkOut, roomName);

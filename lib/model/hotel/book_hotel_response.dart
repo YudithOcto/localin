@@ -35,6 +35,8 @@ class BookHotelDetailResponse {
   String invoiceCode;
   String currencyCode;
   String entityId;
+  String requestCheckInDate;
+  String requestCheckOutDate;
   int finalAmount;
   int userPrice;
   String cancellationPolicy;
@@ -57,6 +59,8 @@ class BookHotelDetailResponse {
     this.invoiceCode,
     this.currencyCode,
     this.entityId,
+    this.requestCheckInDate,
+    this.requestCheckOutDate,
     this.finalAmount,
     this.userPrice,
     this.cancellationPolicy,
@@ -81,6 +85,8 @@ class BookHotelDetailResponse {
       invoiceCode: body['invoice_kode'],
       currencyCode: body['currencyCode'],
       entityId: body['entityId'],
+      requestCheckInDate: body['request_checkin'],
+      requestCheckOutDate: body['request_checkout'],
       finalAmount: body['finalAmount'],
       userPrice: body['hargaUser'],
       cancellationPolicy: body['cancellationPolicy'],

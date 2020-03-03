@@ -13,7 +13,7 @@ dependencies:
   simple_animations: ^1.3.4
   dotted_border: ^1.0.4
   intl: ^0.16.0
-  dio: ^3.0.7
+  dio: any
   flutter_facebook_login: ^3.0.0
   firebase_auth: ^0.15.3
   google_maps_flutter: ^0.5.21+15

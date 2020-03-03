@@ -253,13 +253,14 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                       } else if (index ==
                           searchProvider.hotelDetailList.length) {
                         return Center(child: CircularProgressIndicator());
+                      } else {
+                        return HomeContentSearchHotel(
+                          index: index,
+                          hotel: searchProvider.hotelDetailList[index],
+                          checkIn: searchProvider.selectedCheckIn,
+                          checkout: searchProvider.selectedCheckOut,
+                        );
                       }
-                      return HomeContentSearchHotel(
-                        index: index,
-                        hotel: searchProvider.hotelDetailList[index],
-                        checkIn: searchProvider.selectedCheckIn,
-                        checkout: searchProvider.selectedCheckOut,
-                      );
                     } else {
                       return Container(
                         margin: EdgeInsets.only(top: 40.0),

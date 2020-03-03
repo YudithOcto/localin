@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -161,7 +160,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         customText(
-                            '${DateHelper.formatFromTimeStampShort(detail.checkIn)}'),
+                            '${DateHelper.formatDateBookingDetailShort(detail.requestCheckInDate)}'),
                         SizedBox(
                           width: 15.0,
                         ),
@@ -181,7 +180,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
                           width: 15.0,
                         ),
                         customText(
-                            '${DateHelper.formatFromTimeStampShort(detail.checkOut)}'),
+                            '${DateHelper.formatDateBookingDetailShort(detail.requestCheckOutDate)}'),
                       ],
                     ),
                     customDivider(),

@@ -7,6 +7,12 @@ class DateHelper {
     return dateValue;
   }
 
+  static String formatDateRangeForOYO(DateTime value) {
+    if (value == null) return '';
+    String dateValue = DateFormat('yyyy-MM-dd').format(value);
+    return dateValue;
+  }
+
   static String formatDateFromApi(String value) {
     if (value == null) return '';
     DateTime dateTime = DateTime.parse(value);

@@ -9,11 +9,7 @@ import 'package:localin/provider/base_model_provider.dart';
 class HotelDetailProvider extends BaseModelProvider {
   Repository _repository;
   HotelDetailEntity hotelDetailEntity;
-  int _checkInTime = 0,
-      _checkOutTime = 0,
-      _roomTotal = 1,
-      _hotelID = 0,
-      discount = 0;
+  int _roomTotal = 1, _hotelID = 0, discount = 0;
   String _errorMessage = '';
   DateTime _selectedCheckIn, _selectedCheckOut;
   StreamController<RoomState> _roomState;
@@ -28,8 +24,6 @@ class HotelDetailProvider extends BaseModelProvider {
 
   Future<HotelListBaseResponse> getHotelDetail(int hotelID) async {
     _hotelID = hotelID;
-    _checkInTime = _selectedCheckIn.millisecondsSinceEpoch;
-    _checkOutTime = _selectedCheckOut.millisecondsSinceEpoch;
 
     getRoomAvailability();
 
@@ -49,8 +43,8 @@ class HotelDetailProvider extends BaseModelProvider {
         roomCategoryId,
         roomTotal * 2,
         roomTotal,
-        _checkInTime,
-        _checkOutTime,
+        _selectedCheckIn,
+        _selectedCheckOut,
         roomName);
     _roomState.add(RoomState.DataRetrieved);
     return result;
@@ -60,7 +54,7 @@ class HotelDetailProvider extends BaseModelProvider {
     _roomState.add(RoomState.Busy);
     roomAvailability.clear();
     final result = await _repository.getRoomAvailability(
-        _hotelID, _checkInTime, _checkOutTime, _roomTotal);
+        _hotelID, _selectedCheckIn, _selectedCheckOut, _roomTotal);
     if (result != null && result.error == null) {
       _roomState.add(RoomState.DataRetrieved);
       discount = result.discount ?? 0;
@@ -72,8 +66,8 @@ class HotelDetailProvider extends BaseModelProvider {
   }
 
   void setRoomDateSearch(DateTime checkIn, DateTime checkOut) {
-    this._checkInTime = checkIn.millisecondsSinceEpoch;
-    this._checkOutTime = checkOut.millisecondsSinceEpoch;
+    this._selectedCheckIn = checkIn;
+    this._selectedCheckOut = checkOut;
     getRoomAvailability();
   }
 
@@ -101,8 +95,6 @@ class HotelDetailProvider extends BaseModelProvider {
     notifyListeners();
   }
 
-  int get checkInTime => _checkInTime;
-  int get checkOutTime => _checkOutTime;
   int get roomTotal => _roomTotal;
   DateTime get checkInDate => _selectedCheckIn;
   DateTime get checkOutDate => _selectedCheckOut;
