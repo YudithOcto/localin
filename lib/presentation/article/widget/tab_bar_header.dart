@@ -41,10 +41,10 @@ class _TabBarHeaderState extends State<TabBarHeader>
           elevation: 0.0,
           bottom: TabBar(
             tabs: _createTab(context),
-            labelColor: Themes.primaryBlue,
+            labelColor: ThemeColors.primaryBlue,
             labelStyle: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
             unselectedLabelColor: Colors.grey,
-            indicatorColor: Themes.primaryBlue,
+            indicatorColor: ThemeColors.primaryBlue,
             controller: _tabController,
           ),
         ),

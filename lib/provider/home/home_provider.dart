@@ -44,6 +44,7 @@ class HomeProvider with ChangeNotifier {
     } else {
       isLoading = false;
       articleDetail = null;
+      notifyListeners();
     }
     return response.data;
   }

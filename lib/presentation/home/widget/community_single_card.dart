@@ -64,7 +64,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                 Text(
                   '${widget.model.name}',
                   style: kValueStyle.copyWith(
-                      fontSize: 18.0, color: Themes.primaryBlue),
+                      fontSize: 18.0, color: ThemeColors.primaryBlue),
                 ),
                 Visibility(
                   visible: false,
@@ -89,7 +89,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                     children: <Widget>[
                       Icon(
                         Icons.location_on,
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                         size: 11.0,
                       ),
                       SizedBox(
@@ -112,7 +112,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                     '${widget.model.follower} Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 11.0, color: Themes.primaryBlue),
+                        fontSize: 11.0, color: ThemeColors.primaryBlue),
                   ),
                 )
               ],
@@ -162,7 +162,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         colors: [
-                          Themes.red,
+                          ThemeColors.red,
                           Colors.red,
                         ],
                       ),
@@ -190,7 +190,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             children: <Widget>[
               Icon(
                 Icons.star,
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 size: 15.0,
               ),
               SizedBox(
@@ -199,7 +199,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
               Text(
                 '${widget.model.ranting ?? 0}',
                 style: kValueStyle.copyWith(
-                    fontSize: 12.0, color: Themes.primaryBlue),
+                    fontSize: 12.0, color: ThemeColors.primaryBlue),
               ),
               SizedBox(
                 width: 10.0,
@@ -225,7 +225,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: Themes.primaryBlue, width: 2.0),
+                                color: ThemeColors.primaryBlue, width: 2.0),
                             borderRadius: BorderRadius.circular(5.0)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -233,7 +233,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                           child: Text(
                             'Kunjungi',
                             style: Constants.kValueStyle.copyWith(
-                                color: Themes.primaryBlue,
+                                color: ThemeColors.primaryBlue,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -248,7 +248,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                             borderRadius: BorderRadius.circular(4.0)),
                         child: InkWell(
                           onTap: () {

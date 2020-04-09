@@ -29,7 +29,7 @@ class DescriptionColumn extends StatelessWidget {
               children: <Widget>[
                 ImageIcon(
                   ExactAssetImage('images/ic_fb_small.png'),
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   size: 30.0,
                 ),
                 SizedBox(
@@ -38,7 +38,7 @@ class DescriptionColumn extends StatelessWidget {
                 ImageIcon(
                   ExactAssetImage('images/ic_google.png'),
                   size: 30.0,
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                 ),
               ],
             ),

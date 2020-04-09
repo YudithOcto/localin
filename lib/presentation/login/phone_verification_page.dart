@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
-import 'package:localin/presentation/login/input_phone_number.dart';
+import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +96,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               InkWell(
                 onTap: () {
                   Navigator.of(context)
-                      .pushReplacementNamed(InputPhoneNumber.routeName);
+                      .pushReplacementNamed(InputPhoneNumberPage.routeName);
                 },
                 child: Icon(
                   Icons.keyboard_backspace,
@@ -195,7 +195,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                         child: Text(
                           'Verify',
                           style: TextStyle(
-                              color: Themes.primaryBlue,
+                              color: ThemeColors.primaryBlue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w600),
                         ),
@@ -255,7 +255,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   Future<UserBaseModel> userVerifyPhoneRequest() async {
-    print('COUNT');
     if (!_phoneNumber.startsWith('0')) {
       _phoneNumber = '0$_phoneNumber';
     }

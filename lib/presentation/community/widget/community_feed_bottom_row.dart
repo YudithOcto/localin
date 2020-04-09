@@ -18,7 +18,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.star,
-          color: Themes.primaryBlue,
+          color: ThemeColors.primaryBlue,
           size: 20.0,
         ),
         SizedBox(
@@ -28,7 +28,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
           '${detail?.ranting ?? 0}',
           textAlign: TextAlign.center,
           style: kValueStyle.copyWith(
-              color: Themes.primaryBlue, fontWeight: FontWeight.w500),
+              color: ThemeColors.primaryBlue, fontWeight: FontWeight.w500),
         ),
         Expanded(
           child: Row(
@@ -43,7 +43,8 @@ class CommunityFeedBottomRow extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: Themes.primaryBlue, width: 2.0),
+                      border: Border.all(
+                          color: ThemeColors.primaryBlue, width: 2.0),
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -51,7 +52,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
                     child: Text(
                       'Kunjungi',
                       style: kValueStyle.copyWith(
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w500),
                     ),
@@ -71,7 +72,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
                     height: 30.0,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                         borderRadius: BorderRadius.circular(5.0)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

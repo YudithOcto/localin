@@ -13,7 +13,7 @@ class CircleMaterialButton extends StatelessWidget {
     @required this.onPressed,
     this.icon,
     this.iconColor = Colors.white,
-    this.backgroundColor = Themes.primaryBlue,
+    this.backgroundColor = ThemeColors.primaryBlue,
     this.imageAsset,
     this.title,
   });

@@ -39,6 +39,7 @@ dependencies:
   auto_size_text: ^2.1.0
   firebase_crashlytics: ^0.1.2+5
   flutter_native_timezone: ^1.0.4
+  superellipse_shape: ^0.1.5
 
 dev_dependencies:
   flutter_test:
@@ -59,3 +60,13 @@ flutter:
           weight: 400
         - asset: fonts/OpenSans-Italic.ttf
           style: italic
+    - family: SfProText
+      fonts:
+        - asset: fonts/SFProText-Regular.ttf
+        - asset: fonts/SFProText-Medium.ttf
+          weight: 400
+        - asset: fonts/SFProText-SemiBold.ttf
+          weight: 600
+    - family: Rodina
+      fonts:
+        - asset: fonts/Rodina.ttf

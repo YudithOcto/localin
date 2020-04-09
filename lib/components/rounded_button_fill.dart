@@ -17,7 +17,7 @@ class RoundedButtonFill extends StatelessWidget {
       this.title,
       this.height,
       this.titleColor = Colors.white,
-      this.backgroundColor = Themes.primaryBlue,
+      this.backgroundColor = ThemeColors.primaryBlue,
       this.needCenter = false,
       this.fontWeight = FontWeight.w500,
       this.fontSize = 12.0});

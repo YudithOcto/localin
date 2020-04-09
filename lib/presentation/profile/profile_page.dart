@@ -11,7 +11,7 @@ const kTitleStyle = TextStyle(
     fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
 
 const kValueStyle = TextStyle(
-    fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w500);
+    fontSize: 14.0, color: ThemeColors.black100, fontWeight: FontWeight.w500);
 
 class ProfilePage extends StatefulWidget {
   @override

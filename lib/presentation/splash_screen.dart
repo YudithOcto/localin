@@ -2,7 +2,7 @@ import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
-import 'package:localin/presentation/login/input_phone_number.dart';
+import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/themes.dart';
@@ -46,10 +46,11 @@ class _SplashScreenState extends State<SplashScreen>
             isUserVerify) {
           checkGps();
         } else {
-          Navigator.of(context).pushNamed(InputPhoneNumber.routeName);
+          Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName);
         }
       } else {
-        Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+        Navigator.of(context)
+            .pushReplacementNamed(InputPhoneNumberPage.routeName);
       }
     });
   }
@@ -77,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen>
                     intent.launch();
                     updateAndroidIntent = true;
                   },
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   child: Text('Enabled'),
                 )
               ],

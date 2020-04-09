@@ -49,7 +49,7 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
           height: MediaQuery.of(context).size.height * 0.5,
           margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
           decoration: BoxDecoration(
-              border: Border.all(color: Themes.primaryBlue),
+              border: Border.all(color: ThemeColors.primaryBlue),
               borderRadius: BorderRadius.circular(10.0)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -58,7 +58,7 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
                 Text(
                   'Enter your DANA Account',
                   style: kValueStyle.copyWith(
-                      fontSize: 50.0, color: Themes.primaryBlue),
+                      fontSize: 50.0, color: ThemeColors.primaryBlue),
                 ),
                 SizedBox(
                   height: 15.0,
@@ -75,11 +75,12 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
                       decoration: InputDecoration(
                           hintText: '081123456789',
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Themes.primaryBlue),
+                              borderSide:
+                                  BorderSide(color: ThemeColors.primaryBlue),
                               borderRadius: BorderRadius.circular(12.0)),
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: Themes.primaryBlue))),
+                                  BorderSide(color: ThemeColors.primaryBlue))),
                     ),
                   ),
                 ),
@@ -94,9 +95,9 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
                       validateInput();
                     },
                     elevation: 5.0,
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                     shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Themes.primaryBlue),
+                        side: BorderSide(color: ThemeColors.primaryBlue),
                         borderRadius: BorderRadius.circular(8.0)),
                     child: Text(
                       'CONNECT',
@@ -137,7 +138,7 @@ class _ConnectDanaAccountPageState extends State<ConnectDanaAccountPage> {
                   ),
                   actions: <Widget>[
                     FlatButton(
-                      color: Themes.primaryBlue,
+                      color: ThemeColors.primaryBlue,
                       onPressed: () => Navigator.of(context).pop('success'),
                       child: Text(
                         'Ok',

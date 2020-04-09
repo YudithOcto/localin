@@ -53,7 +53,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
         body: pages[currentSelected],
         bottomNavigationBar: FloatingActionBottomAppBar(
           color: Colors.black,
-          selectedColor: Themes.primaryBlue,
+          selectedColor: ThemeColors.primaryBlue,
           onTabSelected: _selectedTab,
           selectedTabIndex: currentSelected,
           items: [

@@ -122,7 +122,7 @@ class UpperCommunityCardRow extends StatelessWidget {
               Text(
                 '${detail?.name}',
                 style: kValueStyle.copyWith(
-                    fontSize: 18.0, color: Themes.primaryBlue),
+                    fontSize: 18.0, color: ThemeColors.primaryBlue),
               ),
               Visibility(
                 visible: false,
@@ -147,7 +147,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                     children: <Widget>[
                       Icon(
                         Icons.location_on,
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                         size: 12.0,
                       ),
                       SizedBox(
@@ -167,7 +167,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: Themes.primaryBlue,
+                      color: ThemeColors.primaryBlue,
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -187,7 +187,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                     '${detail?.follower} Orang Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 11.0, color: Themes.primaryBlue),
+                        fontSize: 11.0, color: ThemeColors.primaryBlue),
                   ),
                 )
               ],

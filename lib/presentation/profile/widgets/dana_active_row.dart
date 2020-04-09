@@ -40,7 +40,7 @@ class DanaActiveRow extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Themes.primaryBlue),
+                border: Border.all(color: ThemeColors.primaryBlue),
                 borderRadius: BorderRadius.circular(10.0)),
             child: InkWell(
               onTap: () async {
@@ -57,7 +57,7 @@ class DanaActiveRow extends StatelessWidget {
                 child: Text(
                   'Top Up',
                   style: kValueStyle.copyWith(
-                      color: Themes.primaryBlue,
+                      color: ThemeColors.primaryBlue,
                       letterSpacing: -.5,
                       fontWeight: FontWeight.bold),
                 ),
@@ -77,7 +77,7 @@ class DanaActiveRow extends StatelessWidget {
                 ),
                 Text(
                   '${getFormattedCurrency(detail?.balance)}',
-                  style: kValueStyle.copyWith(color: Themes.primaryBlue),
+                  style: kValueStyle.copyWith(color: ThemeColors.primaryBlue),
                 )
               ],
             ),

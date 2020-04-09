@@ -75,7 +75,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: key,
-      backgroundColor: Themes.darkBlue,
+      backgroundColor: ThemeColors.darkBlue,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 5.0,
@@ -254,7 +254,7 @@ class _SuccessBookingPageState extends State<SuccessBookingPage> {
     return Container(
       margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
       decoration: BoxDecoration(
-          color: Themes.green, borderRadius: BorderRadius.circular(8.0)),
+          color: ThemeColors.green, borderRadius: BorderRadius.circular(8.0)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
@@ -370,7 +370,8 @@ class SuccessRoomDetail extends StatelessWidget {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(left: 5.0, right: 5.0),
       decoration: BoxDecoration(
-          color: Themes.primaryBlue, borderRadius: BorderRadius.circular(4.0)),
+          color: ThemeColors.primaryBlue,
+          borderRadius: BorderRadius.circular(4.0)),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Column(
@@ -446,7 +447,7 @@ class LocationDetail extends StatelessWidget {
                       alignment: FractionalOffset.center,
                       height: 25.0,
                       decoration: BoxDecoration(
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(12.0),
                               bottomRight: Radius.circular(12.0))),
@@ -542,7 +543,7 @@ class LocationDetail extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
           side: BorderSide(
-              color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+              color: title == 'Bayar' ? Colors.white : ThemeColors.primaryBlue,
               width: 2.0)),
       onPressed: onPressed,
       child: Row(
@@ -550,7 +551,7 @@ class LocationDetail extends StatelessWidget {
         children: <Widget>[
           Icon(
             icon,
-            color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+            color: title == 'Bayar' ? Colors.white : ThemeColors.primaryBlue,
             size: 15.0,
           ),
           SizedBox(
@@ -561,7 +562,8 @@ class LocationDetail extends StatelessWidget {
               title,
               style: TextStyle(
                   fontSize: 12.0,
-                  color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+                  color:
+                      title == 'Bayar' ? Colors.white : ThemeColors.primaryBlue,
                   fontWeight: FontWeight.w600),
             ),
           )

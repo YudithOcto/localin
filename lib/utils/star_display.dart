@@ -24,7 +24,7 @@ class StarDisplay extends StatelessWidget {
     if (index >= value) {
       icon = Icon(
         Icons.star_border,
-        color: Themes.primaryBlue,
+        color: ThemeColors.primaryBlue,
         size: size,
       );
     } else if (index > value - 1 && index < value) {
@@ -36,7 +36,7 @@ class StarDisplay extends StatelessWidget {
     } else {
       icon = Icon(
         Icons.star,
-        color: Themes.primaryBlue,
+        color: ThemeColors.primaryBlue,
         size: size,
       );
     }

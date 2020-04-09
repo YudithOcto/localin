@@ -89,7 +89,7 @@ class _HeaderProfileState extends State<HeaderProfile> {
                                     ),
                                     actions: <Widget>[
                                       FlatButton(
-                                        color: Themes.primaryBlue,
+                                        color: ThemeColors.primaryBlue,
                                         onPressed: () => Navigator.of(context)
                                             .pop('success'),
                                         child: Text(

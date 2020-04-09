@@ -50,7 +50,7 @@ class RoomLocation extends StatelessWidget {
                         alignment: FractionalOffset.center,
                         height: 25.0,
                         decoration: BoxDecoration(
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(12.0),
                                 bottomRight: Radius.circular(12.0))),
@@ -84,7 +84,7 @@ class RoomLocation extends StatelessWidget {
                     '${detail?.shortAddress}',
                     style: kValueStyle.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: Themes.grey,
+                        color: ThemeColors.grey,
                         fontSize: 11.0),
                   ),
                   SizedBox(
@@ -96,7 +96,7 @@ class RoomLocation extends StatelessWidget {
                       children: <Widget>[
                         Icon(
                           Icons.location_on,
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           size: 15.0,
                         ),
                         SizedBox(
@@ -106,7 +106,7 @@ class RoomLocation extends StatelessWidget {
                           '4.6 Km near from your location',
                           style: kValueStyle.copyWith(
                               fontWeight: FontWeight.w500,
-                              color: Themes.grey,
+                              color: ThemeColors.grey,
                               fontSize: 11.0),
                         ),
                       ],

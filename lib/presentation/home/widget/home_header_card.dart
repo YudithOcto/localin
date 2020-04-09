@@ -79,7 +79,7 @@ class HomeHeaderCard extends StatelessWidget {
                       user?.userModel?.status == 'verified_identitas'
                           ? Icon(
                               Icons.verified_user,
-                              color: Themes.primaryBlue,
+                              color: ThemeColors.primaryBlue,
                               size: 15.0,
                             )
                           : Container(),
@@ -99,7 +99,7 @@ class HomeHeaderCard extends StatelessWidget {
           bottom: -25.0,
           right: 20.0,
           child: CircleMaterialButton(
-            backgroundColor: Themes.red,
+            backgroundColor: ThemeColors.red,
             onPressed: () async {
               var result = await Navigator.of(context)
                   .pushNamed(CreateArticlePage.routeName);

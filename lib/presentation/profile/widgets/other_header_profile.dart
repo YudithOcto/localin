@@ -95,7 +95,7 @@ class _OtherHeaderProfileState extends State<OtherHeaderProfile> {
                                   ? Icon(
                                       Icons.verified_user,
                                       size: 20.0,
-                                      color: Themes.primaryBlue,
+                                      color: ThemeColors.primaryBlue,
                                     )
                                   : Container()
                             ],
@@ -109,7 +109,7 @@ class _OtherHeaderProfileState extends State<OtherHeaderProfile> {
                         EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
                     height: 55.0,
                     decoration: BoxDecoration(
-                        border: Border.all(color: Themes.primaryBlue),
+                        border: Border.all(color: ThemeColors.primaryBlue),
                         borderRadius: BorderRadius.circular(8.0)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -79,7 +79,7 @@ class ArticleCommentPage extends StatelessWidget {
                                   FlatButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
-                                    color: Themes.primaryBlue,
+                                    color: ThemeColors.primaryBlue,
                                     child: Text('Ok'),
                                   )
                                 ],
@@ -92,7 +92,7 @@ class ArticleCommentPage extends StatelessWidget {
                     height: 35.0,
                     width: 35.0,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Themes.primaryBlue),
+                        shape: BoxShape.circle, color: ThemeColors.primaryBlue),
                     child: Icon(
                       Icons.send,
                       color: Colors.white,
@@ -138,7 +138,7 @@ class CommentCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '${commentDetail?.sender}',
-                      style: kValueStyle.copyWith(color: Themes.primaryBlue),
+                      style: kValueStyle.copyWith(color: ThemeColors.primaryBlue),
                     ),
                     Text(
                       '${commentDetail?.createdAt}',

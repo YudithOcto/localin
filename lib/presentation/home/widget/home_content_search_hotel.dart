@@ -89,7 +89,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                           children: <Widget>[
                             Icon(
                               Icons.location_on,
-                              color: Themes.primaryBlue,
+                              color: ThemeColors.primaryBlue,
                               size: 15.0,
                             ),
                             SizedBox(
@@ -129,7 +129,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                       Text(
                         '${hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty ? getFormattedCurrency(hotel.roomAvailability.first.sellingAmount - hotel.discount) : ''}',
                         style: cardTextStyle.copyWith(
-                            fontSize: 14.0, color: Themes.primaryBlue),
+                            fontSize: 14.0, color: ThemeColors.primaryBlue),
                       ),
                       SizedBox(
                         height: 5.0,

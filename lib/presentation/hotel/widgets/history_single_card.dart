@@ -48,13 +48,13 @@ class HistorySingleCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 12.0,
                               fontWeight: FontWeight.w600,
-                              color: Themes.primaryBlue)),
+                              color: ThemeColors.primaryBlue)),
                     ],
                   ),
                 ),
               ),
               Container(
-                color: Themes.greyGainsBoro,
+                color: ThemeColors.greyGainsBoro,
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Row(
@@ -62,7 +62,7 @@ class HistorySingleCard extends StatelessWidget {
                     children: <Widget>[
                       Icon(
                         Icons.hotel,
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                       ),
                       widthDivider(),
                       Expanded(
@@ -89,13 +89,14 @@ class HistorySingleCard extends StatelessWidget {
                       '${detail?.status}',
                       style: kTitleStyle.copyWith(
                           color: detail?.status == 'confirm booking'
-                              ? Themes.green
-                              : Themes.red,
+                              ? ThemeColors.green
+                              : ThemeColors.red,
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
                       '${getFormattedCurrency(detail?.userPrice)}',
-                      style: kValueStyle.copyWith(color: Themes.primaryBlue),
+                      style:
+                          kValueStyle.copyWith(color: ThemeColors.primaryBlue),
                     ),
                   ],
                 ),

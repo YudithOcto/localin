@@ -44,26 +44,52 @@ class _RowArticleState extends State<RowArticle> {
               )
             : Consumer<HomeProvider>(
                 builder: (context, provider, child) {
-                  return ListView.builder(
-                    itemCount: provider.articleDetail != null &&
-                            provider.articleDetail.isNotEmpty
-                        ? provider.articleDetail.length + 1
-                        : 0,
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      print(
-                          '${provider.total}, $index, ${provider.articleDetail.length}');
-                      if (index == provider.total) {
-                        return Container();
-                      } else if (provider.articleDetail.length == index) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ArticleSingleCard(provider?.articleDetail[index]);
-                    },
-                  );
+                  if (provider.articleDetail == null) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset(
+                            'images/article_empty.jpeg',
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            'Belum Ada Cerita yang dibagikan di Sekitarmu, Ayo Jadi Yang Pertama Berbagi',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: provider.articleDetail != null &&
+                              provider.articleDetail.isNotEmpty
+                          ? provider.articleDetail.length + 1
+                          : 0,
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        if (index == provider.total) {
+                          return Container();
+                        } else if (provider.articleDetail.length == index) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return ArticleSingleCard(
+                            provider?.articleDetail[index]);
+                      },
+                    );
+                  }
                 },
               )
       ],

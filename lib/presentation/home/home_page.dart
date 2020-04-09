@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     intent.launch();
                     updateAndroidIntent = true;
                   },
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   child: Text('Enabled'),
                 )
               ],

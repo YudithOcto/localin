@@ -13,7 +13,7 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
-import 'package:localin/presentation/login/input_phone_number.dart';
+import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
@@ -30,6 +30,7 @@ import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/services/location_services.dart';
+import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -92,9 +93,8 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navigator,
         title: 'Localin App',
         theme: ThemeData(
-            primarySwatch: Colors.blue,
-            canvasColor: Colors.white,
-            fontFamily: 'OpenSans',
+            canvasColor: ThemeColors.black0,
+            fontFamily: 'SfProText',
             textTheme: ThemeData.light().textTheme.copyWith(
                 body1:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
           CreateArticlePage.routeName: (_) => CreateArticlePage(),
           GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
           WebViewPage.routeName: (_) => WebViewPage(),
-          InputPhoneNumber.routeName: (_) => InputPhoneNumber(),
+          InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
           PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
           OtherProfilePage.routeName: (_) => OtherProfilePage(),
         },

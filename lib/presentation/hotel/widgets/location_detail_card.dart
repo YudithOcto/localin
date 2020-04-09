@@ -61,7 +61,7 @@ class _LocationDetailCardState extends State<LocationDetailCard> {
                       alignment: FractionalOffset.center,
                       height: 25.0,
                       decoration: BoxDecoration(
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(12.0),
                               bottomRight: Radius.circular(12.0))),
@@ -158,7 +158,7 @@ class _LocationDetailCardState extends State<LocationDetailCard> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
           side: BorderSide(
-              color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+              color: title == 'Bayar' ? Colors.white : ThemeColors.primaryBlue,
               width: 2.0)),
       onPressed: onPressed,
       child: Row(
@@ -166,7 +166,7 @@ class _LocationDetailCardState extends State<LocationDetailCard> {
         children: <Widget>[
           Icon(
             icon,
-            color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+            color: title == 'Bayar' ? Colors.white : ThemeColors.primaryBlue,
             size: 15.0,
           ),
           SizedBox(
@@ -176,7 +176,8 @@ class _LocationDetailCardState extends State<LocationDetailCard> {
             title,
             style: TextStyle(
                 fontSize: 12.0,
-                color: title == 'Bayar' ? Colors.white : Themes.primaryBlue,
+                color:
+                    title == 'Bayar' ? Colors.white : ThemeColors.primaryBlue,
                 fontWeight: FontWeight.w600),
           )
         ],

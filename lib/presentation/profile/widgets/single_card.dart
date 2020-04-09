@@ -80,7 +80,7 @@ class SingleCard extends StatelessWidget {
                         child: Container(
                           constraints: BoxConstraints(maxWidth: 100.0),
                           decoration: BoxDecoration(
-                              color: Themes.orange,
+                              color: ThemeColors.orange,
                               borderRadius: BorderRadius.circular(6.0)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(

@@ -38,7 +38,8 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
                 List.generate(widget.articleDetail?.tags?.length, (index) {
               return Text(
                 '#${widget.articleDetail?.tags[index]?.tagName}',
-                style: kValueStyle.copyWith(fontSize: 10.0, color: Themes.red),
+                style: kValueStyle.copyWith(
+                    fontSize: 10.0, color: ThemeColors.red),
               );
             }),
           ),
@@ -105,7 +106,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
                           widget.articleDetail.tags.first.tagName.isNotEmpty,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Themes.green,
+                            color: ThemeColors.green,
                             borderRadius: BorderRadius.circular(4.0)),
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),

@@ -147,7 +147,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                 ),
                 Icon(
                   Icons.arrow_forward,
-                  color: Themes.silverGrey,
+                  color: ThemeColors.silverGrey,
                 ),
                 SizedBox(
                   width: 5.0,
@@ -167,7 +167,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
-                  color: Themes.darkGrey,
+                  color: ThemeColors.darkGrey,
                   width: 1.0,
                   height: 50.0,
                 ),
@@ -199,7 +199,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                               },
                               child: Icon(
                                 Icons.remove_circle_outline,
-                                color: Themes.dimGrey,
+                                color: ThemeColors.dimGrey,
                                 size: 25.0,
                               ),
                             ),
@@ -209,7 +209,8 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                             Text(
                               '${searchProvider.userTotalPickedRoom}',
                               style: TextStyle(
-                                  fontSize: 14.0, color: Themes.primaryBlue),
+                                  fontSize: 14.0,
+                                  color: ThemeColors.primaryBlue),
                             ),
                             SizedBox(
                               width: 10.0,
@@ -219,7 +220,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                               child: Icon(
                                 Icons.add_circle_outline,
                                 size: 25.0,
-                                color: Themes.dimGrey,
+                                color: ThemeColors.dimGrey,
                               ),
                             )
                           ],
@@ -237,7 +238,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: CircularProgressIndicator(
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(Themes.primaryBlue),
+                        AlwaysStoppedAnimation<Color>(ThemeColors.primaryBlue),
                   ),
                 ))
               : ListView.builder(
@@ -314,7 +315,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: Themes.dimGrey)),
+            border: Border.all(color: ThemeColors.dimGrey)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
           child: AutoSizeText(
@@ -323,7 +324,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
             maxFontSize: 14.0,
             maxLines: 1,
             style: TextStyle(
-                fontWeight: FontWeight.w600, color: Themes.primaryBlue),
+                fontWeight: FontWeight.w600, color: ThemeColors.primaryBlue),
           ),
         ),
       ),

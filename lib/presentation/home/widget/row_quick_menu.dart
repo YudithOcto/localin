@@ -129,7 +129,7 @@ class RowQuickMenu extends StatelessWidget {
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
-                                      color: Themes.primaryBlue,
+                                      color: ThemeColors.primaryBlue,
                                       onPressed: () =>
                                           Navigator.of(context).pop('success'),
                                       child: Text(

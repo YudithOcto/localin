@@ -10,7 +10,7 @@ class CustomHeaderBelowAppBar extends StatelessWidget {
 
   CustomHeaderBelowAppBar({
     @required this.title,
-    this.color = Themes.primaryBlue,
+    this.color = ThemeColors.primaryBlue,
     this.icon = Icons.keyboard_backspace,
     this.iconColor = Colors.white,
   });

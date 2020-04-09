@@ -128,7 +128,7 @@ class _ScrollContentState extends State<ScrollContent> {
                         Text(
                           '404',
                           style: kValueStyle.copyWith(
-                              fontSize: 40.0, color: Themes.primaryBlue),
+                              fontSize: 40.0, color: ThemeColors.primaryBlue),
                         ),
                         SizedBox(
                           height: 5.0,
@@ -137,7 +137,7 @@ class _ScrollContentState extends State<ScrollContent> {
                           'Oops. Page akan segera datang',
                           style: kValueStyle.copyWith(
                               fontSize: 20.0,
-                              color: Themes.primaryBlue,
+                              color: ThemeColors.primaryBlue,
                               fontWeight: FontWeight.w600),
                         ),
                         SizedBox(
@@ -150,7 +150,7 @@ class _ScrollContentState extends State<ScrollContent> {
                             textAlign: TextAlign.center,
                             style: kValueStyle.copyWith(
                                 fontSize: 16.0,
-                                color: Themes.primaryBlue,
+                                color: ThemeColors.primaryBlue,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -185,8 +185,8 @@ class QuickMenuCommunity extends StatelessWidget {
       margin: EdgeInsets.only(right: 5.0),
       child: ActionChip(
         backgroundColor: provider.currentQuickPicked == index
-            ? Themes.greyGainsBoro
-            : Themes.primaryBlue,
+            ? ThemeColors.greyGainsBoro
+            : ThemeColors.primaryBlue,
         onPressed: () {
           provider.setCurrentQuickPicked(index, category.id);
           if (index == 0) {
@@ -200,7 +200,7 @@ class QuickMenuCommunity extends StatelessWidget {
           style: kValueStyle.copyWith(
               fontSize: 11.0,
               color: provider.currentQuickPicked == index
-                  ? Themes.primaryBlue
+                  ? ThemeColors.primaryBlue
                   : Colors.white),
         ),
       ),
@@ -214,7 +214,7 @@ class CommunityBottomCard extends StatelessWidget {
     return ClipPath(
       clipper: RoundedClipper(),
       child: Container(
-        color: Themes.primaryBlue,
+        color: ThemeColors.primaryBlue,
         height: 350.0,
         width: double.infinity,
         child: Column(
@@ -248,7 +248,7 @@ class CommunityBottomCard extends StatelessWidget {
               child: Text(
                 'Buat Komunitas',
                 style: kValueStyle.copyWith(
-                    fontSize: 14.0, color: Themes.primaryBlue),
+                    fontSize: 14.0, color: ThemeColors.primaryBlue),
               ),
             )
           ],

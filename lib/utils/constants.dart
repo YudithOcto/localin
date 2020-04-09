@@ -12,5 +12,5 @@ class Constants {
       'Tangerang, Banten 15810';
 
   static const kValueStyle = TextStyle(
-      fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
+      fontSize: 14.0, color: ThemeColors.black100, fontWeight: FontWeight.w600);
 }

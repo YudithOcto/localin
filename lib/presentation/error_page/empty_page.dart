@@ -33,8 +33,8 @@ class EmptyPage extends StatelessWidget {
           ),
           Text(
             '404',
-            style:
-                kValueStyle.copyWith(fontSize: 40.0, color: Themes.primaryBlue),
+            style: kValueStyle.copyWith(
+                fontSize: 40.0, color: ThemeColors.primaryBlue),
           ),
           SizedBox(
             height: 5.0,
@@ -43,7 +43,7 @@ class EmptyPage extends StatelessWidget {
             'Oops. Page akan segera datang',
             style: kValueStyle.copyWith(
                 fontSize: 20.0,
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 fontWeight: FontWeight.w600),
           ),
           SizedBox(
@@ -56,7 +56,7 @@ class EmptyPage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: kValueStyle.copyWith(
                   fontSize: 16.0,
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   fontWeight: FontWeight.w500),
             ),
           ),

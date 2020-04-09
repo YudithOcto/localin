@@ -9,7 +9,7 @@ import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'input_phone_number.dart';
+import 'input_phone_number_page.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/loginpage';
@@ -96,7 +96,7 @@ class Content extends StatelessWidget {
                             });
                       } else {
                         Navigator.of(context)
-                            .pushNamed(InputPhoneNumber.routeName);
+                            .pushNamed(InputPhoneNumberPage.routeName);
                       }
                     } else {
                       showErrorMessageDialog(context, authState.errorMessage);
@@ -104,7 +104,7 @@ class Content extends StatelessWidget {
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0)),
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   child: Container(
                     height: 40,
                     child: Stack(
@@ -195,7 +195,7 @@ class Content extends StatelessWidget {
                               });
                         } else {
                           Navigator.of(context)
-                              .pushNamed(InputPhoneNumber.routeName);
+                              .pushNamed(InputPhoneNumberPage.routeName);
                         }
                       }
                     }
@@ -203,7 +203,7 @@ class Content extends StatelessWidget {
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0)),
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   child: Container(
                     height: 40,
                     child: Stack(
@@ -244,7 +244,8 @@ class Content extends StatelessWidget {
           child: Visibility(
             visible: authState.state == ViewState.Busy,
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Themes.primaryBlue),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(ThemeColors.primaryBlue),
               strokeWidth: 6.0,
             ),
           ),
@@ -263,7 +264,7 @@ class Content extends StatelessWidget {
             actions: <Widget>[
               RaisedButton(
                 elevation: 5.0,
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('Ok'),
               )

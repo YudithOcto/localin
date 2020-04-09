@@ -121,7 +121,7 @@ class _AvailableHistoryContentWidgetState
                         children: <Widget>[
                           Icon(
                             Icons.filter_list,
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                             size: 20.0,
                           ),
                           SizedBox(
@@ -129,8 +129,8 @@ class _AvailableHistoryContentWidgetState
                           ),
                           Text(
                             'Filter',
-                            style:
-                                kValueStyle.copyWith(color: Themes.primaryBlue),
+                            style: kValueStyle.copyWith(
+                                color: ThemeColors.primaryBlue),
                           ),
                           SizedBox(
                             width: 15.0,

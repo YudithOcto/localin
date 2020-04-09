@@ -11,7 +11,7 @@ class ProfilePageRowCard extends StatelessWidget {
       fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
 
   final kValueStyle = TextStyle(
-      fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
+      fontSize: 14.0, color: ThemeColors.black100, fontWeight: FontWeight.w600);
 
   final Function onSettingPressed;
 
@@ -61,7 +61,7 @@ class ProfilePageRowCard extends StatelessWidget {
                   onTap: onSettingPressed,
                   child: Icon(
                     Icons.settings,
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                   ),
                 ),
               ),
@@ -87,7 +87,7 @@ class ProfilePageRowCard extends StatelessWidget {
                         ? Icon(
                             Icons.verified_user,
                             size: 20.0,
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                           )
                         : Container()
                   ],
@@ -107,7 +107,7 @@ class ProfilePageRowCard extends StatelessWidget {
                             actions: <Widget>[
                               RaisedButton(
                                 elevation: 4.0,
-                                color: Themes.primaryBlue,
+                                color: ThemeColors.primaryBlue,
                                 onPressed: () => Navigator.of(context).pop(),
                                 child: Text(
                                   'Cancel',
@@ -154,7 +154,7 @@ class ProfilePageRowCard extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(30.0),
                             bottomLeft: Radius.circular(30.0))),
@@ -187,7 +187,7 @@ class ProfilePageRowCard extends StatelessWidget {
         Container(
           margin: EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
           decoration: BoxDecoration(
-              border: Border.all(color: Themes.primaryBlue),
+              border: Border.all(color: ThemeColors.primaryBlue),
               borderRadius: BorderRadius.circular(8.0)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -212,7 +212,7 @@ class ProfilePageRowCard extends StatelessWidget {
             actions: <Widget>[
               RaisedButton(
                 elevation: 5.0,
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('Ok'),
               )

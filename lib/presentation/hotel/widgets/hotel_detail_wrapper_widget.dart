@@ -84,7 +84,7 @@ class HotelDetailWrapperWidget extends StatelessWidget {
                       right: 20.0,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Themes.primaryBlue.withOpacity(0.5),
+                            color: ThemeColors.primaryBlue.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(4.0)),
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -153,7 +153,7 @@ class HotelDetailWrapperWidget extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.star,
-          color: Themes.primaryBlue,
+          color: ThemeColors.primaryBlue,
           size: 15.0,
         ),
         SizedBox(
@@ -161,8 +161,8 @@ class HotelDetailWrapperWidget extends StatelessWidget {
         ),
         Text(
           '4.0',
-          style:
-              cardTextStyle.copyWith(fontSize: 11.0, color: Themes.primaryBlue),
+          style: cardTextStyle.copyWith(
+              fontSize: 11.0, color: ThemeColors.primaryBlue),
         ),
         SizedBox(
           width: 25.0,

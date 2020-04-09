@@ -9,7 +9,7 @@ class CommunityHeadingTitleWidget extends StatelessWidget {
   final double textSize;
 
   CommunityHeadingTitleWidget(this.title,
-      {this.color = Themes.primaryBlue, this.textSize = 18.0});
+      {this.color = ThemeColors.primaryBlue, this.textSize = 18.0});
   @override
   Widget build(BuildContext context) {
     return Column(

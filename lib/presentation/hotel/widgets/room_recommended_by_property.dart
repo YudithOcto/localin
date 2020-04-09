@@ -71,7 +71,7 @@ class RoomRecommendedByProperty extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontSize: 10.0,
-                          color: Themes.grey,
+                          color: ThemeColors.grey,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -97,7 +97,7 @@ class RoomRecommendedByProperty extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14.0,
                         fontWeight: FontWeight.w600,
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                       ),
                     ),
                   ),

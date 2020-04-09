@@ -184,7 +184,7 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
                   onPressed: () {
                     Navigator.of(context).pop(address);
                   },
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   child: Text(
                     'Apply',
                     style: TextStyle(

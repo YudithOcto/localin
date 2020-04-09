@@ -47,7 +47,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Themes.lightGrey,
+      backgroundColor: ThemeColors.lightGrey,
       appBar: BaseAppBar(
         appBar: AppBar(),
       ),

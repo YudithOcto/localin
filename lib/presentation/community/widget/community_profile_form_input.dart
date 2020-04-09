@@ -156,7 +156,7 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
                                           child: Align(
                                             alignment: Alignment.bottomRight,
                                             child: FlatButton(
-                                              color: Themes.primaryBlue,
+                                              color: ThemeColors.primaryBlue,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -279,7 +279,7 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 child: Text('OK'),
               )
             ],

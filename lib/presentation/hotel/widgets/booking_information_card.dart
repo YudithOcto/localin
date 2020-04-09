@@ -66,11 +66,11 @@ class BookingInformationCard extends StatelessWidget {
                   child: RaisedButton(
                     onPressed: () {},
                     elevation: 5.0,
-                    color: Themes.greyGainsBoro,
+                    color: ThemeColors.greyGainsBoro,
                     child: Text(
                       'Kirim Bukti Pembelian',
                       style: kValueStyle.copyWith(
-                          color: Themes.primaryBlue, fontSize: 11.0),
+                          color: ThemeColors.primaryBlue, fontSize: 11.0),
                     ),
                   ),
                 ),

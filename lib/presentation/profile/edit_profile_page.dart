@@ -97,10 +97,10 @@ class ScrollContentPage extends StatelessWidget {
                                     labelText: 'Display Name',
                                     enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Themes.primaryBlue)),
+                                            color: ThemeColors.primaryBlue)),
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Themes.primaryBlue))),
+                                            color: ThemeColors.primaryBlue))),
                               ),
                             );
                           },
@@ -138,7 +138,7 @@ class ScrollContentPage extends StatelessWidget {
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
-                                      color: Themes.primaryBlue,
+                                      color: ThemeColors.primaryBlue,
                                       onPressed: () =>
                                           Navigator.of(context).pop('success'),
                                       child: Text(
@@ -243,7 +243,7 @@ class SocialLoginCard extends StatelessWidget {
         ),
         SocialButton(
           onPressed: () {},
-          color: Themes.primaryBlue,
+          color: ThemeColors.primaryBlue,
           textColor: Colors.white,
           title: 'FACEBOOK',
           height: 40.0,
@@ -254,7 +254,7 @@ class SocialLoginCard extends StatelessWidget {
         ),
         SocialButton(
           onPressed: () {},
-          color: Themes.primaryBlue,
+          color: ThemeColors.primaryBlue,
           textColor: Colors.white,
           height: 40.0,
           title: 'GOOGLE',
@@ -279,7 +279,7 @@ class _ShortBioCardState extends State<ShortBioCard> {
       height: 200.0,
       width: double.infinity,
       decoration: BoxDecoration(
-          border: Border.all(color: Themes.primaryBlue),
+          border: Border.all(color: ThemeColors.primaryBlue),
           borderRadius: BorderRadius.circular(10.0)),
       child: Consumer<UserEditProfileProvider>(
         builder: (ctx, state, child) {
@@ -345,12 +345,12 @@ class RowSaveButton extends StatelessWidget {
             elevation: 5.0,
             color: Colors.white,
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Themes.primaryBlue),
+                side: BorderSide(color: ThemeColors.primaryBlue),
                 borderRadius: BorderRadius.circular(8.0)),
             child: Text(
               'Back',
               style: kValueStyle.copyWith(
-                  color: Themes.primaryBlue, fontWeight: FontWeight.bold),
+                  color: ThemeColors.primaryBlue, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
@@ -368,9 +368,9 @@ class RowSaveButton extends StatelessWidget {
               }
             },
             elevation: 5.0,
-            color: Themes.primaryBlue,
+            color: ThemeColors.primaryBlue,
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Themes.primaryBlue),
+                side: BorderSide(color: ThemeColors.primaryBlue),
                 borderRadius: BorderRadius.circular(8.0)),
             child: Text(
               'Save',
@@ -395,7 +395,7 @@ class VerifyAccountCard extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 80.0),
         width: double.infinity,
         decoration: BoxDecoration(
-            border: Border.all(color: Themes.primaryBlue),
+            border: Border.all(color: ThemeColors.primaryBlue),
             borderRadius: BorderRadius.circular(10.0)),
         child: Form(
           key: state.formKey,
@@ -422,10 +422,12 @@ class VerifyAccountCard extends StatelessWidget {
                   decoration: InputDecoration(
                       labelText: 'ID Card Number',
                       enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Themes.primaryBlue),
+                          borderSide:
+                              BorderSide(color: ThemeColors.primaryBlue),
                           borderRadius: BorderRadius.circular(12.0)),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Themes.primaryBlue),
+                          borderSide:
+                              BorderSide(color: ThemeColors.primaryBlue),
                           borderRadius: BorderRadius.circular(12.0))),
                 ),
               ),
@@ -436,7 +438,7 @@ class VerifyAccountCard extends StatelessWidget {
                         height: 100.0,
                         width: 100.0,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Themes.primaryBlue)),
+                            border: Border.all(color: ThemeColors.primaryBlue)),
                         child: Image.file(state.idFile),
                       ),
                     )
@@ -448,9 +450,9 @@ class VerifyAccountCard extends StatelessWidget {
                     showDialogImagePicker(context, state);
                   },
                   elevation: 5.0,
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Themes.primaryBlue),
+                      side: BorderSide(color: ThemeColors.primaryBlue),
                       borderRadius: BorderRadius.circular(8.0)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -490,9 +492,9 @@ class VerifyAccountCard extends StatelessWidget {
                     }
                   },
                   elevation: 5.0,
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Themes.primaryBlue),
+                      side: BorderSide(color: ThemeColors.primaryBlue),
                       borderRadius: BorderRadius.circular(8.0)),
                   child: Text(
                     'Submit',
@@ -518,7 +520,7 @@ class VerifyAccountCard extends StatelessWidget {
             content: Text('Upload your ID'),
             actions: <Widget>[
               RaisedButton(
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 onPressed: () async {
@@ -540,7 +542,7 @@ class VerifyAccountCard extends StatelessWidget {
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () async {
                   Navigator.of(context).pop();
                   var request = await profileState.openCamera(true);

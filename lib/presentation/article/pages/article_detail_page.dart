@@ -198,11 +198,11 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                 delegate: _SliverAppBarDelegate(
                   TabBar(
                     controller: _tabController,
-                    labelColor: Themes.primaryBlue,
+                    labelColor: ThemeColors.primaryBlue,
                     labelStyle:
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                     unselectedLabelColor: Colors.grey,
-                    indicatorColor: Themes.primaryBlue,
+                    indicatorColor: ThemeColors.primaryBlue,
                     tabs: tabs,
                   ),
                 ),

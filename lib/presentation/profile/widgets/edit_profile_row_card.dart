@@ -11,7 +11,7 @@ class EditProfileRowCard extends StatelessWidget {
       fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
 
   final kValueStyle = TextStyle(
-      fontSize: 14.0, color: Themes.black212121, fontWeight: FontWeight.w600);
+      fontSize: 14.0, color: ThemeColors.black100, fontWeight: FontWeight.w600);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class EditProfileRowCard extends StatelessWidget {
               content: Text('Choose your preference to change your image'),
               actions: <Widget>[
                 RaisedButton(
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
                   onPressed: () async {
@@ -46,7 +46,7 @@ class EditProfileRowCard extends StatelessWidget {
                 RaisedButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   onPressed: () async {
                     Navigator.of(context).pop();
                     var request = await profileState.openCamera(false);
@@ -120,7 +120,7 @@ class EditProfileRowCard extends StatelessWidget {
                         child: Container(
                           width: 100.0,
                           decoration: BoxDecoration(
-                              color: Themes.primaryBlue,
+                              color: ThemeColors.primaryBlue,
                               borderRadius: BorderRadius.circular(6.0)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -154,7 +154,7 @@ class EditProfileRowCard extends StatelessWidget {
                                 actions: <Widget>[
                                   RaisedButton(
                                     elevation: 4.0,
-                                    color: Themes.primaryBlue,
+                                    color: ThemeColors.primaryBlue,
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
                                     child: Text(
@@ -200,7 +200,7 @@ class EditProfileRowCard extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30.0),
                                 bottomLeft: Radius.circular(30.0))),
@@ -246,7 +246,7 @@ class EditProfileRowCard extends StatelessWidget {
             actions: <Widget>[
               RaisedButton(
                 elevation: 5.0,
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('Ok'),
               )

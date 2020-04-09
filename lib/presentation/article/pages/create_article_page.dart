@@ -57,7 +57,7 @@ class ScrollContent extends StatelessWidget {
                   hintStyle: TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w600,
-                      color: Themes.lightGrey),
+                      color: ThemeColors.lightGrey),
                 ),
               ),
             ),
@@ -75,7 +75,7 @@ class ScrollContent extends StatelessWidget {
                   hintStyle: TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w600,
-                      color: Themes.lightGrey),
+                      color: ThemeColors.lightGrey),
                 ),
               ),
             ),
@@ -121,7 +121,7 @@ class ScrollContent extends StatelessWidget {
                   hintStyle: TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w600,
-                      color: Themes.lightGrey),
+                      color: ThemeColors.lightGrey),
                 ),
               ),
             ),
@@ -145,7 +145,7 @@ class ScrollContent extends StatelessWidget {
                     showDialogValidate(context, 'image is required');
                   }
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24.0)),
                 child: state.state == ViewState.Idle
@@ -216,7 +216,7 @@ class ScrollContent extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 elevation: 5.0,
                 child: Text('OK'),
               )
@@ -235,7 +235,7 @@ class ScrollContent extends StatelessWidget {
             content: Text('Please choose 1 of your preferences'),
             actions: <Widget>[
               RaisedButton(
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 onPressed: () async {
@@ -257,7 +257,7 @@ class ScrollContent extends StatelessWidget {
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () async {
                   Navigator.of(context).pop();
                   var request = await providerState.getImageFromCamera();
