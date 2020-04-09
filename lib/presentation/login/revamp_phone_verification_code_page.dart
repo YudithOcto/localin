@@ -45,7 +45,29 @@ class _RevampPhoneVerificationCodePageState
                       style: ThemeText.sfRegularBody.copyWith(height: 1.5)),
                 ]),
               ),
-              SizedBox(height: 28.0),
+              Visibility(
+                visible: true,
+                child: Container(
+                  margin: EdgeInsets.only(top: 16.0, bottom: 20.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.0),
+                    color: ThemeColors.red10,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 12.0),
+                    child: Text(
+                      'Code was expired! Please request a new code',
+                      style: ThemeText.sfMediumFootnote
+                          .copyWith(color: ThemeColors.red80),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: false,
+                child: SizedBox(height: 28.0),
+              ),
               ListFormVerificationWidget(
                 length: 4,
                 color: color,
