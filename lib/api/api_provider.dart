@@ -107,7 +107,6 @@ class ApiProvider {
           print('send request：path:${options.uri}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
-            print(token);
             options.headers.clear();
             var header = {
               'Content-Type': 'application/json',

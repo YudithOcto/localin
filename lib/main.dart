@@ -15,6 +15,7 @@ import 'package:localin/presentation/community/pages/community_create_event_page
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
+import 'package:localin/presentation/login/providers/verify_code_provider.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<SearchHotelProvider>(
           create: (_) => SearchHotelProvider(),
-        )
+        ),
       ],
       child: MaterialApp(
         navigatorKey: navigator,

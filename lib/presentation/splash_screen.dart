@@ -39,18 +39,18 @@ class _SplashScreenState extends State<SplashScreen>
       final userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
       final save = await SharedPreferences.getInstance();
-      bool isUserVerify = save.getBool(kUserVerify);
+      bool isUserAlreadyDoneVerifying = save.getBool(kUserVerify);
       if (userCache != null) {
         if (userCache.handphone != null &&
             userCache.handphone.isNotEmpty &&
-            isUserVerify) {
+            isUserAlreadyDoneVerifying) {
           checkGps();
         } else {
-          Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName);
+          Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
+              arguments: {InputPhoneNumberPage.openVerificationCode: false});
         }
       } else {
-        Navigator.of(context)
-            .pushReplacementNamed(InputPhoneNumberPage.routeName);
+        Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       }
     });
   }

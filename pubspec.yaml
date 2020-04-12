@@ -4,7 +4,7 @@ description: Localin app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -40,6 +40,7 @@ dependencies:
   firebase_crashlytics: ^0.1.2+5
   flutter_native_timezone: ^1.0.4
   superellipse_shape: ^0.1.5
+  flutter_styled_toast: ^1.2.1
 
 dev_dependencies:
   flutter_test:

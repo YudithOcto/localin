@@ -46,4 +46,7 @@ abstract class ThemeColors {
   static const green50 = Color(0xFF31B057);
   static const green40 = Color(0xFF83D09A);
   static const green10 = Color(0xFFEAF7EE);
+
+  static const facebookColor = Color(0xFF1877F2);
+  static const googleColor = Color(0xFFEA4335);
 }

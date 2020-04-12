@@ -265,8 +265,8 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   Future<UserBaseModel> verifySmsCode() async {
     var response;
     try {
-      response =
-          await _repository.verifyPhoneVerificationCode(int.parse(_smsCode));
+//      response =
+//          await _repository.verifyPhoneVerificationCode(int.parse(_smsCode));
     } catch (error) {
       response = UserBaseModel.withError('Kode sms tidak boleh kosong');
     }
