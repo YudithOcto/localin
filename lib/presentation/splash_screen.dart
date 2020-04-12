@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
           checkGps();
         } else {
           Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
-              arguments: {InputPhoneNumberPage.openVerificationCode: false});
+              arguments: {InputPhoneNumberPage.userPhoneVerificationCode: ''});
         }
       } else {
         Navigator.of(context).pushReplacementNamed(LoginPage.routeName);

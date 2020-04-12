@@ -14,6 +14,7 @@ class AuthProvider extends BaseModelProvider {
   UserModel userModel = UserModel();
   String errorMessage;
 
+  /// DO CALL LOCALIN LOGIN API
   Future<UserBaseModel> getUserFromApi(
       UserRequest userRequest, String token) async {
     userRequest.fcmToken = token;
@@ -21,35 +22,39 @@ class AuthProvider extends BaseModelProvider {
     return result;
   }
 
-  Future<UserModel> signInWithFacebook(String token) async {
-    setState(ViewState.Busy);
+  /// DO CALL FACEBOOK API
+  Future<UserModel> signInWithFacebook() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    sf.setBool(kUserVerify, false);
     UserBaseModel signInToApiResult;
-    var signInFacebookResult = await SocialSignIn().signInFacebook();
+    final signInFacebookResult = await SocialSignIn().signInFacebook();
     if (signInFacebookResult != null && signInFacebookResult.length > 1) {
       signInToApiResult = await getUserFromApi(
-          UserRequest.fromJson(signInFacebookResult), token);
+          UserRequest.fromJson(signInFacebookResult),
+          sf.getString('tokenFirebase'));
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
     } else {
       errorMessage = signInFacebookResult['error'];
     }
-    setState(ViewState.Idle);
     return userModel;
   }
 
-  Future<UserModel> signInWithGoogle(String token) async {
-    setState(ViewState.Busy);
+  ///DO CALL GOOGLE API
+  Future<UserModel> signInWithGoogle() async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    sf.setBool(kUserVerify, false);
     UserBaseModel signInToApiResult;
     var signInGoogleResult = await SocialSignIn().signInWithGoogle();
     if (signInGoogleResult != null && signInGoogleResult.length > 1) {
-      signInToApiResult =
-          await getUserFromApi(UserRequest.fromJson(signInGoogleResult), token);
+      signInToApiResult = await getUserFromApi(
+          UserRequest.fromJson(signInGoogleResult),
+          sf.getString('tokenFirebase'));
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
     } else {
       errorMessage = signInGoogleResult['error'];
     }
-    setState(ViewState.Idle);
     return userModel;
   }
 

@@ -11,7 +11,7 @@ import '../../text_themes.dart';
 
 class InputPhoneNumberPage extends StatefulWidget {
   static const routeName = '/phoneVerify';
-  static const openVerificationCode = 'openverifyCode';
+  static const userPhoneVerificationCode = 'userPhoneVerificationCode';
   @override
   _InputPhoneNumberPageState createState() => _InputPhoneNumberPageState();
 }
@@ -21,8 +21,8 @@ class _InputPhoneNumberPageState extends State<InputPhoneNumberPage> {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    bool openVerificationCode =
-        routeArgs[InputPhoneNumberPage.openVerificationCode];
+    String openVerificationCode =
+        routeArgs[InputPhoneNumberPage.userPhoneVerificationCode];
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -47,7 +47,7 @@ class _InputPhoneNumberPageState extends State<InputPhoneNumberPage> {
 }
 
 class ColumnContent extends StatefulWidget {
-  final bool isVerificationCodeOpen;
+  final String isVerificationCodeOpen;
   ColumnContent({this.isVerificationCodeOpen});
 
   @override
@@ -64,8 +64,9 @@ class _ColumnContentState extends State<ColumnContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
-      if (widget.isVerificationCodeOpen) {
-        openVerificationCodePage(context);
+      if (widget.isVerificationCodeOpen.isNotNullOrNotEmpty) {
+        openVerificationCodePage(context,
+            phoneNumber: widget.isVerificationCodeOpen);
       }
       isInit = false;
     }
@@ -231,5 +232,11 @@ class _ColumnContentState extends State<ColumnContent> {
                     )),
               ));
     });
+  }
+}
+
+extension on String {
+  bool get isNotNullOrNotEmpty {
+    return this != null && this.isNotEmpty;
   }
 }

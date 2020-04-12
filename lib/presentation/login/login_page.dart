@@ -1,12 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
-import 'package:localin/presentation/login/phone_verification_page.dart';
+import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
 class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var authState = Provider.of<AuthProvider>(context);
     return Stack(
       fit: StackFit.loose,
       children: <Widget>[
@@ -81,35 +79,7 @@ class Content extends StatelessWidget {
                 width: double.infinity,
                 child: RaisedButton(
                   elevation: 2.0,
-                  onPressed: () async {
-                    SharedPreferences sf =
-                        await SharedPreferences.getInstance();
-                    final result = await authState
-                        .signInWithFacebook(sf.getString('tokenFirebase'));
-                    if (result != null &&
-                        authState.errorMessage != null &&
-                        authState.errorMessage.isEmpty) {
-                      final save = await SharedPreferences.getInstance();
-                      save.setBool(kUserVerify, false);
-                      if (result.handphone != null &&
-                          result.handphone.isNotEmpty) {
-                        Navigator.of(context).pushNamed(
-                            PhoneVerificationPage.routeName,
-                            arguments: {
-                              PhoneVerificationPage.phone: result.handphone,
-                              PhoneVerificationPage.isBackButtonActive: false,
-                            });
-                      } else {
-                        Navigator.of(context).pushNamed(
-                            InputPhoneNumberPage.routeName,
-                            arguments: {
-                              InputPhoneNumberPage.openVerificationCode: false
-                            });
-                      }
-                    } else {
-                      showErrorMessageDialog(context, authState.errorMessage);
-                    }
-                  },
+                  onPressed: () => thirdPartySignIn(context, isFacebook: true),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0)),
                   color: ThemeColors.facebookColor,
@@ -151,62 +121,7 @@ class Content extends StatelessWidget {
                 width: double.infinity,
                 child: RaisedButton(
                   elevation: 2.0,
-                  onPressed: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0)),
-                              content: Row(
-                                children: <Widget>[
-                                  Container(
-                                      width: 36.0,
-                                      height: 36.0,
-                                      child: CircularProgressIndicator()),
-                                  SizedBox(
-                                    width: 17.0,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                        'Signing you in and loading your data',
-                                        style: ThemeText.sfMediumBody.copyWith(
-                                            color: ThemeColors.black80)),
-                                  ),
-                                ],
-                              ),
-                            ));
-
-                    SharedPreferences sf =
-                        await SharedPreferences.getInstance();
-                    final result = await authState
-                        .signInWithGoogle(sf.getString('tokenFirebase'));
-                    if (result != null) {
-                      Navigator.of(context, rootNavigator: true).pop();
-                      if (authState.errorMessage.isNotEmpty) {
-                        showErrorMessageDialog(context, authState.errorMessage);
-                      } else {
-                        final save = await SharedPreferences.getInstance();
-                        save.setBool(kUserVerify, false);
-                        if (result.handphone != null &&
-                            result.handphone.isNotEmpty) {
-                          Navigator.of(context).pushNamed(
-                              PhoneVerificationPage.routeName,
-                              arguments: {
-                                PhoneVerificationPage.phone: result.handphone,
-                                PhoneVerificationPage.isBackButtonActive: false,
-                              });
-                        } else {
-                          Navigator.of(context).pushNamed(
-                              InputPhoneNumberPage.routeName,
-                              arguments: {
-                                InputPhoneNumberPage.openVerificationCode:
-                                    false,
-                              });
-                        }
-                      }
-                    }
-                    //
-                  },
+                  onPressed: () => thirdPartySignIn(context, isFacebook: false),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0)),
                   color: ThemeColors.googleColor,
@@ -255,36 +170,46 @@ class Content extends StatelessWidget {
             )
           ],
         ),
-//        Center(
-//          child: Visibility(
-//            visible: authState.state == ViewState.Busy,
-//            child: CircularProgressIndicator(
-//              valueColor:
-//                  AlwaysStoppedAnimation<Color>(ThemeColors.primaryBlue),
-//              strokeWidth: 6.0,
-//            ),
-//          ),
-//        )
       ],
     );
   }
 
-  void showErrorMessageDialog(BuildContext context, String error) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Login'),
-            content: Text(error),
-            actions: <Widget>[
-              RaisedButton(
-                elevation: 5.0,
-                color: ThemeColors.primaryBlue,
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('Ok'),
-              )
-            ],
-          );
-        });
+  openPhoneVerificationPage(BuildContext context, String phone) {
+    Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
+        arguments: {InputPhoneNumberPage.userPhoneVerificationCode: phone});
+  }
+
+  openInputPhoneNumberPage(BuildContext context) {
+    Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
+        arguments: {InputPhoneNumberPage.userPhoneVerificationCode: ''});
+  }
+
+  thirdPartySignIn(BuildContext context, {bool isFacebook}) async {
+    CustomDialog.showLoadingDialog(context);
+    final authState = Provider.of<AuthProvider>(context, listen: false);
+    final result = isFacebook
+        ? await authState.signInWithFacebook()
+        : await authState.signInWithGoogle();
+    if (authState.errorMessage.isError) {
+      CustomDialog.closeDialog(context);
+      CustomToast.showCustomToast(context, authState.errorMessage);
+    } else {
+      if (result.handphone.isNotNullOrNotEmpty) {
+        openPhoneVerificationPage(context, result.handphone);
+      } else {
+        openInputPhoneNumberPage(context);
+      }
+    }
+  }
+}
+
+extension on String {
+  bool get isError {
+    ///because result not null and error field is empty
+    return this != null && this.isNotEmpty;
+  }
+
+  bool get isNotNullOrNotEmpty {
+    return this != null && this.isNotEmpty;
   }
 }
