@@ -58,9 +58,6 @@ class VerifyCodeProvider with ChangeNotifier {
   Future<UserBaseModel> verifySmsCode() async {
     verifyingCodeStateChanges();
     String verifyCode = '';
-    for (int i = 0; i < _nodes.length; i++) {
-      verifyCode += _editingController[i].text;
-    }
     _editingController.forEach((value) => verifyCode += value.text);
 
     final response =
