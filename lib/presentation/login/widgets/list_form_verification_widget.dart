@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/login/providers/verify_code_provider.dart';
 import 'package:localin/presentation/login/widgets/single_form_verification_widget.dart';
-import 'package:localin/themes.dart';
 
 class ListFormVerificationWidget extends StatefulWidget {
   const ListFormVerificationWidget({

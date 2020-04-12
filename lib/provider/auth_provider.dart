@@ -34,6 +34,7 @@ class AuthProvider extends BaseModelProvider {
           sf.getString('tokenFirebase'));
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
+      updateUserModelAndCache(userModel?.handphone);
     } else {
       errorMessage = signInFacebookResult['error'];
     }
@@ -52,6 +53,7 @@ class AuthProvider extends BaseModelProvider {
           sf.getString('tokenFirebase'));
       errorMessage = signInToApiResult.error;
       userModel = signInToApiResult.userModel;
+      updateUserModelAndCache(userModel?.handphone);
     } else {
       errorMessage = signInGoogleResult['error'];
     }

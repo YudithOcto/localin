@@ -68,7 +68,7 @@ class VerifyContentFormWidget extends StatelessWidget {
                   ]),
                 ),
                 Visibility(
-                  visible: provider.timerState == TimerState.Expired,
+                  visible: provider.timerState.isExpired,
                   child: Container(
                     margin: EdgeInsets.only(top: 16.0, bottom: 20.0),
                     decoration: BoxDecoration(
@@ -99,8 +99,11 @@ class VerifyContentFormWidget extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       onTap: () async {
+                        /// Only after expired that user can request new code again
                         if (provider.timerState.isExpired) {
-                          provider.requestingVerifyCodeBySms(phoneNumber);
+                          provider.enabledForm();
+                          provider.requestingCodeBySms(phoneNumber);
+                          provider.setAllFieldsFilled();
                         }
                       },
                       child: Text(
@@ -112,8 +115,7 @@ class VerifyContentFormWidget extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: provider.seconds > 0 &&
-                          provider.timerState.isOnProgress,
+                      visible: provider.timerState.isOnProgress,
                       child: Text(
                         '${provider?.currentDifference}',
                         textAlign: TextAlign.center,
@@ -125,7 +127,7 @@ class VerifyContentFormWidget extends StatelessWidget {
                       width: 8.21,
                     ),
                     Visibility(
-                      visible: provider.isRequestingVerifyCode,
+                      visible: provider.requestingNewSmSCode,
                       child: Container(
                         width: 11.57,
                         height: 11.57,
@@ -149,23 +151,22 @@ class VerifyContentFormWidget extends StatelessWidget {
             backgroundColor: ThemeColors.primaryBlue,
             isLoading: provider.isVerifyCodeNumber,
             onPressed: () async {
-              if (provider.isFormFieldsCompleted) {
+              if (!provider.isFormDisabled && provider.isAllFieldsFilled) {
                 final response = await provider.verifySmsCode();
-                if (response.isError != null && !response.isError) {
+                FocusScope.of(context).requestFocus(provider.nodeController[0]);
+                if (response.error != null) {
+                  customShowToast(context, '${response.error}');
+                  if (response.error.contains('ganti')) {
+                    provider.disabledForm();
+                  }
+                } else {
                   pushDataToLocalCache(context, provider);
                   Navigator.of(context)
                       .pushReplacementNamed(MainBottomNavigation.routeName);
-                } else {
-                  customShowToast(context, '${response.error}');
-                  FocusScope.of(context)
-                      .requestFocus(provider.nodeController[0]);
-                  provider.formController[0].selection =
-                      TextSelection.collapsed(offset: 0);
-                  provider.verifyingCodeStateChanges();
-                  provider.clearTextFormField();
                 }
               } else {
-                customShowToast(context, 'Input all fields first');
+                customShowToast(
+                    context, 'You are required to fill in all fields');
               }
             },
           )
