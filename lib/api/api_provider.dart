@@ -104,7 +104,7 @@ class ApiProvider {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options) async {
-          print('send request：path:${options.uri} ${options.queryParameters}');
+          print('send request：path:${options.uri} ${options.data.toString()}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
             options.headers.clear();
