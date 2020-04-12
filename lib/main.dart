@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,21 +30,8 @@ import 'package:localin/services/location_services.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'model/firebase/message.dart';
 import 'model/service/user_location.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-
-main() {
-  Crashlytics.instance.enableInDevMode = true;
-
-  // Pass all uncaught errors from the framework to Crashlytics.
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
-
-  runZoned(() {
-    runApp(MyApp());
-  }, onError: Crashlytics.instance.recordError);
-}
 
 final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 

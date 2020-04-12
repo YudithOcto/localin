@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:localin/api/api_constant.dart';
+import 'package:localin/build_environment.dart';
 import 'package:localin/main.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
@@ -44,7 +45,7 @@ class ApiProvider {
 
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
-        baseUrl: ApiConstant.kBaseUrl,
+        baseUrl: buildEnvironment.baseUrl,
         receiveTimeout: 20000,
         maxRedirects: 3,
         connectTimeout: 20000);

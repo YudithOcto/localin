@@ -51,6 +51,7 @@ flutter:
   uses-material-design: true
   assets:
     - images/
+    - config/
   fonts:
     - family: OpenSans
       fonts:
