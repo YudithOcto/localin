@@ -21,21 +21,18 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserProfileProvider>(
-      create: (_) => UserProfileProvider(),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 5.0,
-          backgroundColor: Theme.of(context).canvasColor,
-          title: Image.asset(
-            'images/app_bar_logo.png',
-            width: MediaQuery.of(context).size.width * 0.3,
-            height: 50.0,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 5.0,
+        backgroundColor: Theme.of(context).canvasColor,
+        title: Image.asset(
+          'images/app_bar_logo.png',
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: 50.0,
         ),
-        body: Content(),
       ),
+      body: Content(),
     );
   }
 }

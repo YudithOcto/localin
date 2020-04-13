@@ -29,6 +29,7 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
+import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,6 +87,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<SearchHotelProvider>(
           create: (_) => SearchHotelProvider(),
+        ),
+        ChangeNotifierProvider<UserProfileProvider>(
+          create: (_) => UserProfileProvider(),
         )
       ],
       child: MaterialApp(

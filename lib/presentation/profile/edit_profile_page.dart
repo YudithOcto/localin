@@ -113,51 +113,56 @@ class ScrollContentPage extends StatelessWidget {
                   onPressed: () async {
                     if (authState.userModel.handphone != null &&
                         authState.userModel.handphone.isNotEmpty) {
-                      final result =
-                          await Provider.of<UserProfileProvider>(context)
-                              .authenticateUserDanaAccount(
-                                  authState.userModel.handphone);
-                      if (result.urlRedirect.isNotEmpty && !result.error) {
-                        final response = await Navigator.of(context)
-                            .pushNamed(WebViewPage.routeName, arguments: {
-                          WebViewPage.urlName: result.urlRedirect
-                        });
-                        if (response != null && response == 'success') {
-                          final dialogResult = await showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('DANA'),
-                                  content: Text(
-                                    'Connect to dana success',
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      color: Themes.primaryBlue,
-                                      onPressed: () =>
-                                          Navigator.of(context).pop('success'),
-                                      child: Text(
-                                        'Ok',
-                                        style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              });
+                      try {
+                        final result = await Provider.of<UserProfileProvider>(
+                                context,
+                                listen: false)
+                            .authenticateUserDanaAccount(
+                                authState.userModel.handphone);
+                        if (result.urlRedirect.isNotEmpty && !result.error) {
+                          final response = await Navigator.of(context)
+                              .pushNamed(WebViewPage.routeName, arguments: {
+                            WebViewPage.urlName: result.urlRedirect
+                          });
+                          if (response != null && response == 'success') {
+                            final dialogResult = await showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('DANA'),
+                                    content: Text(
+                                      'Connect to dana success',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        color: Themes.primaryBlue,
+                                        onPressed: () => Navigator.of(context)
+                                            .pop('success'),
+                                        child: Text(
+                                          'Ok',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                });
 
-                          if (dialogResult == 'success') {
-                            Provider.of<UserProfileProvider>(context)
-                                .getUserDanaStatus();
+                            if (dialogResult == 'success') {
+                              Provider.of<UserProfileProvider>(context)
+                                  .getUserDanaStatus();
+                            }
                           }
                         }
+                      } catch (error) {
+                        print(error);
                       }
                     } else {
                       Scaffold.of(context).showSnackBar(SnackBar(
