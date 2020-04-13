@@ -46,8 +46,10 @@ class _SplashScreenState extends State<SplashScreen>
             isUserAlreadyDoneVerifying) {
           checkGps();
         } else {
-          Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
-              arguments: {InputPhoneNumberPage.userPhoneVerificationCode: ''});
+          Navigator.of(context)
+              .pushNamed(InputPhoneNumberPage.routeName, arguments: {
+            InputPhoneNumberPage.userPhoneVerificationCode: userCache.handphone
+          });
         }
       } else {
         Navigator.of(context).pushReplacementNamed(LoginPage.routeName);

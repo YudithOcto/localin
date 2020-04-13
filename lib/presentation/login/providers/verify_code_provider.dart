@@ -10,48 +10,57 @@ class VerifyCodeProvider with ChangeNotifier {
 
   /// UI STATE MANAGEMENT
   bool _isVerifyingCodeNumber = false;
-  bool _isRequestingVerifyCode = false;
+  bool _isRequestingNewSmsCode = false;
+  String errorMessage = '';
   Color _color = ThemeColors.black0;
-  bool _isEnabled = false;
-  String _currentDifference = '';
-  bool _isVerifyFormFieldCompleted = false;
+  bool _isFormDisabled = false;
+  bool _isAllFieldsFilled = false;
   final List<TextEditingController> _editingController =
       List<TextEditingController>();
   final _nodes = List<FocusNode>();
-  TimerState _timerState = TimerState.Default;
-  Timer _timer;
-  int _seconds = 120;
 
   /// TIMER
+  TimerState _timerState = TimerState.Default;
+  Timer _timer;
+  String _currentDifference = '';
+
   VerifyCodeProvider() {
-    createFormTextField();
+    initTextFormField();
     _startTimer();
   }
 
-  createFormTextField() {
+  initTextFormField() {
     for (int i = 0; i < 4; i++) {
       _nodes.add(FocusNode());
       _editingController.add(TextEditingController(text: ""));
     }
   }
 
-  void setCodeInputStatusCompleted() {
-    _isVerifyFormFieldCompleted = !_isVerifyFormFieldCompleted;
+  void clearTextFormField() {
+    _editingController.forEach((value) => value.clear());
+  }
+
+  void enabledForm() {
+    _isFormDisabled = false;
+    _color = ThemeColors.black0;
     notifyListeners();
   }
 
-  void clearTextFormField() {
-    _editingController.forEach((value) => value.clear());
-    setCodeInputStatusCompleted();
+  void disabledForm() {
+    _isFormDisabled = true;
+    _color = ThemeColors.black10;
+    notifyListeners();
   }
 
-  verifyingCodeStateChanges() {
+  verifyingCodeStateChanges({bool isNeedToDisableForm = false}) {
     _isVerifyingCodeNumber = !_isVerifyingCodeNumber;
-    _isEnabled = !_isEnabled;
-    _color = !_isEnabled ? ThemeColors.black0 : ThemeColors.black10;
-    if (_timer == null) {
-      _startTimer();
-    }
+    _color = _isVerifyingCodeNumber ? ThemeColors.black10 : ThemeColors.black0;
+    notifyListeners();
+  }
+
+  void setAllFieldsFilled() {
+    _isAllFieldsFilled = !_isAllFieldsFilled;
+    notifyListeners();
   }
 
   /// API RELATED
@@ -62,20 +71,24 @@ class VerifyCodeProvider with ChangeNotifier {
 
     final response =
         await _repository.verifyPhoneVerificationCode(int.parse(verifyCode));
+    clearTextFormField();
+    verifyingCodeStateChanges();
     return response;
   }
 
-  Future<UserBaseModel> requestingVerifyCodeBySms(String phoneNumber) async {
+  Future<UserBaseModel> requestingCodeBySms(String phoneNumber) async {
     _startTimer();
-    _isRequestingVerifyCode = !_isRequestingVerifyCode;
+    _requestingNewSmsCodeCircular();
     if (!phoneNumber.startsWith('0')) {
       phoneNumber = '0$phoneNumber';
     }
     final response = await _repository.userPhoneRequestCode(phoneNumber);
-    if (response != null) {
-      _isRequestingVerifyCode = !_isRequestingVerifyCode;
-    }
+    _requestingNewSmsCodeCircular();
     return response;
+  }
+
+  void _requestingNewSmsCodeCircular() {
+    _isRequestingNewSmsCode = !_isRequestingNewSmsCode;
   }
 
   @override
@@ -87,21 +100,23 @@ class VerifyCodeProvider with ChangeNotifier {
   }
 
   void _startTimer() {
+    if (_timer != null && _timer.isActive) {
+      return;
+    }
     DateTime startDateTime = DateTime.now().add(Duration(seconds: 120));
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       DateTime timeNow = DateTime.now();
-      if (_seconds == 0) {
+      if (timer.tick == 120) {
         _cancelTimer();
-        _seconds = 120;
         _timerState = TimerState.Expired;
-        _timer = null;
+        _editingController.forEach((value) => value.clear());
+        disabledForm();
         notifyListeners();
         return;
       }
 
       _currentDifference =
           '${startDateTime.difference(timeNow).inMinutes.toString().padLeft(2, '0')}:${(startDateTime.difference(timeNow).inSeconds % 60).toString().padLeft(2, '0')}';
-      _seconds--;
       _timerState = TimerState.Progress;
       notifyListeners();
     });
@@ -110,19 +125,19 @@ class VerifyCodeProvider with ChangeNotifier {
   _cancelTimer() {
     if (_timer != null && _timer.isActive) {
       _timer?.cancel();
+      _timer = null;
     }
   }
 
   String get currentDifference => _currentDifference;
   bool get isVerifyCodeNumber => _isVerifyingCodeNumber;
-  bool get isRequestingVerifyCode => _isRequestingVerifyCode;
-  bool get isFormEnabled => _isEnabled;
+  bool get requestingNewSmSCode => _isRequestingNewSmsCode;
   Color get formColor => _color;
   List<TextEditingController> get formController => _editingController;
   List<FocusNode> get nodeController => _nodes;
-  int get seconds => _seconds;
   TimerState get timerState => _timerState;
-  bool get isFormFieldsCompleted => _isVerifyFormFieldCompleted;
+  bool get isFormDisabled => _isFormDisabled;
+  bool get isAllFieldsFilled => _isAllFieldsFilled;
 }
 
 enum TimerState { Default, Progress, Expired }

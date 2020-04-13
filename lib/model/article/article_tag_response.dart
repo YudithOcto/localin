@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:localin/model/article/tag_model.dart';
 
 class ArticleTagResponse {
