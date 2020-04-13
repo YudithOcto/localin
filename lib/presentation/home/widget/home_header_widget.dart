@@ -1,0 +1,194 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dash/flutter_dash.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/text_themes.dart';
+import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
+
+class HomeHeaderWidget extends StatefulWidget {
+  @override
+  _HomeHeaderWidgetState createState() => _HomeHeaderWidgetState();
+}
+
+class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Image.asset(
+                'images/curve_base.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              top: 26.36 + MediaQuery.of(context).padding.top,
+              left: 20.0,
+              right: 20.0,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Image.asset(
+                        'images/localin_logo.png',
+                        fit: BoxFit.cover,
+                        height: 32.99,
+                        width: 119.72,
+                      ),
+                      CachedNetworkImage(
+                        imageUrl:
+                            Provider.of<AuthProvider>(context, listen: false)
+                                ?.userModel
+                                ?.imageProfile,
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            height: 40.0,
+                            width: 40.0,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                )),
+                          );
+                        },
+                        placeholder: (context, url) => CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 50.0,
+                        ),
+                        errorWidget: (context, url, child) => CircleAvatar(
+                          radius: 50.0,
+                          backgroundColor: Colors.blue,
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  Container(
+                    height: 64.0,
+                    decoration: BoxDecoration(
+                        color: ThemeColors.black100.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 16.0, right: 19.79),
+                          child: Image.asset(
+                            'images/dana_logo_white.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 28.0,
+                          width: 47.0,
+                          alignment: FractionalOffset.center,
+                          decoration: BoxDecoration(
+                              color: ThemeColors.yellow,
+                              borderRadius: BorderRadius.circular(4.0)),
+                          child: Text(
+                            'ADD',
+                            textAlign: TextAlign.center,
+                            style: ThemeText.sfSemiBoldFootnote,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: SizedBox(
+                            height: 32.0,
+                            child: Dash(
+                              direction: Axis.vertical,
+                              length: 32.0,
+                              dashThickness: 1.5,
+                              dashColor: ThemeColors.black20,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: SvgPicture.asset(
+                            'images/point_icon.svg',
+                            width: 24.0,
+                            height: 24.0,
+                          ),
+                        ),
+                        Text(
+                          '0 Point',
+                          style: ThemeText.sfRegularHeadline
+                              .copyWith(color: ThemeColors.black0),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        HomeSingleServicesWrapperWidget(
+                          serviceIcon: 'home_service_stay_icon.svg',
+                          serviceName: 'STAY',
+                        ),
+                        HomeSingleServicesWrapperWidget(
+                          serviceIcon: 'home_service_eat_icon.svg',
+                          serviceName: 'EAT',
+                        ),
+                        HomeSingleServicesWrapperWidget(
+                          serviceIcon: 'home_service_attraction_icon.svg',
+                          serviceName: 'ATTRACT',
+                        ),
+                        HomeSingleServicesWrapperWidget(
+                          serviceIcon: 'home_service_ticket_icon.svg',
+                          serviceName: 'EVENT',
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class HomeSingleServicesWrapperWidget extends StatelessWidget {
+  final String serviceIcon;
+  final String serviceName;
+
+  HomeSingleServicesWrapperWidget({this.serviceIcon, this.serviceName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        SvgPicture.asset(
+          'images/$serviceIcon',
+          width: 62.0,
+          height: 62.0,
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        Text(
+          '$serviceName',
+          style: ThemeText.sfSemiBoldCaption.copyWith(color: Colors.white),
+        )
+      ],
+    );
+  }
+}

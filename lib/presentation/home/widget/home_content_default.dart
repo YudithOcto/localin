@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/home/widget/row_article.dart';
+import 'package:localin/presentation/home/widget/articles/row_article.dart';
+import 'package:localin/presentation/home/widget/row_community.dart';
 import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 
 class HomeContentDefault extends StatelessWidget {
@@ -13,13 +14,10 @@ class HomeContentDefault extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 50.0),
       child: Column(
         children: <Widget>[
-          RowQuickMenu(
-            isHomePage: isHomePage,
-            onPressed: onSearchBarPressed,
+          RowCommunity(),
+          SizedBox(
+            height: 12.0,
           ),
-          containerDivider(25.0),
-          //RowCommunity(),
-          //containerDivider(5.0),
           RowArticle()
         ],
       ),

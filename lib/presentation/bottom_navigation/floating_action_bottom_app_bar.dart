@@ -1,4 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/text_themes.dart';
 
 class FloatingActionBottomAppBarItem {
   String iconData;
@@ -37,6 +41,20 @@ class FloatingActionBottomAppBar extends StatefulWidget {
 class _FloatingActionBottomAppBarState
     extends State<FloatingActionBottomAppBar> {
   int _selectedIndex = 0;
+  final iconActive = [
+    'images/feed_active.svg',
+    'images/new_active.svg',
+    'images/transaction_active.svg',
+    'images/inbox_active.svg',
+    'images/profile_active.svg',
+  ];
+  final iconInactive = [
+    'images/feed_inactive.svg',
+    'images/news_inactive.svg',
+    'images/transaction_inactive.svg',
+    'images/inbox_inactive.svg',
+    'images/profile_inactive.svg',
+  ];
 
   _updateIndex(int index) {
     widget.onTabSelected(index);
@@ -74,6 +92,8 @@ class _FloatingActionBottomAppBarState
       int index,
       ValueChanged<int> onPressed}) {
     Color color = _selectedIndex == index ? widget.selectedColor : widget.color;
+    String image =
+        _selectedIndex == index ? iconActive[index] : iconInactive[index];
     return Expanded(
       child: SizedBox(
         height: widget.height,
@@ -85,21 +105,18 @@ class _FloatingActionBottomAppBarState
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ImageIcon(
-                  ExactAssetImage(item.iconData),
-                  color: color,
+                SvgPicture.asset(
+                  '$image',
+                  width: 24.0,
+                  height: 24.0,
                 ),
                 SizedBox(
-                  height: 3.0,
+                  height: 7.8,
                 ),
-                Text(
-                  item.text,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: color,
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.w600),
-                )
+                Text(item.text,
+                    overflow: TextOverflow.fade,
+                    style:
+                        ThemeText.sfSemiBoldFootnote.copyWith(fontSize: 11.0))
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:localin/build_environment.dart';
 
 class WebViewPage extends StatefulWidget {
   static const routeName = '/webviewPage';
@@ -45,7 +46,7 @@ class _WebViewPageState extends State<WebViewPage> {
       if (mounted) {
         setState(() {
           print("URL changed: $url");
-          if (url.startsWith('https://api.localin.xyz/payment/dana/auth')) {
+          if (url.startsWith('${buildEnvironment.baseUrl}payment/dana/auth')) {
             Navigator.of(context).pop('success');
             flutterWebviewPlugin.close();
           }

@@ -9,13 +9,13 @@ import 'package:localin/model/community/community_detail.dart';
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
   List<CommunityDetail> communityDetail = List();
-  List<ArticleDetail> articleDetail = List();
+  List<ArticleDetail> articleDetail;
   bool isRoomPage = false;
   String previewUrl = '';
   int total = 0;
   final int pageSize = 3;
   int counter = 1;
-  bool isLoading = true;
+  bool isLoading = false;
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
     final response = await _repository.getCommunityList(search);

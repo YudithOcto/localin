@@ -10,7 +10,7 @@ import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../../../themes.dart';
+import '../../../../themes.dart';
 
 class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
