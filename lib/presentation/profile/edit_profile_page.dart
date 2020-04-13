@@ -209,19 +209,19 @@ class ScrollContentPage extends StatelessWidget {
     );
   }
 
-  Future<bool> _onWillPop(BuildContext context) {
+  Future<bool> _onWillPop(BuildContext context) async {
     return Provider.of<UserEditProfileProvider>(context) != null &&
             Provider.of<UserEditProfileProvider>(context).isProfileNeedUpdate
         ? showDialog(
             context: context,
-            builder: (context) => new AlertDialog(
+            builder: (ctx) => new AlertDialog(
               title: new Text('Profile save'),
               content: new Text(
                   'You have changed that not yet saved. Do you want to save first?'),
               actions: <Widget>[
                 new FlatButton(
                   onPressed: () {
-                    Provider.of<UserEditProfileProvider>(context)
+                    Provider.of<UserEditProfileProvider>(context, listen: false)
                         .clearChangedFile();
                     Navigator.of(context).pop(true);
                   },
