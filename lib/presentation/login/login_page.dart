@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/presentation/login/phone_verification_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/themes.dart';
@@ -238,6 +240,33 @@ class Content extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 30.0,
+            ),
+            RichText(
+              text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: 'By continuing, you agree to our',
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey)),
+                TextSpan(
+                    text: ' Privacy Policy',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        final response = await Navigator.of(context)
+                            .pushNamed(WebViewPage.routeName, arguments: {
+                          WebViewPage.urlName:
+                              'https://localin.id/privacy-policy.html',
+                        });
+                      },
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w600,
+                        color: Themes.primaryBlue)),
+              ]),
+            )
           ],
         ),
         Center(
