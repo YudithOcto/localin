@@ -12,7 +12,8 @@ class HomeContentDefault extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 50.0),
-      child: Column(
+      child: ListView(
+        shrinkWrap: true,
         children: <Widget>[
           RowCommunity(),
           SizedBox(

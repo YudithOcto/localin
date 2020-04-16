@@ -110,16 +110,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Consumer<HomeProvider>(
-          builder: (ctx, state, child) {
-            return Column(
-              children: <Widget>[
+      body: Consumer<HomeProvider>(
+        builder: (ctx, state, child) {
+          return Column(
+            children: <Widget>[
 //              HomeHeaderCard(notifyParent: () {
 //                setState(() {});
 //              }),
-                HomeHeaderWidget(),
-                HomeContentDefault(),
+              HomeHeaderWidget(),
+              HomeContentDefault(),
 //                state.isRoomPage
 //                    ? SearchHotelWidget(
 //                        isHomePage: true,
@@ -130,10 +129,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 //                          widget.valueChanged(4);
 //                        },
 //                      ),
-              ],
-            );
-          },
-        ),
+            ],
+          );
+        },
       ),
     );
   }
