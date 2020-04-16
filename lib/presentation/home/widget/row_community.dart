@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/home/widget/community/community_empty_page.dart';
 import 'package:localin/presentation/home/widget/community_single_card.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -52,11 +54,22 @@ class _RowCommunityState extends State<RowCommunity> {
                   )
                 ],
               ),
-              Text(
-                'Discover',
-                textAlign: TextAlign.center,
-                style: ThemeText.sfSemiBoldHeadline
-                    .copyWith(color: ThemeColors.primaryBlue),
+              InkWell(
+                onTap: () async {
+                  final result = await Navigator.of(context)
+                      .pushNamed(CommunityCreateEditPage.routeName, arguments: {
+                    CommunityCreateEditPage.isUpdatePage: false,
+                  });
+                  if (result != null) {
+                    /// refresh the page
+                  }
+                },
+                child: Text(
+                  'Discover',
+                  textAlign: TextAlign.center,
+                  style: ThemeText.sfSemiBoldHeadline
+                      .copyWith(color: ThemeColors.primaryBlue),
+                ),
               )
             ],
           ),
@@ -71,7 +84,7 @@ class _RowCommunityState extends State<RowCommunity> {
                 return Center(child: CircularProgressIndicator());
               } else {
                 if (snapshot.error != null) {
-                  return EmptyPage();
+                  return CommunityEmptyPage();
                 } else {
                   return Container(
                     width: MediaQuery.of(context).size.width,

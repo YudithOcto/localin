@@ -7,6 +7,7 @@ import 'package:localin/presentation/home/widget/home_header_widget.dart';
 import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:provider/provider.dart';
 import '../../themes.dart';
 
@@ -28,14 +29,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       if (updateAndroidIntent) {
-        checkGps();
+        checkGps(fromDialog: true);
       }
     }
   }
 
-  checkGps() async {
-    final isGpsOn = await location.isLocationServiceEnabled();
-
+  checkGps({bool fromDialog = false}) async {
+    bool isGpsOn = true;
+    if (isGpsOn) {
+      isGpsOn = await location.isLocationServiceEnabled();
+    } else {
+      isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
+          .getUserLocation();
+    }
     if (!isGpsOn) {
       showDialog(
           barrierDismissible: false,
@@ -110,15 +116,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<HomeProvider>(
-        builder: (ctx, state, child) {
-          return Column(
-            children: <Widget>[
+      body: SingleChildScrollView(
+        child: Consumer<HomeProvider>(
+          builder: (ctx, state, child) {
+            return ListView(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              children: <Widget>[
 //              HomeHeaderCard(notifyParent: () {
 //                setState(() {});
 //              }),
-              HomeHeaderWidget(),
-              HomeContentDefault(),
+                HomeHeaderWidget(),
+                HomeContentDefault(),
 //                state.isRoomPage
 //                    ? SearchHotelWidget(
 //                        isHomePage: true,
@@ -129,9 +138,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 //                          widget.valueChanged(4);
 //                        },
 //                      ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

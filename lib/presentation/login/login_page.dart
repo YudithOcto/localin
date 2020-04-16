@@ -175,12 +175,12 @@ class Content extends StatelessWidget {
   }
 
   openPhoneVerificationPage(BuildContext context, String phone) {
-    Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
+    Navigator.of(context).pushReplacementNamed(InputPhoneNumberPage.routeName,
         arguments: {InputPhoneNumberPage.userPhoneVerificationCode: phone});
   }
 
   openInputPhoneNumberPage(BuildContext context) {
-    Navigator.of(context).pushNamed(InputPhoneNumberPage.routeName,
+    Navigator.of(context).pushReplacementNamed(InputPhoneNumberPage.routeName,
         arguments: {InputPhoneNumberPage.userPhoneVerificationCode: ''});
   }
 

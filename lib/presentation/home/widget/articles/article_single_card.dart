@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/profile/other_profile_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/text_themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
 import 'package:provider/provider.dart';
@@ -24,27 +26,58 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+      margin: EdgeInsets.only(top: 16.0, bottom: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          upperRow(),
-          SizedBox(
-            height: 15.0,
-          ),
           bigImages(context),
-          Row(
-            children:
-                List.generate(widget.articleDetail?.tags?.length, (index) {
-              return Text(
-                '#${widget.articleDetail?.tags[index]?.tagName}',
-                style: kValueStyle.copyWith(
-                    fontSize: 10.0, color: ThemeColors.red),
-              );
-            }),
+          SizedBox(
+            height: 12.0,
           ),
-          rowBottomIcon(context),
-          Divider()
+          Text(
+            'by ${widget?.articleDetail?.author}',
+            style: ThemeText.sfMediumBody.copyWith(color: ThemeColors.black80),
+          ),
+          SizedBox(
+            height: 4.0,
+          ),
+          Text(
+            '${widget?.articleDetail?.title}',
+            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black100),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Row(
+            children: <Widget>[
+              SvgPicture.asset(
+                'images/chat.svg',
+                width: 16.0,
+                height: 16.0,
+              ),
+              SizedBox(
+                width: 5.59,
+              ),
+              Text(
+                '24',
+                style: ThemeText.sfSemiBoldBody
+                    .copyWith(color: ThemeColors.black80),
+              ),
+              SizedBox(
+                width: 9.67,
+              ),
+              SvgPicture.asset(
+                'images/love.svg',
+                width: 16.0,
+                height: 16.0,
+              ),
+              Text(
+                '24',
+                style: ThemeText.sfSemiBoldBody
+                    .copyWith(color: ThemeColors.black80),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -155,23 +188,27 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
         imageBuilder: (context, imageProvider) {
           return Container(
             width: double.infinity,
-            height: 150.0,
+            height: 188.0,
             decoration: BoxDecoration(
                 color: Colors.grey,
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(8.0),
                 image:
                     DecorationImage(image: imageProvider, fit: BoxFit.cover)),
           );
         },
         placeholder: (context, url) => Container(
-          color: Colors.grey,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: ThemeColors.black80),
           width: double.infinity,
-          height: 150.0,
+          height: 188.0,
         ),
         errorWidget: (_, url, child) => Container(
           width: double.infinity,
-          height: 150.0,
-          color: Colors.grey,
+          height: 188.0,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: ThemeColors.black80),
         ),
       ),
     );

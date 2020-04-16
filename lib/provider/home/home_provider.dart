@@ -9,13 +9,16 @@ import 'package:localin/model/community/community_detail.dart';
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
   List<CommunityDetail> communityDetail = List();
-  List<ArticleDetail> articleDetail;
+  List<ArticleDetail> articleDetail = [];
   bool isRoomPage = false;
   String previewUrl = '';
   int total = 0;
-  final int pageSize = 3;
+  final int pageSize = 8;
+  int pageOffset = 1;
   int counter = 1;
   bool isLoading = false;
+  StreamController<articleState> _articleController =
+      StreamController<articleState>.broadcast();
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
     final response = await _repository.getCommunityList(search);
@@ -32,19 +35,31 @@ class HomeProvider with ChangeNotifier {
     return getArticleList();
   }
 
-  Future<List<ArticleDetail>> getArticleList() async {
-    isLoading = true;
-    final response = await _repository.getArticleList(counter, pageSize);
-    if (response != null && response.data != null && response.data.isNotEmpty) {
+  Future<List<ArticleDetail>> getArticleList(
+      {bool isRefresh = true, int offset = 0}) async {
+    if (isRefresh) {
+      articleDetail.clear();
+      pageOffset = 1;
+    }
+    _articleController.add(articleState.Loading);
+    final response = await _repository.getArticleList(offset, pageSize);
+//    if (response != null && response.data != null && response.data.isNotEmpty) {
+//      articleDetail.addAll(response.data);
+//      total = response.total;
+//      _articleController.add(articleState.Loading);
+//      counter += 1;
+//    } else {
+//      _articleController.add(articleState.Loading);
+//      articleDetail = null;
+//    }
+    if (response != null && response.error != 'success') {
+      _articleController.add(articleState.Success);
       articleDetail.addAll(response.data);
       total = response.total;
-      counter += 1;
-      isLoading = false;
+      pageOffset += 1;
       notifyListeners();
     } else {
-      isLoading = false;
-      articleDetail = null;
-      notifyListeners();
+      _articleController.add(articleState.NoData);
     }
     return response.data;
   }
@@ -63,4 +78,14 @@ class HomeProvider with ChangeNotifier {
     this.isRoomPage = value;
     notifyListeners();
   }
+
+  @override
+  void dispose() {
+    _articleController.close();
+    super.dispose();
+  }
+
+  Stream<articleState> get articleStream => _articleController.stream;
 }
+
+enum articleState { Loading, Success, NoData }

@@ -108,6 +108,7 @@ class ApiProvider {
           print('send request：path:${options.uri} ${options.data.toString()}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
+            print("token $token");
             options.headers.clear();
             var header = {
               'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ class ApiProvider {
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
+    final model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
     return model.apiToken;
   }
 
@@ -816,6 +817,29 @@ class ApiProvider {
         return NotificationModel.withError(_handleError(error));
       } else {
         return NotificationModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<UserBaseModel> updateUserLocation(
+      String latitude, String longitude, String address) async {
+    try {
+      final response = await _dio.post(ApiConstant.kUpdateUserLocation,
+          queryParameters: {
+            'lat': latitude,
+            'long': longitude,
+            'address': address,
+          },
+          options: Options(headers: {'requiredToken': true}));
+      final result = UserBaseModel.fromJson(response.data);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(kUserCache, jsonEncode(result.userModel.toJson()));
+      return result;
+    } catch (error) {
+      if (error is DioError) {
+        return UserBaseModel.withError(_handleError(error));
+      } else {
+        return UserBaseModel.withError(error.toString());
       }
     }
   }

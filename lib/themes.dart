@@ -8,6 +8,7 @@ abstract class ThemeColors {
   static const yellow = Color(0xFFFFCB3F);
   static const navigationBlue = Color(0xFF094AAC);
   static const bgNavigation = Color(0xFFF9FAFC);
+  static const brandBlack = Color(0xFF1F2D3D);
 
   /// Black
   static const black100 = Color(0xFF1F2D3D);

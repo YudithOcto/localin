@@ -26,6 +26,7 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<SearchHotelProvider>(
           create: (_) => SearchHotelProvider(),
         ),
+        ChangeNotifierProvider<LocationProvider>(
+          create: (_) => LocationProvider(),
+        )
       ],
       child: MaterialApp(
         navigatorKey: navigator,

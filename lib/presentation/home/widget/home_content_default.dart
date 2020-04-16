@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/presentation/home/widget/articles/row_article.dart';
 import 'package:localin/presentation/home/widget/row_community.dart';
 import 'package:localin/presentation/home/widget/row_quick_menu.dart';
+import 'package:localin/presentation/home/widget/row_user_data.dart';
 
 class HomeContentDefault extends StatelessWidget {
   final bool isHomePage;
@@ -10,18 +11,18 @@ class HomeContentDefault extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 50.0),
-      child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          RowCommunity(),
-          SizedBox(
-            height: 12.0,
-          ),
-          RowArticle()
-        ],
-      ),
+    return ListView(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      padding: EdgeInsets.only(bottom: 50.0),
+      children: <Widget>[
+        RowUserData(),
+        RowCommunity(),
+        SizedBox(
+          height: 12.0,
+        ),
+        RowArticle()
+      ],
     );
   }
 
