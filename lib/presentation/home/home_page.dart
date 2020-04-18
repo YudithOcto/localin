@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
 import 'package:localin/presentation/home/widget/home_header_widget.dart';
-import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
+import 'package:localin/presentation/home/widget/stay/search_hotel_widget.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/provider/location/location_provider.dart';
@@ -74,6 +74,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _scrollListener() {
+    if (controller.offset >= controller.position.maxScrollExtent) {
+      Provider.of<HomeProvider>(context, listen: false)
+          .getArticleList(isRefresh: false);
+    }
 //    if (Provider.of<HomeProvider>(context).isRoomPage) {
 //      final searchProvider =
 //          Provider.of<SearchHotelProvider>(context, listen: false);
@@ -123,21 +127,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               children: <Widget>[
-//              HomeHeaderCard(notifyParent: () {
-//                setState(() {});
-//              }),
                 HomeHeaderWidget(),
-                HomeContentDefault(),
-//                state.isRoomPage
-//                    ? SearchHotelWidget(
-//                        isHomePage: true,
-//                      )
-//                    : HomeContentDefault(
-//                        isHomePage: true,
-//                        onSearchBarPressed: () {
-//                          widget.valueChanged(4);
-//                        },
-//                      ),
+                state.isRoomPage
+                    ? SearchHotelWidget(
+                        isHomePage: true,
+                        controller: controller,
+                      )
+                    : HomeContentDefault(),
               ],
             );
           },

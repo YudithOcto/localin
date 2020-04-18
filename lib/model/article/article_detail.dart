@@ -11,9 +11,12 @@ class ArticleDetail {
   String updatedAt;
   String author;
   String authorImage;
+  String type;
   List<TagModel> tags;
   int isLike;
   int isBookmark;
+  int totalLike;
+  int totalComment;
 
   ArticleDetail({
     this.id,
@@ -25,10 +28,13 @@ class ArticleDetail {
     this.updatedAt,
     this.author,
     this.authorImage,
+    this.type,
     this.tags,
     this.isLike,
     this.isBookmark,
     this.createdBy,
+    this.totalLike,
+    this.totalComment,
   });
 
   factory ArticleDetail.fromJson(Map<String, dynamic> body) {
@@ -44,9 +50,12 @@ class ArticleDetail {
       updatedAt: body['updated_at'],
       author: body['penulis'],
       authorImage: body['penulis_avatar'],
+      type: body['type'],
       tags: tags.map((value) => TagModel.fromJson(value)).toList(),
       isBookmark: body['is_bookmark'],
       isLike: body['is_like'],
+      totalLike: body['total_like'],
+      totalComment: body['total_komentar'],
     );
   }
 }

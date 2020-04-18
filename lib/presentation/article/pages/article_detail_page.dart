@@ -156,16 +156,20 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                   background: Column(
                     children: <Widget>[
                       Hero(
-                        tag: state?.articleModel?.image,
+                        tag: state?.articleModel?.image ?? '',
                         child: CachedNetworkImage(
-                          imageUrl: state?.articleModel?.image,
+                          imageUrl: state?.articleModel?.image ?? '',
                           fit: BoxFit.fitWidth,
                           width: width,
                           height: height * 0.3,
                           placeholder: (context, url) =>
                               CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          errorWidget: (context, url, error) => Container(
+                            height: height * .3,
+                            color: ThemeColors.black80,
+                            width: width,
+                            child: Icon(Icons.error),
+                          ),
                         ),
                       ),
                       RowHeaderArticle(),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/home/widget/articles/row_article.dart';
-import 'package:localin/presentation/home/widget/row_community.dart';
+import 'package:localin/presentation/home/widget/community/row_community.dart';
 import 'package:localin/presentation/home/widget/row_quick_menu.dart';
 import 'package:localin/presentation/home/widget/row_user_data.dart';
 
 class HomeContentDefault extends StatelessWidget {
   final bool isHomePage;
-  final VoidCallback onSearchBarPressed;
-  HomeContentDefault({this.isHomePage, this.onSearchBarPressed});
+  HomeContentDefault({this.isHomePage});
 
   @override
   Widget build(BuildContext context) {

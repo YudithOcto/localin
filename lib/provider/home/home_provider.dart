@@ -5,18 +5,17 @@ import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/dana/dana_user_account_response.dart';
 
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
   List<CommunityDetail> communityDetail = List();
-  List<ArticleDetail> articleDetail = [];
+  List<ArticleDetail> _articleDetailList = [];
   bool isRoomPage = false;
-  String previewUrl = '';
-  int total = 0;
-  final int pageSize = 8;
-  int pageOffset = 1;
-  int counter = 1;
-  bool isLoading = false;
+  int _pageTotal = 0;
+  final int _limitPageRequest = 8;
+  int _pageRequest = 1;
+  bool _canLoadMore = true;
   StreamController<articleState> _articleController =
       StreamController<articleState>.broadcast();
 
@@ -29,38 +28,29 @@ class HomeProvider with ChangeNotifier {
     return response;
   }
 
-  Future<List<ArticleDetail>> resetAndGetArticleList() async {
-    this.counter = 1;
-    articleDetail = [];
-    return getArticleList();
-  }
-
-  Future<List<ArticleDetail>> getArticleList(
-      {bool isRefresh = true, int offset = 0}) async {
+  Future<List<ArticleDetail>> getArticleList({bool isRefresh = true}) async {
     if (isRefresh) {
-      articleDetail.clear();
-      pageOffset = 1;
+      _articleDetailList.clear();
+      _pageRequest = 1;
+      _canLoadMore = true;
+      _pageTotal = 0;
+    }
+    if (!_canLoadMore) {
+      return null;
     }
     _articleController.add(articleState.Loading);
-    final response = await _repository.getArticleList(offset, pageSize);
-//    if (response != null && response.data != null && response.data.isNotEmpty) {
-//      articleDetail.addAll(response.data);
-//      total = response.total;
-//      _articleController.add(articleState.Loading);
-//      counter += 1;
-//    } else {
-//      _articleController.add(articleState.Loading);
-//      articleDetail = null;
-//    }
+    final response =
+        await _repository.getArticleList(_pageRequest, _limitPageRequest);
     if (response != null && response.error != 'success') {
       _articleController.add(articleState.Success);
-      articleDetail.addAll(response.data);
-      total = response.total;
-      pageOffset += 1;
-      notifyListeners();
+      _articleDetailList.addAll(response.data);
+      _pageTotal = response.total;
+      _canLoadMore = _pageTotal > _articleDetailList.length;
+      _pageRequest += 1;
     } else {
       _articleController.add(articleState.NoData);
     }
+    notifyListeners();
     return response.data;
   }
 
@@ -74,6 +64,10 @@ class HomeProvider with ChangeNotifier {
     return response;
   }
 
+  Future<DanaUserAccountResponse> getDanaStatus() async {
+    return await _repository.getUserDanaStatus();
+  }
+
   void setRoomPage(bool value) {
     this.isRoomPage = value;
     notifyListeners();
@@ -85,7 +79,9 @@ class HomeProvider with ChangeNotifier {
     super.dispose();
   }
 
+  List<ArticleDetail> get articleDetailList => _articleDetailList;
   Stream<articleState> get articleStream => _articleController.stream;
+  bool get canLoadMore => _canLoadMore;
 }
 
 enum articleState { Loading, Success, NoData }

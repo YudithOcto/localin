@@ -612,8 +612,6 @@ class ApiProvider {
             'keyword': search,
             'page': page,
             'limit': limit,
-//            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
-//            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
                 0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
             'checkout': checkOutDate.millisecondsSinceEpoch
@@ -621,7 +619,6 @@ class ApiProvider {
                 .substring(0,
                     checkOutDate.millisecondsSinceEpoch.toString().length - 3),
             'room': total,
-            //'timezone': await getFlutterTimezone(),
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);

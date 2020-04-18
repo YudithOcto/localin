@@ -5,7 +5,7 @@ import 'package:localin/presentation/community/pages/community_detail_page.dart'
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/constants.dart';
 
-import '../../../themes.dart';
+import '../../../../themes.dart';
 
 class CommunitySingleCard extends StatefulWidget {
   final int index;

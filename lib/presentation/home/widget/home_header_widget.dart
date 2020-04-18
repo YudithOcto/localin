@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -58,17 +62,24 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                                 )),
                           );
                         },
-                        placeholder: (context, url) => CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          radius: 50.0,
-                        ),
-                        errorWidget: (context, url, child) => CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Colors.blue,
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
+                        placeholder: (context, url) => Container(
+                          height: 40.0,
+                          width: 40.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ThemeColors.black80,
+                            border: Border.all(color: Colors.white),
                           ),
+                        ),
+                        errorWidget: (context, url, child) => Container(
+                          height: 40.0,
+                          width: 40.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ThemeColors.black80,
+                            border: Border.all(color: Colors.white),
+                          ),
+                          child: Icon(Icons.person),
                         ),
                       )
                     ],
@@ -91,17 +102,20 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Container(
-                          height: 28.0,
-                          width: 47.0,
-                          alignment: FractionalOffset.center,
-                          decoration: BoxDecoration(
-                              color: ThemeColors.yellow,
-                              borderRadius: BorderRadius.circular(4.0)),
-                          child: Text(
-                            'ADD',
-                            textAlign: TextAlign.center,
-                            style: ThemeText.sfSemiBoldFootnote,
+                        InkWell(
+                          onTap: onDanaClick,
+                          child: Container(
+                            height: 28.0,
+                            width: 47.0,
+                            alignment: FractionalOffset.center,
+                            decoration: BoxDecoration(
+                                color: ThemeColors.yellow,
+                                borderRadius: BorderRadius.circular(4.0)),
+                            child: Text(
+                              'ADD',
+                              textAlign: TextAlign.center,
+                              style: ThemeText.sfSemiBoldFootnote,
+                            ),
                           ),
                         ),
                         Container(
@@ -140,18 +154,28 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_stay_icon.svg',
                           serviceName: 'STAY',
+                          onPressed: () {
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .setRoomPage(true);
+                          },
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_eat_icon.svg',
                           serviceName: 'EAT',
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(EmptyPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_attraction_icon.svg',
                           serviceName: 'ATTRACT',
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(EmptyPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_ticket_icon.svg',
                           serviceName: 'EVENT',
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(EmptyPage.routeName),
                         ),
                       ],
                     ),
@@ -164,31 +188,97 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
       ],
     );
   }
+
+  onDanaClick() async {
+    final result =
+        await Provider.of<HomeProvider>(context, listen: false).getDanaStatus();
+    if (result != null && result.data != null) {
+      await Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
+        WebViewPage.urlName: result.data.urlTopUp,
+      });
+    } else {
+      final authState = Provider.of<AuthProvider>(context, listen: false);
+      if (authState.userModel.handphone != null &&
+          authState.userModel.handphone.isNotEmpty) {
+        final result = await authState
+            .authenticateUserDanaAccount(authState.userModel.handphone);
+        if (result.urlRedirect.isNotEmpty && !result.error) {
+          final response = await Navigator.of(context).pushNamed(
+              WebViewPage.routeName,
+              arguments: {WebViewPage.urlName: result.urlRedirect});
+          if (response != null && response == 'success') {
+            final dialogResult = await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('DANA'),
+                    content: Text(
+                      'Connect to dana success',
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        color: ThemeColors.primaryBlue,
+                        onPressed: () => Navigator.of(context).pop('success'),
+                        child: Text(
+                          'Ok',
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      )
+                    ],
+                  );
+                });
+
+            if (dialogResult == 'success') {
+              Provider.of<UserProfileProvider>(context).getUserDanaStatus();
+            }
+          }
+        }
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('No Phone number on your account'),
+          duration: Duration(milliseconds: 1500),
+        ));
+      }
+    }
+  }
 }
 
 class HomeSingleServicesWrapperWidget extends StatelessWidget {
   final String serviceIcon;
   final String serviceName;
+  final Function onPressed;
 
-  HomeSingleServicesWrapperWidget({this.serviceIcon, this.serviceName});
+  HomeSingleServicesWrapperWidget(
+      {this.serviceIcon, this.serviceName, @required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SvgPicture.asset(
-          'images/$serviceIcon',
-          width: 62.0,
-          height: 62.0,
-        ),
-        SizedBox(
-          height: 10.0,
-        ),
-        Text(
-          '$serviceName',
-          style: ThemeText.sfSemiBoldCaption.copyWith(color: Colors.white),
-        )
-      ],
+    return InkWell(
+      onTap: onPressed,
+      child: Column(
+        children: <Widget>[
+          SvgPicture.asset(
+            'images/$serviceIcon',
+            width: 62.0,
+            height: 62.0,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text(
+            '$serviceName',
+            style: ThemeText.sfSemiBoldCaption.copyWith(color: Colors.white),
+          )
+        ],
+      ),
     );
   }
 }
