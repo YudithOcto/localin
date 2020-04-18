@@ -818,6 +818,17 @@ class ApiProvider {
     }
   }
 
+  Future<bool> readNotificationUpdate(String notificationId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kNotificationList}/$notificationId',
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['status'];
+    } catch (error) {
+      return false;
+    }
+  }
+
   Future<UserBaseModel> updateUserLocation(
       String latitude, String longitude, String address) async {
     try {

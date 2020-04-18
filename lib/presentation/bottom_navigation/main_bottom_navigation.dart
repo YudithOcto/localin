@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localin/presentation/home/widget/home_header_widget.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/community/pages/community_feed_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
-import 'package:localin/presentation/notification/notification_list_page.dart';
+import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';

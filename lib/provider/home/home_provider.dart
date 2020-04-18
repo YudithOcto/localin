@@ -39,8 +39,15 @@ class HomeProvider with ChangeNotifier {
       return null;
     }
     _articleController.add(articleState.Loading);
-    final response =
-        await _repository.getArticleList(_pageRequest, _limitPageRequest);
+//    final response =
+//        await _repository.getArticleList(_pageRequest, _limitPageRequest);
+    ArticleBaseResponse articleBaseResponse = ArticleBaseResponse();
+    articleBaseResponse.total = 30;
+    final response = await Future.delayed(Duration(seconds: 2), () {
+      articleBaseResponse.data =
+          List.generate(10, (index) => ArticleDetail(description: 'name'));
+      return articleBaseResponse;
+    });
     if (response != null && response.error != 'success') {
       _articleController.add(articleState.Success);
       _articleDetailList.addAll(response.data);

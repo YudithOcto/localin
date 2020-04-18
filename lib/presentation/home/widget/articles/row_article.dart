@@ -15,6 +15,7 @@ class RowArticle extends StatefulWidget {
 
 class _RowArticleState extends State<RowArticle> {
   bool isInit = true;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

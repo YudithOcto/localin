@@ -47,7 +47,7 @@ class BookingInformationCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                '${detail.status.contains('confirm booking') ? 'Pembelian Berhasil' : detail?.status}',
+                '${detail?.status?.contains('confirm booking') ?? '' ? 'Pembelian Berhasil' : detail?.status}',
                 textAlign: TextAlign.center,
               ),
               rowInformation('Booking iD', '${detail?.invoiceCode}'),

@@ -226,4 +226,8 @@ class Repository {
   Future<NotificationModel> getNotificationList(int offset, int limit) {
     return apiProvider.getNotificationList(offset, limit);
   }
+
+  Future<bool> readNotificationUpdate(String notifId) async {
+    return apiProvider.readNotificationUpdate(notifId);
+  }
 }

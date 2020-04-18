@@ -74,10 +74,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _scrollListener() {
-    if (controller.offset >= controller.position.maxScrollExtent) {
-      Provider.of<HomeProvider>(context, listen: false)
-          .getArticleList(isRefresh: false);
-    }
+//    if (controller.offset >= controller.position.maxScrollExtent) {
+//      Provider.of<HomeProvider>(context, listen: false)
+//          .getArticleList(isRefresh: false);
+//    }
 //    if (Provider.of<HomeProvider>(context).isRoomPage) {
 //      final searchProvider =
 //          Provider.of<SearchHotelProvider>(context, listen: false);
@@ -113,8 +113,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     checkGps();
-    controller = new ScrollController();
-    controller.addListener(_scrollListener);
   }
 
   @override

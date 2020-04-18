@@ -8,6 +8,11 @@ class NotificationProvider extends BaseModelProvider {
   Future<List<NotificationDetailModel>> getNotificationList(
       int offset, int limit) async {
     final response = await _repository.getNotificationList(offset, limit);
-    return response.data;
+    return null;
+  }
+
+  Future<bool> updateReadNotification(String notifId) async {
+    final response = await _repository.readNotificationUpdate(notifId);
+    return response;
   }
 }
