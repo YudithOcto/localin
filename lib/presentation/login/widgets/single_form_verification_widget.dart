@@ -40,21 +40,7 @@ class _SingleFormVerificationWidgetState
                 ],
                 maxLines: 1,
                 keyboardType: TextInputType.number,
-                controller: provider.formController[widget.index],
-                textAlign: TextAlign.center,
-                focusNode: provider.nodeController[widget.index],
-                onChanged: (value) {
-                  if (widget.index == provider.formController.length - 1) {
-                    provider.setAllFieldsFilled();
-                  }
-                  if (widget.index < provider.formController.length - 1 &&
-                      provider.formController[widget.index].text.isNotEmpty) {
-                    FocusScope.of(context).requestFocus(
-                        provider.nodeController[widget.index + 1]);
-                    provider.formController[widget.index + 1].selection =
-                        TextSelection.collapsed(offset: 0);
-                  }
-                },
+                onChanged: (value) {},
                 style: TextStyle(fontSize: 20.0, color: Colors.black),
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 0.0),

@@ -56,8 +56,8 @@ class UserModel {
       points: body['point'] ?? 0,
       views: body['views'] ?? 0,
       posts: body['posts'] ?? 0,
-      latitude: body['lat'] ?? 0.0,
-      longitude: body['long'] ?? 0.0,
+      latitude: body['lat'] ?? '0.0',
+      longitude: body['long'] ?? '0.0',
     );
   }
 

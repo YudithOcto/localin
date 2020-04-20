@@ -16,6 +16,8 @@ class InputPhoneNumberProvider with ChangeNotifier {
     String _userRealPhoneNumber = '';
     if (!_phoneNumberController.text.startsWith('0')) {
       _userRealPhoneNumber = '0${_phoneNumberController.text}';
+    } else {
+      _userRealPhoneNumber = _phoneNumberController.text;
     }
     final response =
         await _repository.userPhoneRequestCode(_userRealPhoneNumber);

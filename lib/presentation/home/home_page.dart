@@ -36,12 +36,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   checkGps({bool fromDialog = false}) async {
     bool isGpsOn = true;
-    if (isGpsOn) {
-      isGpsOn = await location.isLocationServiceEnabled();
-    } else {
-      isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
-          .getUserLocation();
-    }
+    isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
+        .getUserLocation();
     if (!isGpsOn) {
       showDialog(
           barrierDismissible: false,
@@ -74,9 +70,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _scrollListener() {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     if (controller.offset >= controller.position.maxScrollExtent) {
-      Provider.of<HomeProvider>(context, listen: false)
-          .getArticleList(isRefresh: false);
+      if (homeProvider.isRoomPage) {
+        Provider.of<SearchHotelProvider>(context, listen: false).getHotel();
+      } else {
+        homeProvider.getArticleList(isRefresh: false);
+      }
     }
 //    if (Provider.of<HomeProvider>(context).isRoomPage) {
 //      final searchProvider =
@@ -120,23 +120,29 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Consumer<HomeProvider>(
-          builder: (ctx, state, child) {
-            return ListView(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              children: <Widget>[
-                HomeHeaderWidget(),
-                state.isRoomPage
-                    ? SearchHotelWidget(
-                        isHomePage: true,
-                        controller: controller,
-                      )
-                    : HomeContentDefault(),
-              ],
-            );
-          },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          Provider.of<HomeProvider>(context, listen: false)
+              .getArticleList(isRefresh: true);
+        },
+        child: SingleChildScrollView(
+          controller: controller,
+          child: Consumer<HomeProvider>(
+            builder: (ctx, state, child) {
+              return ListView(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                children: <Widget>[
+                  HomeHeaderWidget(),
+                  state.isRoomPage
+                      ? SearchHotelWidget(
+                          isHomePage: true,
+                        )
+                      : HomeContentDefault(),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

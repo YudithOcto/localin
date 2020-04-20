@@ -84,7 +84,10 @@ class _RowArticleState extends State<RowArticle> {
                         ? homeProvider.articleDetailList.length + 1
                         : 1,
                     itemBuilder: (context, index) {
-                      if (index < homeProvider.articleDetailList.length) {
+                      if (homeProvider.articleDetailList.length == 0) {
+                        return EmptyArticle();
+                      } else if (index <
+                          homeProvider.articleDetailList.length) {
                         return ArticleSingleCard(
                             homeProvider.articleDetailList[index]);
                       } else if (homeProvider.canLoadMore) {

@@ -26,9 +26,12 @@ class _InputPhoneNumberPageState extends State<InputPhoneNumberPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        leading: Icon(
-          Icons.arrow_back,
-          color: ThemeColors.black80,
+        leading: InkWell(
+          onTap: _onWillPop,
+          child: Icon(
+            Icons.arrow_back,
+            color: ThemeColors.black80,
+          ),
         ),
         backgroundColor: Theme.of(context).canvasColor,
       ),
@@ -38,11 +41,34 @@ class _InputPhoneNumberPageState extends State<InputPhoneNumberPage> {
             create: (_) => InputPhoneNumberProvider(),
           ),
         ],
-        child: ColumnContent(
-          isVerificationCodeOpen: openVerificationCode,
+        child: WillPopScope(
+          onWillPop: _onWillPop,
+          child: ColumnContent(
+            isVerificationCodeOpen: openVerificationCode,
+          ),
         ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('Do you want to exit app?'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('No')),
+              FlatButton(
+                onPressed: () => SystemNavigator.pop(),
+                child: Text('Yes'),
+              )
+            ],
+          ),
+        ) ??
+        false;
   }
 }
 
@@ -238,5 +264,15 @@ class _ColumnContentState extends State<ColumnContent> {
 extension on String {
   bool get isNotNullOrNotEmpty {
     return this != null && this.isNotEmpty;
+  }
+
+  String get validatedPhoneNumber {
+    if (this.startsWith('0')) {
+      return '+62${this.substring(1, this.length)}';
+    } else if (this.startsWith('+62')) {
+      return this;
+    } else {
+      return '+62$this';
+    }
   }
 }

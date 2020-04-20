@@ -53,7 +53,8 @@ class CommunityDetailColumn extends StatelessWidget {
                     width: double.infinity,
                     height: size.height * 0.3,
                     decoration: BoxDecoration(
-                        image: DecorationImage(image: imageProvider)),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover)),
                   );
                 },
                 placeholder: (context, url) => Container(

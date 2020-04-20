@@ -23,11 +23,16 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
       children: <Widget>[
         Stack(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Image.asset(
-                'images/curve_base.png',
-                fit: BoxFit.cover,
+            ClipPath(
+              clipper: HeaderClipper(),
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.4,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0xFF1F75E1), Color(0xFF094AAC)])),
               ),
             ),
             Positioned(
@@ -94,29 +99,34 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                         borderRadius: BorderRadius.circular(10.0)),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 16.0, right: 19.79),
-                          child: Image.asset(
-                            'images/dana_logo_white.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: onDanaClick,
-                          child: Container(
-                            height: 28.0,
-                            width: 47.0,
-                            alignment: FractionalOffset.center,
-                            decoration: BoxDecoration(
-                                color: ThemeColors.yellow,
-                                borderRadius: BorderRadius.circular(4.0)),
-                            child: Text(
-                              'ADD',
-                              textAlign: TextAlign.center,
-                              style: ThemeText.sfSemiBoldFootnote,
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(left: 16.0, right: 19.79),
+                              child: Image.asset(
+                                'images/dana_logo_white.png',
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
+                            InkWell(
+                              onTap: onDanaClick,
+                              child: Container(
+                                height: 28.0,
+                                width: 47.0,
+                                alignment: FractionalOffset.center,
+                                decoration: BoxDecoration(
+                                    color: ThemeColors.yellow,
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                child: Text(
+                                  'ADD',
+                                  textAlign: TextAlign.center,
+                                  style: ThemeText.sfSemiBoldFootnote,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -130,19 +140,26 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: SvgPicture.asset(
-                            'images/point_icon.svg',
-                            width: 24.0,
-                            height: 24.0,
-                          ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: SvgPicture.asset(
+                                'images/point_icon.svg',
+                                width: 24.0,
+                                height: 24.0,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Text(
+                                '0 Point',
+                                style: ThemeText.sfRegularHeadline
+                                    .copyWith(color: ThemeColors.black0),
+                              ),
+                            )
+                          ],
                         ),
-                        Text(
-                          '0 Point',
-                          style: ThemeText.sfRegularHeadline
-                              .copyWith(color: ThemeColors.black0),
-                        )
                       ],
                     ),
                   ),
@@ -192,7 +209,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
   onDanaClick() async {
     final result =
         await Provider.of<HomeProvider>(context, listen: false).getDanaStatus();
-    if (result != null && result.data != null) {
+    if (!result.error) {
       await Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
         WebViewPage.urlName: result.data.urlTopUp,
       });
@@ -248,6 +265,24 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
         ));
       }
     }
+  }
+}
+
+class HeaderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path clippedPath = Path();
+    clippedPath.lineTo(0.0, size.height - 24);
+    clippedPath.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 24);
+    clippedPath.lineTo(size.width, 0.0);
+    clippedPath.close();
+    return clippedPath;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }
 

@@ -15,9 +15,8 @@ class VerifyCodeProvider with ChangeNotifier {
   Color _color = ThemeColors.black0;
   bool _isFormDisabled = false;
   bool _isAllFieldsFilled = false;
-  final List<TextEditingController> _editingController =
-      List<TextEditingController>();
-  final _nodes = List<FocusNode>();
+  final StreamController<bool> _textClear = StreamController<bool>.broadcast();
+  String _currentFilledVerifyCode = '';
 
   /// TIMER
   TimerState _timerState = TimerState.Default;
@@ -25,19 +24,7 @@ class VerifyCodeProvider with ChangeNotifier {
   String _currentDifference = '';
 
   VerifyCodeProvider() {
-    initTextFormField();
     _startTimer();
-  }
-
-  initTextFormField() {
-    for (int i = 0; i < 4; i++) {
-      _nodes.add(FocusNode());
-      _editingController.add(TextEditingController(text: ""));
-    }
-  }
-
-  void clearTextFormField() {
-    _editingController.forEach((value) => value.clear());
   }
 
   void enabledForm() {
@@ -58,20 +45,30 @@ class VerifyCodeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAllFieldsFilled() {
-    _isAllFieldsFilled = !_isAllFieldsFilled;
+  void setAllFieldsFilled(bool isValueCompleted) {
+    _isAllFieldsFilled = isValueCompleted;
     notifyListeners();
+  }
+
+  void setFieldVerifyCode(String value) {
+    _currentFilledVerifyCode = value;
+    notifyListeners();
+  }
+
+  void clearTextFormField() {
+    _textClear.add(true);
   }
 
   /// API RELATED
   Future<UserBaseModel> verifySmsCode() async {
     verifyingCodeStateChanges();
-    String verifyCode = '';
-    _editingController.forEach((value) => verifyCode += value.text);
-
-    final response =
-        await _repository.verifyPhoneVerificationCode(int.parse(verifyCode));
-    clearTextFormField();
+    final response = await _repository
+        .verifyPhoneVerificationCode(int.parse(_currentFilledVerifyCode));
+    print(response.error);
+    if (response.error != null && !response.error.contains('ganti') ||
+        response.error == null) {
+      clearTextFormField();
+    }
     verifyingCodeStateChanges();
     return response;
   }
@@ -79,8 +76,8 @@ class VerifyCodeProvider with ChangeNotifier {
   Future<UserBaseModel> requestingCodeBySms(String phoneNumber) async {
     _startTimer();
     _requestingNewSmsCodeCircular();
-    if (!phoneNumber.startsWith('0')) {
-      phoneNumber = '0$phoneNumber';
+    if (phoneNumber.startsWith('+62')) {
+      phoneNumber = '0${phoneNumber.substring(3, phoneNumber.length)}';
     }
     final response = await _repository.userPhoneRequestCode(phoneNumber);
     _requestingNewSmsCodeCircular();
@@ -93,8 +90,7 @@ class VerifyCodeProvider with ChangeNotifier {
 
   @override
   void dispose() {
-    _editingController.forEach((value) => value.dispose());
-    _nodes.forEach((value) => value.dispose());
+    _textClear.close();
     _cancelTimer();
     super.dispose();
   }
@@ -109,7 +105,7 @@ class VerifyCodeProvider with ChangeNotifier {
       if (timer.tick == 120) {
         _cancelTimer();
         _timerState = TimerState.Expired;
-        _editingController.forEach((value) => value.clear());
+        clearTextFormField();
         disabledForm();
         notifyListeners();
         return;
@@ -133,11 +129,10 @@ class VerifyCodeProvider with ChangeNotifier {
   bool get isVerifyCodeNumber => _isVerifyingCodeNumber;
   bool get requestingNewSmSCode => _isRequestingNewSmsCode;
   Color get formColor => _color;
-  List<TextEditingController> get formController => _editingController;
-  List<FocusNode> get nodeController => _nodes;
   TimerState get timerState => _timerState;
   bool get isFormDisabled => _isFormDisabled;
   bool get isAllFieldsFilled => _isAllFieldsFilled;
+  Stream<bool> get clearAllField => _textClear.stream;
 }
 
 enum TimerState { Default, Progress, Expired }

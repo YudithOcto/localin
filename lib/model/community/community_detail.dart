@@ -20,6 +20,7 @@ class CommunityDetail {
   String latitude;
   String longitude;
   bool isJoin;
+  int totalMember;
 
   CommunityDetail(
       {this.id,
@@ -42,7 +43,8 @@ class CommunityDetail {
       this.follower,
       this.imageCount,
       this.logoUrl,
-      this.isJoin});
+      this.isJoin,
+      this.totalMember});
 
   factory CommunityDetail.fromJson(Map<String, dynamic> body) {
     return CommunityDetail(
@@ -67,6 +69,7 @@ class CommunityDetail {
       imageCount: body['image_count'],
       logoUrl: body['logo_url'],
       isJoin: body['is_join'],
+      totalMember: body['total_member'],
     );
   }
 }
