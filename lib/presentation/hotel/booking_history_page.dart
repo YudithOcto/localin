@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
-import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
+import 'package:localin/presentation/home/widget/stay/search_hotel_widget.dart';
 import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
 import 'package:localin/presentation/hotel/widgets/history_single_card.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
@@ -63,22 +63,22 @@ class _AvailableHistoryContentWidgetState
   }
 
   _listener() {
-    final provider =
-        Provider.of<BookingHistoryProvider>(context, listen: false);
-    if (provider.historyList != null &&
-        provider.historyList.isNotEmpty &&
-        _controller.offset >= _controller.position.maxScrollExtent &&
-        provider.historyList.length < provider.totalPage) {
-      provider.getBookingHistoryList();
-    } else {
-      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      if (_controller.offset >= _controller.position.maxScrollExtent &&
-          !homeProvider.isLoading &&
-          homeProvider.articleDetail != null &&
-          homeProvider.total > homeProvider.articleDetail.length) {
-        Provider.of<HomeProvider>(context, listen: false).getArticleList();
-      }
-    }
+//    final provider =
+//        Provider.of<BookingHistoryProvider>(context, listen: false);
+//    if (provider.historyList != null &&
+//        provider.historyList.isNotEmpty &&
+//        _controller.offset >= _controller.position.maxScrollExtent &&
+//        provider.historyList.length < provider.totalPage) {
+//      provider.getBookingHistoryList();
+//    } else {
+//      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+//      if (_controller.offset >= _controller.position.maxScrollExtent &&
+//          !homeProvider.isLoading &&
+//          homeProvider.articleDetail != null &&
+//          homeProvider.total > homeProvider.articleDetail.length) {
+//        Provider.of<HomeProvider>(context, listen: false).getArticleList();
+//      }
+//    }
   }
 
   @override

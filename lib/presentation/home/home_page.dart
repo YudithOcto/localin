@@ -1,15 +1,14 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
-import 'package:localin/presentation/home/widget/home_header_card.dart';
-import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
+import 'package:localin/presentation/home/widget/home_header_widget.dart';
+import 'package:localin/presentation/home/widget/stay/search_hotel_widget.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../themes.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,14 +29,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       if (updateAndroidIntent) {
-        checkGps();
+        checkGps(fromDialog: true);
       }
     }
   }
 
-  checkGps() async {
-    final isGpsOn = await location.isLocationServiceEnabled();
-
+  checkGps({bool fromDialog = false}) async {
+    bool isGpsOn = true;
+    isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
+        .getUserLocation();
     if (!isGpsOn) {
       showDialog(
           barrierDismissible: false,
@@ -70,26 +70,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _scrollListener() {
-    if (Provider.of<HomeProvider>(context).isRoomPage) {
-      final searchProvider =
-          Provider.of<SearchHotelProvider>(context, listen: false);
-      if (searchProvider.hotelDetailList != null &&
-          searchProvider.hotelDetailList.isNotEmpty &&
-          controller.offset >= controller.position.maxScrollExtent &&
-          !searchProvider.isLoading &&
-          searchProvider.totalPage > searchProvider.hotelDetailList.length) {
-        searchProvider.setLoading();
-        searchProvider.getHotel();
-      }
-    } else {
-      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      if (homeProvider.articleDetail != null &&
-          homeProvider.articleDetail.isNotEmpty &&
-          controller.offset >= controller.position.maxScrollExtent &&
-          !homeProvider.isLoading &&
-          homeProvider.articleDetail != null &&
-          homeProvider.total > homeProvider.articleDetail.length) {
-        Provider.of<HomeProvider>(context, listen: false).getArticleList();
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    if (controller.offset >= controller.position.maxScrollExtent) {
+      if (homeProvider.isRoomPage) {
+        Provider.of<SearchHotelProvider>(context, listen: false).getHotel();
+      } else {
+        homeProvider.getArticleList(isRefresh: false);
       }
     }
   }
@@ -112,38 +98,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 5.0,
-        backgroundColor: Theme.of(context).canvasColor,
-        title: Image.asset(
-          'images/app_bar_logo.png',
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: 50.0,
-        ),
-      ),
-      body: Consumer<HomeProvider>(
-        builder: (ctx, state, child) {
-          return ListView(
-            shrinkWrap: true,
-            controller: controller,
-            children: <Widget>[
-              HomeHeaderCard(notifyParent: () {
-                setState(() {});
-              }),
-              state.isRoomPage
-                  ? SearchHotelWidget(
-                      isHomePage: true,
-                    )
-                  : HomeContentDefault(
-                      isHomePage: true,
-                      onSearchBarPressed: () {
-                        widget.valueChanged(4);
-                      },
-                    ),
-            ],
-          );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          Provider.of<HomeProvider>(context, listen: false)
+              .getArticleList(isRefresh: true);
         },
+        child: SingleChildScrollView(
+          controller: controller,
+          child: Consumer<HomeProvider>(
+            builder: (ctx, state, child) {
+              return ListView(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                children: <Widget>[
+                  HomeHeaderWidget(),
+                  state.isRoomPage
+                      ? SearchHotelWidget(
+                          isHomePage: true,
+                        )
+                      : HomeContentDefault(),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

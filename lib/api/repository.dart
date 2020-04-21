@@ -54,6 +54,11 @@ class Repository {
     return apiProvider.verifyPhoneCodeVerification(smsCode);
   }
 
+  Future<UserBaseModel> updateUserLoction(
+      String latitude, String longitude, String address) async {
+    return apiProvider.updateUserLocation(latitude, longitude, address);
+  }
+
   Future<ArticleBaseResponse> likeArticle(String articleId) async {
     return apiProvider.likeArticle(articleId);
   }

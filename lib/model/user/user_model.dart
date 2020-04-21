@@ -15,6 +15,8 @@ class UserModel {
   int points;
   int views;
   int posts;
+  String latitude;
+  String longitude;
 
   UserModel({
     this.id,
@@ -33,6 +35,8 @@ class UserModel {
     this.points,
     this.views,
     this.posts,
+    this.latitude,
+    this.longitude,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
@@ -52,6 +56,8 @@ class UserModel {
       points: body['point'] ?? 0,
       views: body['views'] ?? 0,
       posts: body['posts'] ?? 0,
+      latitude: body['lat'] ?? '0.0',
+      longitude: body['long'] ?? '0.0',
     );
   }
 
@@ -73,6 +79,8 @@ class UserModel {
     map['nama'] = username;
     map['email'] = email;
     map['handphone'] = handphone;
+    map['lat'] = latitude;
+    map['long'] = longitude;
     return map;
   }
 }

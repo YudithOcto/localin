@@ -9,6 +9,7 @@ class ApiConstant {
       'v1/member/update/handphone-verifikasi';
   static const String kProfile = 'v1/member/me';
   static const String kOtherUserProfile = 'v1/member/profile';
+  static const String kUpdateUserLocation = 'v1/member/update/location';
 
   /// COMMUNITY
   static const String kCommunity = 'v1/komunitas';

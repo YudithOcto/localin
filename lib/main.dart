@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
+import 'package:localin/presentation/community/pages/community_feed_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/hotel/hotel_detail_page.dart';
@@ -26,6 +27,7 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +74,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<SearchHotelProvider>(
           create: (_) => SearchHotelProvider(),
         ),
+        ChangeNotifierProvider<LocationProvider>(
+          create: (_) => LocationProvider(),
+        )
       ],
       child: MaterialApp(
         navigatorKey: navigator,
@@ -107,6 +112,7 @@ class _MyAppState extends State<MyApp> {
           WebViewPage.routeName: (_) => WebViewPage(),
           InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
           OtherProfilePage.routeName: (_) => OtherProfilePage(),
+          CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
         },
       ),
     );

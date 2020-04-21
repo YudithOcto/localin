@@ -5,6 +5,7 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with WidgetsBindingObserver {
-  final Geolocator location = Geolocator()..forceAndroidLocationManager;
   bool updateAndroidIntent = false;
 
   @override
@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
           checkGps();
         } else {
           Navigator.of(context)
-              .pushNamed(InputPhoneNumberPage.routeName, arguments: {
+              .pushReplacementNamed(InputPhoneNumberPage.routeName, arguments: {
             InputPhoneNumberPage.userPhoneVerificationCode: userCache.handphone
           });
         }
@@ -58,8 +58,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   checkGps() async {
-    final isGpsOn = await location.isLocationServiceEnabled();
-
+    final isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
+        .getUserLocation();
     if (isGpsOn) {
       Navigator.of(context)
           .pushReplacementNamed(MainBottomNavigation.routeName);

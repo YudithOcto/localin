@@ -1,114 +1,122 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
-import 'package:localin/model/service/user_location.dart';
 import 'package:localin/provider/base_model_provider.dart';
 
 class SearchHotelProvider extends BaseModelProvider {
   Repository _repository;
-  TextEditingController _searchController;
+  TextEditingController _searchFormController;
   Timer _debounce;
   int _userRoomTotal = 1;
-  int _offset = 1, limit = 10, totalPage = 0;
-  UserLocation _userLocation = UserLocation();
+  int _pageRequestOffset = 1, _pageRequestLimit = 10, _totalPage = 0;
+  bool _canLoadMore = true;
+  Coordinates _userCoordinates = Coordinates(0.0, 0.0);
   DateTime _selectedCheckIn = DateTime.now();
   DateTime _selectedCheckOut = DateTime.now().add(Duration(days: 1));
-  final StreamController<SearchViewState> stateController =
-      StreamController<SearchViewState>();
-  List<HotelDetailEntity> hotelDetailList = [];
-  bool isLoading = false;
 
-  TextEditingController get searchController => _searchController;
+  final StreamController<SearchViewState> _searchHotelController =
+      StreamController<SearchViewState>.broadcast();
+  List<HotelDetailEntity> _hotelDetailList = [];
+
+  TextEditingController get searchController => _searchFormController;
   DateTime get selectedCheckIn => _selectedCheckIn;
   DateTime get selectedCheckOut => _selectedCheckOut;
   int get userTotalPickedRoom => _userRoomTotal;
+  List<HotelDetailEntity> get hotelDetailList => _hotelDetailList;
+  bool get canLoadMore => _canLoadMore;
+  Stream<SearchViewState> get searchStream => _searchHotelController.stream;
 
   SearchHotelProvider() {
     _repository = Repository();
-    _searchController = TextEditingController();
-    _searchController.addListener(_onSearchChanged);
+    _searchFormController = TextEditingController();
+    _searchFormController.addListener(_onSearchChanged);
   }
 
-  void setUserLocation(UserLocation _location) {
-    this._userLocation = _location;
+  void setUserLocation(Coordinates _location) {
+    this._userCoordinates = _location;
   }
 
   _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce.cancel();
-    if (_searchController.text.isNotEmpty) {
-      _debounce = Timer(const Duration(milliseconds: 400), () {});
+    if (_searchFormController.text.isNotEmpty) {
+      _debounce = Timer(const Duration(milliseconds: 400), () {
+        getHotel(isRefresh: true);
+      });
     }
-  }
-
-  void setLoading() {
-    isLoading = !isLoading;
-    notifyListeners();
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
+    _searchFormController.dispose();
     if (_debounce != null && _debounce.isActive) {
       _debounce.cancel();
     }
-    stateController.close();
+    _searchHotelController.close();
     super.dispose();
   }
 
-  Future<List<HotelDetailEntity>> getHotel() async {
+  Future<void> getHotel({bool isRefresh = false}) async {
+    _searchHotelController.add(SearchViewState.Busy);
+    if (isRefresh) {
+      _canLoadMore = true;
+      _hotelDetailList.clear();
+      _pageRequestOffset = 1;
+    }
+    if (!_canLoadMore) {
+      return null;
+    }
     HotelListBaseResponse result = await _repository.getHotelList(
-        '${_userLocation?.latitude}',
-        '${_userLocation?.longitude}',
-        '${_searchController.text}',
-        _offset,
-        limit,
+        '${_userCoordinates?.latitude}',
+        '${_userCoordinates?.longitude}',
+        '${_searchFormController.text}',
+        _pageRequestOffset,
+        _pageRequestLimit,
         _selectedCheckIn,
         _selectedCheckOut,
         _userRoomTotal);
-    if (result != null &&
-        result.hotelDetailEntity != null &&
-        result.hotelDetailEntity.isNotEmpty) {
-      _offset += 1;
-      totalPage = result?.total ?? 0;
-      hotelDetailList.addAll(result.hotelDetailEntity);
-      isLoading = false;
-      notifyListeners();
-      return result.hotelDetailEntity;
+    if (result != null && result.hotelDetailEntity.isNotEmptyNorNull) {
+      _pageRequestOffset += 1;
+      _totalPage = result?.total ?? 0;
+      _canLoadMore = _totalPage > _hotelDetailList.length;
+      _hotelDetailList.addAll(result.hotelDetailEntity);
+      _searchHotelController.add(SearchViewState.DataRetrieved);
     } else {
-      return null;
+      _searchHotelController.add(SearchViewState.NoData);
+      _canLoadMore = false;
     }
-  }
-
-  void resetParams() {
-    _offset = 1;
     notifyListeners();
-  }
-
-  Future<List<HotelDetailEntity>> resetAndCallApi() async {
-    _offset = 1;
-    hotelDetailList.clear();
-    return getHotel();
   }
 
   void setSelectedDate(DateTime checkIn, DateTime checkOut) {
     this._selectedCheckIn = checkIn;
     this._selectedCheckOut = checkOut;
     notifyListeners();
+    getHotel(isRefresh: true);
   }
 
   void increaseRoomTotal() {
     this._userRoomTotal += 1;
     notifyListeners();
+    getHotel(isRefresh: true);
   }
 
-  void decreaseRoomTotal() {
+  void decreaseRoomTotal() async {
     if (_userRoomTotal > 1) {
       this._userRoomTotal -= 1;
       notifyListeners();
     }
+    getHotel(isRefresh: true);
   }
 }
 
 enum SearchViewState { Busy, DataRetrieved, NoData }
+
+extension on List {
+  bool get isNotEmptyNorNull {
+    return this != null && this.isNotEmpty;
+  }
+}

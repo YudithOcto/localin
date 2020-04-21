@@ -108,6 +108,7 @@ class ApiProvider {
           print('send request：path:${options.uri} ${options.data.toString()}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
+            print("token $token");
             options.headers.clear();
             var header = {
               'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ class ApiProvider {
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
+    final model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
     return model.apiToken;
   }
 
@@ -611,16 +612,9 @@ class ApiProvider {
             'keyword': search,
             'page': page,
             'limit': limit,
-//            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
-//            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
-            'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-                0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-            'checkout': checkOutDate.millisecondsSinceEpoch
-                .toString()
-                .substring(0,
-                    checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
+            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'room': total,
-            //'timezone': await getFlutterTimezone(),
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);
@@ -639,10 +633,6 @@ class ApiProvider {
       final result = await _dio.get(
         '${ApiConstant.kHotelDetail}/$hotelId',
         queryParameters: {
-//          'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-//              0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-//          'checkout': checkOutDate.millisecondsSinceEpoch.toString().substring(
-//              0, checkOutDate.millisecondsSinceEpoch.toString().length - 3),
           'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
           'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
           'timezone': await getFlutterTimezone(),
@@ -720,10 +710,6 @@ class ApiProvider {
       DateTime checkIn,
       DateTime checkOut,
       String roomName) async {
-//    int incheck = int.parse(
-//        checkIn.toString().substring(0, checkIn.toString().length - 3));
-//    int outcheck = int.parse(
-//        checkOut.toString().substring(0, checkOut.toString().length - 3));
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
@@ -816,6 +802,29 @@ class ApiProvider {
         return NotificationModel.withError(_handleError(error));
       } else {
         return NotificationModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<UserBaseModel> updateUserLocation(
+      String latitude, String longitude, String address) async {
+    try {
+      final response = await _dio.post(ApiConstant.kUpdateUserLocation,
+          queryParameters: {
+            'lat': latitude,
+            'long': longitude,
+            'address': address,
+          },
+          options: Options(headers: {'requiredToken': true}));
+      final result = UserBaseModel.fromJson(response.data);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(kUserCache, jsonEncode(result.userModel.toJson()));
+      return result;
+    } catch (error) {
+      if (error is DioError) {
+        return UserBaseModel.withError(_handleError(error));
+      } else {
+        return UserBaseModel.withError(error.toString());
       }
     }
   }

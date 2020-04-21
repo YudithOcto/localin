@@ -92,5 +92,21 @@
         <true/>
         <key>NSAllowsArbitraryLoadsInWebContent</key>
         <true/>
+
+        <key>CFBundleURLSchemes</key>
+
+        <!-- Facebook Login configuration -->
+	<array>
+    <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+        <string>fb595990124492174</string>
+    </array>
+    </dict>
+	</array>
+	<key>FacebookAppID</key>
+    <string>595990124492174</string>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 </dict>
 </plist>

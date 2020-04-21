@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:localin/presentation/home/widget/home_header_widget.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/community/pages/community_feed_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
@@ -29,6 +30,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
         HomePage(
           valueChanged: _selectedTab,
         ),
+        // HomeHeaderWidget(),
         CommunityFeedPage(),
         BookingHistoryPage(),
         NotificationListPage(),
@@ -52,23 +54,18 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
       child: Scaffold(
         body: pages[currentSelected],
         bottomNavigationBar: FloatingActionBottomAppBar(
-          color: Colors.black,
-          selectedColor: ThemeColors.primaryBlue,
+          backgroundColor: ThemeColors.bgNavigation,
+          selectedColor: ThemeColors.navigationBlue,
           onTabSelected: _selectedTab,
           selectedTabIndex: currentSelected,
           items: [
             FloatingActionBottomAppBarItem(
-              iconData: 'images/home_logo.png',
-              text: 'Home',
+              text: 'Feed',
             ),
-            FloatingActionBottomAppBarItem(
-                iconData: 'images/search_logo.png', text: 'Search'),
-            FloatingActionBottomAppBarItem(
-                iconData: 'images/article_logo.png', text: 'Booking'),
-            FloatingActionBottomAppBarItem(
-                iconData: 'images/notification_logo.png', text: 'Notification'),
-            FloatingActionBottomAppBarItem(
-                iconData: 'images/account_logo.png', text: 'Profile'),
+            FloatingActionBottomAppBarItem(text: 'News'),
+            FloatingActionBottomAppBarItem(text: 'Transaction'),
+            FloatingActionBottomAppBarItem(text: 'Inbox'),
+            FloatingActionBottomAppBarItem(text: 'Profile'),
           ],
         ),
       ),

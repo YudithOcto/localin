@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/community/widget/community_feed_bottom_row.dart';
+import 'package:localin/presentation/home/widget/community/community_empty_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/utils/image_helper.dart';
 
@@ -14,7 +15,7 @@ class CommunityCardWidget extends StatelessWidget {
   CommunityCardWidget({this.detailList});
   @override
   Widget build(BuildContext context) {
-    return detailList.isNotEmpty
+    return detailList != null && detailList.isNotEmpty
         ? Container(
             margin: EdgeInsets.only(left: 10.0),
             child: ListView.builder(
@@ -29,11 +30,9 @@ class CommunityCardWidget extends StatelessWidget {
               },
             ),
           )
-        : Center(
-            child: Container(
-              margin: EdgeInsets.only(top: 40.0),
-              child: Text('No Community found'),
-            ),
+        : Container(
+            margin: EdgeInsets.only(top: 50.0),
+            child: CommunityEmptyPage(),
           );
   }
 }
