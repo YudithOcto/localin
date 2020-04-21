@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
+import 'package:localin/presentation/community/pages/community_feed_page.dart';
 import 'package:localin/presentation/home/widget/community/community_empty_page.dart';
 import 'package:localin/presentation/home/widget/community/community_single_card.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -55,9 +56,7 @@ class _RowCommunityState extends State<RowCommunity> {
               InkWell(
                 onTap: () async {
                   final result = await Navigator.of(context)
-                      .pushNamed(CommunityCreateEditPage.routeName, arguments: {
-                    CommunityCreateEditPage.isUpdatePage: false,
-                  });
+                      .pushNamed(CommunityFeedPage.routeName);
                   if (result != null) {
                     /// refresh the page
                   }
@@ -81,38 +80,29 @@ class _RowCommunityState extends State<RowCommunity> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               } else {
-                if (snapshot.error != null) {
+                if (snapshot.error != null ||
+                    (snapshot.hasData &&
+                        snapshot.data.communityDetailList.isEmpty)) {
                   return CommunityEmptyPage();
                 } else {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Consumer<HomeProvider>(
-                          builder: (ctx, state, child) {
-                            return Container(
-                              height: Orientation.portrait ==
-                                      MediaQuery.of(context).orientation
-                                  ? MediaQuery.of(context).size.height * 0.5
-                                  : MediaQuery.of(context).size.height * 0.9,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: state.communityDetail != null
-                                    ? state.communityDetail.length
-                                    : 0,
-                                itemBuilder: (context, index) {
-                                  return CommunitySingleCard(
-                                      index: index,
-                                      model: state.communityDetail[index]);
-                                },
-                              ),
-                            );
+                  return Consumer<HomeProvider>(
+                    builder: (ctx, state, child) {
+                      return Container(
+                        height: 259.0,
+                        margin: EdgeInsets.only(left: 20.0),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.communityDetail != null
+                              ? state.communityDetail.length
+                              : 0,
+                          itemBuilder: (context, index) {
+                            return CommunitySingleCard(
+                                index: index,
+                                model: state.communityDetail[index]);
                           },
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 }
               }

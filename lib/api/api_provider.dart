@@ -612,12 +612,8 @@ class ApiProvider {
             'keyword': search,
             'page': page,
             'limit': limit,
-            'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-                0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-            'checkout': checkOutDate.millisecondsSinceEpoch
-                .toString()
-                .substring(0,
-                    checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
+            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'room': total,
           },
           options: Options(headers: {'requiredToken': false}));
@@ -637,10 +633,6 @@ class ApiProvider {
       final result = await _dio.get(
         '${ApiConstant.kHotelDetail}/$hotelId',
         queryParameters: {
-//          'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-//              0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-//          'checkout': checkOutDate.millisecondsSinceEpoch.toString().substring(
-//              0, checkOutDate.millisecondsSinceEpoch.toString().length - 3),
           'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
           'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
           'timezone': await getFlutterTimezone(),
@@ -718,10 +710,6 @@ class ApiProvider {
       DateTime checkIn,
       DateTime checkOut,
       String roomName) async {
-//    int incheck = int.parse(
-//        checkIn.toString().substring(0, checkIn.toString().length - 3));
-//    int outcheck = int.parse(
-//        checkOut.toString().substring(0, checkOut.toString().length - 3));
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,

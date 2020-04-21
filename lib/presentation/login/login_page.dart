@@ -1,8 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -164,6 +166,14 @@ class Content extends StatelessWidget {
                 ),
                 TextSpan(
                     text: ' Terms of Service',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        final response = await Navigator.of(context)
+                            .pushNamed(WebViewPage.routeName, arguments: {
+                          WebViewPage.urlName:
+                              'https://localin.id/privacy-policy.html',
+                        });
+                      },
                     style: ThemeText.sfMediumCaption
                         .copyWith(color: ThemeColors.primaryBlue)),
               ]),
@@ -184,7 +194,7 @@ class Content extends StatelessWidget {
         arguments: {InputPhoneNumberPage.userPhoneVerificationCode: ''});
   }
 
-  thirdPartySignIn(BuildContext context, {bool isFacebook}) async {
+  thirdPartySignIn(BuildContext context, {bool isFacebook = false}) async {
     CustomDialog.showLoadingDialog(context);
     final authState = Provider.of<AuthProvider>(context, listen: false);
     final result = isFacebook

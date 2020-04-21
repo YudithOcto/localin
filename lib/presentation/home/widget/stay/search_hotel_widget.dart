@@ -11,9 +11,8 @@ import 'package:provider/provider.dart';
 
 class SearchHotelWidget extends StatefulWidget {
   final bool isHomePage;
-  final ScrollController controller;
 
-  SearchHotelWidget({this.isHomePage, this.controller});
+  SearchHotelWidget({this.isHomePage});
 
   @override
   _SearchHotelWidgetState createState() => _SearchHotelWidgetState();
@@ -21,7 +20,6 @@ class SearchHotelWidget extends StatefulWidget {
 
 class _SearchHotelWidgetState extends State<SearchHotelWidget> {
   bool isInit = true;
-  ScrollController controller;
 
   @override
   void didChangeDependencies() {
@@ -34,19 +32,6 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
               .userCoordinates);
       searchHotelProvider.getHotel(isRefresh: true);
       isInit = false;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller = widget.controller;
-    controller..addListener(searchHotelListener);
-  }
-
-  searchHotelListener() {
-    if (controller.offset > controller.position.maxScrollExtent) {
-      Provider.of<SearchHotelProvider>(context, listen: false).getHotel();
     }
   }
 
@@ -119,22 +104,19 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
           StreamBuilder<SearchViewState>(
               stream: searchProvider.searchStream,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    snapshot.data == SearchViewState.Busy) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    !snapshot.hasData) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
                 }
                 return ListView.builder(
                   shrinkWrap: true,
-                  controller: controller,
                   physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 20.0),
                   itemCount: searchProvider.hotelDetailList.length + 1 ?? 0,
                   itemBuilder: (context, index) {
-                    if (searchProvider.hotelDetailList.length == 0) {
-                      return EmptyHotelWidget();
-                    } else if (index < searchProvider.hotelDetailList.length) {
+                    if (index < searchProvider.hotelDetailList.length) {
                       return HomeContentSearchHotel(
                         index: index,
                         hotel: searchProvider.hotelDetailList[index],
@@ -146,7 +128,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      return Container();
+                      return EmptyHotelWidget();
                     }
                   },
                 );

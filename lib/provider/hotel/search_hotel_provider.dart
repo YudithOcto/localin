@@ -64,6 +64,10 @@ class SearchHotelProvider extends BaseModelProvider {
     if (isRefresh) {
       _canLoadMore = true;
       _hotelDetailList.clear();
+      _pageRequestOffset = 1;
+    }
+    if (!_canLoadMore) {
+      return null;
     }
     HotelListBaseResponse result = await _repository.getHotelList(
         '${_userCoordinates?.latitude}',
@@ -79,7 +83,7 @@ class SearchHotelProvider extends BaseModelProvider {
       _totalPage = result?.total ?? 0;
       _canLoadMore = _totalPage > _hotelDetailList.length;
       _hotelDetailList.addAll(result.hotelDetailEntity);
-      _searchHotelController.add(SearchViewState.Busy);
+      _searchHotelController.add(SearchViewState.DataRetrieved);
     } else {
       _searchHotelController.add(SearchViewState.NoData);
       _canLoadMore = false;

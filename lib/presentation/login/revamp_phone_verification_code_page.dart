@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:localin/components/custom_verification_code.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/providers/verify_code_provider.dart';
-import 'package:localin/presentation/login/widgets/list_form_verification_widget.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,8 @@ class _RevampPhoneVerificationCodePageState
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<VerifyCodeProvider>(
       create: (_) => VerifyCodeProvider(),
-      child: VerifyContentFormWidget(phoneNumber: widget.phoneNumber),
+      child: VerifyContentFormWidget(
+          phoneNumber: widget.phoneNumber.validatedPhoneNumber),
     );
   }
 }
@@ -62,7 +63,7 @@ class VerifyContentFormWidget extends StatelessWidget {
                         style: ThemeText.sfRegularBody
                             .copyWith(color: ThemeColors.black80)),
                     TextSpan(
-                        text: '${getPhoneNumber(phoneNumber)}',
+                        text: '${phoneNumber.validatedPhoneNumber}',
                         style:
                             ThemeText.sfRegularFootnote.copyWith(height: 1.5)),
                   ]),
@@ -90,7 +91,15 @@ class VerifyContentFormWidget extends StatelessWidget {
                   visible: provider.timerState.defaultOrOnProgress,
                   child: SizedBox(height: 28.0),
                 ),
-                ListFormVerificationWidget(),
+                VerificationCode(
+                  keyboardType: TextInputType.number,
+                  onCompleted: (v) {
+                    provider.setFieldVerifyCode(v);
+                  },
+                  onEditing: (isStillEditing) {
+                    provider.setAllFieldsFilled(!isStillEditing);
+                  },
+                ),
                 SizedBox(
                   height: 24.0,
                 ),
@@ -103,7 +112,8 @@ class VerifyContentFormWidget extends StatelessWidget {
                         if (provider.timerState.isExpired) {
                           provider.enabledForm();
                           provider.requestingCodeBySms(phoneNumber);
-                          provider.setAllFieldsFilled();
+                          provider.setAllFieldsFilled(false);
+                          provider.clearTextFormField();
                         }
                       },
                       child: Text(
@@ -151,9 +161,10 @@ class VerifyContentFormWidget extends StatelessWidget {
             backgroundColor: ThemeColors.primaryBlue,
             isLoading: provider.isVerifyCodeNumber,
             onPressed: () async {
-              if (!provider.isFormDisabled && provider.isAllFieldsFilled) {
+              if (provider.isFormDisabled) {
+                customShowToast(context, 'You need to Request new code');
+              } else if (provider.isAllFieldsFilled) {
                 final response = await provider.verifySmsCode();
-                FocusScope.of(context).requestFocus(provider.nodeController[0]);
                 if (response.error != null) {
                   customShowToast(context, '${response.error}');
                   if (response.error.contains('ganti')) {
@@ -175,20 +186,10 @@ class VerifyContentFormWidget extends StatelessWidget {
     });
   }
 
-  String getPhoneNumber(String phoneNumber) {
-    if (phoneNumber.startsWith('0')) {
-      phoneNumber = '+62${phoneNumber.substring(1, phoneNumber.length)}';
-    } else {
-      phoneNumber = '+62$phoneNumber';
-    }
-    return phoneNumber;
-  }
-
   pushDataToLocalCache(
       BuildContext context, VerifyCodeProvider provider) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(kUserVerify, true);
-    provider.clearTextFormField();
     Provider.of<AuthProvider>(context, listen: false)
         .updateUserModelAndCache(phoneNumber);
   }
@@ -200,6 +201,18 @@ class VerifyContentFormWidget extends StatelessWidget {
         textStyle:
             ThemeText.sfMediumFootnote.copyWith(color: ThemeColors.red80),
         backgroundColor: ThemeColors.red10);
+  }
+}
+
+extension on String {
+  String get validatedPhoneNumber {
+    if (this.startsWith('0')) {
+      return '+62${this.substring(1, this.length)}';
+    } else if (this.startsWith('+62')) {
+      return this;
+    } else {
+      return '+62$this';
+    }
   }
 }
 
