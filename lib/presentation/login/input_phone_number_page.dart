@@ -91,6 +91,11 @@ class _ColumnContentState extends State<ColumnContent> {
     super.didChangeDependencies();
     if (isInit) {
       if (widget.isVerificationCodeOpen.isNotNullOrNotEmpty) {
+        Provider.of<InputPhoneNumberProvider>(context, listen: false)
+                .phoneNumberController
+                .text =
+            widget.isVerificationCodeOpen
+                .substring(1, widget.isVerificationCodeOpen.length);
         openVerificationCodePage(context,
             phoneNumber: widget.isVerificationCodeOpen);
       }
