@@ -78,28 +78,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         homeProvider.getArticleList(isRefresh: false);
       }
     }
-//    if (Provider.of<HomeProvider>(context).isRoomPage) {
-//      final searchProvider =
-//          Provider.of<SearchHotelProvider>(context, listen: false);
-//      if (searchProvider.hotelDetailList != null &&
-//          searchProvider.hotelDetailList.isNotEmpty &&
-//          controller.offset >= controller.position.maxScrollExtent &&
-//          !searchProvider.isLoading &&
-//          searchProvider.totalPage > searchProvider.hotelDetailList.length) {
-//        searchProvider.setLoading();
-//        searchProvider.getHotel();
-//      }
-//    } else {
-//      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-//      if (homeProvider.articleDetail != null &&
-//          homeProvider.articleDetail.isNotEmpty &&
-//          controller.offset >= controller.position.maxScrollExtent &&
-//          !homeProvider.isLoading &&
-//          homeProvider.articleDetail != null &&
-//          homeProvider.total > homeProvider.articleDetail.length) {
-//        // Provider.of<HomeProvider>(context, listen: false).getArticleList();
-//      }
-//    }
   }
 
   @override
