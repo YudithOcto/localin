@@ -17,6 +17,7 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/presentation/profile/other_profile_page.dart';
 import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
@@ -113,6 +114,7 @@ class _MyAppState extends State<MyApp> {
           InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
           OtherProfilePage.routeName: (_) => OtherProfilePage(),
           CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
+          OnBoardingPage.routeName: (_) => OnBoardingPage(),
         },
       ),
     );

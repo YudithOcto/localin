@@ -27,7 +27,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
               clipper: HeaderClipper(),
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,

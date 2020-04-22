@@ -5,6 +5,7 @@ import '../themes.dart';
 const kUserCache = 'UserModelCache';
 const kFacebookExpired = 'facebookExpired';
 const kUserVerify = 'userverify';
+const kUserCarousel = 'usercarousel';
 
 class Constants {
   static const kAddress =
