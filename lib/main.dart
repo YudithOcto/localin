@@ -31,6 +31,7 @@ import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/services/location_services.dart';
 import 'package:localin/themes.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/firebase/message.dart';
@@ -79,43 +80,46 @@ class _MyAppState extends State<MyApp> {
           create: (_) => LocationProvider(),
         )
       ],
-      child: MaterialApp(
-        navigatorKey: navigator,
-        title: 'Localin App',
-        theme: ThemeData(
-            canvasColor: ThemeColors.black0,
-            fontFamily: 'SfProText',
-            textTheme: ThemeData.light().textTheme.copyWith(
-                body1:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
-                body2: TextStyle(color: Colors.black87),
-                title: TextStyle(fontSize: 24.0, fontFamily: 'OpenSans'))),
-        initialRoute: '/',
-        routes: {
-          '/': (_) => SplashScreen(),
-          LoginPage.routeName: (_) => LoginPage(),
-          MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
-          EditProfilePage.routeName: (_) => EditProfilePage(),
-          ConnectDanaAccountPage.routeName: (_) => ConnectDanaAccountPage(),
-          ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
-          EmptyPage.routeName: (_) => EmptyPage(),
-          CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
-          CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
-          CommunityCreateEventPage.routeName: (_) => CommunityCreateEventPage(),
-          NotificationListPage.routeName: (_) => NotificationListPage(),
-          SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
-          BookingDetailPage.routeName: (_) => BookingDetailPage(),
-          BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
-          HotelDetailPage.routeName: (_) => HotelDetailPage(),
-          CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
-          CreateArticlePage.routeName: (_) => CreateArticlePage(),
-          GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
-          WebViewPage.routeName: (_) => WebViewPage(),
-          InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
-          OtherProfilePage.routeName: (_) => OtherProfilePage(),
-          CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
-          OnBoardingPage.routeName: (_) => OnBoardingPage(),
-        },
+      child: OKToast(
+        child: MaterialApp(
+          navigatorKey: navigator,
+          title: 'Localin App',
+          theme: ThemeData(
+              canvasColor: ThemeColors.black0,
+              fontFamily: 'SfProText',
+              textTheme: ThemeData.light().textTheme.copyWith(
+                  body1: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w600),
+                  body2: TextStyle(color: Colors.black87),
+                  title: TextStyle(fontSize: 24.0, fontFamily: 'OpenSans'))),
+          initialRoute: '/',
+          routes: {
+            '/': (_) => SplashScreen(),
+            LoginPage.routeName: (_) => LoginPage(),
+            MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
+            EditProfilePage.routeName: (_) => EditProfilePage(),
+            ConnectDanaAccountPage.routeName: (_) => ConnectDanaAccountPage(),
+            ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
+            EmptyPage.routeName: (_) => EmptyPage(),
+            CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
+            CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
+            CommunityCreateEventPage.routeName: (_) =>
+                CommunityCreateEventPage(),
+            NotificationListPage.routeName: (_) => NotificationListPage(),
+            SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
+            BookingDetailPage.routeName: (_) => BookingDetailPage(),
+            BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
+            HotelDetailPage.routeName: (_) => HotelDetailPage(),
+            CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
+            CreateArticlePage.routeName: (_) => CreateArticlePage(),
+            GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
+            WebViewPage.routeName: (_) => WebViewPage(),
+            InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
+            OtherProfilePage.routeName: (_) => OtherProfilePage(),
+            CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
+            OnBoardingPage.routeName: (_) => OnBoardingPage(),
+          },
+        ),
       ),
     );
   }

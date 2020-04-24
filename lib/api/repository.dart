@@ -223,11 +223,23 @@ class Repository {
   }
 
   /// NOTIFICATION
-  Future<NotificationModel> getNotificationList(int offset, int limit) {
+  Future<NotificationModelResponse> getNotificationList(int offset, int limit) {
     return apiProvider.getNotificationList(offset, limit);
   }
 
   Future<bool> readNotificationUpdate(String notifId) async {
     return apiProvider.readNotificationUpdate(notifId);
+  }
+
+  Future<String> deleteAllNotification() async {
+    return apiProvider.deleteAllNotification();
+  }
+
+  Future<String> deleteNotificationById(String id) async {
+    return apiProvider.deleteNotificationById(id);
+  }
+
+  Future<String> undoNotificationDelete(String id) async {
+    return apiProvider.unDeleteNotificationById(id);
   }
 }

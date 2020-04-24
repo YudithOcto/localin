@@ -47,4 +47,9 @@ class ApiConstant {
 
   /// NOTIFICATION
   static const String kNotificationList = 'v1/member/notifications';
+  static const String kNotificationDeleteAll = 'v1/member/notifications/delete';
+  static const String kNotificationDeleteById =
+      'v1/member/notifications/delete';
+  static const String kNotificationUnDeleteById =
+      'v1/member/notifications/undelete';
 }

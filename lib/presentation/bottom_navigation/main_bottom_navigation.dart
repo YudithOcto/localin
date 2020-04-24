@@ -26,13 +26,11 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
     super.didChangeDependencies();
     if (isInit) {
       pages = [
-        HomePage(
-          valueChanged: _selectedTab,
-        ),
+        HomePage(valueChanged: _selectedTab),
         // HomeHeaderWidget(),
         CommunityFeedPage(),
         BookingHistoryPage(),
-        NotificationListPage(),
+        NotificationListPage(valueChanged: _selectedTab),
         ProfilePage()
       ];
       isInit = false;

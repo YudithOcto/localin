@@ -791,17 +791,18 @@ class ApiProvider {
     }
   }
 
-  Future<NotificationModel> getNotificationList(int offset, int limit) async {
+  Future<NotificationModelResponse> getNotificationList(
+      int offset, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kNotificationList,
           queryParameters: {'page': offset, 'limit': limit},
           options: Options(headers: {'requiredToken': true}));
-      return NotificationModel.fromJson(response.data);
+      return NotificationModelResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return NotificationModel.withError(_handleError(error));
+        return NotificationModelResponse.withError(_handleError(error));
       } else {
-        return NotificationModel.withError(error.toString());
+        return NotificationModelResponse.withError(error.toString());
       }
     }
   }
@@ -814,6 +815,38 @@ class ApiProvider {
       return response.data['status'];
     } catch (error) {
       return false;
+    }
+  }
+
+  Future<String> deleteAllNotification() async {
+    try {
+      final response = await _dio.get(ApiConstant.kNotificationDeleteAll,
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<String> deleteNotificationById(String id) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kNotificationDeleteById}/$id',
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<String> unDeleteNotificationById(String id) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kNotificationUnDeleteById}/$id',
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
     }
   }
 
