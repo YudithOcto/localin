@@ -13,7 +13,6 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:superellipse_shape/superellipse_shape.dart';
 
 class RevampProfilePage extends StatelessWidget {
   static const routeName = '/revampProfilePage';
@@ -72,7 +71,7 @@ class _RevampProfileContentWidgetState
                 return Row(
                   children: <Widget>[
                     Text(
-                      '0 points',
+                      '${authProvider.userModel.points} points',
                       style: ThemeText.sfSemiBoldBody,
                     ),
                     SizedBox(
