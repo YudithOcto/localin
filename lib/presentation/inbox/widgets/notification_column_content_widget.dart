@@ -160,7 +160,14 @@ class _NotificationColumnContentWidgetState
                         onRefresh: () async {
                           notifProvider.getNotificationList(isRefresh: true);
                         },
-                        child: ListView.builder(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) {
+                            return Container(
+                              width: double.maxFinite,
+                              height: 1.0,
+                              color: ThemeColors.black10,
+                            );
+                          },
                           physics: ClampingScrollPhysics(),
                           controller: _scrollController,
                           itemCount: notifProvider.notificationList.length + 1,

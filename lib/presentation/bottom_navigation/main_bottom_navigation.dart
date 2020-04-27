@@ -5,6 +5,7 @@ import 'package:localin/presentation/community/pages/community_feed_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_profile_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
         CommunityFeedPage(),
         BookingHistoryPage(),
         NotificationListPage(valueChanged: _selectedTab),
-        ProfilePage()
+        RevampProfilePage()
       ];
       isInit = false;
     }

@@ -34,6 +34,10 @@ class Repository {
     return apiProvider.userLogout();
   }
 
+  Future<String> updateUserProfile(FormData formData) async {
+    return apiProvider.updateUserProfile(formData);
+  }
+
   Future<UserModel> getUserProfile() async {
     return apiProvider.getUserProfile();
   }

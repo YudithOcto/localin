@@ -19,6 +19,11 @@ import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/presentation/profile/other_profile_page.dart';
+import 'package:localin/presentation/profile/revamp/page/others_profile/revamp_others_profile_page.dart';
+import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_edit_profile_page.dart';
+import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_profile_page.dart';
+import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_page.dart';
+import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
@@ -118,6 +123,13 @@ class _MyAppState extends State<MyApp> {
             OtherProfilePage.routeName: (_) => OtherProfilePage(),
             CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
             OnBoardingPage.routeName: (_) => OnBoardingPage(),
+            RevampProfilePage.routeName: (_) => RevampProfilePage(),
+            RevampEditProfilePage.routeName: (_) => RevampEditProfilePage(),
+            RevampUserVerificationPage.routeName: (_) =>
+                RevampUserVerificationPage(),
+            RevampUserVerificationSuccessPage.routeName: (_) =>
+                RevampUserVerificationSuccessPage(),
+            RevampOthersProfilePage.routeName: (_) => RevampOthersProfilePage(),
           },
         ),
       ),

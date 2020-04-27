@@ -38,104 +38,104 @@ class _HeaderProfileState extends State<HeaderProfile> {
         ProfilePageRowCard(onSettingPressed: () {
           Navigator.of(context).pushNamed(EditProfilePage.routeName);
         }),
-        StreamBuilder<DanaAccountDetail>(
-          stream: provider.danaAccountStream,
-          builder: (context, asyncSnapshot) {
-            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              if (asyncSnapshot.hasError) {
-                return Center(
-                  child: Column(
-                    children: <Widget>[
-                      Icon(Icons.error),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text('An error occured'),
-                    ],
-                  ),
-                );
-              } else {
-                if (asyncSnapshot.data == null ||
-                    asyncSnapshot.data.maskDanaId == null) {
-                  return RowConnectDana(
-                    onPressed: () async {
-                      if (authState.userModel.handphone != null &&
-                          authState.userModel.handphone.isNotEmpty) {
-                        final result =
-                            await provider.authenticateUserDanaAccount(
-                                authState.userModel.handphone);
-                        if (result.urlRedirect.isNotEmpty && !result.error) {
-                          final response = await Navigator.of(context)
-                              .pushNamed(WebViewPage.routeName, arguments: {
-                            WebViewPage.urlName: result.urlRedirect
-                          });
-                          if (response != null && response == 'success') {
-                            final dialogResult = await showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('DANA'),
-                                    content: Text(
-                                      'Connect to dana success',
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        color: ThemeColors.primaryBlue,
-                                        onPressed: () => Navigator.of(context)
-                                            .pop('success'),
-                                        child: Text(
-                                          'Ok',
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                });
-
-                            if (dialogResult == 'success') {
-                              Provider.of<UserProfileProvider>(context)
-                                  .getUserDanaStatus();
-                            }
-                          }
-                        }
-                      } else {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text('No Phone number on your account'),
-                          duration: Duration(milliseconds: 1500),
-                        ));
-                      }
-                    },
-                  );
-                } else {
-                  return DanaActiveRow(
-                    detail: asyncSnapshot.data,
-                    isNeedRefresh: (isNeedRefresh) {
-                      if (isNeedRefresh) {
-                        setState(() {
-                          Provider.of<UserProfileProvider>(context,
-                                  listen: false)
-                              .getUserDanaStatus();
-                        });
-                      }
-                    },
-                  );
-                }
-              }
-            }
-          },
-        ),
+//        StreamBuilder<DanaAccountDetail>(
+//          stream: provider.danaAccountStream,
+//          builder: (context, asyncSnapshot) {
+//            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+//              return Center(
+//                child: CircularProgressIndicator(),
+//              );
+//            } else {
+//              if (asyncSnapshot.hasError) {
+//                return Center(
+//                  child: Column(
+//                    children: <Widget>[
+//                      Icon(Icons.error),
+//                      SizedBox(
+//                        height: 5.0,
+//                      ),
+//                      Text('An error occured'),
+//                    ],
+//                  ),
+//                );
+//              } else {
+//                if (asyncSnapshot.data == null ||
+//                    asyncSnapshot.data.maskDanaId == null) {
+//                  return RowConnectDana(
+//                    onPressed: () async {
+//                      if (authState.userModel.handphone != null &&
+//                          authState.userModel.handphone.isNotEmpty) {
+//                        final result =
+//                            await provider.authenticateUserDanaAccount(
+//                                authState.userModel.handphone);
+//                        if (result.urlRedirect.isNotEmpty && !result.error) {
+//                          final response = await Navigator.of(context)
+//                              .pushNamed(WebViewPage.routeName, arguments: {
+//                            WebViewPage.urlName: result.urlRedirect
+//                          });
+//                          if (response != null && response == 'success') {
+//                            final dialogResult = await showDialog(
+//                                barrierDismissible: false,
+//                                context: context,
+//                                builder: (context) {
+//                                  return AlertDialog(
+//                                    title: Text('DANA'),
+//                                    content: Text(
+//                                      'Connect to dana success',
+//                                      style: TextStyle(
+//                                          fontSize: 14.0,
+//                                          color: Colors.black,
+//                                          fontWeight: FontWeight.w600),
+//                                    ),
+//                                    actions: <Widget>[
+//                                      FlatButton(
+//                                        color: ThemeColors.primaryBlue,
+//                                        onPressed: () => Navigator.of(context)
+//                                            .pop('success'),
+//                                        child: Text(
+//                                          'Ok',
+//                                          style: TextStyle(
+//                                              fontSize: 12.0,
+//                                              color: Colors.white,
+//                                              fontWeight: FontWeight.w600),
+//                                        ),
+//                                      )
+//                                    ],
+//                                  );
+//                                });
+//
+//                            if (dialogResult == 'success') {
+//                              Provider.of<UserProfileProvider>(context)
+//                                  .getUserDanaStatus();
+//                            }
+//                          }
+//                        }
+//                      } else {
+//                        Scaffold.of(context).showSnackBar(SnackBar(
+//                          content: Text('No Phone number on your account'),
+//                          duration: Duration(milliseconds: 1500),
+//                        ));
+//                      }
+//                    },
+//                  );
+//                } else {
+//                  return DanaActiveRow(
+//                    detail: asyncSnapshot.data,
+//                    isNeedRefresh: (isNeedRefresh) {
+//                      if (isNeedRefresh) {
+//                        setState(() {
+//                          Provider.of<UserProfileProvider>(context,
+//                                  listen: false)
+//                              .getUserDanaStatus();
+//                        });
+//                      }
+//                    },
+//                  );
+//                }
+//              }
+//            }
+//          },
+//        ),
         authState?.userModel?.shortBio != null
             ? DescriptionColumn()
             : Container(),

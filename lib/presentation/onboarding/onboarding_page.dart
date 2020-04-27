@@ -57,10 +57,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            height: 600,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: PageView(
               physics: ClampingScrollPhysics(),
               controller: _pageController,
@@ -69,105 +68,42 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   _currentPage = page;
                 });
               },
+              children: List.generate(onBoardingImage.length, (index) {
+                return Container(
+                  width: double.infinity,
+                  child: Image.asset(
+                    '${onBoardingImage[index]}',
+                    fit: BoxFit.cover,
+                  ),
+                );
+              }),
+            ),
+          ),
+          Expanded(
+            child: Column(
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: double.infinity,
-                      child: Image.asset(
-                        '${onBoardingImage[_currentPage]}',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 26.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '${onBoardingTitle[_currentPage]}',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.rodinaTitle2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '${onBoardingBody[_currentPage]}',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.sfRegularHeadline
-                            .copyWith(color: ThemeColors.black80),
-                      ),
-                    )
-                  ],
+                SizedBox(
+                  height: 26.0,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Image.asset(
-                      '${onBoardingImage[_currentPage]}',
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(
-                      height: 26.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '${onBoardingTitle[_currentPage]}',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.rodinaTitle2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '${onBoardingBody[_currentPage]}',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.sfRegularHeadline
-                            .copyWith(color: ThemeColors.black80),
-                      ),
-                    )
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    '${onBoardingTitle[_currentPage]}',
+                    textAlign: TextAlign.center,
+                    style: ThemeText.rodinaTitle2,
+                  ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Image.asset(
-                      '${onBoardingImage[_currentPage]}',
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(
-                      height: 26.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '${onBoardingTitle[_currentPage]}',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.rodinaTitle2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        '${onBoardingBody[_currentPage]}',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.sfRegularHeadline
-                            .copyWith(color: ThemeColors.black80),
-                      ),
-                    )
-                  ],
+                SizedBox(
+                  height: 8.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    '${onBoardingBody[_currentPage]}',
+                    textAlign: TextAlign.center,
+                    style: ThemeText.sfRegularHeadline
+                        .copyWith(color: ThemeColors.black80),
+                  ),
                 ),
               ],
             ),

@@ -62,6 +62,9 @@ class SingleCardNotification extends StatelessWidget {
                     style: ThemeText.sfMediumCaption
                         .copyWith(color: ThemeColors.brandBlack),
                   ),
+                  SizedBox(
+                    height: 4.0,
+                  ),
                   Text(
                     '${detailModel?.message}',
                     style: ThemeText.sfSemiBoldHeadline

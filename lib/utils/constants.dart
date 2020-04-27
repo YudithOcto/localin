@@ -6,6 +6,14 @@ const kUserCache = 'UserModelCache';
 const kFacebookExpired = 'facebookExpired';
 const kUserVerify = 'userverify';
 const kUserCarousel = 'usercarousel';
+const kUserStatusVerified = 'verified_identitas';
+const kRequstVerificationContentText =
+    'A verified badge is a check that appears next to an Localin account’s'
+    ' name to indicate that the account is the authentic presence of a notable Curator it represents.'
+    '\n\nSubmitting a request for verification does not guarantee that your account will be verified.';
+const kUserProfileVerifiedSubmitted =
+    'We’ll let you know once we’ve reviewed your request for a verified badge.'
+    ' \n\nKeep watch in your email or notification in inbox for update.';
 
 class Constants {
   static const kAddress =

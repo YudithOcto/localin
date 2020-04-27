@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/bottom_company_information.dart';
-import 'package:localin/components/social_button.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/presentation/profile/widgets/edit_profile_row_card.dart';
 import 'package:localin/presentation/profile/widgets/row_connect_dana.dart';
@@ -241,24 +240,8 @@ class SocialLoginCard extends StatelessWidget {
         SizedBox(
           height: 25.0,
         ),
-        SocialButton(
-          onPressed: () {},
-          color: ThemeColors.primaryBlue,
-          textColor: Colors.white,
-          title: 'FACEBOOK',
-          height: 40.0,
-          imageAsset: 'images/ic_fb_small.png',
-        ),
         SizedBox(
           height: 10.0,
-        ),
-        SocialButton(
-          onPressed: () {},
-          color: ThemeColors.primaryBlue,
-          textColor: Colors.white,
-          height: 40.0,
-          title: 'GOOGLE',
-          imageAsset: 'images/ic_google.png',
         ),
       ],
     );

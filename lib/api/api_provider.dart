@@ -207,6 +207,16 @@ class ApiProvider {
     }
   }
 
+  Future<String> updateUserProfile(FormData formData) async {
+    try {
+      final response = await _dio.post('${ApiConstant.kUpdateProfile}',
+          data: formData, options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
   Future<UpdateProfileModel> verifyUserAccount() async {
     try {
       final response = await _dio.get(ApiConstant.kVerifyAccount,

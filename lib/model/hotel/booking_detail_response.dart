@@ -88,7 +88,9 @@ class BookingDetailModel {
       hotelImage: body['hotel_image'],
       guestCount: body['adult_count'],
       roomName: body['room_name'],
-      hotelDetail: HotelDetailModel.fromJson(body['hotel_detail']),
+      hotelDetail: body['hotel_detail'] == null
+          ? null
+          : HotelDetailModel.fromJson(body['hotel_detail']),
       expiredAt: body['expired_at'],
       requestCheckInDate: body['request_checkin'],
       requestCheckOutDate: body['request_checkout'],

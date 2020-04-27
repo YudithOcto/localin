@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/profile/revamp/page/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -186,7 +187,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                           serviceIcon: 'home_service_attraction_icon.svg',
                           serviceName: 'ATTRACT',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(RevampOthersProfilePage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_ticket_icon.svg',

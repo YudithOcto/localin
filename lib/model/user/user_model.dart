@@ -17,6 +17,7 @@ class UserModel {
   int posts;
   String latitude;
   String longitude;
+  int totalView;
 
   UserModel({
     this.id,
@@ -37,6 +38,7 @@ class UserModel {
     this.posts,
     this.latitude,
     this.longitude,
+    this.totalView,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
@@ -58,6 +60,7 @@ class UserModel {
       posts: body['posts'] ?? 0,
       latitude: body['lat'] ?? '0.0',
       longitude: body['long'] ?? '0.0',
+      totalView: body['total_View'] ?? 0,
     );
   }
 

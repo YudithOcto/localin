@@ -50,10 +50,9 @@ class BookingInformationCard extends StatelessWidget {
                 '${detail?.status?.contains('confirm booking') ?? '' ? 'Pembelian Berhasil' : detail?.status}',
                 textAlign: TextAlign.center,
               ),
-              rowInformation('Booking iD', '${detail?.invoiceCode}'),
+              rowInformation('Booking ID', '${detail?.invoiceCode}'),
               rowInformation('Dibeli',
                   '${DateHelper.formatDateBookingDetail(detail?.updatedAt)}'),
-              //rowInformation('Metode Pembayaran', 'BCA'),
               rowInformation('Rincian Harga',
                   '${getFormattedCurrency(detail?.userPrice)}'),
               Visibility(
