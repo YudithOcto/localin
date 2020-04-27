@@ -60,6 +60,7 @@ class _WebViewPageState extends State<WebViewPage> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[WebViewPage.urlName];
+    url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
     return Scaffold(
       body: MaterialApp(
         routes: {

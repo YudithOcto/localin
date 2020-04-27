@@ -6,6 +6,7 @@ import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/profile/other_profile_page.dart';
 import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -65,11 +66,17 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
   Widget bigImages(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(ArticleDetailPage.routeName, arguments: {
-          ArticleDetailPage.articleId: widget.articleDetail?.slug,
-          ArticleDetailPage.commentPage: false,
-        });
+        if (widget?.articleDetail?.type == 'media') {
+          Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
+            WebViewPage.urlName: widget?.articleDetail?.slug,
+          });
+        } else {
+          Navigator.of(context)
+              .pushNamed(ArticleDetailPage.routeName, arguments: {
+            ArticleDetailPage.articleId: widget.articleDetail?.slug,
+            ArticleDetailPage.commentPage: false,
+          });
+        }
       },
       child: CachedNetworkImage(
         imageUrl: ImageHelper.addSubFixHttp(widget.articleDetail?.image),

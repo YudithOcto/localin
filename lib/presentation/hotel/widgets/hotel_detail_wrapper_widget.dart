@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/home/gallery_photo_view.dart';
+import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';

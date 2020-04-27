@@ -39,9 +39,12 @@ class _RevampOthersProfileHeaderWidgetState
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.arrow_back,
-                      color: ThemeColors.black0,
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: ThemeColors.black0,
+                      ),
                     ),
                     SizedBox(
                       width: 16.0,
