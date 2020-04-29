@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_category.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/widget/community_card_widget.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
-import 'package:localin/presentation/home/widget/community/community_empty_page.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_feed_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';

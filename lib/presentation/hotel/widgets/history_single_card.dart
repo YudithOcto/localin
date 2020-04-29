@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/model/hotel/booking_detail.dart';
-import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/utils/constants.dart';
 
 import '../../../themes.dart';
 

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:localin/presentation/profile/revamp/provider/revamp_verification_provider.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_page.dart';
+import 'package:localin/presentation/profile/provider/revamp_verification_provider.dart';
 import 'package:localin/provider/core/image_picker_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../text_themes.dart';
-import '../../../../../themes.dart';
+import '../../../text_themes.dart';
+import '../../../themes.dart';
 
 class RowUserProfileFormWidget extends StatelessWidget {
   @override

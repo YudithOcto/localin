@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:localin/components/custom_dialog.dart';
-import 'package:localin/presentation/profile/revamp/provider/revamp_edit_profile_provider.dart';
+import 'package:localin/presentation/profile/provider/revamp_edit_profile_provider.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
 import 'package:superellipse_shape/superellipse_shape.dart';
 
-import '../../../../../themes.dart';
+import '../../../themes.dart';
 
 class RevampEditProfilePage extends StatelessWidget {
   static const routeName = '/revampEditProfilePage';

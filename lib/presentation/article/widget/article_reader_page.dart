@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/widget/recommended_card.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/article/article_detail_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:localin/utils/constants.dart';
 
 class ArticleReaderPage extends StatelessWidget {
   @override

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_profile_page.dart';
+import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/utils/constants.dart';
 
-import '../../../../../text_themes.dart';
-import '../../../../../themes.dart';
+import '../../../text_themes.dart';
+import '../../../themes.dart';
 
 class RevampUserVerificationSuccessPage extends StatelessWidget {
   static const routeName = 'revampUserVerificationSuccess';

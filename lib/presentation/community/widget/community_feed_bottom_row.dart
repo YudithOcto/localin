@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_feed_provider.dart';
-import 'package:localin/utils/star_display.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';

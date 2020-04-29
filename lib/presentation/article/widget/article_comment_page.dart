@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/presentation/article/widget/recommended_card.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/article/article_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -138,7 +138,8 @@ class CommentCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '${commentDetail?.sender}',
-                      style: kValueStyle.copyWith(color: ThemeColors.primaryBlue),
+                      style:
+                          kValueStyle.copyWith(color: ThemeColors.primaryBlue),
                     ),
                     Text(
                       '${commentDetail?.createdAt}',

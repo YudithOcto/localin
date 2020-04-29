@@ -1,19 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
-import 'package:localin/presentation/profile/other_profile_page.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
-import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../themes.dart';
+import '../../themes.dart';
 
 class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;

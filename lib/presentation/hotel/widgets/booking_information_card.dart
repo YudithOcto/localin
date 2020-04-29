@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:localin/model/hotel/booking_detail.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
-import 'package:provider/provider.dart';
-
 import '../../../themes.dart';
 
 class BookingInformationCard extends StatelessWidget {

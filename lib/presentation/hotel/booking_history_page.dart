@@ -5,9 +5,8 @@ import 'package:localin/presentation/home/widget/stay/search_hotel_widget.dart';
 import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
 import 'package:localin/presentation/hotel/widgets/history_single_card.dart';
 import 'package:localin/presentation/home/widget/home_content_default.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../themes.dart';

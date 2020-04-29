@@ -18,29 +18,24 @@ import 'package:localin/presentation/community/widget/community_category_search.
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
-import 'package:localin/presentation/profile/other_profile_page.dart';
-import 'package:localin/presentation/profile/revamp/page/others_profile/revamp_others_profile_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_edit_profile_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_profile_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_success_page.dart';
+import 'package:localin/presentation/profile/others_profile/revamp_others_profile_page.dart';
+import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
+import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
+import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
+import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
-import 'package:localin/presentation/profile/widgets/connect_dana_account_page.dart';
-import 'package:localin/presentation/profile/edit_profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
 import 'package:localin/provider/location/location_provider.dart';
-import 'package:localin/services/location_services.dart';
 import 'package:localin/themes.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/firebase/message.dart';
-import 'model/service/user_location.dart';
 
 final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 
@@ -75,9 +70,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<BookingHistoryProvider>(
           create: (_) => BookingHistoryProvider(),
         ),
-        StreamProvider<UserLocation>(
-          create: (context) => LocationServices().locationStream,
-        ),
         ChangeNotifierProvider<SearchHotelProvider>(
           create: (_) => SearchHotelProvider(),
         ),
@@ -102,8 +94,6 @@ class _MyAppState extends State<MyApp> {
             '/': (_) => SplashScreen(),
             LoginPage.routeName: (_) => LoginPage(),
             MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
-            EditProfilePage.routeName: (_) => EditProfilePage(),
-            ConnectDanaAccountPage.routeName: (_) => ConnectDanaAccountPage(),
             ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
             EmptyPage.routeName: (_) => EmptyPage(),
             CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
@@ -120,7 +110,6 @@ class _MyAppState extends State<MyApp> {
             GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
             WebViewPage.routeName: (_) => WebViewPage(),
             InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
-            OtherProfilePage.routeName: (_) => OtherProfilePage(),
             CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
             OnBoardingPage.routeName: (_) => OnBoardingPage(),
             RevampProfilePage.routeName: (_) => RevampProfilePage(),

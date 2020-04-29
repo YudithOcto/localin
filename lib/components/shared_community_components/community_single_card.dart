@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
-import '../../../../text_themes.dart';
-import '../../../../themes.dart';
+import '../../text_themes.dart';
+import '../../themes.dart';
 
 class CommunitySingleCard extends StatefulWidget {
   final int index;

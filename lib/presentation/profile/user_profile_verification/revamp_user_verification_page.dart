@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_dialog.dart';
-import 'package:localin/presentation/profile/revamp/provider/revamp_verification_provider.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_success_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile/row_user_profile_form_widget.dart';
+import 'package:localin/presentation/profile/provider/revamp_verification_provider.dart';
+import 'package:localin/presentation/profile/user_profile/row_user_profile_form_widget.dart';
+import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/provider/core/image_picker_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../text_themes.dart';
-import '../../../../../themes.dart';
+import '../../../text_themes.dart';
+import '../../../themes.dart';
 
 class RevampUserVerificationPage extends StatelessWidget {
   static const routeName = '/userprofileverificationpage';

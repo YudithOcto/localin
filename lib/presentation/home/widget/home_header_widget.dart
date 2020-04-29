@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
-import 'package:localin/presentation/profile/revamp/page/others_profile/revamp_others_profile_page.dart';
+import 'package:localin/presentation/profile/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -151,12 +151,14 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                                 height: 24.0,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Text(
-                                '0 Point',
-                                style: ThemeText.sfRegularHeadline
-                                    .copyWith(color: ThemeColors.black0),
+                            Consumer<AuthProvider>(
+                              builder: (context, provider, child) => Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: Text(
+                                  '${provider.userModel.points} Point',
+                                  style: ThemeText.sfRegularHeadline
+                                      .copyWith(color: ThemeColors.black0),
+                                ),
                               ),
                             )
                           ],

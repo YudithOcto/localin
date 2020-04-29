@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 
 import '../../../themes.dart';

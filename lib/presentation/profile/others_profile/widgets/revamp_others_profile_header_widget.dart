@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
-import 'package:localin/presentation/profile/revamp/page/others_profile/row_user_community_article_widget.dart';
+import 'package:localin/presentation/profile/others_profile/widgets/row_user_community_article_widget.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../text_themes.dart';
-import '../../../../../themes.dart';
+import '../../../../text_themes.dart';
+import '../../../../themes.dart';
 
 class RevampOthersProfileHeaderWidget extends StatefulWidget {
   @override

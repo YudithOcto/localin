@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/presentation/article/pages/create_article_page.dart';
-import 'package:localin/themes.dart';
+import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 
-import '../../../../text_themes.dart';
+import '../../text_themes.dart';
+import '../../themes.dart';
 
-class EmptyArticle extends StatelessWidget {
+class CommunityEmptyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,10 +14,10 @@ class EmptyArticle extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SvgPicture.asset(
-            'images/empty_article.svg',
+            'images/empty_community.svg',
           ),
           Text(
-            'Can\'t find news around you',
+            'Can\'t find community around you',
             textAlign: TextAlign.center,
             style: ThemeText.sfSemiBoldHeadline
                 .copyWith(color: ThemeColors.black80),
@@ -26,7 +26,7 @@ class EmptyArticle extends StatelessWidget {
             height: 4.0,
           ),
           Text(
-            'Read news from other location, or create your own article',
+            'Dicover community from other location, or create your own community',
             textAlign: TextAlign.center,
             style: ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
           ),
@@ -36,12 +36,14 @@ class EmptyArticle extends StatelessWidget {
           OutlineButtonDefault(
             onPressed: () async {
               final result = await Navigator.of(context)
-                  .pushNamed(CreateArticlePage.routeName);
+                  .pushNamed(CommunityCreateEditPage.routeName, arguments: {
+                CommunityCreateEditPage.isUpdatePage: false,
+              });
               if (result != null) {
-                /// refresh current page
+                /// refresh the page
               }
             },
-            buttonText: 'Create Article',
+            buttonText: 'Create my own community',
           )
         ],
       ),

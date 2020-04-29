@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile/revamp_edit_profile_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile_verification/revamp_user_verification_page.dart';
-import 'package:localin/presentation/profile/revamp/page/user_profile/row_profile_settings_widget.dart';
+import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
+import 'package:localin/presentation/profile/user_profile/row_profile_settings_widget.dart';
+import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/profile/user_profile_detail_provider.dart';
