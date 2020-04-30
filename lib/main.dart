@@ -18,13 +18,14 @@ import 'package:localin/presentation/community/widget/community_category_search.
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
-import 'package:localin/presentation/profile/others_profile/revamp_others_profile_page.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
+import 'package:localin/presentation/webview/revamp_webview.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -119,6 +120,7 @@ class _MyAppState extends State<MyApp> {
             RevampUserVerificationSuccessPage.routeName: (_) =>
                 RevampUserVerificationSuccessPage(),
             RevampOthersProfilePage.routeName: (_) => RevampOthersProfilePage(),
+            RevampWebview.routeName: (_) => RevampWebview(),
           },
         ),
       ),

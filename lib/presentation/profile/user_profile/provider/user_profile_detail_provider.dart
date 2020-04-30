@@ -4,6 +4,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/user/user_model.dart';
 
 class UserProfileProvider with ChangeNotifier {
   Repository _repository = Repository();
@@ -30,6 +31,10 @@ class UserProfileProvider with ChangeNotifier {
         _danaAccountDetail.add(danaStatus.NoData);
       }
     }
+  }
+
+  Future<UserModel> getUserProfile() async {
+    return await _repository.getUserProfile();
   }
 
   Future<DanaActivateBaseResponse> authenticateUserDanaAccount(

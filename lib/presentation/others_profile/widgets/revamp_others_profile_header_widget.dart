@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
-import 'package:localin/presentation/profile/others_profile/widgets/row_user_community_article_widget.dart';
-import 'package:localin/provider/auth_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:localin/model/user/user_model.dart';
+import 'package:localin/presentation/others_profile/widgets/row_user_community_article_widget.dart';
+import 'package:localin/utils/constants.dart';
 
-import '../../../../text_themes.dart';
-import '../../../../themes.dart';
+import '../../../text_themes.dart';
+import '../../../themes.dart';
 
 class RevampOthersProfileHeaderWidget extends StatefulWidget {
+  final UserModel userModel;
+  RevampOthersProfileHeaderWidget({this.userModel});
   @override
   _RevampOthersProfileHeaderWidgetState createState() =>
       _RevampOthersProfileHeaderWidgetState();
@@ -41,16 +43,19 @@ class _RevampOthersProfileHeaderWidgetState
                   children: <Widget>[
                     InkWell(
                       onTap: () => Navigator.of(context).pop(),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: ThemeColors.black0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: ThemeColors.black0,
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 16.0,
                     ),
                     Text(
-                      'Dema Wiguna',
+                      '${widget.userModel?.username ?? ''}',
                       style: ThemeText.sfMediumHeadline
                           .copyWith(color: ThemeColors.black0),
                     )
@@ -64,17 +69,15 @@ class _RevampOthersProfileHeaderWidgetState
                     Stack(
                       overflow: Overflow.visible,
                       children: <Widget>[
-                        UserProfileBoxWidget(
-                          imageUrl:
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .userModel
-                                  .imageProfile,
+                        UserProfileImageWidget(
+                          imageUrl: widget.userModel?.imageProfile,
                         ),
                         Positioned(
                           right: -4.0,
                           bottom: -4.0,
                           child: Visibility(
-                            visible: true,
+                            visible:
+                                widget.userModel?.status == kUserStatusVerified,
                             child: SvgPicture.asset(
                               'images/verified_profile.svg',
                               fit: BoxFit.cover,
@@ -89,7 +92,7 @@ class _RevampOthersProfileHeaderWidgetState
                     RowUserCommunityArticleWidget(
                       icon: 'images/other_profile_community_icon.svg',
                       title: 'community',
-                      value: '14',
+                      value: '${widget.userModel?.totalCommunity ?? 0}',
                     ),
                     SizedBox(
                       width: 26.0,
@@ -97,7 +100,7 @@ class _RevampOthersProfileHeaderWidgetState
                     RowUserCommunityArticleWidget(
                       icon: 'images/other_profile_article_icon.svg',
                       title: 'articles',
-                      value: '23',
+                      value: '${widget.userModel?.totalArticle ?? 0}',
                     ),
                   ],
                 ),
@@ -113,7 +116,7 @@ class _RevampOthersProfileHeaderWidgetState
                   height: 4.0,
                 ),
                 Text(
-                  'Actor, musician, songwriter. Mailbox: wiguna69@gmail.com *Rythm&Blues is Life*. Link new video // youtube.com/wiguna69',
+                  '${widget.userModel?.shortBio ?? '-'}',
                   style: ThemeText.sfRegularBody
                       .copyWith(color: ThemeColors.black0),
                 )

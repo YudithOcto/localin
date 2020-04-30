@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../text_themes.dart';
-import '../../../themes.dart';
+import '../../../../text_themes.dart';
+import '../../../../themes.dart';
 
 class RowProfileSettingsWidget extends StatelessWidget {
   final Function onPressed;

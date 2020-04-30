@@ -292,7 +292,7 @@
         <entry key="flutter_webview_plugin">
           <value>
             <list>
-              <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.3.10+1/lib" />
+              <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.3.11/lib" />
             </list>
           </value>
         </entry>
@@ -653,6 +653,13 @@
             </list>
           </value>
         </entry>
+        <entry key="webview_flutter">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-0.3.21/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="xml">
           <value>
             <list>
@@ -701,7 +708,7 @@
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_pagewise-1.2.3/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_styled_toast-1.2.1/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.17.4/lib" />
-      <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.3.10+1/lib" />
+      <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.3.11/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/geocoder-0.2.1/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-5.1.5/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/google_api_availability-2.0.1/lib" />
@@ -752,6 +759,7 @@
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.10.5/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/video_player_platform_interface-1.0.4/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/video_player_web-0.1.1+1/lib" />
+      <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-0.3.21/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/xml-3.5.0/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/packages/flutter/lib" />

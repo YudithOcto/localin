@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
+import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
-import 'package:localin/presentation/profile/user_profile/row_profile_settings_widget.dart';
-import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/profile/user_profile/widgets/profile_settings_widgets.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
@@ -39,8 +37,12 @@ class _RevampProfileContentWidgetState
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
-      Provider.of<UserProfileProvider>(context, listen: false)
-          .getUserDanaStatus();
+      final provider = Provider.of<UserProfileProvider>(context, listen: false);
+      provider.getUserDanaStatus();
+      provider.getUserProfile().then((value) {
+        Provider.of<AuthProvider>(context, listen: false)
+            .updateUserIdentityVerification(value);
+      });
       isInit = false;
     }
   }
@@ -98,7 +100,7 @@ class _RevampProfileContentWidgetState
                     return Stack(
                       overflow: Overflow.visible,
                       children: <Widget>[
-                        UserProfileBoxWidget(
+                        UserProfileImageWidget(
                           imageUrl: provider.userModel.imageProfile,
                         ),
                         Positioned(
@@ -198,147 +200,10 @@ class _RevampProfileContentWidgetState
                     .copyWith(color: ThemeColors.black80),
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              child: StreamBuilder<danaStatus>(
-                  stream:
-                      Provider.of<UserProfileProvider>(context, listen: false)
-                          .danaAccountStream,
-                  builder: (context, snapshot) {
-                    final profileProvider =
-                        Provider.of<UserProfileProvider>(context);
-                    return RowProfileSettingsWidget(
-                      title: 'Dana',
-                      description: 'Payment Method',
-                      iconValue: 'images/profile_dana.svg',
-                      showButton: profileProvider?.userDanaAccount?.data !=
-                              null &&
-                          profileProvider?.userDanaAccount?.data?.maskDanaId !=
-                              null,
-                      onPressed: () {
-                        _connectAccountToDana(profileProvider);
-                      },
-                    );
-                  }),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              child: RowProfileSettingsWidget(
-                title: 'Point',
-                description: 'Learn how to get local point',
-                iconValue: 'images/profile_point.svg',
-                showButton: false,
-                onPressed: () {},
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              child: RowProfileSettingsWidget(
-                title: 'About',
-                description: 'General Information about Localin',
-                iconValue: 'images/profile_about.svg',
-                showButton: false,
-                onPressed: () {
-                  Navigator.of(context).pushNamed(WebViewPage.routeName,
-                      arguments: {WebViewPage.urlName: 'https://localin.id'});
-                },
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              child: RowProfileSettingsWidget(
-                title: 'Privacy Policy',
-                description: 'Read user agreements',
-                iconValue: 'images/profile_privacy_policy.svg',
-                showButton: false,
-                onPressed: () {
-                  Navigator.of(context).pushNamed(WebViewPage.routeName,
-                      arguments: {
-                        WebViewPage.urlName:
-                            'https://localin.id/privacy-policy.html'
-                      });
-                },
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              child: Consumer<AuthProvider>(
-                builder: (context, provider, child) {
-                  return RowProfileSettingsWidget(
-                    title: 'Verification',
-                    description: 'Verify your account',
-                    iconValue: 'images/profile_verification.svg',
-                    showButton:
-                        provider.userModel.status != kUserStatusVerified,
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed(RevampUserVerificationPage.routeName);
-                    },
-                  );
-                },
-              ),
-            ),
+            ProfileSettingsWidgets(),
           ],
         ),
       ),
     );
-  }
-
-  void _connectAccountToDana(UserProfileProvider provider) async {
-    final authState = Provider.of<AuthProvider>(context, listen: false);
-    if (authState.userModel.handphone != null &&
-        authState.userModel.handphone.isNotEmpty) {
-      final result = await provider
-          .authenticateUserDanaAccount(authState.userModel.handphone);
-      if (result.urlRedirect.isNotEmpty && !result.error) {
-        final response = await Navigator.of(context).pushNamed(
-            WebViewPage.routeName,
-            arguments: {WebViewPage.urlName: result.urlRedirect});
-        if (response != null && response == 'success') {
-          final dialogResult = await showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('DANA'),
-                  content: Text(
-                    'Connect to dana success',
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      color: ThemeColors.primaryBlue,
-                      onPressed: () => Navigator.of(context).pop('success'),
-                      child: Text(
-                        'Ok',
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
-                  ],
-                );
-              });
-
-          if (dialogResult == 'success') {
-            Provider.of<UserProfileProvider>(context).getUserDanaStatus();
-          }
-        }
-      }
-    } else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('No Phone number on your account'),
-        duration: Duration(milliseconds: 1500),
-      ));
-    }
   }
 }

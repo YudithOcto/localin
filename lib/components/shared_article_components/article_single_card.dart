@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -23,7 +24,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 16.0, bottom: 12.0),
+      margin: EdgeInsets.only(bottom: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -31,9 +32,21 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
           SizedBox(
             height: 12.0,
           ),
-          Text(
-            'by ${widget?.articleDetail?.author}',
-            style: ThemeText.sfMediumBody.copyWith(color: ThemeColors.black80),
+          InkWell(
+            onTap: () {
+              if (widget?.articleDetail?.type != 'media') {
+                Navigator.of(context)
+                    .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                  RevampOthersProfilePage.userId:
+                      widget?.articleDetail?.createdBy,
+                });
+              }
+            },
+            child: Text(
+              'by ${widget?.articleDetail?.author}',
+              style:
+                  ThemeText.sfMediumBody.copyWith(color: ThemeColors.black80),
+            ),
           ),
           SizedBox(
             height: 4.0,

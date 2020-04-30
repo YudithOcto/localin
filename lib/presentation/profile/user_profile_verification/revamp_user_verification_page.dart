@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/profile/provider/revamp_verification_provider.dart';
-import 'package:localin/presentation/profile/user_profile/row_user_profile_form_widget.dart';
+import 'package:localin/presentation/profile/user_profile_verification/row_user_profile_form_widget.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/provider/core/image_picker_provider.dart';
 import 'package:localin/utils/constants.dart';
@@ -110,14 +111,25 @@ class _ProfileVerificationPageState extends State<ProfileVerificationPage> {
                           height: 48.0,
                           child: RaisedButton(
                             onPressed: () async {
-                              CustomDialog.showLoadingDialog(context,
-                                  message: 'Sending data');
-                              Future.delayed(Duration(seconds: 2), () {
+                              final validation = provider.validateInput;
+                              if (validation.isEmpty) {
+                                CustomDialog.showLoadingDialog(context,
+                                    message: 'Sending data');
+                                final result =
+                                    await provider.verifyUserAccount();
+                                if (result.error.isEmpty) {
+                                  Navigator.of(context).popAndPushNamed(
+                                      RevampUserVerificationSuccessPage
+                                          .routeName);
+                                } else {
+                                  CustomToast.showCustomToast(
+                                      context, '${result?.message}');
+                                }
                                 CustomDialog.closeDialog(context);
-                                Navigator.of(context).pushNamed(
-                                    RevampUserVerificationSuccessPage
-                                        .routeName);
-                              });
+                              } else {
+                                CustomToast.showCustomToast(
+                                    context, '$validation');
+                              }
                             },
                             color: snapshot.hasData && snapshot.data
                                 ? ThemeColors.primaryBlue

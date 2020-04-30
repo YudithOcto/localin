@@ -102,6 +102,17 @@ class AuthProvider extends BaseModelProvider {
     notifyListeners();
   }
 
+  void updateUserIdentityVerification(UserModel model) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    if (userModel != null && userModel.status != model.status) {
+      userModel.status = model.status;
+      userModel.identityNo = model.identityNo;
+      userModel.imageIdentity = model.imageIdentity;
+      sf.setString(kUserCache, jsonEncode(userModel.toJson()));
+      notifyListeners();
+    }
+  }
+
   void updateUserModelVerifyStatus(String phone) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     if (userModel != null) {

@@ -5,8 +5,16 @@ import 'package:localin/utils/constants.dart';
 import '../../../text_themes.dart';
 import '../../../themes.dart';
 
-class RevampUserVerificationSuccessPage extends StatelessWidget {
+class RevampUserVerificationSuccessPage extends StatefulWidget {
   static const routeName = 'revampUserVerificationSuccess';
+
+  @override
+  _RevampUserVerificationSuccessPageState createState() =>
+      _RevampUserVerificationSuccessPageState();
+}
+
+class _RevampUserVerificationSuccessPageState
+    extends State<RevampUserVerificationSuccessPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +23,7 @@ class RevampUserVerificationSuccessPage extends StatelessWidget {
         backgroundColor: ThemeColors.black0,
         leading: InkWell(
           onTap: () {
-            Navigator.of(context)
-                .popUntil(ModalRoute.withName(RevampProfilePage.routeName));
+            Navigator.of(context).pop(RevampProfilePage.routeName);
           },
           child: Icon(
             Icons.arrow_back,

@@ -27,6 +27,7 @@ import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/model/user/user_verification_category_model.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -81,7 +82,7 @@ class ApiProvider {
         errorDescription = error.response.data != null &&
                 error.response.data.toString().isNotEmpty
             ? convertResponseErrorMessage(error.response.data)
-            : 'Request failed with status cide ${error.response.statusCode}';
+            : 'Request failed with status code ${error.response.statusCode}';
         break;
       case DioErrorType.SEND_TIMEOUT:
         errorDescription = "Request to API Timeout";
@@ -95,10 +96,7 @@ class ApiProvider {
 
   String convertResponseErrorMessage(Map<String, dynamic> body) {
     String message = body['message'];
-    String comment = body['komentar'] != null && body['komentar'][0] != null
-        ? body['komentar'][0]
-        : null;
-    return comment != null ? comment : message;
+    return message ?? 'There\'s an error on our side. Please try again later';
   }
 
   void setupLoggingInterceptor() async {
@@ -156,6 +154,20 @@ class ApiProvider {
     }
   }
 
+  Future<UserVerificationCategoryModel> getUserVerificationCategory() async {
+    try {
+      final response = await _dio.get(ApiConstant.kUserVerificationCategory,
+          options: Options(headers: {'requiredToken': true}));
+      return UserVerificationCategoryModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return UserVerificationCategoryModel.withError(_handleError(error));
+      } else {
+        return UserVerificationCategoryModel(error: error);
+      }
+    }
+  }
+
   Future<String> userLogout() async {
     try {
       final response = await _dio.get(ApiConstant.kLogoutUrl,
@@ -180,8 +192,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(ApiConstant.kProfile,
           options: Options(headers: {'requiredToken': true}));
-      final model = UserModel.fromJson(response.data);
-      sharedPreferences.setString(kUserCache, jsonEncode(model.toJson()));
+      final model = UserModel.fromJson(response.data['data']);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -217,10 +228,10 @@ class ApiProvider {
     }
   }
 
-  Future<UpdateProfileModel> verifyUserAccount() async {
+  Future<UpdateProfileModel> verifyUserAccount(FormData form) async {
     try {
-      final response = await _dio.get(ApiConstant.kVerifyAccount,
-          options: Options(headers: {'requiredToken': true}));
+      final response = await _dio.post(ApiConstant.kVerifyAccount,
+          data: form, options: Options(headers: {'requiredToken': true}));
       final model = UpdateProfileModel.fromJson(response.data);
       return model;
     } catch (error) {
@@ -280,12 +291,30 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleBaseResponse> getOtherUserArticle(
+      int offset, int limit, String userId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kOtherUserArticle}/$userId',
+          queryParameters: {'limit': limit, 'page': offset},
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
   Future<ArticleBaseResponse> getArticleList(int offset, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kArticleList,
           queryParameters: {'limit': limit, 'page': offset},
           options: Options(headers: {'requiredToken': true}));
-      var model = ArticleBaseResponse.fromJson(response.data);
+      final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -436,6 +465,22 @@ class ApiProvider {
       final response = await _dio.get(ApiConstant.kUserCommunity,
           options: Options(headers: {'requiredToken': true}));
       var model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> getOtherUserCommunityList(
+      String id) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kUserCommunity}/$id',
+          options: Options(headers: {'requiredToken': true}));
+      final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {

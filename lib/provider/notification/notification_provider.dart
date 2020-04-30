@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/provider/base_model_provider.dart';
@@ -28,7 +27,7 @@ class NotificationProvider extends BaseModelProvider {
 
     final response = await _repository.getNotificationList(
         _offsetPageRequest, _totalPageRequest);
-    if (response != null && response.model.data != null) {
+    if (response != null && !response.error) {
       if (response.model.data.isEmpty) {
         _notificationState.add(NotificationState.NoData);
       } else {

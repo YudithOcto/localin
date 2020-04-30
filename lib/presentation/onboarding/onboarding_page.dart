@@ -58,54 +58,57 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: PageView(
-              physics: ClampingScrollPhysics(),
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              children: List.generate(onBoardingImage.length, (index) {
-                return Container(
-                  width: double.infinity,
-                  child: Image.asset(
-                    '${onBoardingImage[index]}',
-                    fit: BoxFit.cover,
-                  ),
-                );
-              }),
-            ),
-          ),
           Expanded(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 26.0,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    '${onBoardingTitle[_currentPage]}',
-                    textAlign: TextAlign.center,
-                    style: ThemeText.rodinaTitle2,
-                  ),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    '${onBoardingBody[_currentPage]}',
-                    textAlign: TextAlign.center,
-                    style: ThemeText.sfRegularHeadline
-                        .copyWith(color: ThemeColors.black80),
-                  ),
-                ),
-              ],
+            child: Container(
+              child: PageView(
+                physics: ClampingScrollPhysics(),
+                controller: _pageController,
+                onPageChanged: (int page) {
+                  setState(() {
+                    _currentPage = page;
+                  });
+                },
+                children: List.generate(onBoardingImage.length, (index) {
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                        width: double.infinity,
+                        child: Image.asset(
+                          '${onBoardingImage[index]}',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 26.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              '${onBoardingTitle[index]}',
+                              textAlign: TextAlign.center,
+                              style: ThemeText.rodinaTitle2,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              '${onBoardingBody[index]}',
+                              textAlign: TextAlign.center,
+                              style: ThemeText.sfRegularHeadline
+                                  .copyWith(color: ThemeColors.black80),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                }),
+              ),
             ),
           ),
           Column(

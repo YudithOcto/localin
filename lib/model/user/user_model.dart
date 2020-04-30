@@ -18,6 +18,8 @@ class UserModel {
   String latitude;
   String longitude;
   int totalView;
+  int totalArticle;
+  int totalCommunity;
 
   UserModel({
     this.id,
@@ -39,28 +41,32 @@ class UserModel {
     this.latitude,
     this.longitude,
     this.totalView,
+    this.totalArticle,
+    this.totalCommunity,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
     return UserModel(
-      id: body['id'],
-      address: body['alamat'],
-      shortBio: body['short_bio'],
-      imageProfile: body['image_profile'],
-      imageIdentity: body['image_identitas'],
-      identityNo: body['no_identitas'],
-      status: body['status'],
-      source: body['source'],
-      apiToken: body['api_token'],
-      username: body['nama'],
-      email: body['email'],
-      handphone: body['handphone'],
+      id: body['id'] ?? '',
+      address: body['alamat'] ?? '',
+      shortBio: body['short_bio'] ?? '',
+      imageProfile: body['image_profile'] ?? '',
+      imageIdentity: body['image_identitas'] ?? '',
+      identityNo: body['no_identitas'] ?? '',
+      status: body['status'] ?? '',
+      source: body['source'] ?? '',
+      apiToken: body['api_token'] ?? '',
+      username: body['nama'] ?? '',
+      email: body['email'] ?? '',
+      handphone: body['handphone'] ?? '',
       points: body['point'] ?? 0,
       views: body['views'] ?? 0,
       posts: body['posts'] ?? 0,
       latitude: body['lat'] ?? '0.0',
       longitude: body['long'] ?? '0.0',
       totalView: body['total_View'] ?? 0,
+      totalArticle: body['total_artikel'] ?? 0,
+      totalCommunity: body['total_komunitas'] ?? 0,
     );
   }
 

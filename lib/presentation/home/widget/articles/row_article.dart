@@ -68,6 +68,9 @@ class _RowArticleState extends State<RowArticle> {
               )
             ],
           ),
+          SizedBox(
+            height: 16.0,
+          ),
           StreamBuilder<articleState>(
             stream:
                 Provider.of<HomeProvider>(context, listen: false).articleStream,

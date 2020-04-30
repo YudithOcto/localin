@@ -4,9 +4,9 @@ import 'package:superellipse_shape/superellipse_shape.dart';
 
 import '../themes.dart';
 
-class UserProfileBoxWidget extends StatelessWidget {
+class UserProfileImageWidget extends StatelessWidget {
   final String imageUrl;
-  UserProfileBoxWidget({this.imageUrl});
+  UserProfileImageWidget({this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

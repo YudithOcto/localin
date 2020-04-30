@@ -6,6 +6,7 @@ import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/user/user_model.dart';
 
 class RevampOthersProvider with ChangeNotifier {
   final Repository _repository = Repository();
@@ -21,7 +22,8 @@ class RevampOthersProvider with ChangeNotifier {
   bool get canLoadMoreArticle => _canLoadMoreArticle;
   List<CommunityDetail> get communityList => _communityList;
 
-  Future<ArticleBaseResponse> getArticleList({bool isRefresh = true}) async {
+  Future<ArticleBaseResponse> getArticleList(
+      {bool isRefresh = true, @required String id}) async {
     if (isRefresh) {
       _articleList.clear();
       _pageRequest = 1;
@@ -32,8 +34,9 @@ class RevampOthersProvider with ChangeNotifier {
       return null;
     }
     _stateController.add(OthersProfileState.Loading);
-    final response = await _repository.getArticleList(_pageRequest, _pageLimit);
-    if (response != null && response.error != 'success') {
+    final response =
+        await _repository.getOtherArticle(_pageRequest, _pageLimit, id);
+    if (response != null && response.error == null) {
       _stateController.add(OthersProfileState.Success);
       _articleList.addAll(response.data);
       _articleTotal = response.total;
@@ -46,12 +49,17 @@ class RevampOthersProvider with ChangeNotifier {
     return response;
   }
 
-  Future<CommunityDetailBaseResponse> getCommunityList() async {
-    final response = await _repository.getCommunityList('');
+  Future<CommunityDetailBaseResponse> getOtherCommunityList(String id) async {
+    final response = await _repository.getOtherCommunityList(id);
     if (response != null) {
       _communityList.clear();
       _communityList.addAll(response.communityDetailList);
     }
+    return response;
+  }
+
+  Future<UserModel> getOtherUserProfile(String profileId) async {
+    final response = await _repository.getOtherUserProfile(profileId);
     return response;
   }
 

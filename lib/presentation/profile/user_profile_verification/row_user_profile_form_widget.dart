@@ -18,7 +18,7 @@ class RowUserProfileFormWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'FIELD TITLE',
+                'NAME',
                 style:
                     ThemeText.rodinaBody.copyWith(color: ThemeColors.black80),
               ),
@@ -65,8 +65,8 @@ class RowUserProfileFormWidget extends StatelessWidget {
                                     (index) {
                                       return InkWell(
                                         onTap: () {
-                                          provider.setSelectedCategory(
-                                              provider.categoryList[index]);
+                                          provider.setSelectedCategory(provider
+                                              .categoryList[index].category);
                                           setState(() {
                                             Navigator.of(context).pop();
                                           });
@@ -76,19 +76,21 @@ class RowUserProfileFormWidget extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             Text(
-                                              '${provider.categoryList[index]}',
+                                              '${provider.categoryList[index].category}',
                                               style: ThemeText.sfMediumHeadline,
                                             ),
                                             Radio(
-                                              value:
-                                                  provider.categoryList[index],
+                                              value: provider
+                                                  .categoryList[index].category,
                                               activeColor: ThemeColors.black80,
                                               groupValue:
                                                   provider.selectedCategory,
                                               onChanged: (category) {
                                                 provider.setSelectedCategory(
                                                     category);
-                                                setState(() {});
+                                                setState(() {
+                                                  Navigator.of(context).pop();
+                                                });
                                               },
                                             )
                                           ],
@@ -141,18 +143,23 @@ class RowUserProfileFormWidget extends StatelessWidget {
               ),
               Stack(
                 children: <Widget>[
-                  TextFormField(
-                    enabled: false,
-                    style: ThemeText.sfRegularHeadline,
-                    controller: provider.documentController,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: ThemeColors.black20, width: 1.5)),
-                      disabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: ThemeColors.black20, width: 1.5)),
+                  InkWell(
+                    onTap: () {
+                      showImagePickerDialog(context, provider);
+                    },
+                    child: TextFormField(
+                      enabled: false,
+                      style: ThemeText.sfRegularHeadline,
+                      controller: provider.documentController,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: ThemeColors.black20, width: 1.5)),
+                        disabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: ThemeColors.black20, width: 1.5)),
+                      ),
                     ),
                   ),
                   Positioned(

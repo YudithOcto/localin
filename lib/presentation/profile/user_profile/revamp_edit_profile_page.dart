@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/profile/provider/revamp_edit_profile_provider.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:superellipse_shape/superellipse_shape.dart';
-
 import '../../../themes.dart';
 
 class RevampEditProfilePage extends StatelessWidget {
@@ -64,50 +64,24 @@ class _RevampEditProfileWrapperWidgetState
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Material(
-                          clipBehavior: Clip.antiAlias,
-                          shape: SuperellipseShape(
-                            side: BorderSide(
-                                color: ThemeColors.black20,
-                                width: 8,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(48.0),
-                          ),
-                          child: editProvider.userImageFile == null
-                              ? CachedNetworkImage(
-                                  imageUrl: provider.userModel.imageProfile,
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      height: 62.0,
-                                      width: 62.0,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                      )),
-                                    );
-                                  },
-                                  placeholder: (context, placeHolder) =>
-                                      Container(
-                                    height: 62.0,
-                                    width: 62.0,
-                                    color: ThemeColors.black40,
-                                  ),
-                                  placeholderFadeInDuration:
-                                      Duration(milliseconds: 250),
-                                  errorWidget: (context, errorMsg, child) =>
-                                      Container(
-                                    height: 62.0,
-                                    width: 62.0,
-                                    color: ThemeColors.black40,
-                                  ),
-                                )
-                              : Image.file(
-                                  editProvider.userImageFile,
-                                  width: 62.0,
-                                  height: 62.0,
+                        Stack(
+                          children: <Widget>[
+                            UserProfileImageWidget(
+                              imageUrl: provider.userModel.imageProfile,
+                            ),
+                            Positioned(
+                              right: -4.0,
+                              bottom: -4.0,
+                              child: Visibility(
+                                visible: provider.userModel.status ==
+                                    kUserStatusVerified,
+                                child: SvgPicture.asset(
+                                  'images/verified_profile.svg',
                                   fit: BoxFit.cover,
                                 ),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           width: 16.0,
@@ -281,6 +255,7 @@ class _RevampEditProfileWrapperWidgetState
       final response = await editProvider.refreshUserProfileData();
       if (response != null) {
         authProvider.setUserModel(response);
+        Navigator.of(context).pop();
       }
     }
 
