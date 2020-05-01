@@ -47,6 +47,7 @@ class ProfileSettingsWidgets extends StatelessWidget {
               Navigator.of(context)
                   .pushNamed(RevampWebview.routeName, arguments: {
                 RevampWebview.url: 'https://localin.id/#point',
+                RevampWebview.isFromProfile: true
               });
             },
           ),
@@ -60,7 +61,10 @@ class ProfileSettingsWidgets extends StatelessWidget {
             showButton: false,
             onPressed: () {
               Navigator.of(context).pushNamed(RevampWebview.routeName,
-                  arguments: {RevampWebview.url: 'https://localin.id'});
+                  arguments: {
+                    RevampWebview.url: 'https://localin.id',
+                    RevampWebview.isFromProfile: true
+                  });
             },
           ),
         ),
@@ -72,10 +76,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
             iconValue: 'images/profile_privacy_policy.svg',
             showButton: false,
             onPressed: () {
-              Navigator.of(context).pushNamed(RevampWebview.routeName,
-                  arguments: {
-                    RevampWebview.url: 'https://localin.id/privacy-policy.html'
-                  });
+              Navigator.of(context)
+                  .pushNamed(RevampWebview.routeName, arguments: {
+                RevampWebview.url: 'https://localin.id/privacy-policy.html',
+                RevampWebview.isFromProfile: true,
+              });
             },
           ),
         ),

@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
+import 'package:localin/presentation/home/widget/articles/row_bookmark.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/image_helper.dart';
@@ -20,11 +22,13 @@ class ArticleSingleCard extends StatefulWidget {
   _ArticleSingleCardState createState() => _ArticleSingleCardState();
 }
 
+const kArticleMediaType = 'media';
+
 class _ArticleSingleCardState extends State<ArticleSingleCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.0),
+      margin: EdgeInsets.only(bottom: 12.0, top: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -34,7 +38,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
           ),
           InkWell(
             onTap: () {
-              if (widget?.articleDetail?.type != 'media') {
+              if (widget?.articleDetail?.type != kArticleMediaType) {
                 Navigator.of(context)
                     .pushNamed(RevampOthersProfilePage.routeName, arguments: {
                   RevampOthersProfilePage.userId:
@@ -51,20 +55,52 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
           SizedBox(
             height: 4.0,
           ),
-          Text(
-            '${widget?.articleDetail?.title}',
-            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black100),
+          InkWell(
+            onTap: () async {
+              if (widget?.articleDetail?.type == kArticleMediaType) {
+                final result = await Navigator.of(context)
+                    .pushNamed(ArticleWebView.routeName, arguments: {
+                  ArticleWebView.url: widget.articleDetail.slug
+                          .contains('https')
+                      ? widget.articleDetail.slug
+                      : widget.articleDetail.slug.replaceRange(0, 4, 'https'),
+                  ArticleWebView.articleModel: widget.articleDetail,
+                });
+                if (result != null) {
+                  setState(() {
+                    widget?.articleDetail?.isBookmark = result;
+                  });
+                }
+              } else {
+                Navigator.of(context)
+                    .pushNamed(ArticleDetailPage.routeName, arguments: {
+                  ArticleDetailPage.articleId: widget.articleDetail?.slug,
+                  ArticleDetailPage.commentPage: false,
+                });
+              }
+            },
+            child: Text(
+              '${widget?.articleDetail?.title}',
+              style:
+                  ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black100),
+            ),
           ),
           SizedBox(
             height: 8.0,
           ),
           Row(
             children: <Widget>[
-              rowMessage(),
+              widget?.articleDetail?.type != kArticleMediaType
+                  ? rowMessage()
+                  : RowBookmark(
+                      articleDetail: widget?.articleDetail,
+                    ),
               SizedBox(
                 width: 9.67,
               ),
-              rowLike(),
+              widget?.articleDetail?.type != kArticleMediaType
+                  ? rowLike()
+                  : rowShare(),
             ],
           )
         ],
@@ -74,11 +110,20 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
 
   Widget bigImages(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (widget?.articleDetail?.type == 'media') {
-          Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
-            WebViewPage.urlName: widget?.articleDetail?.slug,
+      onTap: () async {
+        if (widget?.articleDetail?.type == kArticleMediaType) {
+          final result = await Navigator.of(context)
+              .pushNamed(ArticleWebView.routeName, arguments: {
+            ArticleWebView.url: widget.articleDetail.slug.contains('https')
+                ? widget.articleDetail.slug
+                : widget.articleDetail.slug.replaceRange(0, 4, 'https'),
+            ArticleWebView.articleModel: widget.articleDetail,
           });
+          if (result != null) {
+            setState(() {
+              widget?.articleDetail?.isBookmark = result;
+            });
+          }
         } else {
           Navigator.of(context)
               .pushNamed(ArticleDetailPage.routeName, arguments: {
@@ -122,21 +167,24 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
   Widget rowLike() {
     return InkWell(
       onTap: () async {
-        final response = await Provider.of<HomeProvider>(context)
-            .likeArticle(widget.articleDetail.id);
-        if (response.error != null) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('${response?.error}'),
-          ));
-        } else {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('${response?.message}'),
-            duration: Duration(milliseconds: 300),
-          ));
-          setState(() {
-            widget.articleDetail?.isLike =
-                widget.articleDetail?.isLike == 0 ? 1 : 0;
-          });
+        if (widget?.articleDetail?.isLike == 0) {
+          final response = await Provider.of<HomeProvider>(context)
+              .likeArticle(widget.articleDetail.id);
+          if (response.error != null) {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('${response?.error}'),
+            ));
+          } else {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('${response?.message}'),
+              duration: Duration(milliseconds: 300),
+            ));
+            setState(() {
+              widget.articleDetail?.isLike =
+                  widget.articleDetail?.isLike == 0 ? 1 : 0;
+              widget.articleDetail?.totalLike += 1;
+            });
+          }
         }
       },
       child: Row(
@@ -165,11 +213,13 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
   Widget rowMessage() {
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(ArticleDetailPage.routeName, arguments: {
-          ArticleDetailPage.articleId: widget.articleDetail?.slug,
-          ArticleDetailPage.commentPage: true,
-        });
+        if (widget?.articleDetail?.type != kArticleMediaType) {
+          Navigator.of(context)
+              .pushNamed(ArticleDetailPage.routeName, arguments: {
+            ArticleDetailPage.articleId: widget.articleDetail?.slug,
+            ArticleDetailPage.commentPage: true,
+          });
+        }
       },
       child: Row(
         children: <Widget>[
@@ -188,6 +238,15 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget rowShare() {
+    return InkWell(
+      onTap: () {
+        Share.text('Localin', '${widget?.articleDetail?.slug}', 'text/plain');
+      },
+      child: SvgPicture.asset('images/share_article.svg'),
     );
   }
 }

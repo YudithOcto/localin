@@ -80,7 +80,7 @@ class ApiProvider {
         break;
       case DioErrorType.RESPONSE:
         errorDescription = error.response.data != null &&
-                error.response.data.toString().isNotEmpty
+                error.response.data != null
             ? convertResponseErrorMessage(error.response.data)
             : 'Request failed with status code ${error.response.statusCode}';
         break;
@@ -236,6 +236,10 @@ class ApiProvider {
       return model;
     } catch (error) {
       if (error is DioError) {
+        if (error.response.statusMessage != null &&
+            error.response.statusMessage.contains('Large')) {
+          return UpdateProfileModel.errorJson(error.response.statusMessage);
+        }
         return UpdateProfileModel.errorJson(_handleError(error));
       } else {
         return UpdateProfileModel.errorJson(error);

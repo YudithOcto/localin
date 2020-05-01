@@ -6,6 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class RevampWebview extends StatefulWidget {
   static const routeName = '/revampWebview';
   static const url = 'url';
+  static const isFromProfile = 'isFromProfile';
   @override
   _RevampWebviewState createState() => _RevampWebviewState();
 }
@@ -13,12 +14,22 @@ class RevampWebview extends StatefulWidget {
 class _RevampWebviewState extends State<RevampWebview> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
+  num _stackToView = 1;
+  bool isFromProfile = false;
+
+  void _handleLoad(String value) {
+    setState(() {
+      _stackToView = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[RevampWebview.url];
-    url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
+    isFromProfile = routeArgs[RevampWebview.isFromProfile] ?? false;
+    //url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
     return WillPopScope(
       onWillPop: () async {
         final future = await _controller.future;
@@ -36,14 +47,33 @@ class _RevampWebviewState extends State<RevampWebview> {
             leading: NavigationControls(_controller.future),
           ),
           body: Builder(
-            builder: (context) => WebView(
-              initialUrl: url,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (webViewController) {
-                _controller.complete(webViewController);
-              },
-              onPageStarted: (v) => print(v),
-              onPageFinished: (v) => print(v),
+            builder: (context) => IndexedStack(
+              index: _stackToView,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: WebView(
+                        initialUrl: url,
+                        javascriptMode: JavascriptMode.unrestricted,
+                        onWebViewCreated: (webViewController) {
+                          _controller.complete(webViewController);
+                        },
+                        onPageFinished: _handleLoad,
+                      ),
+                    ),
+                  ],
+                ),
+                Visibility(
+                  visible: !isFromProfile,
+                  child: Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ),

@@ -53,13 +53,17 @@ class RevampVerificationProvider with ChangeNotifier {
   }
 
   Future<UpdateProfileModel> verifyUserAccount() async {
+    UserCategoryDetailModel category = _userCategory
+        .where((v) => v.category == _selectedCategory)
+        .toList()
+        .first;
     FormData _formData = FormData.fromMap({
       'photo_identitas': MultipartFile.fromFileSync(
         _currentUserFile.path,
         filename: '${_currentUserFile.path}',
       ),
       'nama': titleController.text,
-      'kategori': _selectedCategory,
+      'kategori': category.id,
     });
     final response = await _repository.verifyUserAccount(_formData);
     return response;

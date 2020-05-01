@@ -25,6 +25,7 @@ import 'package:localin/presentation/profile/user_profile_verification/revamp_us
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/presentation/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
+import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/presentation/webview/revamp_webview.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
@@ -121,6 +122,7 @@ class _MyAppState extends State<MyApp> {
                 RevampUserVerificationSuccessPage(),
             RevampOthersProfilePage.routeName: (_) => RevampOthersProfilePage(),
             RevampWebview.routeName: (_) => RevampWebview(),
+            ArticleWebView.routeName: (_) => ArticleWebView(),
           },
         ),
       ),

@@ -80,57 +80,86 @@ class _NotificationColumnContentWidgetState
                     onTap: () {
                       showDialog(
                           context: context,
-                          builder: (BuildContext context) {
+                          builder: (BuildContext ctx) {
                             return AlertDialog(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0)),
-                              title: Text(
-                                'Delete All?',
-                                style: ThemeText.sfMediumTitle3,
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'Delete All?',
+                                    style: ThemeText.sfMediumTitle3,
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  Text(
+                                      'Once you delete all inbox, you can\'t undo it.',
+                                      style: ThemeText.sfMediumBody.copyWith(
+                                          color: ThemeColors.black80)),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: RaisedButton(
+                                          elevation: 1.0,
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                          color: ThemeColors.primaryBlue,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          ),
+                                          child: Text(
+                                            'Cancel',
+                                            style: ThemeText.rodinaTitle3
+                                                .copyWith(
+                                                    color: ThemeColors.black0),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 7.0,
+                                      ),
+                                      Expanded(
+                                        child: RaisedButton(
+                                          elevation: 1.0,
+                                          color: ThemeColors.black0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                              side: BorderSide(
+                                                color: ThemeColors.primaryBlue,
+                                              )),
+                                          onPressed: () async {
+                                            final response = await Provider.of<
+                                                        NotificationProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .deleteAllNotification();
+                                            if (response != null) {
+                                              Provider.of<NotificationProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .getNotificationList(
+                                                      isRefresh: true);
+                                            }
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            'Delete All',
+                                            style: ThemeText.rodinaTitle3
+                                                .copyWith(
+                                                    color: ThemeColors
+                                                        .primaryBlue),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
                               ),
-                              content: Text(
-                                  'Once you delete all inbox, you can\'t undo it.',
-                                  style: ThemeText.sfMediumBody
-                                      .copyWith(color: ThemeColors.black80)),
-                              actions: <Widget>[
-                                RaisedButton(
-                                  elevation: 1.0,
-                                  color: ThemeColors.black0,
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                      side: BorderSide(
-                                        color: ThemeColors.primaryBlue,
-                                      )),
-                                  child: Text(
-                                    'Cancel',
-                                    style: ThemeText.rodinaTitle3.copyWith(
-                                        color: ThemeColors.primaryBlue),
-                                  ),
-                                ),
-                                RaisedButton(
-                                  elevation: 1.0,
-                                  color: ThemeColors.primaryBlue,
-                                  onPressed: () async {
-                                    final response =
-                                        await Provider.of<NotificationProvider>(
-                                                context,
-                                                listen: false)
-                                            .deleteAllNotification();
-                                    if (response != null) {
-                                      Provider.of<NotificationProvider>(context,
-                                              listen: false)
-                                          .getNotificationList(isRefresh: true);
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    'Delete All',
-                                    style: ThemeText.rodinaTitle3
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                )
-                              ],
                             );
                           });
                     },

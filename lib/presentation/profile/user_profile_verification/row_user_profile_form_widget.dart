@@ -198,57 +198,81 @@ class RowUserProfileFormWidget extends StatelessWidget {
     final imageProvider = Provider.of<ImagePickerProvider>(context);
     final dialogResult = await showDialog(
         context: context,
-        builder: (context) {
+        builder: (BuildContext context) {
           return AlertDialog(
-            content: Text(
-              'Choose your preference to change your image',
-              style: ThemeText.rodinaHeadline
-                  .copyWith(color: ThemeColors.primaryBlue),
-            ),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
-            actions: <Widget>[
-              RaisedButton(
-                color: ThemeColors.primaryBlue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0)),
-                onPressed: () async {
-                  final result = await imageProvider.openGallery();
-                  if (result.isEmpty) {
-                    provider.setUserFile(imageProvider.selectedImage);
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pop(result);
-                  }
-                },
-                elevation: 5.0,
-                child: Text(
-                  'Image Gallery',
-                  style: ThemeText.rodinaFootnote
-                      .copyWith(color: ThemeColors.black0),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Image Preferences',
+                  style: ThemeText.sfMediumTitle3,
                 ),
-              ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0)),
-                color: ThemeColors.primaryBlue,
-                onPressed: () async {
-                  final result = await imageProvider.openCamera();
-                  if (result.isEmpty) {
-                    provider.setUserFile(imageProvider.selectedImage);
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pop(result);
-                  }
-                },
-                elevation: 5.0,
-                child: Text(
-                  'Camera',
-                  style: ThemeText.rodinaFootnote
-                      .copyWith(color: ThemeColors.black0),
+                SizedBox(height: 8.0),
+                Text('Choose your preference to change your image',
+                    style: ThemeText.sfMediumBody
+                        .copyWith(color: ThemeColors.black80)),
+                SizedBox(
+                  height: 20.0,
                 ),
-              )
-            ],
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        elevation: 1.0,
+                        onPressed: () async {
+                          final result = await imageProvider.openGallery();
+                          if (result.isEmpty) {
+                            provider.setUserFile(imageProvider.selectedImage);
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context).pop(result);
+                          }
+                        },
+                        color: ThemeColors.primaryBlue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Text(
+                          'Gallery',
+                          style: ThemeText.rodinaTitle3
+                              .copyWith(color: ThemeColors.black0),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 7.0,
+                    ),
+                    Expanded(
+                      child: RaisedButton(
+                        elevation: 1.0,
+                        color: ThemeColors.black0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            side: BorderSide(
+                              color: ThemeColors.primaryBlue,
+                            )),
+                        onPressed: () async {
+                          final result = await imageProvider.openCamera();
+                          if (result.isEmpty) {
+                            provider.setUserFile(imageProvider.selectedImage);
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context).pop(result);
+                          }
+                        },
+                        child: Text(
+                          'Camera',
+                          style: ThemeText.rodinaTitle3
+                              .copyWith(color: ThemeColors.primaryBlue),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           );
         });
     if (dialogResult != null) {

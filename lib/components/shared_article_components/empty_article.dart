@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
+import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/themes.dart';
 
 import '../../text_themes.dart';
@@ -35,11 +36,12 @@ class EmptyArticle extends StatelessWidget {
           ),
           OutlineButtonDefault(
             onPressed: () async {
-              final result = await Navigator.of(context)
-                  .pushNamed(CreateArticlePage.routeName);
-              if (result != null) {
-                /// refresh current page
-              }
+              Navigator.of(context).pushNamed(EmptyPage.routeName);
+//              final result = await Navigator.of(context)
+//                  .pushNamed(CreateArticlePage.routeName);
+//              if (result != null) {
+//                /// refresh current page
+//              }
             },
             buttonText: 'Create Article',
           )

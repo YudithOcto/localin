@@ -113,19 +113,22 @@ class _ProfileVerificationPageState extends State<ProfileVerificationPage> {
                             onPressed: () async {
                               final validation = provider.validateInput;
                               if (validation.isEmpty) {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 CustomDialog.showLoadingDialog(context,
                                     message: 'Sending data');
                                 final result =
                                     await provider.verifyUserAccount();
                                 if (result.error.isEmpty) {
+                                  CustomDialog.closeDialog(context);
                                   Navigator.of(context).popAndPushNamed(
                                       RevampUserVerificationSuccessPage
                                           .routeName);
                                 } else {
+                                  CustomDialog.closeDialog(context);
                                   CustomToast.showCustomToast(
-                                      context, '${result?.message}');
+                                      context, '${result?.error}');
                                 }
-                                CustomDialog.closeDialog(context);
                               } else {
                                 CustomToast.showCustomToast(
                                     context, '$validation');
