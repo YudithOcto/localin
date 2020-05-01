@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';

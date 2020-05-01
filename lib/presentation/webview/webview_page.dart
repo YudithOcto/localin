@@ -60,50 +60,62 @@ class _WebViewPageState extends State<WebViewPage> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[WebViewPage.urlName];
-    return Scaffold(
-      body: MaterialApp(
-        routes: {
-          '/': (_) => WebviewScaffold(
-                appBar: AppBar(
-                  automaticallyImplyLeading: true,
-                  leading: InkWell(
-                    onTap: () async {
-                      if (await flutterWebviewPlugin.canGoBack()) {
-                        flutterWebviewPlugin.goBack();
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: Icon(
-                      Icons.keyboard_backspace,
-                      color: Colors.white,
+    //url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
+    return WillPopScope(
+      onWillPop: () async {
+        if (await flutterWebviewPlugin.canGoBack()) {
+          await flutterWebviewPlugin.goBack();
+        } else {
+          Navigator.of(context).pop();
+        }
+        return false;
+      },
+      child: Scaffold(
+        body: MaterialApp(
+          routes: {
+            '/': (_) => WebviewScaffold(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: true,
+                    leading: InkWell(
+                      onTap: () async {
+                        if (await flutterWebviewPlugin.canGoBack()) {
+                          await flutterWebviewPlugin.goBack();
+                        } else {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: Icon(
+                        Icons.keyboard_backspace,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
+                  withJavascript: true,
+                  javascriptChannels: Set.from([
+                    JavascriptChannel(
+                        name: 'Print',
+                        onMessageReceived: (JavascriptMessage data) {
+                          print(data);
+                          if (data.message.contains(
+                              'Pembayaran sukses dan sedang di verifikasi')) {
+                            Future.delayed(Duration(milliseconds: 2000), () {
+                              Navigator.of(context).pop('${data.message}');
+                              flutterWebviewPlugin.close();
+                            });
+                          }
+                        }),
+                  ]),
+                  hidden: true,
+                  withZoom: true,
+                  url: url,
+                  displayZoomControls: true,
+                  withOverviewMode: true,
+                  useWideViewPort: true,
+                  //withLocalStorage: true,
+                  // appCacheEnabled: true,
                 ),
-                withJavascript: true,
-                javascriptChannels: Set.from([
-                  JavascriptChannel(
-                      name: 'Print',
-                      onMessageReceived: (JavascriptMessage data) {
-                        if (data.message.contains(
-                            'Pembayaran sukses dan sedang di verifikasi')) {
-                          Future.delayed(Duration(milliseconds: 2000), () {
-                            Navigator.of(context).pop('${data.message}');
-                            flutterWebviewPlugin.close();
-                          });
-                        }
-                      }),
-                ]),
-                hidden: true,
-                url: url,
-                displayZoomControls: true,
-                withOverviewMode: true,
-                useWideViewPort: true,
-                clearCache: true,
-                clearCookies: true,
-                withZoom: true,
-              ),
-        },
+          },
+        ),
       ),
     );
   }

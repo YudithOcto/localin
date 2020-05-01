@@ -5,16 +5,23 @@ import 'package:localin/themes.dart';
 class OutlineButtonDefault extends StatelessWidget {
   final String buttonText;
   final Function onPressed;
+  final Color backgroundColor;
+  final double width;
 
-  OutlineButtonDefault({@required this.buttonText, @required this.onPressed});
+  OutlineButtonDefault(
+      {@required this.buttonText,
+      @required this.onPressed,
+      this.width = double.infinity,
+      this.backgroundColor = ThemeColors.black0});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 48.0,
+      width: width,
       child: RaisedButton(
         elevation: 1.0,
-        color: ThemeColors.black0,
+        color: backgroundColor,
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4.0),

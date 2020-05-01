@@ -2,11 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/presentation/home/widget/home_header_clipper.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
-import 'package:localin/provider/profile/user_profile_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -24,10 +25,10 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
         Stack(
           children: <Widget>[
             ClipPath(
-              clipper: HeaderClipper(),
+              clipper: HomeHeaderClipper(),
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
@@ -150,12 +151,14 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                                 height: 24.0,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Text(
-                                '0 Point',
-                                style: ThemeText.sfRegularHeadline
-                                    .copyWith(color: ThemeColors.black0),
+                            Consumer<AuthProvider>(
+                              builder: (context, provider, child) => Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: Text(
+                                  '${provider.userModel.points} Point',
+                                  style: ThemeText.sfRegularHeadline
+                                      .copyWith(color: ThemeColors.black0),
+                                ),
                               ),
                             )
                           ],
@@ -224,7 +227,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
               WebViewPage.routeName,
               arguments: {WebViewPage.urlName: result.urlRedirect});
           if (response != null && response == 'success') {
-            final dialogResult = await showDialog(
+            await showDialog(
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
@@ -252,10 +255,6 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                     ],
                   );
                 });
-
-            if (dialogResult == 'success') {
-              Provider.of<UserProfileProvider>(context).getUserDanaStatus();
-            }
           }
         }
       } else {
@@ -265,24 +264,6 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
         ));
       }
     }
-  }
-}
-
-class HeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path clippedPath = Path();
-    clippedPath.lineTo(0.0, size.height - 24);
-    clippedPath.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 24);
-    clippedPath.lineTo(size.width, 0.0);
-    clippedPath.close();
-    return clippedPath;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
 

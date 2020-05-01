@@ -90,9 +90,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    checkGps();
     controller = new ScrollController();
     controller.addListener(_scrollListener);
+    checkGps();
   }
 
   @override

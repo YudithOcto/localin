@@ -22,6 +22,7 @@ import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
 import 'package:localin/model/user/user_request.dart';
+import 'package:localin/model/user/user_verification_category_model.dart';
 
 class Repository {
   ApiProvider apiProvider = ApiProvider();
@@ -34,16 +35,24 @@ class Repository {
     return apiProvider.userLogout();
   }
 
+  Future<String> updateUserProfile(FormData formData) async {
+    return apiProvider.updateUserProfile(formData);
+  }
+
   Future<UserModel> getUserProfile() async {
     return apiProvider.getUserProfile();
+  }
+
+  Future<UserVerificationCategoryModel> getUserVerificationCategory() async {
+    return apiProvider.getUserVerificationCategory();
   }
 
   Future<UserModel> getOtherUserProfile(String profileId) async {
     return apiProvider.getOtherUserProfile(profileId);
   }
 
-  Future<UpdateProfileModel> verifyUserAccount() async {
-    return apiProvider.verifyUserAccount();
+  Future<UpdateProfileModel> verifyUserAccount(FormData form) async {
+    return apiProvider.verifyUserAccount(form);
   }
 
   Future<UserBaseModel> userPhoneRequestCode(String phoneNumber) async {
@@ -73,6 +82,11 @@ class Repository {
 
   Future<ArticleBaseResponse> getArticleList(int offset, int page) async {
     return apiProvider.getArticleList(offset, page);
+  }
+
+  Future<ArticleBaseResponse> getOtherArticle(
+      int offset, int page, String id) async {
+    return apiProvider.getOtherUserArticle(offset, page, id);
   }
 
   Future<ArticleBaseResponse> createArticle(FormData form) async {
@@ -141,6 +155,10 @@ class Repository {
 
   Future<CommunityDetailBaseResponse> getUserCommunityList() async {
     return apiProvider.getUserCommunityList();
+  }
+
+  Future<CommunityDetailBaseResponse> getOtherCommunityList(String id) async {
+    return apiProvider.getOtherUserCommunityList(id);
   }
 
   Future<CommunityCommentBaseResponse> getCommunityCommentList(
@@ -223,7 +241,23 @@ class Repository {
   }
 
   /// NOTIFICATION
-  Future<NotificationModel> getNotificationList(int offset, int limit) {
+  Future<NotificationModelResponse> getNotificationList(int offset, int limit) {
     return apiProvider.getNotificationList(offset, limit);
+  }
+
+  Future<bool> readNotificationUpdate(String notifId) async {
+    return apiProvider.readNotificationUpdate(notifId);
+  }
+
+  Future<String> deleteAllNotification() async {
+    return apiProvider.deleteAllNotification();
+  }
+
+  Future<String> deleteNotificationById(String id) async {
+    return apiProvider.deleteNotificationById(id);
+  }
+
+  Future<String> undoNotificationDelete(String id) async {
+    return apiProvider.unDeleteNotificationById(id);
   }
 }

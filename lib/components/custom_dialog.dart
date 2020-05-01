@@ -4,7 +4,8 @@ import '../text_themes.dart';
 import '../themes.dart';
 
 class CustomDialog {
-  static Future<void> showLoadingDialog(BuildContext context) async {
+  static Future<void> showLoadingDialog(BuildContext context,
+      {String message = 'Signing you in and loading your data'}) async {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -24,7 +25,7 @@ class CustomDialog {
                     width: 17.0,
                   ),
                   Expanded(
-                    child: Text('Signing you in and loading your data',
+                    child: Text('$message',
                         style: ThemeText.sfMediumBody
                             .copyWith(color: ThemeColors.black80)),
                   ),

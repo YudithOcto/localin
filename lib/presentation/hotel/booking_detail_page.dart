@@ -4,8 +4,8 @@ import 'package:localin/components/custom_header_below_base_appbar.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/hotel/widgets/booking_information_card.dart';
 import 'package:localin/presentation/hotel/widgets/booking_product_detail_card.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../themes.dart';

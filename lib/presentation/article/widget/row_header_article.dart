@@ -1,7 +1,7 @@
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/article/article_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
-import 'package:localin/presentation/home/widget/articles/article_single_card.dart';
-import 'package:localin/presentation/home/widget/articles/empty_article.dart';
+import 'package:localin/components/shared_article_components/article_single_card.dart';
+import 'package:localin/components/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -15,6 +16,7 @@ class RowArticle extends StatefulWidget {
 
 class _RowArticleState extends State<RowArticle> {
   bool isInit = true;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -52,11 +54,12 @@ class _RowArticleState extends State<RowArticle> {
               ),
               InkWell(
                 onTap: () async {
-                  final result = await Navigator.of(context)
-                      .pushNamed(CreateArticlePage.routeName);
-                  if (result != null) {
-                    /// refresh current page
-                  }
+//                  final result = await Navigator.of(context)
+//                      .pushNamed(CreateArticlePage.routeName);
+//                  if (result != null) {
+//                    /// refresh current page
+//                  }
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
                 },
                 child: Text(
                   'More articles',
@@ -66,6 +69,9 @@ class _RowArticleState extends State<RowArticle> {
                 ),
               )
             ],
+          ),
+          SizedBox(
+            height: 16.0,
           ),
           StreamBuilder<articleState>(
             stream:

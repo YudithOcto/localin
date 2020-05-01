@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:localin/model/hotel/booking_detail.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
-import 'package:provider/provider.dart';
-
 import '../../../themes.dart';
 
 class BookingInformationCard extends StatelessWidget {
@@ -47,13 +43,12 @@ class BookingInformationCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                '${detail.status.contains('confirm booking') ? 'Pembelian Berhasil' : detail?.status}',
+                '${detail?.status?.contains('confirm booking') ?? '' ? 'Pembelian Berhasil' : detail?.status}',
                 textAlign: TextAlign.center,
               ),
-              rowInformation('Booking iD', '${detail?.invoiceCode}'),
+              rowInformation('Booking ID', '${detail?.invoiceCode}'),
               rowInformation('Dibeli',
                   '${DateHelper.formatDateBookingDetail(detail?.updatedAt)}'),
-              //rowInformation('Metode Pembayaran', 'BCA'),
               rowInformation('Rincian Harga',
                   '${getFormattedCurrency(detail?.userPrice)}'),
               Visibility(

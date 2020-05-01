@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/home/gallery_photo_view.dart';
+import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:localin/presentation/hotel/widgets/room_description.dart';
 import 'package:localin/presentation/hotel/widgets/room_general_facilities.dart';
@@ -12,7 +13,6 @@ import 'package:localin/presentation/hotel/widgets/room_location.dart';
 import 'package:localin/presentation/hotel/widgets/room_property_policies.dart';
 import 'package:localin/presentation/hotel/widgets/room_recommended_by_property.dart';
 import 'package:localin/presentation/hotel/widgets/room_type.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 
 class HotelDetailWrapperWidget extends StatelessWidget {
   @override

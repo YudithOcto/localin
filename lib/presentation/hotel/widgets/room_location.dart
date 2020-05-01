@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class RoomLocation extends StatelessWidget {

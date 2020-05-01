@@ -10,6 +10,7 @@ class ApiConstant {
   static const String kProfile = 'v1/member/me';
   static const String kOtherUserProfile = 'v1/member/profile';
   static const String kUpdateUserLocation = 'v1/member/update/location';
+  static const String kUserVerificationCategory = '/v1/member/kategori';
 
   /// COMMUNITY
   static const String kCommunity = 'v1/komunitas';
@@ -19,12 +20,14 @@ class ApiConstant {
   static const String kJoinCommunity = 'v1/komunitas/join/';
   static const String kMemberCommunity = 'v1/komunitas/anggota/';
   static const String kUserCommunity = 'v1/komunitas/me';
+  static const String kOtherUserCommunity = 'v1/komunitas/member';
   static const String kCommentCommunity = 'v1/komunitas/komentar/';
   static const String kCreateEventCommunity = 'v1/komunitas/event/';
   static const String kEventCategory = 'v1/komunitas/event/kategori';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';
+  static const String kOtherUserArticle = 'v1/artikel/member';
   static const String kArticleList = 'v1/artikel';
   static const String kCreateArticle = 'v1/artikel/entri/';
   static const String kArticleTags = 'v1/artikel/tags';
@@ -47,4 +50,9 @@ class ApiConstant {
 
   /// NOTIFICATION
   static const String kNotificationList = 'v1/member/notifications';
+  static const String kNotificationDeleteAll = 'v1/member/notifications/delete';
+  static const String kNotificationDeleteById =
+      'v1/member/notifications/delete';
+  static const String kNotificationUnDeleteById =
+      'v1/member/notifications/undelete';
 }

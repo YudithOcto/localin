@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/utils/constants.dart';
 
 class RecommendedCard extends StatelessWidget {
   @override

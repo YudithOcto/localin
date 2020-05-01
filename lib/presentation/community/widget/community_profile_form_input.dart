@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 

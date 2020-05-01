@@ -1,12 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_createedit_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
