@@ -313,10 +313,19 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleBaseResponse> getArticleList(int offset, int limit) async {
+  Future<ArticleBaseResponse> getArticleList(int offset, int limit, int isLiked,
+      int isBookmark, String keyword) async {
+    Map<String, dynamic> _articleRequest = {'limit': limit, 'page': offset};
+    if (isLiked != null) {
+      _articleRequest['is_like'] = isLiked;
+    } else if (isBookmark != null) {
+      _articleRequest['is_bookmark'] = isBookmark;
+    } else if (keyword != null) {
+      _articleRequest['search'] = keyword;
+    }
     try {
       final response = await _dio.get(ApiConstant.kArticleList,
-          queryParameters: {'limit': limit, 'page': offset},
+          queryParameters: _articleRequest,
           options: Options(headers: {'requiredToken': true}));
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
@@ -362,16 +371,34 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleTagResponse> getArticleTags(String keyword) async {
+  Future<ArticleTagResponse> getArticleTags(
+      String keyword, int offset, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kArticleTags,
-          queryParameters: {'keyword': keyword},
+          queryParameters: {'keyword': keyword, 'page': offset, 'limit': limit},
           options: Options(headers: {'requiredToken': true}));
-      List result = response.data;
-      var model = ArticleTagResponse.fromJson(result[0]);
+      final model = ArticleTagResponse.fromJson(response.data);
       return model;
     } catch (error) {
       return ArticleTagResponse.withError(error.toString());
+    }
+  }
+
+  Future<ArticleBaseResponse> getArticleByTag(
+      int offset, int limit, String tagId) async {
+    Map<String, dynamic> _articleRequest = {'limit': limit, 'page': offset};
+    try {
+      final response = await _dio.get('${ApiConstant.kArticleByTag}/$tagId',
+          queryParameters: _articleRequest,
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
     }
   }
 

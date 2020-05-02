@@ -39,8 +39,9 @@ class HomeProvider with ChangeNotifier {
       return null;
     }
     _articleController.add(articleState.Loading);
-    final response =
-        await _repository.getArticleList(_pageRequest, _limitPageRequest);
+    final response = await _repository.getArticleList(
+        _pageRequest, _limitPageRequest,
+        isBookmark: null, isLiked: null);
     if (response != null && response.error != 'success') {
       _articleController.add(articleState.Success);
       _articleDetailList.addAll(response.data);

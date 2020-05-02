@@ -46,35 +46,12 @@ class _RevampWebviewState extends State<RevampWebview> {
             automaticallyImplyLeading: true,
             leading: NavigationControls(_controller.future),
           ),
-          body: Builder(
-            builder: (context) => IndexedStack(
-              index: _stackToView,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: WebView(
-                        initialUrl: url,
-                        javascriptMode: JavascriptMode.unrestricted,
-                        onWebViewCreated: (webViewController) {
-                          _controller.complete(webViewController);
-                        },
-                        onPageFinished: _handleLoad,
-                      ),
-                    ),
-                  ],
-                ),
-                Visibility(
-                  visible: !isFromProfile,
-                  child: Container(
-                    color: Colors.white,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              ],
-            ),
+          body: WebView(
+            initialUrl: url,
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (webViewController) {
+              _controller.complete(webViewController);
+            },
           ),
         ),
       ),

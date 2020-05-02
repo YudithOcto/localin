@@ -17,13 +17,16 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/presentation/news/news_main_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
-import 'package:localin/presentation/splash_screen.dart';
+import 'package:localin/presentation/search/search_article_page.dart';
+import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
+import 'package:localin/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/presentation/webview/revamp_webview.dart';
@@ -123,6 +126,9 @@ class _MyAppState extends State<MyApp> {
             RevampOthersProfilePage.routeName: (_) => RevampOthersProfilePage(),
             RevampWebview.routeName: (_) => RevampWebview(),
             ArticleWebView.routeName: (_) => ArticleWebView(),
+            NewsMainPage.routeName: (_) => NewsMainPage(),
+            SearchArticlePage.routeName: (_) => SearchArticlePage(),
+            TagsDetailListPage.routeName: (_) => TagsDetailListPage(),
           },
         ),
       ),
