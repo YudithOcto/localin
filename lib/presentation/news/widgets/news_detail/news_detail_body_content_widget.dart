@@ -186,10 +186,13 @@ class _NewsDetailBodyContentWidgetState
           child: NewsBodyTagWidget(tagModel: _articleDetail?.tags),
         ),
         FutureBuilder<List<ArticleDetail>>(
-          future: Provider.of<NewsDetailProvider>(context, listen:false).getRelatedArticle(_articleDetail.id),
+          future: Provider.of<NewsDetailProvider>(context, listen: false)
+              .getRelatedArticle(_articleDetail.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(),);
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             } else {
               if (snapshot.data.isNotEmpty) {
                 return Container(
@@ -216,9 +219,9 @@ class _NewsDetailBodyContentWidgetState
                         ),
                       ),
                       ListView.builder(
-                       itemCount: snapshot.data.length,
+                        itemCount: snapshot.data.length,
                         itemBuilder: (context, index) {
-                         return Container();
+                          return Container();
                         },
                       )
                     ],
