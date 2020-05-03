@@ -86,6 +86,10 @@ class Repository {
         offset, page, isLiked, isBookmark, keyword);
   }
 
+  Future<ArticleBaseResponse> getRelatedArticle(String articleId) async {
+    return apiProvider.getRelatedArticle(articleId);
+  }
+
   Future<ArticleBaseResponse> getArticleByTag(
       int offset, int page, String tag) async {
     return apiProvider.getArticleByTag(offset, page, tag);

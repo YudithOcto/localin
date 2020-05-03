@@ -17,6 +17,7 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/presentation/news/news_detail_page.dart';
 import 'package:localin/presentation/news/news_main_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
@@ -129,6 +130,7 @@ class _MyAppState extends State<MyApp> {
             NewsMainPage.routeName: (_) => NewsMainPage(),
             SearchArticlePage.routeName: (_) => SearchArticlePage(),
             TagsDetailListPage.routeName: (_) => TagsDetailListPage(),
+            NewsDetailPage.routeName: (_) => NewsDetailPage(),
           },
         ),
       ),

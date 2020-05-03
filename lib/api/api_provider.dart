@@ -313,6 +313,21 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleBaseResponse> getRelatedArticle(String articleId) async {
+    try {
+      final response = await _dio.get(ApiConstant.kArticleList,
+          queryParameters: {'is_releated': articleId},
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
   Future<ArticleBaseResponse> getArticleList(int offset, int limit, int isLiked,
       int isBookmark, String keyword) async {
     Map<String, dynamic> _articleRequest = {'limit': limit, 'page': offset};

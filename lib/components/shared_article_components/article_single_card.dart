@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/home/widget/articles/row_bookmark.dart';
+import 'package:localin/presentation/news/news_detail_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/provider/home/home_provider.dart';
@@ -125,11 +126,17 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
             });
           }
         } else {
-          Navigator.of(context)
-              .pushNamed(ArticleDetailPage.routeName, arguments: {
-            ArticleDetailPage.articleId: widget.articleDetail?.slug,
-            ArticleDetailPage.commentPage: false,
+          final result = await Navigator.of(context)
+              .pushNamed(NewsDetailPage.routeName, arguments: {
+            NewsDetailPage.newsSlug: widget?.articleDetail?.slug,
           });
+          if (result != null && result is ArticleDetail) {
+            widget.articleDetail.isLike = result.isLike;
+            widget.articleDetail.totalLike = result.totalLike;
+            widget.articleDetail.isBookmark = result.isBookmark;
+            widget.articleDetail.totalComment = result.totalComment;
+            setState(() {});
+          }
         }
       },
       child: CachedNetworkImage(
@@ -190,7 +197,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
       child: Row(
         children: <Widget>[
           SvgPicture.asset(
-            'images/love.svg',
+            'images/ic_like_full.svg',
             color: widget.articleDetail.isLike == 1
                 ? ThemeColors.primaryBlue
                 : ThemeColors.black80,

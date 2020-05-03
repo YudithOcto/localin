@@ -17,6 +17,7 @@ class ArticleDetail {
   int isBookmark;
   int totalLike;
   int totalComment;
+  List<MediaModel> media;
 
   ArticleDetail({
     this.id,
@@ -35,6 +36,7 @@ class ArticleDetail {
     this.createdBy,
     this.totalLike,
     this.totalComment,
+    this.media,
   });
 
   factory ArticleDetail.fromJson(Map<String, dynamic> body) {
@@ -56,6 +58,26 @@ class ArticleDetail {
       isLike: body['is_like'],
       totalLike: body['total_like'],
       totalComment: body['total_komentar'],
+      media: body['media'] == null
+          ? []
+          : List<MediaModel>.from(
+              body['media'].map((x) => MediaModel.fromJson(x))),
+    );
+  }
+}
+
+class MediaModel {
+  String attachmentId;
+  String type;
+  String attachment;
+
+  MediaModel({this.attachment, this.type, this.attachmentId});
+
+  factory MediaModel.fromJson(Map<String, dynamic> body) {
+    return MediaModel(
+      attachmentId: body['lampiran_id'],
+      attachment: body['lampiran'],
+      type: body['tipe'],
     );
   }
 }

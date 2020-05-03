@@ -46,38 +46,44 @@ class HotelDetailWrapperWidget extends StatelessWidget {
                 },
                 child: Stack(
                   children: <Widget>[
-                    CarouselSlider.builder(
-                      aspectRatio: 2.0,
-                      itemCount: provider.hotelDetailEntity.images.length,
-                      itemBuilder: (BuildContext context, int itemIndex) =>
-                          CachedNetworkImage(
-                              width: double.infinity,
-                              height: MediaQuery.of(context).orientation ==
-                                      Orientation.portrait
-                                  ? size.height * 0.3
-                                  : size.height * 0.6,
-                              imageUrl: provider
-                                  ?.hotelDetailEntity?.images[itemIndex],
-                              fit: BoxFit.cover,
-                              fadeInCurve: Curves.bounceIn,
-                              placeholderFadeInDuration:
-                                  Duration(milliseconds: 500),
-                              placeholder: (context, url) => Container(
-                                    color: Colors.grey,
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        aspectRatio: 1.5,
+                        height: 209.0,
+                        autoPlay: false,
+                        enlargeCenterPage: false,
+                        viewportFraction: 1.0,
+                      ),
+                      items: List.generate(
+                          provider.hotelDetailEntity.images.length, (index) {
+                        return CachedNetworkImage(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).orientation ==
+                                    Orientation.portrait
+                                ? size.height * 0.3
+                                : size.height * 0.6,
+                            imageUrl:
+                                provider?.hotelDetailEntity?.images[index],
+                            fit: BoxFit.cover,
+                            fadeInCurve: Curves.bounceIn,
+                            placeholderFadeInDuration:
+                                Duration(milliseconds: 500),
+                            placeholder: (context, url) => Container(
+                                  color: Colors.grey,
+                                ),
+                            errorWidget: (context, url, _) => Container(
+                                  color: Colors.grey,
+                                  width: double.infinity,
+                                  height: MediaQuery.of(context).orientation ==
+                                          Orientation.portrait
+                                      ? size.height * 0.3
+                                      : size.height * 0.6,
+                                  child: Icon(
+                                    Icons.error,
+                                    color: Colors.white,
                                   ),
-                              errorWidget: (context, url, _) => Container(
-                                    color: Colors.grey,
-                                    width: double.infinity,
-                                    height:
-                                        MediaQuery.of(context).orientation ==
-                                                Orientation.portrait
-                                            ? size.height * 0.3
-                                            : size.height * 0.6,
-                                    child: Icon(
-                                      Icons.error,
-                                      color: Colors.white,
-                                    ),
-                                  )),
+                                ));
+                      }),
                     ),
                     Positioned(
                       bottom: 10.0,
