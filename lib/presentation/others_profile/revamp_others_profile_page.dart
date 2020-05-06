@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_article_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_community_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/revamp_others_profile_header_widget.dart';
@@ -35,6 +36,7 @@ class _RevampOthersProfileContentState
     extends State<RevampOthersProfileContent> {
   ScrollController _scrollController;
   bool isInit = true;
+  Future getOtherUserProfile;
 
   _articleListener() {
     if (_scrollController.offset >=
@@ -49,6 +51,9 @@ class _RevampOthersProfileContentState
     if (isInit) {
       _scrollController = ScrollController();
       _scrollController..addListener(_articleListener);
+      getOtherUserProfile =
+          Provider.of<RevampOthersProvider>(context, listen: false)
+              .getOtherUserProfile('${widget.userId}');
       isInit = false;
     }
     super.didChangeDependencies();
@@ -60,14 +65,9 @@ class _RevampOthersProfileContentState
       body: SingleChildScrollView(
         controller: _scrollController,
         child: FutureBuilder<UserModel>(
-            future: Provider.of<RevampOthersProvider>(context, listen: false)
-                .getOtherUserProfile('${widget.userId}'),
+            future: getOtherUserProfile,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: CircularProgressIndicator());
-              } else {
+              if (snapshot.hasData) {
                 return ListView(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
@@ -76,9 +76,12 @@ class _RevampOthersProfileContentState
                     RevampOthersProfileHeaderWidget(
                       userModel: snapshot.data,
                     ),
-                    OthersProfileCommunitySectionWidget(
-                      userId: snapshot.data?.id,
-                      username: snapshot.data?.username,
+                    Visibility(
+                      visible: snapshot?.data?.type != kArticleMediaType,
+                      child: OthersProfileCommunitySectionWidget(
+                        userId: snapshot.data?.id,
+                        username: snapshot.data?.username,
+                      ),
                     ),
                     OthersProfileArticleSectionWidget(
                       id: snapshot.data?.id,
@@ -86,6 +89,10 @@ class _RevampOthersProfileContentState
                     ),
                   ],
                 );
+              } else {
+                return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: Center(child: CircularProgressIndicator()));
               }
             }),
       ),

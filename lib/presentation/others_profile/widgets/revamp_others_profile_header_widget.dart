@@ -43,12 +43,9 @@ class _RevampOthersProfileHeaderWidgetState
                   children: <Widget>[
                     InkWell(
                       onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: ThemeColors.black0,
-                        ),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: ThemeColors.black0,
                       ),
                     ),
                     SizedBox(
@@ -116,7 +113,7 @@ class _RevampOthersProfileHeaderWidgetState
                   height: 4.0,
                 ),
                 Text(
-                  '${widget.userModel?.shortBio ?? '-'}',
+                  '${widget?.userModel?.shortBio?.text ?? ''}',
                   style: ThemeText.sfRegularBody
                       .copyWith(color: ThemeColors.black0),
                 )
@@ -126,5 +123,13 @@ class _RevampOthersProfileHeaderWidgetState
         ),
       ],
     );
+  }
+}
+
+extension on String {
+  String get text {
+    print(this);
+    if (this == null || this.isEmpty) return '-';
+    return this;
   }
 }

@@ -62,14 +62,15 @@ class _AvailableHistoryContentWidgetState
   }
 
   _listener() {
-//    final provider =
-//        Provider.of<BookingHistoryProvider>(context, listen: false);
-//    if (provider.historyList != null &&
-//        provider.historyList.isNotEmpty &&
-//        _controller.offset >= _controller.position.maxScrollExtent &&
-//        provider.historyList.length < provider.totalPage) {
-//      provider.getBookingHistoryList();
-//    } else {
+    final provider =
+        Provider.of<BookingHistoryProvider>(context, listen: false);
+    if (provider.historyList != null &&
+        provider.historyList.isNotEmpty &&
+        _controller.offset >= _controller.position.maxScrollExtent &&
+        provider.historyList.length < provider.totalPage) {
+      provider.getBookingHistoryList();
+    }
+    //  else {
 //      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
 //      if (_controller.offset >= _controller.position.maxScrollExtent &&
 //          !homeProvider.isLoading &&

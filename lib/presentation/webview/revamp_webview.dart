@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:localin/text_themes.dart';
+import 'package:localin/themes.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class RevampWebview extends StatefulWidget {
   static const routeName = '/revampWebview';
   static const url = 'url';
   static const isFromProfile = 'isFromProfile';
+  static const title = 'title';
   @override
   _RevampWebviewState createState() => _RevampWebviewState();
 }
@@ -28,6 +31,7 @@ class _RevampWebviewState extends State<RevampWebview> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[RevampWebview.url];
+    String title = routeArgs[RevampWebview.title] ?? '';
     isFromProfile = routeArgs[RevampWebview.isFromProfile] ?? false;
     //url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
     return WillPopScope(
@@ -43,38 +47,25 @@ class _RevampWebviewState extends State<RevampWebview> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            automaticallyImplyLeading: true,
+            backgroundColor: ThemeColors.black0,
+            elevation: 0,
+            titleSpacing: 0.0,
+            title: Container(
+              margin: EdgeInsets.only(right: 80.0),
+              child: Text(
+                title ?? '',
+                overflow: TextOverflow.ellipsis,
+                style: ThemeText.sfMediumHeadline,
+              ),
+            ),
             leading: NavigationControls(_controller.future),
           ),
-          body: Builder(
-            builder: (context) => IndexedStack(
-              index: _stackToView,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: WebView(
-                        initialUrl: url,
-                        javascriptMode: JavascriptMode.unrestricted,
-                        onWebViewCreated: (webViewController) {
-                          _controller.complete(webViewController);
-                        },
-                        onPageFinished: _handleLoad,
-                      ),
-                    ),
-                  ],
-                ),
-                Visibility(
-                  visible: !isFromProfile,
-                  child: Container(
-                    color: Colors.white,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              ],
-            ),
+          body: WebView(
+            initialUrl: url,
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (webViewController) {
+              _controller.complete(webViewController);
+            },
           ),
         ),
       ),
@@ -108,7 +99,10 @@ class NavigationControls extends StatelessWidget {
                       return;
                     }
                   },
-            child: Icon(Icons.keyboard_backspace));
+            child: Icon(
+              Icons.arrow_back,
+              color: ThemeColors.black80,
+            ));
       },
     );
   }

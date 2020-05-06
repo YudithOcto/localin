@@ -55,7 +55,7 @@ class CreateArticleProvider extends BaseModelProvider {
   }
 
   Future<ArticleTagResponse> getArticleTags(String keyword) async {
-    var result = await _repository.getArticleTags(keyword);
+    var result = await _repository.getArticleTags(keyword, 1, null);
     if (result != null && result.error == null) {
       tagResponse = result;
       notifyListeners();

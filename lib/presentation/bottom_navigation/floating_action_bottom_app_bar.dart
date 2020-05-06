@@ -113,10 +113,12 @@ class _FloatingActionBottomAppBarState
                 SizedBox(
                   height: 7.8,
                 ),
-                Text(item.text,
+                AutoSizeText(item.text,
                     overflow: TextOverflow.fade,
-                    style:
-                        ThemeText.sfSemiBoldFootnote.copyWith(fontSize: 11.0))
+                    minFontSize: 10.0,
+                    maxFontSize: 11.0,
+                    maxLines: 1,
+                    style: ThemeText.sfSemiBoldFootnote)
               ],
             ),
           ),

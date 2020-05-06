@@ -76,12 +76,24 @@ class Repository {
     return apiProvider.bookmarkArticle(articleId);
   }
 
-  Future<ArticleBaseResponse> getUserArticle() async {
-    return apiProvider.getUserArticle();
+  Future<ArticleBaseResponse> getUserArticle(
+      {int offset, int isDraft, int isTrash}) async {
+    return apiProvider.getUserArticle(isDraft, isTrash, offset);
   }
 
-  Future<ArticleBaseResponse> getArticleList(int offset, int page) async {
-    return apiProvider.getArticleList(offset, page);
+  Future<ArticleBaseResponse> getArticleList(int offset, int page,
+      {int isLiked, int isBookmark, String keyword}) async {
+    return apiProvider.getArticleList(
+        offset, page, isLiked, isBookmark, keyword);
+  }
+
+  Future<ArticleBaseResponse> getRelatedArticle(String articleId) async {
+    return apiProvider.getRelatedArticle(articleId);
+  }
+
+  Future<ArticleBaseResponse> getArticleByTag(
+      int offset, int page, String tag) async {
+    return apiProvider.getArticleByTag(offset, page, tag);
   }
 
   Future<ArticleBaseResponse> getOtherArticle(
@@ -93,8 +105,9 @@ class Repository {
     return apiProvider.createArticle(form);
   }
 
-  Future<ArticleTagResponse> getArticleTags(String keyword) async {
-    return apiProvider.getArticleTags(keyword);
+  Future<ArticleTagResponse> getArticleTags(
+      String keyword, offset, limit) async {
+    return apiProvider.getArticleTags(keyword, offset, limit);
   }
 
   Future<ArticleCommentBaseResponse> getArticleComment(String articleId) {

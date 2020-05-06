@@ -74,8 +74,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (controller.offset >= controller.position.maxScrollExtent) {
       if (homeProvider.isRoomPage) {
         Provider.of<SearchHotelProvider>(context, listen: false).getHotel();
-      } else {
-        homeProvider.getArticleList(isRefresh: false);
       }
     }
   }
@@ -116,7 +114,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ? SearchHotelWidget(
                           isHomePage: true,
                         )
-                      : HomeContentDefault(),
+                      : HomeContentDefault(
+                          valueChanged: widget.valueChanged,
+                        ),
                 ],
               );
             },

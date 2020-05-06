@@ -12,10 +12,8 @@ class HomeProvider with ChangeNotifier {
   List<CommunityDetail> communityDetail = List();
   List<ArticleDetail> _articleDetailList = [];
   bool isRoomPage = false;
-  int _pageTotal = 0;
-  final int _limitPageRequest = 8;
+  final int _limitPageRequest = 10;
   int _pageRequest = 1;
-  bool _canLoadMore = true;
   StreamController<articleState> _articleController =
       StreamController<articleState>.broadcast();
 
@@ -31,22 +29,15 @@ class HomeProvider with ChangeNotifier {
   Future<List<ArticleDetail>> getArticleList({bool isRefresh = true}) async {
     if (isRefresh) {
       _articleDetailList.clear();
-      _pageRequest = 1;
-      _canLoadMore = true;
-      _pageTotal = 0;
     }
-    if (!_canLoadMore) {
-      return null;
-    }
+
     _articleController.add(articleState.Loading);
-    final response =
-        await _repository.getArticleList(_pageRequest, _limitPageRequest);
+    final response = await _repository.getArticleList(
+        _pageRequest, _limitPageRequest,
+        isBookmark: null, isLiked: null);
     if (response != null && response.error != 'success') {
       _articleController.add(articleState.Success);
       _articleDetailList.addAll(response.data);
-      _pageTotal = response.total;
-      _canLoadMore = _pageTotal > _articleDetailList.length;
-      _pageRequest += 1;
     } else {
       _articleController.add(articleState.NoData);
     }
@@ -81,7 +72,6 @@ class HomeProvider with ChangeNotifier {
 
   List<ArticleDetail> get articleDetailList => _articleDetailList;
   Stream<articleState> get articleStream => _articleController.stream;
-  bool get canLoadMore => _canLoadMore;
 }
 
 enum articleState { Loading, Success, NoData }

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
-class RowUserData extends StatelessWidget {
+class RowUserLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);

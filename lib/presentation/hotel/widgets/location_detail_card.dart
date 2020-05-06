@@ -122,6 +122,7 @@ class _LocationDetailCardState extends State<LocationDetailCard> {
                     final result = await Navigator.of(context)
                         .pushNamed(WebViewPage.routeName, arguments: {
                       WebViewPage.urlName: response?.urlRedirect,
+                      WebViewPage.title: 'Dana',
                     });
                     if (result != null) {
                       widget.onSuccess(true);
