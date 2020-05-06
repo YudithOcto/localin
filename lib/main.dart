@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
 import 'package:localin/presentation/community/pages/community_feed_page.dart';
@@ -55,11 +56,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  final List<Message> messages = [];
-
   @override
   void initState() {
     super.initState();
+    _initLocalNotification();
     registerNotification();
   }
 
@@ -140,6 +140,7 @@ class _MyAppState extends State<MyApp> {
   void registerNotification() {
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
       print(message);
+      showNotification(message);
       return;
     }, onResume: (Map<String, dynamic> message) {
       print(message);
@@ -154,10 +155,55 @@ class _MyAppState extends State<MyApp> {
     getToken();
   }
 
+  showNotification(Map<String, dynamic> data) async {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'drominder',
+      'drominder notification',
+      'Channel for drominder',
+      playSound: true,
+      enableLights: true,
+      enableVibration: true,
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
+    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    try {
+      await FlutterLocalNotificationsPlugin().show(
+          0,
+          '${data['notification']['title']}',
+          '${data['notification']['body']}',
+          platformChannelSpecifics,
+          payload: data.toString());
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  _initLocalNotification() async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    final initializationSettingsAndroid =
+        AndroidInitializationSettings('home_logo');
+    final initializationSettingsIOS = IOSInitializationSettings();
+    final initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String payload) async {
+      try {
+        print(payload);
+      } catch (error) {
+        print(error);
+      }
+    });
+  }
+
   void getToken() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     _firebaseMessaging.getToken().then((token) {
       sf.setString('tokenFirebase', token);
+      print('Firebase $token');
     });
   }
 }

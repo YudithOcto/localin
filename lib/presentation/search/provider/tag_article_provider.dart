@@ -9,6 +9,8 @@ class TagArticleProvider with ChangeNotifier {
   bool get canLoadMoreArticle => _canLoadMoreArticle;
 
   int _offsetRequest = 1, _limitPageRequest = 10;
+  int get offsetRequest => _offsetRequest;
+
   List<ArticleDetail> _listArticle = [];
 
   Future<List<ArticleDetail>> getArticleByTag(String id,
@@ -16,17 +18,19 @@ class TagArticleProvider with ChangeNotifier {
     if (isRefresh) {
       _listArticle.clear();
       _offsetRequest = 1;
+      _canLoadMoreArticle = true;
     }
     final response = await _repository.getArticleByTag(
         _offsetRequest, _limitPageRequest, id);
-    if (response != null && response.data.isNotEmpty) {
+    if (response != null && response.error == null) {
       _offsetRequest += 1;
       _listArticle.addAll(response.data);
-      _canLoadMoreArticle = response.total >= _listArticle.length;
+      _canLoadMoreArticle = response.total > _listArticle.length;
       notifyListeners();
-      return response.data;
+      return _listArticle;
     } else {
-      return null;
+      _canLoadMoreArticle = false;
+      return _listArticle;
     }
   }
 }

@@ -72,7 +72,12 @@ class _CollectionArticleWidgetState extends State<CollectionArticleWidget>
                     .pageController
                     .position
                     .drag(dragStartDetails, () {});
-                drag.update(notification.dragDetails);
+                if (drag != null &&
+                    (notification.metrics.axisDirection == AxisDirection.left ||
+                        notification.metrics.axisDirection ==
+                            AxisDirection.right)) {
+                  drag.update(notification.dragDetails);
+                }
               }
               if (notification is ScrollEndNotification) {
                 drag?.cancel();

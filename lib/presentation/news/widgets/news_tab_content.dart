@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
 import 'package:localin/presentation/news/widgets/latest/latest_article_widget.dart';
-import 'package:localin/presentation/news/widgets/mycollection/my_collection_article.dart';
+import 'package:localin/presentation/news/widgets/my_articles//my_collection_article.dart';
 import 'package:localin/presentation/news/widgets/news_main_header.dart';
 import 'package:provider/provider.dart';
 
 import 'collection/collection_article_widget.dart';
 
-class NewsContent extends StatelessWidget {
+class NewsTabContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

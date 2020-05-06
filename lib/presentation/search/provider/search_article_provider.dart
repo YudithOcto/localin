@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/tag_model.dart';
 
 class SearchArticleProvider with ChangeNotifier {
-//  final TextEditingController _searchController = TextEditingController();
-  //TextEditingController get searchController => _searchController;
+  final TextEditingController _searchController = TextEditingController();
+  TextEditingController get searchController => _searchController;
 
   Timer _debounce;
   bool _isClearButtonVisible = false;
@@ -16,6 +17,7 @@ class SearchArticleProvider with ChangeNotifier {
   final Repository _repository = Repository();
   final int _totalPageRequested = 10;
   int _offsetPage = 1;
+  int get offsetPage => _offsetPage;
 
   bool _isCanLoadMoreArticle = true;
   bool get isCanLoadMoreArticle => _isCanLoadMoreArticle;
@@ -23,29 +25,14 @@ class SearchArticleProvider with ChangeNotifier {
   List<ArticleDetail> _articleList = [];
   List<ArticleDetail> get articleList => _articleList;
 
+  SearchArticleProvider() {
+    _searchController..addListener(_onSearchChanged);
+  }
+
   final StreamController<SearchArticleState> _articleStreamController =
       StreamController<SearchArticleState>.broadcast();
   Stream<SearchArticleState> get searchArticleStream =>
       _articleStreamController.stream;
-
-  SearchArticleProvider() {
-    //_searchController..addListener(_searchListener);
-  }
-
-  _searchListener() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
-    _debounce = Timer(const Duration(milliseconds: 400), () {
-//      if (_searchController.text.isNotEmpty) {
-//        Future.wait([getArticle(), getTags()]).then((value) {
-//          notifyListeners();
-//        });
-//        _isClearButtonVisible = true;
-//      } else {
-//        _isClearButtonVisible = false;
-//        notifyListeners();
-//      }
-    });
-  }
 
   Future<List<ArticleDetail>> getArticle(
       {bool isRefresh = true, String keyword = ''}) async {
@@ -67,6 +54,7 @@ class SearchArticleProvider with ChangeNotifier {
       _articleList.addAll(response.data);
       _offsetPage += 1;
       _isCanLoadMoreArticle = response.total > _articleList.length;
+      _articleStreamController.add(SearchArticleState.isSuccess);
     } else {
       _articleStreamController.add(SearchArticleState.isEmpty);
     }
@@ -78,6 +66,7 @@ class SearchArticleProvider with ChangeNotifier {
   ///
 
   int _offsetTags = 1;
+  int get offsetTags => _offsetTags;
 
   bool _isCanLoadMoreTags = true;
   bool get isCanLoadMoreTags => _isCanLoadMoreTags;
@@ -122,9 +111,19 @@ class SearchArticleProvider with ChangeNotifier {
     super.dispose();
   }
 
-  void onSearchChanged(String v) async {
-    Future.wait([getArticle(keyword: v), getTags(keyword: v)]).then((value) {
-      notifyListeners();
+  Timer t;
+
+  _onSearchChanged() async {
+    if (t != null && t.isActive) {
+      t.cancel();
+    }
+    t = Timer(Duration(milliseconds: 1000), () {
+      Future.wait([
+        getArticle(keyword: _searchController.text),
+        getTags(keyword: _searchController.text)
+      ]).then((value) {
+        notifyListeners();
+      });
     });
   }
 }

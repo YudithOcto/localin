@@ -11,6 +11,7 @@ class NewsArticleProvider with ChangeNotifier {
   List<ArticleDetail> get articleList => _articleList;
 
   int _pageRequest = 1, _limitPageRequest = 10;
+  int get pageRequest => _pageRequest;
   bool _canLoadMore = true;
   bool get canLoadMoreArticle => _canLoadMore;
   int _pageTotal = 0;
@@ -35,6 +36,7 @@ class NewsArticleProvider with ChangeNotifier {
     if (!_canLoadMore) {
       return null;
     }
+
     _articleLoadController.add(NewsArticleState.Loading);
     final response = await _apiRepository.getArticleList(
         _pageRequest, _limitPageRequest,
@@ -48,10 +50,11 @@ class NewsArticleProvider with ChangeNotifier {
       _canLoadMore = _pageTotal > _articleList.length;
       _pageRequest += 1;
     } else {
+      _canLoadMore = false;
       _articleLoadController.add(NewsArticleState.NoData);
     }
     notifyListeners();
-    return response.data;
+    return _articleList;
   }
 
   /// GET BOOKMARK ARTICLE

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/shared_article_components/article_single_card.dart';
-import 'package:localin/components/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/tag_model.dart';
 import 'package:localin/presentation/search/provider/tag_article_provider.dart';
@@ -22,6 +22,7 @@ class _TagDetailListContentWidgetState
   bool _isInit = true;
   Future getArticle;
   TagModel model;
+  final ScrollController _scrollController = ScrollController();
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -31,7 +32,19 @@ class _TagDetailListContentWidgetState
     if (_isInit) {
       getArticle = Provider.of<TagArticleProvider>(context, listen: false)
           .getArticleByTag(model.id);
+      _scrollController..addListener(_scrollListener);
       _isInit = false;
+    }
+  }
+
+  _scrollListener() {
+    final provider = Provider.of<TagArticleProvider>(context, listen: false);
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        provider.canLoadMoreArticle) {
+      setState(() {
+        getArticle = provider.getArticleByTag(model.id, isRefresh: false);
+      });
     }
   }
 
@@ -70,24 +83,37 @@ class _TagDetailListContentWidgetState
             child: FutureBuilder<List<ArticleDetail>>(
                 future: getArticle,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+                  final provider =
+                      Provider.of<TagArticleProvider>(context, listen: false);
+                  if (snapshot.connectionState == ConnectionState.waiting &&
+                      provider.offsetRequest <= 1) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   } else {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        physics: ClampingScrollPhysics(),
-                        itemCount: snapshot?.data?.length,
-                        itemBuilder: (context, index) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      physics: ClampingScrollPhysics(),
+                      itemCount: snapshot.data.length + 1 ?? 1,
+                      itemBuilder: (context, index) {
+                        if (provider.offsetRequest <= 2 &&
+                            snapshot.data.length == 0) {
+                          return EmptyArticle();
+                        } else if (index < snapshot?.data?.length) {
                           return ArticleSingleCard(snapshot?.data[index]);
-                        },
-                      );
-                    } else {
-                      return EmptyArticleByTag();
-                    }
+                        } else if (provider.canLoadMoreArticle) {
+                          return Container(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    );
                   }
                 }),
           ),

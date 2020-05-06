@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/presentation/article/pages/create_article_page.dart';
-import 'package:localin/components/shared_article_components/article_single_card.dart';
-import 'package:localin/components/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -10,6 +9,8 @@ import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class RowArticle extends StatefulWidget {
+  final ValueChanged<int> valueChanged;
+  RowArticle({this.valueChanged});
   @override
   _RowArticleState createState() => _RowArticleState();
 }
@@ -53,14 +54,7 @@ class _RowArticleState extends State<RowArticle> {
                 ],
               ),
               InkWell(
-                onTap: () async {
-//                  final result = await Navigator.of(context)
-//                      .pushNamed(CreateArticlePage.routeName);
-//                  if (result != null) {
-//                    /// refresh current page
-//                  }
-                  Navigator.of(context).pushNamed(EmptyPage.routeName);
-                },
+                onTap: () => widget.valueChanged(1),
                 child: Text(
                   'More articles',
                   textAlign: TextAlign.center,
@@ -96,14 +90,21 @@ class _RowArticleState extends State<RowArticle> {
                           homeProvider.articleDetailList.length) {
                         return ArticleSingleCard(
                             homeProvider.articleDetailList[index]);
-                      } else if (homeProvider.canLoadMore) {
-                        return Container(
-                          child: Center(
-                            child: CircularProgressIndicator(),
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: RaisedButton(
+                            onPressed: () => widget.valueChanged(1),
+                            color: ThemeColors.primaryBlue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0)),
+                            child: Text(
+                              'More Articles',
+                              style: ThemeText.rodinaTitle3
+                                  .copyWith(color: ThemeColors.black0),
+                            ),
                           ),
                         );
-                      } else {
-                        return Container();
                       }
                     },
                   );

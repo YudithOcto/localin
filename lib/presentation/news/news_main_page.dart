@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/news/provider/news_article_provider.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
-import 'package:localin/presentation/news/widgets/news_content.dart';
+import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
+import 'package:localin/presentation/news/widgets/news_tab_content.dart';
 import 'package:provider/provider.dart';
 
 class NewsMainPage extends StatefulWidget {
@@ -21,8 +22,11 @@ class _NewsMainPageState extends State<NewsMainPage> {
         ChangeNotifierProvider<NewsArticleProvider>(
           create: (_) => NewsArticleProvider(),
         ),
+        ChangeNotifierProvider<NewsMyArticleProvider>(
+          create: (_) => NewsMyArticleProvider(),
+        )
       ],
-      child: NewsContent(),
+      child: NewsTabContent(),
     );
   }
 }

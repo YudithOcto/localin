@@ -88,13 +88,16 @@ class _RevampProfileContentWidgetState
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              padding: EdgeInsets.only(bottom: 16.0),
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.symmetric(
@@ -210,24 +213,22 @@ class _RevampProfileContentWidgetState
                 ProfileSettingsWidgets(),
               ],
             ),
-            InkWell(
-              onTap: () => signOut(),
-              child: Container(
-                height: 56.0,
-                width: double.maxFinite,
-                margin: EdgeInsets.only(top: 16.0),
-                alignment: Alignment.center,
-                color: ThemeColors.black10,
-                child: Text(
-                  'Logout',
-                  textAlign: TextAlign.center,
-                  style:
-                      ThemeText.sfMediumBody.copyWith(color: ThemeColors.red),
-                ),
+          ),
+          InkWell(
+            onTap: () => signOut(),
+            child: Container(
+              height: 56.0,
+              width: double.maxFinite,
+              alignment: Alignment.center,
+              color: ThemeColors.black10,
+              child: Text(
+                'Logout',
+                textAlign: TextAlign.center,
+                style: ThemeText.sfMediumBody.copyWith(color: ThemeColors.red),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -47,7 +47,8 @@ class ProfileSettingsWidgets extends StatelessWidget {
               Navigator.of(context)
                   .pushNamed(RevampWebview.routeName, arguments: {
                 RevampWebview.url: 'https://localin.id/#point',
-                RevampWebview.isFromProfile: true
+                RevampWebview.isFromProfile: true,
+                RevampWebview.title: 'Point',
               });
             },
           ),
@@ -60,11 +61,12 @@ class ProfileSettingsWidgets extends StatelessWidget {
             iconValue: 'images/profile_about.svg',
             showButton: false,
             onPressed: () {
-              Navigator.of(context).pushNamed(RevampWebview.routeName,
-                  arguments: {
-                    RevampWebview.url: 'https://localin.id',
-                    RevampWebview.isFromProfile: true
-                  });
+              Navigator.of(context)
+                  .pushNamed(RevampWebview.routeName, arguments: {
+                RevampWebview.url: 'https://localin.id',
+                RevampWebview.isFromProfile: true,
+                RevampWebview.title: 'About',
+              });
             },
           ),
         ),
@@ -80,6 +82,7 @@ class ProfileSettingsWidgets extends StatelessWidget {
                   .pushNamed(RevampWebview.routeName, arguments: {
                 RevampWebview.url: 'https://localin.id/privacy-policy.html',
                 RevampWebview.isFromProfile: true,
+                RevampWebview.title: 'Privacy Policy',
               });
             },
           ),
@@ -88,6 +91,7 @@ class ProfileSettingsWidgets extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
           child: Consumer<AuthProvider>(
             builder: (context, provider, child) {
+              print(provider.userModel.status);
               return RowProfileSettingsWidget(
                 title: 'Verification',
                 description: 'Verify your account',
@@ -113,9 +117,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
       final result = await provider
           .authenticateUserDanaAccount(authState.userModel.handphone);
       if (result.urlRedirect.isNotEmpty && !result.error) {
-        final response = await Navigator.of(context).pushNamed(
-            WebViewPage.routeName,
-            arguments: {WebViewPage.urlName: result.urlRedirect});
+        final response = await Navigator.of(context)
+            .pushNamed(WebViewPage.routeName, arguments: {
+          WebViewPage.urlName: result.urlRedirect,
+          WebViewPage.title: 'Dana',
+        });
         if (response != null && response == 'success') {
           final dialogResult = await showDialog(
               barrierDismissible: false,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/presentation/search/provider/search_article_provider.dart';
-import 'package:localin/presentation/search/widgets/search_article_result_widget.dart';
-import 'package:localin/presentation/search/widgets/search_tag_list_widget.dart';
+import 'package:localin/presentation/search/search_widgets/search_article_result_widget.dart';
+import 'package:localin/presentation/search/search_widgets/search_tag_result_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -43,10 +43,7 @@ class _SearchArticlePageContentState extends State<SearchArticlePageContent>
           child: Consumer<SearchArticleProvider>(
             builder: (context, provider, child) {
               return TextFormField(
-                //controller: provider.searchController,
-                onChanged: (v) async {
-                  provider.onSearchChanged(v);
-                },
+                controller: provider.searchController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: ThemeColors.black10,
@@ -91,10 +88,10 @@ class _SearchArticlePageContentState extends State<SearchArticlePageContent>
               onTap: (index) => _pageController.jumpToPage(index),
               tabs: <Widget>[
                 Tab(
-                  text: 'Article',
+                  text: 'Articles',
                 ),
                 Tab(
-                  text: 'Tag',
+                  text: 'Tags',
                 ),
               ],
             ),
@@ -105,7 +102,7 @@ class _SearchArticlePageContentState extends State<SearchArticlePageContent>
         controller: _pageController,
         children: <Widget>[
           SearchArticleResultWidget(),
-          SearchTagListWidget(),
+          SearchTagResultWidget(),
         ],
       ),
     );

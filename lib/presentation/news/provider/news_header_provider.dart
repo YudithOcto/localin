@@ -9,7 +9,7 @@ class NewsHeaderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> _newsTab = ['Latest', 'My Articles', 'Collection'];
+  List<String> _newsTab = ['Latest', 'My Articles', 'Collections'];
   List<String> get newsTabTitle => _newsTab;
 
   List<String> _iconsTab = [

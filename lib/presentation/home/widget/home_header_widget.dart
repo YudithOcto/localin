@@ -215,6 +215,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
     if (!result.error) {
       await Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
         WebViewPage.urlName: result.data.urlTopUp,
+        WebViewPage.title: 'Dana',
       });
     } else {
       final authState = Provider.of<AuthProvider>(context, listen: false);
@@ -223,9 +224,11 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
         final result = await authState
             .authenticateUserDanaAccount(authState.userModel.handphone);
         if (result.urlRedirect.isNotEmpty && !result.error) {
-          final response = await Navigator.of(context).pushNamed(
-              WebViewPage.routeName,
-              arguments: {WebViewPage.urlName: result.urlRedirect});
+          final response = await Navigator.of(context)
+              .pushNamed(WebViewPage.routeName, arguments: {
+            WebViewPage.urlName: result.urlRedirect,
+            WebViewPage.title: 'Dana',
+          });
           if (response != null && response == 'success') {
             await showDialog(
                 barrierDismissible: false,

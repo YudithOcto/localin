@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/presentation/article/pages/create_article_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-
-import '../../text_themes.dart';
 
 class EmptyArticle extends StatelessWidget {
   @override

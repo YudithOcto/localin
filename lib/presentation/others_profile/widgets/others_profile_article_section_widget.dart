@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/components/shared_article_components/article_single_card.dart';
-import 'package:localin/components/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/presentation/others_profile/provider/revamp_others_provider.dart';
 import 'package:localin/presentation/others_profile/widgets/empty_other_user_article_widget.dart';
 import 'package:localin/text_themes.dart';
@@ -65,6 +65,7 @@ class _OthersProfileArticleSectionWidgetState
                   return EmptyArticle();
                 } else {
                   return ListView.builder(
+                    padding: EdgeInsets.all(0.0),
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
                     itemCount: articleProvider.articleList != null &&
@@ -76,7 +77,8 @@ class _OthersProfileArticleSectionWidgetState
                         return EmptyOtherUserArticle();
                       } else if (index < articleProvider.articleList.length) {
                         return ArticleSingleCard(
-                            articleProvider.articleList[index]);
+                          articleProvider.articleList[index],
+                        );
                       } else if (articleProvider.canLoadMoreArticle) {
                         return Container(
                           child: Center(
@@ -90,7 +92,13 @@ class _OthersProfileArticleSectionWidgetState
                   );
                 }
               } else {
-                return Container();
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return Container();
+                }
               }
             },
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/presentation/search/provider/search_article_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -39,10 +40,17 @@ class _SearchArticleResultWidgetState extends State<SearchArticleResultWidget> {
               stream: provider.searchArticleStream,
               builder: (context, snapshot) {
                 if (snapshot.data == SearchArticleState.isEmpty) {
-                  return Container();
+                  return EmptyArticle();
                 } else {
+                  if (snapshot.data == SearchArticleState.isLoading &&
+                      provider.offsetPage <= 1) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                   return ListView.builder(
                     shrinkWrap: true,
+                    controller: _searchArticleScrollController,
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     physics: ClampingScrollPhysics(),
                     itemCount: provider.articleList != null &&

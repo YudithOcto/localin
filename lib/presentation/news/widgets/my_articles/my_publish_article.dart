@@ -2,69 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/news/provider/news_article_provider.dart';
+import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:provider/provider.dart';
 
-class CollectionContentListWidget extends StatefulWidget {
-  final int isLiked;
-  final int isBookmark;
-  CollectionContentListWidget({this.isLiked, this.isBookmark});
-
+class MyPublishArticle extends StatefulWidget {
   @override
-  _CollectionContentListWidgetState createState() =>
-      _CollectionContentListWidgetState();
+  _MyPublishArticleState createState() => _MyPublishArticleState();
 }
 
-class _CollectionContentListWidgetState
-    extends State<CollectionContentListWidget>
+class _MyPublishArticleState extends State<MyPublishArticle>
     with AutomaticKeepAliveClientMixin {
-  bool isInit = true;
-  final ScrollController _scrollController = ScrollController();
-  Future getLikedArticle;
+  Future getPublishedArticle;
+  bool _isInit = true;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (isInit) {
-      onArticleRefresh();
-      _scrollController..addListener(_listener);
-      isInit = false;
+    if (_isInit) {
+      loadArticle();
+      _scrollController = ScrollController()..addListener(_listener);
+      _isInit = false;
     }
   }
 
   _listener() {
-    final provider = Provider.of<NewsArticleProvider>(context, listen: false);
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
-        provider.canLoadMoreArticle) {
-      getLikedArticle = provider.getArticleList(
-          isRefresh: false,
-          isLiked: widget.isLiked.isNotNull ? widget.isLiked : null,
-          isBookmark: widget.isBookmark.isNotNull ? widget.isBookmark : null);
-      setState(() {});
+        Provider.of<NewsMyArticleProvider>(context, listen: false)
+            .canLoadMoreArticleList) {
+      loadArticle(isRefresh: false);
     }
   }
 
-  onArticleRefresh() {
-    getLikedArticle = Provider.of<NewsArticleProvider>(context, listen: false)
-        .getArticleList(
-            isLiked: widget.isLiked.isNotNull ? widget.isLiked : null,
-            isBookmark: widget.isBookmark.isNotNull ? widget.isBookmark : null);
+  loadArticle({bool isRefresh = true}) {
+    getPublishedArticle =
+        Provider.of<NewsMyArticleProvider>(context, listen: false)
+            .getUserArticle(isRefresh: isRefresh);
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        onArticleRefresh();
-        setState(() {});
+        loadArticle(isRefresh: true);
       },
       child: FutureBuilder<List<ArticleDetail>>(
-        future: getLikedArticle,
+        future: getPublishedArticle,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
-              Provider.of<NewsArticleProvider>(context, listen: false)
-                      .pageRequest <=
+              Provider.of<NewsMyArticleProvider>(context, listen: false)
+                      .userArticleOffset <=
                   1) {
             return Container(
               alignment: FractionalOffset.center,
@@ -75,9 +63,9 @@ class _CollectionContentListWidgetState
           } else {
             return ListView.builder(
               shrinkWrap: true,
-              primary: false,
-              physics: ClampingScrollPhysics(),
               controller: _scrollController,
+              primary: false,
+              physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
                   top: 0.0, bottom: 20.0, left: 20.0, right: 20.0),
               itemCount: snapshot.data.isNotNullNorEmpty
@@ -85,15 +73,16 @@ class _CollectionContentListWidgetState
                   : 1,
               itemBuilder: (context, index) {
                 if (snapshot.data.length == 0 &&
-                    Provider.of<NewsArticleProvider>(context, listen: false)
-                            .pageRequest <=
+                    Provider.of<NewsMyArticleProvider>(context, listen: false)
+                            .userArticleOffset <=
                         2) {
                   return EmptyArticle();
                 } else if (index < snapshot.data.length) {
                   return ArticleSingleCard(snapshot.data[index]);
-                } else if (Provider.of<NewsArticleProvider>(context,
+                } else if (Provider.of<NewsMyArticleProvider>(context,
                         listen: false)
-                    .canLoadMoreArticle) {
+                    .canLoadMoreArticleList) {
+                  /// This load more should be load more to published article
                   return Container(
                     child: Center(
                       child: CircularProgressIndicator(),
@@ -117,11 +106,5 @@ class _CollectionContentListWidgetState
 extension on List {
   bool get isNotNullNorEmpty {
     return this != null && this.isNotEmpty;
-  }
-}
-
-extension on int {
-  bool get isNotNull {
-    return this != null;
   }
 }

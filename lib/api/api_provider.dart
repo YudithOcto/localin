@@ -80,7 +80,7 @@ class ApiProvider {
         break;
       case DioErrorType.RESPONSE:
         errorDescription = error.response.data != null &&
-                error.response.data != null
+                !error.response.data.toString().contains('html')
             ? convertResponseErrorMessage(error.response.data)
             : 'Request failed with status code ${error.response.statusCode}';
         break;
@@ -280,10 +280,20 @@ class ApiProvider {
 
   /// Article
 
-  Future<ArticleBaseResponse> getUserArticle() async {
+  Future<ArticleBaseResponse> getUserArticle(
+      int isDraft, int isTrash, int offset) async {
     try {
+      Map<String, dynamic> map = Map();
+      map['page'] = offset;
+      map['limit'] = 10;
+      if (isDraft != null) {
+        map['is_draft'] = isDraft;
+      } else if (isTrash != null) {
+        map['is_trash'] = isTrash;
+      }
       final response = await _dio.get(ApiConstant.kUserArticle,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {'requiredToken': true}),
+          queryParameters: map);
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -335,7 +345,7 @@ class ApiProvider {
       _articleRequest['is_like'] = isLiked;
     } else if (isBookmark != null) {
       _articleRequest['is_bookmark'] = isBookmark;
-    } else if (keyword != null) {
+    } else if (keyword != null && keyword.isNotEmpty) {
       _articleRequest['search'] = keyword;
     }
     try {
@@ -389,8 +399,15 @@ class ApiProvider {
   Future<ArticleTagResponse> getArticleTags(
       String keyword, int offset, int limit) async {
     try {
+      Map<String, dynamic> query = Map();
+      query['page'] = offset;
+      query['limit'] = limit;
+      print(keyword);
+      if (keyword != null && keyword.isNotEmpty) {
+        query['keyword'] = keyword;
+      }
       final response = await _dio.get(ApiConstant.kArticleTags,
-          queryParameters: {'keyword': keyword, 'page': offset, 'limit': limit},
+          queryParameters: query,
           options: Options(headers: {'requiredToken': true}));
       final model = ArticleTagResponse.fromJson(response.data);
       return model;

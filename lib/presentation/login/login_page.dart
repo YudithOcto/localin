@@ -37,7 +37,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Content(),
+      body: SingleChildScrollView(
+        child: Content(),
+        padding: EdgeInsets.only(bottom: 20.0),
+      ),
     );
   }
 }
@@ -49,6 +52,7 @@ class Content extends StatelessWidget {
       fit: StackFit.loose,
       children: <Widget>[
         Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             FadeAnimation(
               delay: 0.2,
@@ -172,6 +176,7 @@ class Content extends StatelessWidget {
                             .pushNamed(WebViewPage.routeName, arguments: {
                           WebViewPage.urlName:
                               'https://localin.id/privacy-policy.html',
+                          WebViewPage.title: 'Dana',
                         });
                       },
                     style: ThemeText.sfMediumCaption

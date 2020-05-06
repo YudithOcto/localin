@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
+import 'package:localin/presentation/article/shared_article_components/row_like_widget.dart';
 import 'package:localin/presentation/home/widget/articles/row_bookmark.dart';
 import 'package:localin/presentation/news/news_detail_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
+import 'package:localin/themes.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
-import 'package:provider/provider.dart';
-
-import '../../themes.dart';
+import 'package:html/parser.dart' as parser;
 
 class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
@@ -39,13 +39,11 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
           ),
           InkWell(
             onTap: () {
-              if (widget?.articleDetail?.type != kArticleMediaType) {
-                Navigator.of(context)
-                    .pushNamed(RevampOthersProfilePage.routeName, arguments: {
-                  RevampOthersProfilePage.userId:
-                      widget?.articleDetail?.createdBy,
-                });
-              }
+              Navigator.of(context)
+                  .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                RevampOthersProfilePage.userId:
+                    widget?.articleDetail?.createdBy,
+              });
             },
             child: Text(
               'by ${widget?.articleDetail?.author}',
@@ -73,15 +71,21 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
                   });
                 }
               } else {
-                Navigator.of(context)
-                    .pushNamed(ArticleDetailPage.routeName, arguments: {
-                  ArticleDetailPage.articleId: widget.articleDetail?.slug,
-                  ArticleDetailPage.commentPage: false,
+                final result = await Navigator.of(context)
+                    .pushNamed(NewsDetailPage.routeName, arguments: {
+                  NewsDetailPage.newsSlug: widget?.articleDetail?.slug,
                 });
+                if (result != null && result is ArticleDetail) {
+                  widget.articleDetail.isLike = result.isLike;
+                  widget.articleDetail.totalLike = result.totalLike;
+                  widget.articleDetail.isBookmark = result.isBookmark;
+                  widget.articleDetail.totalComment = result.totalComment;
+                  setState(() {});
+                }
               }
             },
             child: Text(
-              '${widget?.articleDetail?.title}',
+              '${parseHtml(widget?.articleDetail?.title)}',
               style:
                   ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black100),
             ),
@@ -90,18 +94,29 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
             height: 8.0,
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              widget?.articleDetail?.type != kArticleMediaType
-                  ? rowMessage()
-                  : RowBookmark(
-                      articleDetail: widget?.articleDetail,
-                    ),
-              SizedBox(
-                width: 9.67,
+              Row(
+                children: <Widget>[
+                  widget?.articleDetail?.type != kArticleMediaType
+                      ? rowMessage()
+                      : RowBookmark(
+                          articleDetail: widget?.articleDetail,
+                        ),
+                  SizedBox(
+                    width: 9.67,
+                  ),
+                  widget?.articleDetail?.type != kArticleMediaType
+                      ? RowLikeWidget(
+                          articleDetail: widget?.articleDetail,
+                        )
+                      : rowShare(),
+                ],
               ),
-              widget?.articleDetail?.type != kArticleMediaType
-                  ? rowLike()
-                  : rowShare(),
+              Text(
+                  '${DateHelper.timeAgo(DateTime.parse(widget?.articleDetail?.createdAt))}',
+                  style: ThemeText.sfMediumBody
+                      .copyWith(color: ThemeColors.black80))
             ],
           )
         ],
@@ -143,14 +158,16 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
         imageUrl: ImageHelper.addSubFixHttp(widget.articleDetail?.image),
         placeholderFadeInDuration: Duration(milliseconds: 250),
         imageBuilder: (context, imageProvider) {
-          return Container(
-            width: double.infinity,
-            height: 188.0,
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(8.0),
-                image:
-                    DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+          return AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(8.0),
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.fill)),
+            ),
           );
         },
         placeholder: (context, url) => Container(
@@ -167,52 +184,6 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
               borderRadius: BorderRadius.circular(8.0),
               color: ThemeColors.black80),
         ),
-      ),
-    );
-  }
-
-  Widget rowLike() {
-    return InkWell(
-      onTap: () async {
-        if (widget?.articleDetail?.isLike == 0) {
-          final response = await Provider.of<HomeProvider>(context)
-              .likeArticle(widget.articleDetail.id);
-          if (response.error != null) {
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('${response?.error}'),
-            ));
-          } else {
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('${response?.message}'),
-              duration: Duration(milliseconds: 300),
-            ));
-            setState(() {
-              widget.articleDetail?.isLike =
-                  widget.articleDetail?.isLike == 0 ? 1 : 0;
-              widget.articleDetail?.totalLike += 1;
-            });
-          }
-        }
-      },
-      child: Row(
-        children: <Widget>[
-          SvgPicture.asset(
-            'images/ic_like_full.svg',
-            color: widget.articleDetail.isLike == 1
-                ? ThemeColors.primaryBlue
-                : ThemeColors.black80,
-            width: 16.0,
-            height: 16.0,
-          ),
-          SizedBox(
-            width: 5.59,
-          ),
-          Text(
-            '${widget?.articleDetail?.totalLike}',
-            style:
-                ThemeText.sfSemiBoldBody.copyWith(color: ThemeColors.black80),
-          ),
-        ],
       ),
     );
   }
@@ -239,7 +210,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
             width: 5.59,
           ),
           Text(
-            '${widget?.articleDetail?.totalComment}',
+            '${widget?.articleDetail?.totalComment ?? 0}',
             style:
                 ThemeText.sfSemiBoldBody.copyWith(color: ThemeColors.black80),
           ),
@@ -255,5 +226,10 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
       },
       child: SvgPicture.asset('images/share_article.svg'),
     );
+  }
+
+  parseHtml(String data) {
+    final doc = parser.parse(data);
+    return parser.parse(doc.body.text).documentElement.text;
   }
 }

@@ -76,8 +76,9 @@ class Repository {
     return apiProvider.bookmarkArticle(articleId);
   }
 
-  Future<ArticleBaseResponse> getUserArticle() async {
-    return apiProvider.getUserArticle();
+  Future<ArticleBaseResponse> getUserArticle(
+      {int offset, int isDraft, int isTrash}) async {
+    return apiProvider.getUserArticle(isDraft, isTrash, offset);
   }
 
   Future<ArticleBaseResponse> getArticleList(int offset, int page,

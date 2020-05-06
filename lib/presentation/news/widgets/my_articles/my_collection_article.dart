@@ -2,10 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/decorated_tab_bar.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
+import 'package:localin/presentation/news/widgets/my_articles/my_draft_article.dart';
+import 'package:localin/presentation/news/widgets/my_articles/my_publish_article.dart';
+import 'package:localin/presentation/news/widgets/my_articles/my_trash_article.dart';
+import 'package:localin/text_themes.dart';
+import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../text_themes.dart';
-import '../../../../themes.dart';
 
 class MyCollectionArticle extends StatefulWidget {
   @override
@@ -75,7 +77,12 @@ class _MyCollectionArticleState extends State<MyCollectionArticle>
                     .pageController
                     .position
                     .drag(dragStartDetails, () {});
-                drag.update(notification.dragDetails);
+                if (drag != null &&
+                    (notification.metrics.axisDirection == AxisDirection.left ||
+                        notification.metrics.axisDirection ==
+                            AxisDirection.right)) {
+                  drag.update(notification.dragDetails);
+                }
               }
               if (notification is ScrollEndNotification) {
                 drag?.cancel();
@@ -85,9 +92,9 @@ class _MyCollectionArticleState extends State<MyCollectionArticle>
             child: TabBarView(
               controller: _tabBarController,
               children: <Widget>[
-                Text('publish'),
-                Text('draft'),
-                Text('trash'),
+                MyPublishArticle(),
+                MyDraftArticle(),
+                MyTrashArticle(),
               ],
             ),
           ),

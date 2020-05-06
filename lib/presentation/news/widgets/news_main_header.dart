@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
 import 'package:localin/presentation/search/search_article_page.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +39,8 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
                         .copyWith(color: ThemeColors.black0),
                   ),
                   InkWell(
-                    onTap: () => Navigator.of(context)
-                        .pushNamed(SearchArticlePage.routeName),
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(EmptyPage.routeName),
                     child: Row(
                       children: <Widget>[
                         Text(

@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:localin/build_environment.dart';
+import 'package:localin/text_themes.dart';
+import 'package:localin/themes.dart';
 
 class WebViewPage extends StatefulWidget {
   static const routeName = '/webviewPage';
   static const urlName = 'webUrl';
+  static const title = 'title';
   @override
   _WebViewPageState createState() => _WebViewPageState();
 }
@@ -60,6 +63,7 @@ class _WebViewPageState extends State<WebViewPage> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String url = routeArgs[WebViewPage.urlName];
+    String title = routeArgs[WebViewPage.title] ?? '';
     //url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
     return WillPopScope(
       onWillPop: () async {
@@ -75,7 +79,17 @@ class _WebViewPageState extends State<WebViewPage> {
           routes: {
             '/': (_) => WebviewScaffold(
                   appBar: AppBar(
-                    automaticallyImplyLeading: true,
+                    backgroundColor: ThemeColors.black0,
+                    elevation: 0,
+                    titleSpacing: 0.0,
+                    title: Container(
+                      margin: EdgeInsets.only(right: 80.0),
+                      child: Text(
+                        title ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        style: ThemeText.sfMediumHeadline,
+                      ),
+                    ),
                     leading: InkWell(
                       onTap: () async {
                         if (await flutterWebviewPlugin.canGoBack()) {
@@ -86,7 +100,7 @@ class _WebViewPageState extends State<WebViewPage> {
                       },
                       child: Icon(
                         Icons.keyboard_backspace,
-                        color: Colors.white,
+                        color: ThemeColors.black80,
                       ),
                     ),
                   ),
