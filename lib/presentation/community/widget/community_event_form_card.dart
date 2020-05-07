@@ -337,7 +337,7 @@ class _CommunityEventFormCardState extends State<CommunityEventFormCard> {
             content: Text('Please choose 1 of your preferences'),
             actions: <Widget>[
               RaisedButton(
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 onPressed: () async {
@@ -359,7 +359,7 @@ class _CommunityEventFormCardState extends State<CommunityEventFormCard> {
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () async {
                   Navigator.of(context).pop();
                   var request = await providerState.getImageFromCamera();

@@ -3,8 +3,8 @@ import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/community/widget/community_comment_card.dart';
 import 'package:localin/presentation/community/widget/community_description.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -44,7 +44,7 @@ class _CommunityDetailCommentSectionState
                   children: <Widget>[
                     Icon(
                       Icons.star,
-                      color: Themes.primaryBlue,
+                      color: ThemeColors.primaryBlue,
                     ),
                     SizedBox(
                       width: 5.0,
@@ -53,7 +53,7 @@ class _CommunityDetailCommentSectionState
                       '${provider.communityDetail?.ranting ?? 0}',
                       textAlign: TextAlign.center,
                       style: kValueStyle.copyWith(
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           fontWeight: FontWeight.w500),
                     ),
                   ],
@@ -67,7 +67,7 @@ class _CommunityDetailCommentSectionState
                         provider.joinCommunity(provider?.communityDetail?.id),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           borderRadius: BorderRadius.circular(4.0)),
                       alignment: Alignment.centerRight,
                       child: Padding(

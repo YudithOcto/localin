@@ -51,7 +51,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
             ),
             Icon(
               Icons.arrow_forward,
-              color: Themes.silverGrey,
+              color: ThemeColors.silverGrey,
             ),
             Column(
               children: <Widget>[
@@ -66,7 +66,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
             ),
             Container(
               margin: EdgeInsets.only(top: 5.0),
-              color: Themes.darkGrey,
+              color: ThemeColors.darkGrey,
               width: 1.0,
               height: 50.0,
             ),
@@ -85,7 +85,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
                         onTap: () => state.decreaseRoomTotal(),
                         child: Icon(
                           Icons.remove_circle_outline,
-                          color: Themes.dimGrey,
+                          color: ThemeColors.dimGrey,
                           size: 20.0,
                         ),
                       ),
@@ -95,7 +95,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
                       Text(
                         '${state.roomTotal}',
                         style: TextStyle(
-                            fontSize: 14.0, color: Themes.primaryBlue),
+                            fontSize: 14.0, color: ThemeColors.primaryBlue),
                       ),
                       SizedBox(
                         width: 5.0,
@@ -105,7 +105,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
                         child: Icon(
                           Icons.add_circle_outline,
                           size: 20.0,
-                          color: Themes.dimGrey,
+                          color: ThemeColors.dimGrey,
                         ),
                       )
                     ],
@@ -147,7 +147,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: Themes.dimGrey)),
+            border: Border.all(color: ThemeColors.dimGrey)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4.0),
           child: Text(
@@ -155,7 +155,7 @@ class _RoomGeneralFacilitiesState extends State<RoomGeneralFacilities> {
             style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 12.0,
-                color: Themes.primaryBlue),
+                color: ThemeColors.primaryBlue),
           ),
         ),
       ),
@@ -193,7 +193,7 @@ class RowFacilities extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 12.0,
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                     fontWeight: FontWeight.w600),
               ),
             ),

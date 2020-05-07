@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/service/user_location.dart';
 import 'package:localin/presentation/hotel/widgets/room_detail_title.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class RoomLocation extends StatelessWidget {
@@ -50,7 +50,7 @@ class RoomLocation extends StatelessWidget {
                         alignment: FractionalOffset.center,
                         height: 25.0,
                         decoration: BoxDecoration(
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(12.0),
                                 bottomRight: Radius.circular(12.0))),
@@ -84,7 +84,7 @@ class RoomLocation extends StatelessWidget {
                     '${detail?.shortAddress}',
                     style: kValueStyle.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: Themes.grey,
+                        color: ThemeColors.grey,
                         fontSize: 11.0),
                   ),
                   SizedBox(
@@ -96,7 +96,7 @@ class RoomLocation extends StatelessWidget {
                       children: <Widget>[
                         Icon(
                           Icons.location_on,
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           size: 15.0,
                         ),
                         SizedBox(
@@ -106,7 +106,7 @@ class RoomLocation extends StatelessWidget {
                           '4.6 Km near from your location',
                           style: kValueStyle.copyWith(
                               fontWeight: FontWeight.w500,
-                              color: Themes.grey,
+                              color: ThemeColors.grey,
                               fontSize: 11.0),
                         ),
                       ],

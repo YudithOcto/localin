@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-
+import 'package:localin/utils/constants.dart';
 import '../themes.dart';
 
 class CustomHeaderBelowAppBar extends StatelessWidget {
@@ -10,7 +9,7 @@ class CustomHeaderBelowAppBar extends StatelessWidget {
 
   CustomHeaderBelowAppBar({
     @required this.title,
-    this.color = Themes.primaryBlue,
+    this.color = ThemeColors.primaryBlue,
     this.icon = Icons.keyboard_backspace,
     this.iconColor = Colors.white,
   });

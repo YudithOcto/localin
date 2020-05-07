@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
-import 'package:localin/presentation/home/widget/search_hotel_widget.dart';
 import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
 import 'package:localin/presentation/hotel/widgets/history_single_card.dart';
-import 'package:localin/presentation/home/widget/home_content_default.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../themes.dart';
@@ -70,14 +67,6 @@ class _AvailableHistoryContentWidgetState
         _controller.offset >= _controller.position.maxScrollExtent &&
         provider.historyList.length < provider.totalPage) {
       provider.getBookingHistoryList();
-    } else {
-      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      if (_controller.offset >= _controller.position.maxScrollExtent &&
-          !homeProvider.isLoading &&
-          homeProvider.articleDetail != null &&
-          homeProvider.total > homeProvider.articleDetail.length) {
-        Provider.of<HomeProvider>(context, listen: false).getArticleList();
-      }
     }
   }
 
@@ -93,6 +82,7 @@ class _AvailableHistoryContentWidgetState
       controller: _controller,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           CustomHeaderBelowAppBar(
             title: 'Pemesanan',
@@ -121,7 +111,7 @@ class _AvailableHistoryContentWidgetState
                         children: <Widget>[
                           Icon(
                             Icons.filter_list,
-                            color: Themes.primaryBlue,
+                            color: ThemeColors.primaryBlue,
                             size: 20.0,
                           ),
                           SizedBox(
@@ -129,8 +119,8 @@ class _AvailableHistoryContentWidgetState
                           ),
                           Text(
                             'Filter',
-                            style:
-                                kValueStyle.copyWith(color: Themes.primaryBlue),
+                            style: kValueStyle.copyWith(
+                                color: ThemeColors.primaryBlue),
                           ),
                           SizedBox(
                             width: 15.0,
@@ -155,7 +145,10 @@ class _AvailableHistoryContentWidgetState
           ),
           isLoading
               ? Center(
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
                 )
               : Consumer<BookingHistoryProvider>(
                   builder: (ctx, provider, child) {
@@ -197,19 +190,8 @@ class _AvailableHistoryContentWidgetState
 class EmptyHistoryContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final state = Provider.of<BookingHistoryProvider>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        HeaderEmptyBooking(),
-        state.showSearchHotel
-            ? SearchHotelWidget(
-                isHomePage: false,
-              )
-            : HomeContentDefault(
-                isHomePage: false,
-              ),
-      ],
-    );
+    return Container(
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+        child: HeaderEmptyBooking());
   }
 }

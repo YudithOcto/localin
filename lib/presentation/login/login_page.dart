@@ -2,16 +2,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
-import 'package:localin/presentation/login/phone_verification_page.dart';
+import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/base_model_provider.dart';
+import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'input_phone_number.dart';
+import 'input_phone_number_page.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/loginpage';
@@ -37,7 +37,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Content(),
+      body: SingleChildScrollView(
+        child: Content(),
+        padding: EdgeInsets.only(bottom: 20.0),
+      ),
     );
   }
 }
@@ -45,259 +48,183 @@ class _LoginPageState extends State<LoginPage> {
 class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var authState = Provider.of<AuthProvider>(context);
     return Stack(
       fit: StackFit.loose,
       children: <Widget>[
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             FadeAnimation(
               delay: 0.2,
               fadeDirection: FadeDirection.bottom,
               child: Image.asset(
-                'images/logo_login_icon.png',
-                fit: BoxFit.scaleDown,
-                width: 250.0,
-                height: 250.0,
+                'images/login_cover.png',
+                fit: BoxFit.cover,
               ),
             ),
             SizedBox(
-              height: 5.0,
+              height: 24.0,
             ),
-            Text('Login with Social Networks'),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  'Join to discover your city by join community, event, find a local stay and food.',
+                  style: ThemeText.sfRegularHeadline
+                      .copyWith(color: ThemeColors.black80),
+                  textAlign: TextAlign.center,
+                )),
             SizedBox(
-              height: 25.0,
+              height: 20.0,
             ),
             FadeAnimation(
               delay: 0.3,
               fadeDirection: FadeDirection.top,
               child: Container(
-                height: 50.0,
-                margin: EdgeInsets.symmetric(horizontal: 30.0),
+                height: 60.0,
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
                 width: double.infinity,
                 child: RaisedButton(
-                  elevation: 5.0,
-                  onPressed: () async {
-                    SharedPreferences sf =
-                        await SharedPreferences.getInstance();
-                    final result = await authState
-                        .signInWithFacebook(sf.getString('tokenFirebase'));
-                    if (result != null &&
-                        authState.errorMessage != null &&
-                        authState.errorMessage.isEmpty) {
-                      final save = await SharedPreferences.getInstance();
-                      save.setBool(kUserVerify, false);
-                      if (result.handphone != null &&
-                          result.handphone.isNotEmpty) {
-                        Navigator.of(context).pushNamed(
-                            PhoneVerificationPage.routeName,
-                            arguments: {
-                              PhoneVerificationPage.phone: result.handphone,
-                              PhoneVerificationPage.isBackButtonActive: false,
-                            });
-                      } else {
-                        Navigator.of(context)
-                            .pushNamed(InputPhoneNumber.routeName);
-                      }
-                    } else {
-                      showErrorMessageDialog(context, authState.errorMessage);
-                    }
-                  },
+                  elevation: 2.0,
+                  onPressed: () => thirdPartySignIn(context, isFacebook: true),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                  color: Themes.primaryBlue,
-                  child: Container(
-                    height: 40,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 0.0,
-                          top: 5.0,
-                          bottom: 5.0,
-                          child: Image.asset(
-                            'images/ic_fb_small.png',
-                            width: 25,
-                            height: 25,
-                            fit: BoxFit.contain,
-                          ),
+                      borderRadius: BorderRadius.circular(50.0)),
+                  color: ThemeColors.facebookColor,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 0.0,
+                        top: 5.0,
+                        bottom: 5.0,
+                        child: Image.asset(
+                          'images/facebook.png',
+                          width: 56,
+                          height: 44,
                         ),
-                        Align(
-                          alignment: FractionalOffset.center,
-                          child: Text(
-                            'Facebook',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
+                      ),
+                      Align(
+                        alignment: FractionalOffset.center,
+                        child: Text(
+                          'Login with Facebook',
+                          textAlign: TextAlign.center,
+                          style: ThemeText.rodinaHeadline
+                              .copyWith(color: ThemeColors.black0),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
             SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      height: 1.0,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  Text('OR'),
-                  Expanded(
-                    child: Container(
-                      height: 1.0,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
+              height: 8.0,
             ),
             FadeAnimation(
               fadeDirection: FadeDirection.top,
               delay: 0.3,
               child: Container(
-                height: 50.0,
-                margin: EdgeInsets.symmetric(horizontal: 30.0),
+                height: 60.0,
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
                 width: double.infinity,
                 child: RaisedButton(
-                  elevation: 5.0,
-                  onPressed: () async {
-                    SharedPreferences sf =
-                        await SharedPreferences.getInstance();
-                    final result = await authState
-                        .signInWithGoogle(sf.getString('tokenFirebase'));
-                    if (result != null) {
-                      if (authState.errorMessage.isNotEmpty) {
-                        showErrorMessageDialog(context, authState.errorMessage);
-                      } else {
-                        final save = await SharedPreferences.getInstance();
-                        save.setBool(kUserVerify, false);
-                        if (result.handphone != null &&
-                            result.handphone.isNotEmpty) {
-                          Navigator.of(context).pushNamed(
-                              PhoneVerificationPage.routeName,
-                              arguments: {
-                                PhoneVerificationPage.phone: result.handphone,
-                                PhoneVerificationPage.isBackButtonActive: false,
-                              });
-                        } else {
-                          Navigator.of(context)
-                              .pushNamed(InputPhoneNumber.routeName);
-                        }
-                      }
-                    }
-                    //
-                  },
+                  elevation: 2.0,
+                  onPressed: () => thirdPartySignIn(context, isFacebook: false),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                  color: Themes.primaryBlue,
-                  child: Container(
-                    height: 40,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 0.0,
-                          top: 5.0,
-                          bottom: 5.0,
-                          child: Image.asset(
-                            'images/ic_google.png',
-                            color: Colors.white,
-                            width: 25,
-                            height: 25,
-                            fit: BoxFit.contain,
-                          ),
+                      borderRadius: BorderRadius.circular(50.0)),
+                  color: ThemeColors.googleColor,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 0.0,
+                        top: 5.0,
+                        bottom: 5.0,
+                        child: Image.asset(
+                          'images/google.png',
+                          width: 56,
+                          height: 44,
+                          fit: BoxFit.scaleDown,
                         ),
-                        Align(
-                          alignment: FractionalOffset.center,
-                          child: Text(
-                            'Google',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
+                      ),
+                      Align(
+                        alignment: FractionalOffset.center,
+                        child: Text(
+                          'Login with Google',
+                          textAlign: TextAlign.center,
+                          style: ThemeText.rodinaHeadline
+                              .copyWith(color: ThemeColors.black0),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
             SizedBox(
-              height: 30.0,
+              height: 28.0,
             ),
             RichText(
               text: TextSpan(children: <TextSpan>[
                 TextSpan(
-                    text: 'By continuing, you agree to our',
-                    style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey)),
+                  text: 'By continuing, you agree to our',
+                  style: ThemeText.sfMediumCaption
+                      .copyWith(color: ThemeColors.black80),
+                ),
                 TextSpan(
-                    text: ' Privacy Policy',
+                    text: ' Terms of Service',
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
                         final response = await Navigator.of(context)
                             .pushNamed(WebViewPage.routeName, arguments: {
                           WebViewPage.urlName:
                               'https://localin.id/privacy-policy.html',
+                          WebViewPage.title: 'Privacy Policy',
                         });
                       },
-                    style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w600,
-                        color: Themes.primaryBlue)),
+                    style: ThemeText.sfMediumCaption
+                        .copyWith(color: ThemeColors.primaryBlue)),
               ]),
             )
           ],
         ),
-        Center(
-          child: Visibility(
-            visible: authState.state == ViewState.Busy,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Themes.primaryBlue),
-              strokeWidth: 6.0,
-            ),
-          ),
-        )
       ],
     );
   }
 
-  void showErrorMessageDialog(BuildContext context, String error) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Login'),
-            content: Text(error),
-            actions: <Widget>[
-              RaisedButton(
-                elevation: 5.0,
-                color: Themes.primaryBlue,
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('Ok'),
-              )
-            ],
-          );
-        });
+  openPhoneVerificationPage(BuildContext context, String phone) {
+    Navigator.of(context).pushReplacementNamed(InputPhoneNumberPage.routeName,
+        arguments: {InputPhoneNumberPage.userPhoneVerificationCode: phone});
+  }
+
+  openInputPhoneNumberPage(BuildContext context) {
+    Navigator.of(context).pushReplacementNamed(InputPhoneNumberPage.routeName,
+        arguments: {InputPhoneNumberPage.userPhoneVerificationCode: ''});
+  }
+
+  thirdPartySignIn(BuildContext context, {bool isFacebook = false}) async {
+    CustomDialog.showLoadingDialog(context);
+    final authState = Provider.of<AuthProvider>(context, listen: false);
+    final result = isFacebook
+        ? await authState.signInWithFacebook()
+        : await authState.signInWithGoogle();
+    if (authState.errorMessage.isError) {
+      CustomDialog.closeDialog(context);
+      CustomToast.showCustomToast(context, authState.errorMessage);
+    } else {
+      if (result.handphone.isNotNullOrNotEmpty) {
+        openPhoneVerificationPage(context, result.handphone);
+      } else {
+        openInputPhoneNumberPage(context);
+      }
+    }
+  }
+}
+
+extension on String {
+  bool get isError {
+    ///because result not null and error field is empty
+    return this != null && this.isNotEmpty;
+  }
+
+  bool get isNotNullOrNotEmpty {
+    return this != null && this.isNotEmpty;
   }
 }

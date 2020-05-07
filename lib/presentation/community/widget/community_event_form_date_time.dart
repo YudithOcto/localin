@@ -44,7 +44,7 @@ class CommunityEventFormDateTime extends StatelessWidget {
                     provider.setEndDate(pick[1]);
                   }
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 child: Text(
                   DateHelper.formatDateRangeToString(provider.startEventDate),
                   style: TextStyle(
@@ -66,7 +66,7 @@ class CommunityEventFormDateTime extends StatelessWidget {
                 onPressed: () async {
                   selectBeginningTime(provider, context);
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 child: Text(
                   formattedTime(provider.startEventTime, context),
                   style: TextStyle(
@@ -109,7 +109,7 @@ class CommunityEventFormDateTime extends StatelessWidget {
                     provider.setEndDate(pick[1]);
                   }
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 child: Text(
                   DateHelper.formatDateRangeToString(provider.endEventDate),
                   style: TextStyle(
@@ -131,7 +131,7 @@ class CommunityEventFormDateTime extends StatelessWidget {
                 onPressed: () async {
                   selectEndTime(provider, context);
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 child: Text(
                   formattedTime(provider.endEventTime, context),
                   style: TextStyle(

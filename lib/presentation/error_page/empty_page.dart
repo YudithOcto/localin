@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-
+import 'package:localin/text_themes.dart';
+import 'package:localin/utils/constants.dart';
 import '../../themes.dart';
 
 class EmptyPage extends StatelessWidget {
@@ -19,48 +19,35 @@ class EmptyPage extends StatelessWidget {
           height: 50.0,
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.center,
-            child: Image.asset(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Image.asset(
               'images/404_image.png',
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.5,
             ),
-          ),
-          Text(
-            '404',
-            style:
-                kValueStyle.copyWith(fontSize: 40.0, color: Themes.primaryBlue),
-          ),
-          SizedBox(
-            height: 5.0,
-          ),
-          Text(
-            'Oops. Page akan segera datang',
-            style: kValueStyle.copyWith(
-                fontSize: 20.0,
-                color: Themes.primaryBlue,
-                fontWeight: FontWeight.w600),
-          ),
-          SizedBox(
-            height: 35.0,
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0),
-            child: Text(
-              'Kami akan berusaha membantu kamu mencari jalan keluar. Karena halaman ini belum tersedia',
+            Text(
+              'Coming Soon',
               textAlign: TextAlign.center,
-              style: kValueStyle.copyWith(
-                  fontSize: 16.0,
-                  color: Themes.primaryBlue,
-                  fontWeight: FontWeight.w500),
+              style: ThemeText.sfSemiBoldHeadline
+                  .copyWith(color: ThemeColors.black80),
             ),
-          ),
-        ],
+            SizedBox(
+              height: 4.0,
+            ),
+            Text(
+              'We are building beautiful features for you',
+              textAlign: TextAlign.center,
+              style:
+                  ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,12 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:localin/components/rounded_button_fill.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_createedit_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -167,7 +166,7 @@ class CommunityCreateEditForm extends StatelessWidget {
               width: double.infinity,
               height: 50.0,
               child: RaisedButton(
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 child: provider.loading
@@ -196,7 +195,7 @@ class CommunityCreateEditForm extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.of(context).pop('close');
                                 },
-                                color: Themes.primaryBlue,
+                                color: ThemeColors.primaryBlue,
                                 elevation: 5.0,
                                 child: Text('OK'),
                               )
@@ -244,7 +243,7 @@ class CommunityCreateEditForm extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 elevation: 5.0,
                 child: Text('OK'),
               )
@@ -258,7 +257,7 @@ class CommunityCreateEditForm extends StatelessWidget {
       '$value',
       style: kValueStyle.copyWith(
           fontWeight: FontWeight.w500,
-          color: Themes.primaryBlue,
+          color: ThemeColors.primaryBlue,
           fontSize: 16.0),
     );
   }
@@ -343,7 +342,7 @@ class CommunityCreateEditForm extends StatelessWidget {
                 height: 100.0,
                 width: 100.0,
                 decoration: BoxDecoration(
-                    border: Border.all(color: Themes.primaryBlue)),
+                    border: Border.all(color: ThemeColors.primaryBlue)),
                 child: Image.file(state.logoImageFile),
               ),
       ),
@@ -360,7 +359,7 @@ class CommunityCreateEditForm extends StatelessWidget {
             content: Text('Please choose 1 of your preferences'),
             actions: <Widget>[
               RaisedButton(
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 onPressed: () async {
@@ -382,7 +381,7 @@ class CommunityCreateEditForm extends StatelessWidget {
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 onPressed: () async {
                   Navigator.of(context).pop();
                   var request = await profileState.openCamera(isIcon);

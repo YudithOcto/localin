@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 
 import '../../../themes.dart';
@@ -38,7 +38,7 @@ class CommunityCommentCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     '${commentDetail?.createdName}',
-                    style: kValueStyle.copyWith(color: Themes.primaryBlue),
+                    style: kValueStyle.copyWith(color: ThemeColors.primaryBlue),
                   ),
                   Text(
                     '${DateHelper.formatDateFromApi(commentDetail?.updatedAt)}',
@@ -70,7 +70,7 @@ class CommunityCommentCard extends StatelessWidget {
             child: Text(
               '#ITCommunity #IsengItuSukses',
               style: kValueStyle.copyWith(
-                  color: Themes.primaryBlue,
+                  color: ThemeColors.primaryBlue,
                   fontWeight: FontWeight.w500,
                   fontSize: 12.0),
             ),
@@ -111,7 +111,7 @@ class CommunityCommentCard extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.thumb_up,
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                   ),
                   SizedBox(
                     width: 10.0,
@@ -119,7 +119,7 @@ class CommunityCommentCard extends StatelessWidget {
                   Text(
                     '0 Sukai',
                     style: kValueStyle.copyWith(
-                        color: Themes.primaryBlue, fontSize: 12.0),
+                        color: ThemeColors.primaryBlue, fontSize: 12.0),
                   )
                 ],
               ),
@@ -128,7 +128,7 @@ class CommunityCommentCard extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.comment,
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                   ),
                   SizedBox(
                     width: 10.0,
@@ -136,7 +136,7 @@ class CommunityCommentCard extends StatelessWidget {
                   Text(
                     '0 Komentar',
                     style: kValueStyle.copyWith(
-                        color: Themes.primaryBlue, fontSize: 12.0),
+                        color: ThemeColors.primaryBlue, fontSize: 12.0),
                   )
                 ],
               ),

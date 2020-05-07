@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
-
+import 'package:localin/utils/constants.dart';
 import '../../../themes.dart';
 
 class CustomRoundedHeaderPage extends StatelessWidget {
@@ -22,7 +21,7 @@ class CustomRoundedHeaderPage extends StatelessWidget {
         ClipPath(
           clipper: BackgroundClipper(),
           child: Container(
-            color: Themes.primaryBlue,
+            color: ThemeColors.primaryBlue,
             height: MediaQuery.of(context).size.height * 0.35,
             width: double.infinity,
           ),

@@ -100,7 +100,7 @@ class _DatePickerHeader extends StatelessWidget {
     Color backgroundColor;
     switch (themeData.brightness) {
       case Brightness.light:
-        backgroundColor = Themes.primaryBlue;
+        backgroundColor = ThemeColors.primaryBlue;
         break;
       case Brightness.dark:
         backgroundColor = themeData.backgroundColor;
@@ -460,16 +460,16 @@ class DayPicker extends StatelessWidget {
             (isSelectedLastDay == null || isSelectedLastDay)) {
           itemStyle = themeData.accentTextTheme.body2
               .copyWith(color: Colors.black, fontWeight: FontWeight.w600);
-          decoration =
-              new BoxDecoration(color: Themes.orange, shape: BoxShape.circle);
+          decoration = new BoxDecoration(
+              color: ThemeColors.orange, shape: BoxShape.circle);
         } else if (isSelectedFirstDay) {
           // The selected day gets a circle background highlight, and a contrasting text color.
           itemStyle = themeData.accentTextTheme.body2
               .copyWith(color: Colors.white, fontWeight: FontWeight.w600);
-          decoration =
-              new BoxDecoration(color: Themes.orange, shape: BoxShape.circle);
+          decoration = new BoxDecoration(
+              color: ThemeColors.orange, shape: BoxShape.circle);
           backgroundDecoration = BoxDecoration(
-              color: Themes.orange.withOpacity(0.6),
+              color: ThemeColors.orange.withOpacity(0.6),
               borderRadius: BorderRadius.only(
                 topLeft: new Radius.circular(50.0),
                 bottomLeft: new Radius.circular(50.0),
@@ -478,18 +478,19 @@ class DayPicker extends StatelessWidget {
           itemStyle = themeData.accentTextTheme.body2
               .copyWith(color: Colors.white, fontWeight: FontWeight.w600);
           backgroundDecoration = new BoxDecoration(
-              color: Themes.orange.withOpacity(0.6),
+              color: ThemeColors.orange.withOpacity(0.6),
               borderRadius: BorderRadius.only(
                 topRight: new Radius.circular(50.0),
                 bottomRight: new Radius.circular(50.0),
               ));
-          decoration =
-              new BoxDecoration(color: Themes.orange, shape: BoxShape.circle);
+          decoration = new BoxDecoration(
+              color: ThemeColors.orange, shape: BoxShape.circle);
         } else if (isInRange != null && isInRange) {
           itemStyle = themeData.accentTextTheme.body2
               .copyWith(color: Colors.black, fontWeight: FontWeight.w600);
           decoration = new BoxDecoration(
-              color: Themes.orange.withOpacity(0.6), shape: BoxShape.rectangle);
+              color: ThemeColors.orange.withOpacity(0.6),
+              shape: BoxShape.rectangle);
         } else if (disabled) {
           itemStyle = themeData.textTheme.body1.copyWith(
               color: themeData.disabledColor, fontWeight: FontWeight.w600);
@@ -1159,7 +1160,7 @@ class _DatePickerDialogState extends State<CustomDatePicker> {
             onPressed: _handleCancel,
           ),
           new FlatButton(
-            color: Themes.primaryBlue,
+            color: ThemeColors.primaryBlue,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)),
             child: new Text(

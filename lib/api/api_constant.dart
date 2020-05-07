@@ -1,5 +1,5 @@
 class ApiConstant {
-  static const String kBaseUrl = 'https://api.localin.id/';
+  static const String kBaseUrl = 'https://api.localin.xyz/';
   static const String kLoginUrl = 'v1/login';
   static const String kLogoutUrl = 'v1/logout';
   static const String kUpdateProfile = 'v1/member/update';
@@ -9,6 +9,8 @@ class ApiConstant {
       'v1/member/update/handphone-verifikasi';
   static const String kProfile = 'v1/member/me';
   static const String kOtherUserProfile = 'v1/member/profile';
+  static const String kUpdateUserLocation = 'v1/member/update/location';
+  static const String kUserVerificationCategory = '/v1/member/kategori';
 
   /// COMMUNITY
   static const String kCommunity = 'v1/komunitas';
@@ -18,18 +20,21 @@ class ApiConstant {
   static const String kJoinCommunity = 'v1/komunitas/join/';
   static const String kMemberCommunity = 'v1/komunitas/anggota/';
   static const String kUserCommunity = 'v1/komunitas/me';
+  static const String kOtherUserCommunity = 'v1/komunitas/member';
   static const String kCommentCommunity = 'v1/komunitas/komentar/';
   static const String kCreateEventCommunity = 'v1/komunitas/event/';
   static const String kEventCategory = 'v1/komunitas/event/kategori';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';
+  static const String kOtherUserArticle = 'v1/artikel/member';
   static const String kArticleList = 'v1/artikel';
   static const String kCreateArticle = 'v1/artikel/entri/';
   static const String kArticleTags = 'v1/artikel/tags';
   static const String kArticleComment = 'v1/artikel/komentar';
   static const String kArticleLike = 'v1/artikel/like';
   static const String kArticleBookmark = 'v1/artikel/bookmark';
+  static const String kArticleByTag = 'v1/artikel/tag';
 
   /// Hotel
   static const String kHotel = 'v1/hotel';
@@ -46,4 +51,9 @@ class ApiConstant {
 
   /// NOTIFICATION
   static const String kNotificationList = 'v1/member/notifications';
+  static const String kNotificationDeleteAll = 'v1/member/notifications/delete';
+  static const String kNotificationDeleteById =
+      'v1/member/notifications/delete';
+  static const String kNotificationUnDeleteById =
+      'v1/member/notifications/undelete';
 }

@@ -1,10 +1,10 @@
 name: localin
 description: Localin app
 
-version: 1.0.2+102
+version: 1.1.0+110
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,22 +23,33 @@ dependencies:
   image_picker: ^0.6.2+3
   permission_handler: ^4.0.0
   geolocator: ^5.1.5
-  video_player: ^0.10.2+1
+  video_player: ^0.10.9+1
   geocoder: ^0.2.1
   flutter_pagewise: ^1.2.3
   cached_network_image: ^2.0.0
-  flutter_webview_plugin: ^0.3.10+1
+  flutter_webview_plugin: ^0.3.11
   android_intent: ^0.3.5
   photo_view: ^0.9.1
   html: ^0.14.0+3
-  carousel_slider: ^1.4.1
+  carousel_slider: ^2.0.0
   esys_flutter_share: ^1.0.2
-  firebase_messaging: ^6.0.9
-  flutter_local_notifications: ^1.1.5+1
+  firebase_messaging: ^6.0.13
+  flutter_local_notifications: ^1.4.2
   flutter_image_compress: ^0.6.5+1
   auto_size_text: ^2.1.0
   firebase_crashlytics: ^0.1.2+5
   flutter_native_timezone: ^1.0.4
+  superellipse_shape: ^0.1.5
+  flutter_styled_toast: ^1.2.1
+  flutter_svg: ^0.17.4
+  flutter_dash: ^0.0.1
+  firebase_core: ^0.4.0+9
+  firebase_analytics: ^5.0.2
+  cloud_firestore: ^0.12.9+5
+  async: ^2.4.0
+  oktoast: ^2.3.2
+  webview_flutter: ^0.3.21
+  timeago: ^2.0.26
 
 dev_dependencies:
   flutter_test:
@@ -59,3 +70,13 @@ flutter:
           weight: 400
         - asset: fonts/OpenSans-Italic.ttf
           style: italic
+    - family: SfProText
+      fonts:
+        - asset: fonts/SFProText-Regular.ttf
+        - asset: fonts/SFProText-Medium.ttf
+          weight: 400
+        - asset: fonts/SFProText-SemiBold.ttf
+          weight: 600
+    - family: Rodina
+      fonts:
+        - asset: fonts/Rodina.ttf

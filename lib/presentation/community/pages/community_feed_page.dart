@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_category.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/widget/community_card_widget.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_feed_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
 
 class CommunityFeedPage extends StatefulWidget {
+  static const routeName = '/communityFeedPage';
   @override
   _CommunityFeedPageState createState() => _CommunityFeedPageState();
 }
@@ -49,8 +49,8 @@ class _ScrollContentState extends State<ScrollContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
-//      communityFuture =
-//          Provider.of<CommunityFeedProvider>(context).getCommunityData();
+      communityFuture =
+          Provider.of<CommunityFeedProvider>(context).getCommunityData();
       isInit = false;
     }
   }
@@ -79,93 +79,43 @@ class _ScrollContentState extends State<ScrollContent> {
         } else {
           return ListView(
             children: <Widget>[
-//              Padding(
-//                padding: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 16.0),
-//                child: TextFormField(
-//                  controller: provider.searchController,
-//                  decoration: InputDecoration(
-//                      border: OutlineInputBorder(
-//                          borderRadius: BorderRadius.circular(16.0)),
-//                      prefixIcon: Icon(Icons.search),
-//                      hintText: 'Cari Komunitas'),
-//                ),
-//              ),
-//              Container(
-//                height: 35.0,
-//                margin: EdgeInsets.only(left: 5.0),
-//                child: ListView.builder(
-//                  scrollDirection: Axis.horizontal,
-//                  itemCount: provider?.categoryList?.communityCategory != null
-//                      ? provider.categoryList.communityCategory.length
-//                      : 0,
-//                  itemBuilder: (context, index) {
-//                    return QuickMenuCommunity(
-//                        index: index,
-//                        category:
-//                            provider.categoryList.communityCategory[index]);
-//                  },
-//                ),
-//              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 16.0),
+                child: TextFormField(
+                  controller: provider.searchController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16.0)),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Cari Komunitas'),
+                ),
+              ),
+              Container(
+                height: 35.0,
+                margin: EdgeInsets.only(left: 5.0),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: provider?.categoryList?.communityCategory != null
+                      ? provider.categoryList.communityCategory.length
+                      : 0,
+                  itemBuilder: (context, index) {
+                    return QuickMenuCommunity(
+                        index: index,
+                        category:
+                            provider.categoryList.communityCategory[index]);
+                  },
+                ),
+              ),
               provider.isSearchLoading
                   ? Center(
                       child: Container(
-                        margin: EdgeInsets.only(top: 25.0),
-                        child: CircularProgressIndicator(),
-                      ),
+                          margin: EdgeInsets.only(top: 25.0),
+                          child: CircularProgressIndicator()),
                     )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            'images/404_image.png',
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.5,
-                          ),
-                        ),
-                        Text(
-                          '404',
-                          style: kValueStyle.copyWith(
-                              fontSize: 40.0, color: Themes.primaryBlue),
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          'Oops. Page akan segera datang',
-                          style: kValueStyle.copyWith(
-                              fontSize: 20.0,
-                              color: Themes.primaryBlue,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 35.0,
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 30.0),
-                          child: Text(
-                            'Kami akan berusaha membantu kamu mencari jalan keluar. Karena halaman ini belum tersedia',
-                            textAlign: TextAlign.center,
-                            style: kValueStyle.copyWith(
-                                fontSize: 16.0,
-                                color: Themes.primaryBlue,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
+                  : CommunityCardWidget(
+                      detailList:
+                          provider?.communityDetail?.communityDetailList,
                     ),
-//              provider.isSearchLoading
-//                  ? Center(
-//                      child: Container(
-//                          margin: EdgeInsets.only(top: 25.0),
-//                          child: CircularProgressIndicator()),
-//                    )
-//                  : CommunityCardWidget(
-//                      detailList: provider.communityDetail.communityDetailList,
-//                    ),
-//              CommunityBottomCard(),
             ],
           );
         }
@@ -185,8 +135,8 @@ class QuickMenuCommunity extends StatelessWidget {
       margin: EdgeInsets.only(right: 5.0),
       child: ActionChip(
         backgroundColor: provider.currentQuickPicked == index
-            ? Themes.greyGainsBoro
-            : Themes.primaryBlue,
+            ? ThemeColors.greyGainsBoro
+            : ThemeColors.primaryBlue,
         onPressed: () {
           provider.setCurrentQuickPicked(index, category.id);
           if (index == 0) {
@@ -200,7 +150,7 @@ class QuickMenuCommunity extends StatelessWidget {
           style: kValueStyle.copyWith(
               fontSize: 11.0,
               color: provider.currentQuickPicked == index
-                  ? Themes.primaryBlue
+                  ? ThemeColors.primaryBlue
                   : Colors.white),
         ),
       ),
@@ -214,7 +164,7 @@ class CommunityBottomCard extends StatelessWidget {
     return ClipPath(
       clipper: RoundedClipper(),
       child: Container(
-        color: Themes.primaryBlue,
+        color: ThemeColors.primaryBlue,
         height: 350.0,
         width: double.infinity,
         child: Column(
@@ -248,7 +198,7 @@ class CommunityBottomCard extends StatelessWidget {
               child: Text(
                 'Buat Komunitas',
                 style: kValueStyle.copyWith(
-                    fontSize: 14.0, color: Themes.primaryBlue),
+                    fontSize: 14.0, color: ThemeColors.primaryBlue),
               ),
             )
           ],

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -51,7 +51,7 @@ class CommunityDescription extends StatelessWidget {
                 Text(
                   '${provider?.communityDetail?.name}',
                   style: kValueStyle.copyWith(
-                      color: Themes.primaryBlue, fontSize: 20.0),
+                      color: ThemeColors.primaryBlue, fontSize: 20.0),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -60,7 +60,7 @@ class CommunityDescription extends StatelessWidget {
                       visible: provider?.communityDetail?.address != null,
                       child: Icon(
                         Icons.location_on,
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                         size: 8.0,
                       ),
                     ),
@@ -86,7 +86,7 @@ class CommunityDescription extends StatelessWidget {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                          color: Themes.primaryBlue,
+                          color: ThemeColors.primaryBlue,
                           borderRadius: BorderRadius.circular(5.0)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -114,7 +114,7 @@ class CommunityDescription extends StatelessWidget {
                     '${provider?.communityDetail?.follower} Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 10.0, color: Themes.primaryBlue),
+                        fontSize: 10.0, color: ThemeColors.primaryBlue),
                   ),
                 )
               ],
@@ -135,7 +135,7 @@ class CommunityDescription extends StatelessWidget {
                   },
                   child: Icon(
                     Icons.settings,
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                   ),
                 ),
               ),

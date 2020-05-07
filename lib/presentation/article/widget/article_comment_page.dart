@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/presentation/article/widget/recommended_card.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 import 'package:localin/provider/article/article_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
@@ -79,7 +79,7 @@ class ArticleCommentPage extends StatelessWidget {
                                   FlatButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
-                                    color: Themes.primaryBlue,
+                                    color: ThemeColors.primaryBlue,
                                     child: Text('Ok'),
                                   )
                                 ],
@@ -92,7 +92,7 @@ class ArticleCommentPage extends StatelessWidget {
                     height: 35.0,
                     width: 35.0,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Themes.primaryBlue),
+                        shape: BoxShape.circle, color: ThemeColors.primaryBlue),
                     child: Icon(
                       Icons.send,
                       color: Colors.white,
@@ -138,7 +138,8 @@ class CommentCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '${commentDetail?.sender}',
-                      style: kValueStyle.copyWith(color: Themes.primaryBlue),
+                      style:
+                          kValueStyle.copyWith(color: ThemeColors.primaryBlue),
                     ),
                     Text(
                       '${commentDetail?.createdAt}',

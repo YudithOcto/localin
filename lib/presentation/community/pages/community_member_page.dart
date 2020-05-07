@@ -122,7 +122,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                       return ListTile(
                         title: Text(item.title),
                         leading: CircleAvatar(
-                          backgroundColor: Themes.silverGrey,
+                          backgroundColor: ThemeColors.silverGrey,
                           backgroundImage: item.imageProfile != null
                               ? NetworkImage(item.imageProfile)
                               : null,
@@ -130,7 +130,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                               ? Container()
                               : Icon(
                                   Icons.people,
-                                  color: Themes.red,
+                                  color: ThemeColors.red,
                                 ),
                         ),
                       );
@@ -151,7 +151,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        color: Themes.silverGrey,
+                                        color: ThemeColors.silverGrey,
                                         elevation: 5.0,
                                         child: Text('Cancel'),
                                       ),
@@ -159,7 +159,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                                         onPressed: () {
                                           Navigator.of(context).pop('success');
                                         },
-                                        color: Themes.primaryBlue,
+                                        color: ThemeColors.primaryBlue,
                                         elevation: 5.0,
                                         child: Text(
                                           'Ok',
@@ -185,7 +185,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                           child: Icon(Icons.person_add),
                         ),
                         leading: CircleAvatar(
-                          backgroundColor: Themes.silverGrey,
+                          backgroundColor: ThemeColors.silverGrey,
                           backgroundImage: memberItem.imageProfile != null
                               ? NetworkImage(memberItem.imageProfile)
                               : null,
@@ -193,7 +193,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                               ? Container()
                               : Icon(
                                   Icons.people,
-                                  color: Themes.red,
+                                  color: ThemeColors.red,
                                 ),
                         ),
                       );
@@ -220,7 +220,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                 onPressed: () {
                   setState(() {});
                 },
-                color: Themes.silverGrey,
+                color: ThemeColors.silverGrey,
                 elevation: 5.0,
                 child: Text('Cancel'),
               ),
@@ -228,7 +228,7 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                color: Themes.primaryBlue,
+                color: ThemeColors.primaryBlue,
                 elevation: 5.0,
                 child: Text(
                   'Ok',

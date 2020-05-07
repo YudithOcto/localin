@@ -44,7 +44,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CachedNetworkImage(
-                    imageUrl: hotel?.image,
+                    imageUrl: hotel?.image ?? '',
                     imageBuilder: (context, imageProvider) {
                       return Container(
                         width: 50.0,
@@ -89,7 +89,7 @@ class HomeContentSearchHotel extends StatelessWidget {
                           children: <Widget>[
                             Icon(
                               Icons.location_on,
-                              color: Themes.primaryBlue,
+                              color: ThemeColors.primaryBlue,
                               size: 15.0,
                             ),
                             SizedBox(
@@ -127,9 +127,9 @@ class HomeContentSearchHotel extends StatelessWidget {
                         height: 5.0,
                       ),
                       Text(
-                        '${hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty ? getFormattedCurrency(hotel.roomAvailability.first.sellingAmount - hotel.discount) : ''}',
+                        '${hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty ? getFormattedCurrency(hotel.roomAvailability.first.sellingAmount - (hotel.discount ?? 0)) : ''}',
                         style: cardTextStyle.copyWith(
-                            fontSize: 14.0, color: Themes.primaryBlue),
+                            fontSize: 14.0, color: ThemeColors.primaryBlue),
                       ),
                       SizedBox(
                         height: 5.0,

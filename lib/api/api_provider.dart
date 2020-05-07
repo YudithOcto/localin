@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:localin/api/api_constant.dart';
+import 'package:localin/build_environment.dart';
 import 'package:localin/main.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
@@ -26,6 +27,7 @@ import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/model/user/user_verification_category_model.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -44,7 +46,7 @@ class ApiProvider {
 
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
-        baseUrl: ApiConstant.kBaseUrl,
+        baseUrl: buildEnvironment.baseUrl,
         receiveTimeout: 20000,
         maxRedirects: 3,
         connectTimeout: 20000);
@@ -78,9 +80,9 @@ class ApiProvider {
         break;
       case DioErrorType.RESPONSE:
         errorDescription = error.response.data != null &&
-                error.response.data.toString().isNotEmpty
+                !error.response.data.toString().contains('html')
             ? convertResponseErrorMessage(error.response.data)
-            : 'Request failed with status cide ${error.response.statusCode}';
+            : 'Request failed with status code ${error.response.statusCode}';
         break;
       case DioErrorType.SEND_TIMEOUT:
         errorDescription = "Request to API Timeout";
@@ -94,20 +96,17 @@ class ApiProvider {
 
   String convertResponseErrorMessage(Map<String, dynamic> body) {
     String message = body['message'];
-    String comment = body['komentar'] != null && body['komentar'][0] != null
-        ? body['komentar'][0]
-        : null;
-    return comment != null ? comment : message;
+    return message ?? 'There\'s an error on our side. Please try again later';
   }
 
   void setupLoggingInterceptor() async {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options) async {
-          print('send request：path:${options.uri}');
+          print('send request：path:${options.uri} ${options.data.toString()}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
-            print(token);
+            print("token $token");
             options.headers.clear();
             var header = {
               'Content-Type': 'application/json',
@@ -132,7 +131,7 @@ class ApiProvider {
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
+    final model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
     return model.apiToken;
   }
 
@@ -151,6 +150,20 @@ class ApiProvider {
         return UserBaseModel.withError(_handleError(error));
       } else {
         return UserBaseModel(error: error);
+      }
+    }
+  }
+
+  Future<UserVerificationCategoryModel> getUserVerificationCategory() async {
+    try {
+      final response = await _dio.get(ApiConstant.kUserVerificationCategory,
+          options: Options(headers: {'requiredToken': true}));
+      return UserVerificationCategoryModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return UserVerificationCategoryModel.withError(_handleError(error));
+      } else {
+        return UserVerificationCategoryModel(error: error);
       }
     }
   }
@@ -179,8 +192,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(ApiConstant.kProfile,
           options: Options(headers: {'requiredToken': true}));
-      final model = UserModel.fromJson(response.data);
-      sharedPreferences.setString(kUserCache, jsonEncode(model.toJson()));
+      final model = UserModel.fromJson(response.data['data']);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -206,14 +218,28 @@ class ApiProvider {
     }
   }
 
-  Future<UpdateProfileModel> verifyUserAccount() async {
+  Future<String> updateUserProfile(FormData formData) async {
     try {
-      final response = await _dio.get(ApiConstant.kVerifyAccount,
-          options: Options(headers: {'requiredToken': true}));
+      final response = await _dio.post('${ApiConstant.kUpdateProfile}',
+          data: formData, options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<UpdateProfileModel> verifyUserAccount(FormData form) async {
+    try {
+      final response = await _dio.post(ApiConstant.kVerifyAccount,
+          data: form, options: Options(headers: {'requiredToken': true}));
       final model = UpdateProfileModel.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
+        if (error.response.statusMessage != null &&
+            error.response.statusMessage.contains('Large')) {
+          return UpdateProfileModel.errorJson(error.response.statusMessage);
+        }
         return UpdateProfileModel.errorJson(_handleError(error));
       } else {
         return UpdateProfileModel.errorJson(error);
@@ -254,10 +280,20 @@ class ApiProvider {
 
   /// Article
 
-  Future<ArticleBaseResponse> getUserArticle() async {
+  Future<ArticleBaseResponse> getUserArticle(
+      int isDraft, int isTrash, int offset) async {
     try {
+      Map<String, dynamic> map = Map();
+      map['page'] = offset;
+      map['limit'] = 10;
+      if (isDraft != null) {
+        map['is_draft'] = isDraft;
+      } else if (isTrash != null) {
+        map['is_trash'] = isTrash;
+      }
       final response = await _dio.get(ApiConstant.kUserArticle,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {'requiredToken': true}),
+          queryParameters: map);
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -269,12 +305,54 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleBaseResponse> getArticleList(int offset, int limit) async {
+  Future<ArticleBaseResponse> getOtherUserArticle(
+      int offset, int limit, String userId) async {
     try {
-      final response = await _dio.get(ApiConstant.kArticleList,
+      final response = await _dio.get(
+          '${ApiConstant.kOtherUserArticle}/$userId',
           queryParameters: {'limit': limit, 'page': offset},
           options: Options(headers: {'requiredToken': true}));
-      var model = ArticleBaseResponse.fromJson(response.data);
+      final model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleBaseResponse> getRelatedArticle(String articleId) async {
+    try {
+      final response = await _dio.get(ApiConstant.kArticleList,
+          queryParameters: {'is_releated': articleId},
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleBaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleBaseResponse> getArticleList(int offset, int limit, int isLiked,
+      int isBookmark, String keyword) async {
+    Map<String, dynamic> _articleRequest = {'limit': limit, 'page': offset};
+    if (isLiked != null) {
+      _articleRequest['is_like'] = isLiked;
+    } else if (isBookmark != null) {
+      _articleRequest['is_bookmark'] = isBookmark;
+    } else if (keyword != null && keyword.isNotEmpty) {
+      _articleRequest['search'] = keyword;
+    }
+    try {
+      final response = await _dio.get(ApiConstant.kArticleList,
+          queryParameters: _articleRequest,
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -318,16 +396,41 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleTagResponse> getArticleTags(String keyword) async {
+  Future<ArticleTagResponse> getArticleTags(
+      String keyword, int offset, int limit) async {
     try {
+      Map<String, dynamic> query = Map();
+      query['page'] = offset;
+      query['limit'] = limit;
+      print(keyword);
+      if (keyword != null && keyword.isNotEmpty) {
+        query['keyword'] = keyword;
+      }
       final response = await _dio.get(ApiConstant.kArticleTags,
-          queryParameters: {'keyword': keyword},
+          queryParameters: query,
           options: Options(headers: {'requiredToken': true}));
-      List result = response.data;
-      var model = ArticleTagResponse.fromJson(result[0]);
+      final model = ArticleTagResponse.fromJson(response.data);
       return model;
     } catch (error) {
       return ArticleTagResponse.withError(error.toString());
+    }
+  }
+
+  Future<ArticleBaseResponse> getArticleByTag(
+      int offset, int limit, String tagId) async {
+    Map<String, dynamic> _articleRequest = {'limit': limit, 'page': offset};
+    try {
+      final response = await _dio.get('${ApiConstant.kArticleByTag}/$tagId',
+          queryParameters: _articleRequest,
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
     }
   }
 
@@ -370,7 +473,11 @@ class ApiProvider {
           options: Options(headers: {'requiredToken': true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
-      return ArticleBaseResponse.withError(error.toString());
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
     }
   }
 
@@ -381,7 +488,11 @@ class ApiProvider {
           options: Options(headers: {'requiredToken': true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
-      return ArticleBaseResponse.withError(error.toString());
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
     }
   }
 
@@ -425,6 +536,22 @@ class ApiProvider {
       final response = await _dio.get(ApiConstant.kUserCommunity,
           options: Options(headers: {'requiredToken': true}));
       var model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error);
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> getOtherUserCommunityList(
+      String id) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kUserCommunity}/$id',
+          options: Options(headers: {'requiredToken': true}));
+      final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -611,16 +738,9 @@ class ApiProvider {
             'keyword': search,
             'page': page,
             'limit': limit,
-//            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
-//            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
-            'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-                0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-            'checkout': checkOutDate.millisecondsSinceEpoch
-                .toString()
-                .substring(0,
-                    checkOutDate.millisecondsSinceEpoch.toString().length - 3),
+            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
+            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'room': total,
-            //'timezone': await getFlutterTimezone(),
           },
           options: Options(headers: {'requiredToken': false}));
       return HotelListBaseResponse.fromJson(response.data);
@@ -639,10 +759,6 @@ class ApiProvider {
       final result = await _dio.get(
         '${ApiConstant.kHotelDetail}/$hotelId',
         queryParameters: {
-//          'checkin': checkInDate.millisecondsSinceEpoch.toString().substring(
-//              0, checkInDate.millisecondsSinceEpoch.toString().length - 3),
-//          'checkout': checkOutDate.millisecondsSinceEpoch.toString().substring(
-//              0, checkOutDate.millisecondsSinceEpoch.toString().length - 3),
           'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
           'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
           'timezone': await getFlutterTimezone(),
@@ -720,10 +836,6 @@ class ApiProvider {
       DateTime checkIn,
       DateTime checkOut,
       String roomName) async {
-//    int incheck = int.parse(
-//        checkIn.toString().substring(0, checkIn.toString().length - 3));
-//    int outcheck = int.parse(
-//        checkOut.toString().substring(0, checkOut.toString().length - 3));
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
@@ -805,17 +917,84 @@ class ApiProvider {
     }
   }
 
-  Future<NotificationModel> getNotificationList(int offset, int limit) async {
+  Future<NotificationModelResponse> getNotificationList(
+      int offset, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kNotificationList,
           queryParameters: {'page': offset, 'limit': limit},
           options: Options(headers: {'requiredToken': true}));
-      return NotificationModel.fromJson(response.data);
+      return NotificationModelResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return NotificationModel.withError(_handleError(error));
+        return NotificationModelResponse.withError(_handleError(error));
       } else {
-        return NotificationModel.withError(error.toString());
+        return NotificationModelResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<bool> readNotificationUpdate(String notificationId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kNotificationList}/$notificationId',
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['status'];
+    } catch (error) {
+      return false;
+    }
+  }
+
+  Future<String> deleteAllNotification() async {
+    try {
+      final response = await _dio.get(ApiConstant.kNotificationDeleteAll,
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<String> deleteNotificationById(String id) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kNotificationDeleteById}/$id',
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<String> unDeleteNotificationById(String id) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kNotificationUnDeleteById}/$id',
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<UserBaseModel> updateUserLocation(
+      String latitude, String longitude, String address) async {
+    try {
+      final response = await _dio.post(ApiConstant.kUpdateUserLocation,
+          queryParameters: {
+            'lat': latitude,
+            'long': longitude,
+            'address': address,
+          },
+          options: Options(headers: {'requiredToken': true}));
+      final result = UserBaseModel.fromJson(response.data);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(kUserCache, jsonEncode(result.userModel.toJson()));
+      return result;
+    } catch (error) {
+      if (error is DioError) {
+        return UserBaseModel.withError(_handleError(error));
+      } else {
+        return UserBaseModel.withError(error.toString());
       }
     }
   }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/community/widget/community_feed_bottom_row.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
+import 'package:localin/components/shared_community_components/community_empty_page.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/image_helper.dart';
 
 import '../../../themes.dart';
@@ -14,7 +15,7 @@ class CommunityCardWidget extends StatelessWidget {
   CommunityCardWidget({this.detailList});
   @override
   Widget build(BuildContext context) {
-    return detailList.isNotEmpty
+    return detailList != null && detailList.isNotEmpty
         ? Container(
             margin: EdgeInsets.only(left: 10.0),
             child: ListView.builder(
@@ -29,11 +30,9 @@ class CommunityCardWidget extends StatelessWidget {
               },
             ),
           )
-        : Center(
-            child: Container(
-              margin: EdgeInsets.only(top: 40.0),
-              child: Text('No Community found'),
-            ),
+        : Container(
+            margin: EdgeInsets.only(top: 50.0),
+            child: CommunityEmptyPage(),
           );
   }
 }
@@ -122,7 +121,7 @@ class UpperCommunityCardRow extends StatelessWidget {
               Text(
                 '${detail?.name}',
                 style: kValueStyle.copyWith(
-                    fontSize: 18.0, color: Themes.primaryBlue),
+                    fontSize: 18.0, color: ThemeColors.primaryBlue),
               ),
               Visibility(
                 visible: false,
@@ -147,7 +146,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                     children: <Widget>[
                       Icon(
                         Icons.location_on,
-                        color: Themes.primaryBlue,
+                        color: ThemeColors.primaryBlue,
                         size: 12.0,
                       ),
                       SizedBox(
@@ -167,7 +166,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: Themes.primaryBlue,
+                      color: ThemeColors.primaryBlue,
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -187,7 +186,7 @@ class UpperCommunityCardRow extends StatelessWidget {
                     '${detail?.follower} Orang Mengikuti',
                     textAlign: TextAlign.right,
                     style: kValueStyle.copyWith(
-                        fontSize: 11.0, color: Themes.primaryBlue),
+                        fontSize: 11.0, color: ThemeColors.primaryBlue),
                   ),
                 )
               ],

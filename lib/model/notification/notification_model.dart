@@ -1,26 +1,40 @@
-class NotificationModel {
+class NotificationModelResponse {
   bool error;
   String message;
-  List<NotificationDetailModel> data;
+  NotificationModel model;
 
-  NotificationModel({this.error, this.message, this.data});
+  NotificationModelResponse({this.error, this.message, this.model});
+
+  factory NotificationModelResponse.fromJson(Map<String, dynamic> body) {
+    return NotificationModelResponse(
+      error: body['error'],
+      message: body['message'],
+      model: NotificationModel.fromJson(body['data']),
+    );
+  }
+
+  NotificationModelResponse.withError(String value)
+      : error = true,
+        message = value,
+        model = null;
+}
+
+class NotificationModel {
+  List<NotificationDetailModel> data;
+  int total;
+
+  NotificationModel({this.data, this.total});
 
   factory NotificationModel.fromJson(Map<String, dynamic> body) {
     List notification = body['data'];
     return NotificationModel(
-        error: body['error'],
-        message: body['message'],
         data: notification != null
             ? notification
                 .map((value) => NotificationDetailModel.fromJson(value))
                 .toList()
-            : null);
+            : null,
+        total: body['paging']['total']);
   }
-
-  NotificationModel.withError(String value)
-      : error = true,
-        message = value,
-        data = null;
 }
 
 class NotificationDetailModel {

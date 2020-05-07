@@ -93,7 +93,8 @@ class RoomDetailCard extends StatelessWidget {
       margin: EdgeInsets.only(left: 5.0, right: 5.0),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-          color: Themes.primaryBlue, borderRadius: BorderRadius.circular(4.0)),
+          color: ThemeColors.primaryBlue,
+          borderRadius: BorderRadius.circular(4.0)),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Column(

@@ -82,7 +82,7 @@ class _RoomTypeState extends State<RoomType> {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
-            border: Border.all(color: Themes.grey),
+            border: Border.all(color: ThemeColors.grey),
             borderRadius: BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -155,14 +155,14 @@ class _RoomTypeState extends State<RoomType> {
                                   'View Details',
                                   style: cardTextStyle.copyWith(
                                       fontSize: 11.0,
-                                      color: Themes.primaryBlue),
+                                      color: ThemeColors.primaryBlue),
                                 ),
                                 SizedBox(
                                   width: 2.0,
                                 ),
                                 Icon(
                                   Icons.keyboard_arrow_right,
-                                  color: Themes.primaryBlue,
+                                  color: ThemeColors.primaryBlue,
                                 )
                               ],
                             ),
@@ -199,7 +199,7 @@ class _RoomTypeState extends State<RoomType> {
                     Text(
                       '${getFormattedCurrency(roomDetail.sellingAmount - discount)}',
                       style: cardTextStyle.copyWith(
-                          fontSize: 14.0, color: Themes.primaryBlue),
+                          fontSize: 14.0, color: ThemeColors.primaryBlue),
                     ),
                     SizedBox(
                       height: 10.0,
@@ -223,7 +223,7 @@ class _RoomTypeState extends State<RoomType> {
                                     },
                                   ),
                                   FlatButton(
-                                    color: Themes.primaryBlue,
+                                    color: ThemeColors.primaryBlue,
                                     child: Text(
                                       'Ok',
                                       style: TextStyle(color: Colors.white),
@@ -240,7 +240,7 @@ class _RoomTypeState extends State<RoomType> {
                               roomDetail?.categoryName);
                         }
                       },
-                      color: Themes.primaryBlue,
+                      color: ThemeColors.primaryBlue,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0)),
                       child: Text(
@@ -278,7 +278,7 @@ class _RoomTypeState extends State<RoomType> {
                     '${response?.error != null ? response?.error : 'Booking Tidak Berhasil, Kamar Sudah Habis'}'),
                 actions: <Widget>[
                   FlatButton(
-                    color: Themes.primaryBlue,
+                    color: ThemeColors.primaryBlue,
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
                       'Ok',
@@ -300,7 +300,9 @@ class _RoomTypeState extends State<RoomType> {
     return Bullet(
       '$restriction',
       style: TextStyle(
-          fontSize: 10.0, fontWeight: FontWeight.w500, color: Themes.dimGrey),
+          fontSize: 10.0,
+          fontWeight: FontWeight.w500,
+          color: ThemeColors.dimGrey),
     );
   }
 }

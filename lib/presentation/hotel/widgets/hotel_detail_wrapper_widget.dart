@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/home/gallery_photo_view.dart';
+import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:localin/presentation/hotel/widgets/room_description.dart';
 import 'package:localin/presentation/hotel/widgets/room_general_facilities.dart';
@@ -12,7 +13,6 @@ import 'package:localin/presentation/hotel/widgets/room_location.dart';
 import 'package:localin/presentation/hotel/widgets/room_property_policies.dart';
 import 'package:localin/presentation/hotel/widgets/room_recommended_by_property.dart';
 import 'package:localin/presentation/hotel/widgets/room_type.dart';
-import 'package:localin/presentation/profile/profile_page.dart';
 
 class HotelDetailWrapperWidget extends StatelessWidget {
   @override
@@ -46,45 +46,51 @@ class HotelDetailWrapperWidget extends StatelessWidget {
                 },
                 child: Stack(
                   children: <Widget>[
-                    CarouselSlider.builder(
-                      aspectRatio: 2.0,
-                      itemCount: provider.hotelDetailEntity.images.length,
-                      itemBuilder: (BuildContext context, int itemIndex) =>
-                          CachedNetworkImage(
-                              width: double.infinity,
-                              height: MediaQuery.of(context).orientation ==
-                                      Orientation.portrait
-                                  ? size.height * 0.3
-                                  : size.height * 0.6,
-                              imageUrl: provider
-                                  ?.hotelDetailEntity?.images[itemIndex],
-                              fit: BoxFit.cover,
-                              fadeInCurve: Curves.bounceIn,
-                              placeholderFadeInDuration:
-                                  Duration(milliseconds: 500),
-                              placeholder: (context, url) => Container(
-                                    color: Colors.grey,
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        aspectRatio: 1.5,
+                        height: 209.0,
+                        autoPlay: false,
+                        enlargeCenterPage: false,
+                        viewportFraction: 1.0,
+                      ),
+                      items: List.generate(
+                          provider.hotelDetailEntity.images.length, (index) {
+                        return CachedNetworkImage(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).orientation ==
+                                    Orientation.portrait
+                                ? size.height * 0.3
+                                : size.height * 0.6,
+                            imageUrl:
+                                provider?.hotelDetailEntity?.images[index],
+                            fit: BoxFit.cover,
+                            fadeInCurve: Curves.bounceIn,
+                            placeholderFadeInDuration:
+                                Duration(milliseconds: 500),
+                            placeholder: (context, url) => Container(
+                                  color: Colors.grey,
+                                ),
+                            errorWidget: (context, url, _) => Container(
+                                  color: Colors.grey,
+                                  width: double.infinity,
+                                  height: MediaQuery.of(context).orientation ==
+                                          Orientation.portrait
+                                      ? size.height * 0.3
+                                      : size.height * 0.6,
+                                  child: Icon(
+                                    Icons.error,
+                                    color: Colors.white,
                                   ),
-                              errorWidget: (context, url, _) => Container(
-                                    color: Colors.grey,
-                                    width: double.infinity,
-                                    height:
-                                        MediaQuery.of(context).orientation ==
-                                                Orientation.portrait
-                                            ? size.height * 0.3
-                                            : size.height * 0.6,
-                                    child: Icon(
-                                      Icons.error,
-                                      color: Colors.white,
-                                    ),
-                                  )),
+                                ));
+                      }),
                     ),
                     Positioned(
                       bottom: 10.0,
                       right: 20.0,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Themes.primaryBlue.withOpacity(0.5),
+                            color: ThemeColors.primaryBlue.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(4.0)),
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -153,7 +159,7 @@ class HotelDetailWrapperWidget extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.star,
-          color: Themes.primaryBlue,
+          color: ThemeColors.primaryBlue,
           size: 15.0,
         ),
         SizedBox(
@@ -161,8 +167,8 @@ class HotelDetailWrapperWidget extends StatelessWidget {
         ),
         Text(
           '4.0',
-          style:
-              cardTextStyle.copyWith(fontSize: 11.0, color: Themes.primaryBlue),
+          style: cardTextStyle.copyWith(
+              fontSize: 11.0, color: ThemeColors.primaryBlue),
         ),
         SizedBox(
           width: 25.0,

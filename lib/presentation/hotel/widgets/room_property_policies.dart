@@ -38,7 +38,9 @@ class RoomPropertyPolicies extends StatelessWidget {
       child: Bullet(
         title,
         style: TextStyle(
-            fontSize: 12.0, fontWeight: FontWeight.w500, color: Themes.dimGrey),
+            fontSize: 12.0,
+            fontWeight: FontWeight.w500,
+            color: ThemeColors.dimGrey),
       ),
     );
   }

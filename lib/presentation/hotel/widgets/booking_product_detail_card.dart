@@ -183,7 +183,7 @@ class _BookingProductDetailCardState extends State<BookingProductDetailCard> {
       child: Container(
         margin: EdgeInsets.only(top: 5.0),
         decoration: BoxDecoration(
-            color: Themes.green, borderRadius: BorderRadius.circular(12.0)),
+            color: ThemeColors.green, borderRadius: BorderRadius.circular(12.0)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
