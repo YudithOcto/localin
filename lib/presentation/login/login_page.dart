@@ -176,7 +176,7 @@ class Content extends StatelessWidget {
                             .pushNamed(WebViewPage.routeName, arguments: {
                           WebViewPage.urlName:
                               'https://localin.id/privacy-policy.html',
-                          WebViewPage.title: 'Dana',
+                          WebViewPage.title: 'Privacy Policy',
                         });
                       },
                     style: ThemeText.sfMediumCaption

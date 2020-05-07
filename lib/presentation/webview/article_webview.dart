@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/presentation/news/widgets/news_detail/appbar_bookmark_share_action_widget.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -70,55 +71,8 @@ class _ArticleWebViewState extends State<ArticleWebView> {
                 style: ThemeText.sfMediumHeadline,
               ),
             ),
-            flexibleSpace: Container(
-              alignment: FractionalOffset.center,
-              margin: EdgeInsets.only(right: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  InkWell(
-                      onTap: () async {
-                        _isChanged = true;
-                        final response =
-                            await Provider.of<HomeProvider>(context)
-                                .bookmarkArticle(model.id);
-                        if (response.error != null) {
-                          CustomToast.showCustomToast(context, response.error);
-                        } else {
-                          CustomToast.showCustomBookmarkToast(
-                              context, response?.message, callback: () async {
-                            dismissAllToast(showAnim: true);
-                            await Provider.of<HomeProvider>(context)
-                                .bookmarkArticle(model.id);
-                            setState(() {
-                              model?.isBookmark =
-                                  model?.isBookmark == 0 ? 1 : 0;
-                            });
-                          });
-                          setState(() {
-                            model?.isBookmark = model?.isBookmark == 0 ? 1 : 0;
-                          });
-                        }
-                      },
-                      child: SvgPicture.asset(
-                        !model.isBookmark.isBookmarked
-                            ? 'images/bookmark_outline.svg'
-                            : 'images/bookmark_full.svg',
-                        color: model.isBookmark.isBookmarked
-                            ? ThemeColors.primaryBlue
-                            : null,
-                      )),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Share.text('Localin', '${model?.slug}', 'text/plain');
-                      },
-                      child: SvgPicture.asset('images/share_article.svg')),
-                ],
-              ),
+            flexibleSpace: AppBarBookMarkShareActionWidget(
+              articleDetail: model,
             ),
           ),
           body: Builder(

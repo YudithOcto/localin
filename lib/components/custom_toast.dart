@@ -19,7 +19,7 @@ class CustomToast {
 
   static showCustomBookmarkToast(BuildContext context, String message,
       {AlignmentGeometry alignment = Alignment.bottomCenter,
-      VoidCallback callback}) {
+      VoidCallback undoCallback}) {
     okToast.showToastWidget(
       Container(
         padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -49,13 +49,13 @@ class CustomToast {
                       width: 11.0,
                     ),
                     Text(
-                      'Added to bookmark',
+                      message,
                       style: ThemeText.sfSemiBoldBody,
                     ),
                   ],
                 ),
                 InkWell(
-                  onTap: callback,
+                  onTap: undoCallback,
                   child: Text(
                     'Undo',
                     style: ThemeText.sfSemiBoldBody

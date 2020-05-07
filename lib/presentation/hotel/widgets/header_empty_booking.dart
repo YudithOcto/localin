@@ -27,7 +27,7 @@ class HeaderEmptyBooking extends StatelessWidget {
         Container(
           margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
           child: Text(
-            'Temukan di bawah ini inspirasi untuk petualngan anda berikutnya!',
+            'Temukan di bawah ini inspirasi untuk petualangan anda berikutnya!',
             textAlign: TextAlign.center,
             style: kValueStyle.copyWith(
                 fontSize: 14.0,

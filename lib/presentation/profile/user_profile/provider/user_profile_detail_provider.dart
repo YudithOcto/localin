@@ -21,10 +21,10 @@ class UserProfileProvider with ChangeNotifier {
     _danaAccountDetail.add(danaStatus.Loading);
     final response = await _repository.getUserDanaStatus();
     if (response.error == null) {
+      _userDanaAccount = response;
+      _danaAccountDetail.add(danaStatus.Success);
       if (!_danaAccountDetail.isClosed) {
-        _userDanaAccount = response;
         notifyListeners();
-        _danaAccountDetail.add(danaStatus.Success);
       }
     } else {
       if (!_danaAccountDetail.isClosed) {
