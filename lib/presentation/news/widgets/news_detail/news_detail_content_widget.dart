@@ -1,15 +1,10 @@
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/news/provider/news_detail_provider.dart';
+import 'package:localin/presentation/news/widgets/news_detail/appbar_bookmark_share_action_widget.dart';
 import 'package:localin/presentation/news/widgets/news_detail/news_detail_body_content_widget.dart';
 import 'package:localin/presentation/news/widgets/news_detail/news_detail_content_bottom_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:provider/provider.dart';
 
 class NewsDetailContentWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
@@ -63,56 +58,8 @@ class _NewsDetailContentWidgetState extends State<NewsDetailContentWidget> {
             ),
           ),
           flexibleSpace: SafeArea(
-            child: Container(
-              alignment: FractionalOffset.center,
-              margin: EdgeInsets.only(right: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  InkWell(
-                      onTap: () async {
-                        final response =
-                            await Provider.of<NewsDetailProvider>(context)
-                                .bookmarkArticle(_articleDetail.id);
-                        if (response.error != null) {
-                          CustomToast.showCustomToast(context, response.error);
-                        } else {
-                          CustomToast.showCustomBookmarkToast(
-                              context, response?.message, callback: () async {
-                            dismissAllToast(showAnim: true);
-                            await Provider.of<NewsDetailProvider>(context)
-                                .bookmarkArticle(_articleDetail.id);
-                            setState(() {
-                              _articleDetail?.isBookmark =
-                                  _articleDetail?.isBookmark == 0 ? 1 : 0;
-                            });
-                          });
-                          setState(() {
-                            _articleDetail?.isBookmark =
-                                _articleDetail?.isBookmark == 0 ? 1 : 0;
-                          });
-                        }
-                      },
-                      child: SvgPicture.asset(
-                        !_articleDetail.isBookmark.isBookmarked
-                            ? 'images/bookmark_outline.svg'
-                            : 'images/bookmark_full.svg',
-                        color: _articleDetail.isBookmark.isBookmarked
-                            ? ThemeColors.primaryBlue
-                            : null,
-                      )),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Share.text(
-                            'Localin', '${_articleDetail?.slug}', 'text/plain');
-                      },
-                      child: SvgPicture.asset('images/share_article.svg')),
-                ],
-              ),
+            child: AppBarBookMarkShareActionWidget(
+              articleDetail: _articleDetail,
             ),
           ),
         ),
@@ -132,15 +79,5 @@ class _NewsDetailContentWidgetState extends State<NewsDetailContentWidget> {
         ),
       ),
     );
-  }
-}
-
-extension on int {
-  bool get isBookmarked {
-    return this == 1;
-  }
-
-  bool get active {
-    return this == 1;
   }
 }

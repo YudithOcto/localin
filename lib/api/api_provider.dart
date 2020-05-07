@@ -473,7 +473,11 @@ class ApiProvider {
           options: Options(headers: {'requiredToken': true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
-      return ArticleBaseResponse.withError(error.toString());
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
     }
   }
 
@@ -484,7 +488,11 @@ class ApiProvider {
           options: Options(headers: {'requiredToken': true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
-      return ArticleBaseResponse.withError(error.toString());
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
     }
   }
 

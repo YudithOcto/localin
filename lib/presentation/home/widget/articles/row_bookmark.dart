@@ -25,20 +25,11 @@ class _RowBookmarkState extends State<RowBookmark> {
         if (response.error != null) {
           CustomToast.showCustomToast(context, response.error);
         } else {
-          CustomToast.showCustomBookmarkToast(context, response?.message,
-              callback: () async {
-            dismissAllToast(showAnim: true);
-            await Provider.of<HomeProvider>(context)
-                .bookmarkArticle(widget.articleDetail.id);
-            setState(() {
-              widget.articleDetail?.isBookmark =
-                  widget.articleDetail?.isBookmark == 0 ? 1 : 0;
-            });
-          });
-          setState(() {
-            widget.articleDetail?.isBookmark =
-                widget.articleDetail?.isBookmark == 0 ? 1 : 0;
-          });
+          if (widget.articleDetail.isBookmark == 1) {
+            unBookmarkArticle();
+          } else {
+            bookMarkArticle();
+          }
         }
       },
       child: SvgPicture.asset(
@@ -50,5 +41,35 @@ class _RowBookmarkState extends State<RowBookmark> {
             : null,
       ),
     );
+  }
+
+  bookMarkArticle() {
+    setState(() {
+      widget.articleDetail?.isBookmark = 1;
+    });
+    CustomToast.showCustomBookmarkToast(context, 'Added to Bookmark',
+        undoCallback: () async {
+      dismissAllToast(showAnim: true);
+      await Provider.of<HomeProvider>(context)
+          .bookmarkArticle(widget.articleDetail.id);
+      setState(() {
+        widget.articleDetail?.isBookmark = 0;
+      });
+    });
+  }
+
+  unBookmarkArticle() {
+    setState(() {
+      widget.articleDetail?.isBookmark = 0;
+    });
+    CustomToast.showCustomBookmarkToast(context, 'Delete from bookmark',
+        undoCallback: () async {
+      dismissAllToast(showAnim: true);
+      await Provider.of<HomeProvider>(context)
+          .bookmarkArticle(widget.articleDetail.id);
+      setState(() {
+        widget.articleDetail?.isBookmark = 1;
+      });
+    });
   }
 }

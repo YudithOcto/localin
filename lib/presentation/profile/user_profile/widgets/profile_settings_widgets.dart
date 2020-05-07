@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/widgets/row_profile_settings_widget.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/webview/revamp_webview.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +29,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
                   title: 'Dana',
                   description: 'Payment Method',
                   iconValue: 'images/profile_dana.svg',
-                  showButton: profileProvider?.userDanaAccount?.data != null &&
-                      profileProvider?.userDanaAccount?.data?.maskDanaId !=
+                  showButton: profileProvider?.userDanaAccount?.data == null ||
+                      profileProvider?.userDanaAccount?.data?.maskDanaId ==
                           null,
                   onPressed: () {
-                    _connectAccountToDana(context, profileProvider);
+                    _connectAccountToDana(context);
                   },
                 );
               }),
@@ -109,59 +111,41 @@ class ProfileSettingsWidgets extends StatelessWidget {
     );
   }
 
-  void _connectAccountToDana(
-      BuildContext context, UserProfileProvider provider) async {
-    final authState = Provider.of<AuthProvider>(context, listen: false);
-    if (authState.userModel.handphone != null &&
-        authState.userModel.handphone.isNotEmpty) {
-      final result = await provider
-          .authenticateUserDanaAccount(authState.userModel.handphone);
-      if (result.urlRedirect.isNotEmpty && !result.error) {
-        final response = await Navigator.of(context)
-            .pushNamed(WebViewPage.routeName, arguments: {
-          WebViewPage.urlName: result.urlRedirect,
-          WebViewPage.title: 'Dana',
-        });
-        if (response != null && response == 'success') {
-          final dialogResult = await showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('DANA'),
-                  content: Text(
-                    'Connect to dana success',
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      color: ThemeColors.primaryBlue,
-                      onPressed: () => Navigator.of(context).pop('success'),
-                      child: Text(
-                        'Ok',
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
-                  ],
-                );
-              });
+  _connectAccountToDana(BuildContext context) async {
+    final result =
+        await Provider.of<HomeProvider>(context, listen: false).getDanaStatus();
+    if (result.error == null) {
+      await Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
+        WebViewPage.urlName: result.data.urlTopUp,
+        WebViewPage.title: 'Dana',
+      });
+    } else {
+      final authState = Provider.of<AuthProvider>(context, listen: false);
+      if (authState.userModel.handphone != null &&
+          authState.userModel.handphone.isNotEmpty) {
+        final result = await authState
+            .authenticateUserDanaAccount(authState.userModel.handphone);
+        if (result.urlRedirect.isNotEmpty && !result.error) {
+          final response = await Navigator.of(context)
+              .pushNamed(WebViewPage.routeName, arguments: {
+            WebViewPage.urlName: result.urlRedirect,
+            WebViewPage.title: 'Dana',
+          });
+          if (response != null && response == 'success') {
+            final dialogSuccess = await CustomDialog.showCustomDialogWithButton(
+                context, 'Dana', 'Connect to dana success');
 
-          if (dialogResult == 'success') {
-            Provider.of<UserProfileProvider>(context).getUserDanaStatus();
+            if (dialogSuccess == 'success') {
+              Provider.of<UserProfileProvider>(context).getUserDanaStatus();
+            }
           }
         }
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('No Phone number on your account'),
+          duration: Duration(milliseconds: 1500),
+        ));
       }
-    } else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('No Phone number on your account'),
-        duration: Duration(milliseconds: 1500),
-      ));
     }
   }
 }

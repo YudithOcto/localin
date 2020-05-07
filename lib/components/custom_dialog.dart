@@ -36,6 +36,47 @@ class CustomDialog {
         });
   }
 
+  static Future<T> showCustomDialogWithButton<T>(
+      BuildContext context, String title, String message) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  '$title',
+                  style: ThemeText.sfMediumTitle3,
+                ),
+                SizedBox(height: 8.0),
+                Text('$message',
+                    style: ThemeText.sfMediumBody
+                        .copyWith(color: ThemeColors.black80)),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RaisedButton(
+                  elevation: 1.0,
+                  onPressed: () => Navigator.of(context).pop('success'),
+                  color: ThemeColors.primaryBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Text(
+                    'Yes',
+                    style: ThemeText.rodinaTitle3
+                        .copyWith(color: ThemeColors.black0),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   static void closeDialog(BuildContext context) {
     Navigator.of(context, rootNavigator: true).pop();
   }

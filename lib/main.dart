@@ -22,12 +22,14 @@ import 'package:localin/presentation/news/news_detail_page.dart';
 import 'package:localin/presentation/news/news_main_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
+import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
 import 'package:localin/presentation/search/search_article_page.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
@@ -37,12 +39,11 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/provider/hotel/search_hotel_provider.dart';
-import 'package:localin/provider/location/location_provider.dart';
+import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'model/firebase/message.dart';
 
 final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 
@@ -79,6 +80,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<SearchHotelProvider>(
           create: (_) => SearchHotelProvider(),
         ),
+        ChangeNotifierProvider<UserProfileProvider>(
+          create: (_) => UserProfileProvider(),
+        ),
         ChangeNotifierProvider<LocationProvider>(
           create: (_) => LocationProvider(),
         )
@@ -91,10 +95,9 @@ class _MyAppState extends State<MyApp> {
               canvasColor: ThemeColors.black0,
               fontFamily: 'SfProText',
               textTheme: ThemeData.light().textTheme.copyWith(
-                  body1: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w600),
-                  body2: TextStyle(color: Colors.black87),
-                  title: TextStyle(fontSize: 24.0, fontFamily: 'OpenSans'))),
+                  body1: ThemeText.sfSemiBoldTitle3,
+                  body2: ThemeText.sfMediumTitle3,
+                  title: ThemeText.rodinaTitle3)),
           initialRoute: '/',
           routes: {
             '/': (_) => SplashScreen(),

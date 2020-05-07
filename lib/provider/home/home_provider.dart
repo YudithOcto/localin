@@ -6,6 +6,7 @@ import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
@@ -64,6 +65,10 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<DanaUserAccountResponse> getUserDanaStatus() async {
+    return await _repository.getUserDanaStatus();
+  }
+
   @override
   void dispose() {
     _articleController.close();
@@ -75,3 +80,4 @@ class HomeProvider with ChangeNotifier {
 }
 
 enum articleState { Loading, Success, NoData }
+enum danaState { loading, success, empty }
