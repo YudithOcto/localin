@@ -5,7 +5,7 @@ import 'package:localin/presentation/news/widgets/news_detail/news_detail_conten
 import 'package:provider/provider.dart';
 
 class NewsDetailPage extends StatelessWidget {
-  static const routeName = '/newsDetailPage';
+  static const routeName = 'NewsDetailPage';
   static const newsSlug = 'newsSlug';
 
   @override

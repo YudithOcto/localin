@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/search/provider/search_article_provider.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
 import 'package:localin/text_themes.dart';
@@ -18,6 +20,7 @@ class _SearchTagResultWidgetState extends State<SearchTagResultWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
+      locator<AnalyticsService>().setScreenName(name: 'SearchTagsTab');
       Provider.of<SearchArticleProvider>(context, listen: false).getTags();
       _searchTagController..addListener(_listen);
       _isInit = false;

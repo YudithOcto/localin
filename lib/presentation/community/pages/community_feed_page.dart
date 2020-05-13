@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../themes.dart';
 
 class CommunityFeedPage extends StatefulWidget {
-  static const routeName = '/communityFeedPage';
+  static const routeName = 'CommunityFeedPage';
   @override
   _CommunityFeedPageState createState() => _CommunityFeedPageState();
 }

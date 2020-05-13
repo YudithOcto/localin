@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'input_phone_number_page.dart';
 
 class LoginPage extends StatefulWidget {
-  static const routeName = '/loginpage';
+  static const routeName = 'LoginPage';
   @override
   _LoginPageState createState() => _LoginPageState();
 }

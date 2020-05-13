@@ -6,7 +6,7 @@ import '../../../text_themes.dart';
 import '../../../themes.dart';
 
 class RevampUserVerificationSuccessPage extends StatefulWidget {
-  static const routeName = 'revampUserVerificationSuccess';
+  static const routeName = 'UserVerificationSuccessPage';
 
   @override
   _RevampUserVerificationSuccessPageState createState() =>

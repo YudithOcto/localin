@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../themes.dart';
 
 class ArticleDetailPage extends StatefulWidget {
-  static const routeName = '/articleDetailPage';
+  static const routeName = 'ArticleDetailPage';
   static const articleId = '/articleId';
   static const commentPage = '/commentPage';
 

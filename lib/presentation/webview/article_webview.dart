@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWebView extends StatefulWidget {
-  static const routeName = '/articleWebview';
+  static const routeName = 'ArticleWebviewPage';
   static const url = 'url';
   static const title = 'title';
   static const articleModel = 'articleModel';

@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/components/decorated_tab_bar.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
 import 'package:localin/presentation/news/widgets/my_articles/my_draft_article.dart';
 import 'package:localin/presentation/news/widgets/my_articles/my_publish_article.dart';
-import 'package:localin/presentation/news/widgets/my_articles/my_trash_article.dart';
+import 'package:localin/presentation/news/widgets/my_articles/my_archive_article.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ class _MyCollectionArticleState extends State<MyCollectionArticle>
   TabController _tabBarController;
 
   void initState() {
+    locator<AnalyticsService>().setScreenName(name: 'MyCollectionArticleTab');
     _tabBarController = new TabController(vsync: this, length: 3);
     super.initState();
   }
@@ -61,7 +64,7 @@ class _MyCollectionArticleState extends State<MyCollectionArticle>
                 text: 'Draft',
               ),
               Tab(
-                text: 'Trash',
+                text: 'Archive',
               )
             ],
           ),
@@ -94,7 +97,7 @@ class _MyCollectionArticleState extends State<MyCollectionArticle>
               children: <Widget>[
                 MyPublishArticle(),
                 MyDraftArticle(),
-                MyTrashArticle(),
+                MyArchiveArticle(),
               ],
             ),
           ),

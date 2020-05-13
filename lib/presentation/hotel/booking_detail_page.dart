@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import '../../themes.dart';
 
 class BookingDetailPage extends StatefulWidget {
-  static const routeName = '/bookingDetailPage';
+  static const routeName = 'BookingDetailPage';
   static const bookingId = '/bookingId';
   @override
   _BookingDetailPageState createState() => _BookingDetailPageState();

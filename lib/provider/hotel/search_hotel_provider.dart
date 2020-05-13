@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
+import 'package:localin/utils/date_helper.dart';
 
 class SearchHotelProvider extends BaseModelProvider {
   Repository _repository;
@@ -17,6 +19,7 @@ class SearchHotelProvider extends BaseModelProvider {
   Coordinates _userCoordinates = Coordinates(0.0, 0.0);
   DateTime _selectedCheckIn = DateTime.now();
   DateTime _selectedCheckOut = DateTime.now().add(Duration(days: 1));
+  AnalyticsService _analyticsService;
 
   final StreamController<SearchViewState> _searchHotelController =
       StreamController<SearchViewState>.broadcast();
@@ -30,10 +33,11 @@ class SearchHotelProvider extends BaseModelProvider {
   bool get canLoadMore => _canLoadMore;
   Stream<SearchViewState> get searchStream => _searchHotelController.stream;
 
-  SearchHotelProvider() {
+  SearchHotelProvider({@required AnalyticsService analyticsService}) {
     _repository = Repository();
     _searchFormController = TextEditingController();
     _searchFormController.addListener(_onSearchChanged);
+    this._analyticsService = analyticsService;
   }
 
   void setUserLocation(Coordinates _location) {
@@ -59,6 +63,14 @@ class SearchHotelProvider extends BaseModelProvider {
     super.dispose();
   }
 
+  _logSearchEvent() {
+    _analyticsService.setCustomSearchEvent(
+        keyword: _searchFormController.text,
+        startDate: DateHelper.formatDateRangeForOYO(_selectedCheckIn),
+        endDate: DateHelper.formatDateRangeForOYO(_selectedCheckOut),
+        numberOfRooms: _userRoomTotal);
+  }
+
   Future<void> getHotel({bool isRefresh = false}) async {
     _searchHotelController.add(SearchViewState.Busy);
     if (isRefresh) {
@@ -69,6 +81,7 @@ class SearchHotelProvider extends BaseModelProvider {
     if (!_canLoadMore) {
       return null;
     }
+    _logSearchEvent();
     HotelListBaseResponse result = await _repository.getHotelList(
         '${_userCoordinates?.latitude}',
         '${_userCoordinates?.longitude}',

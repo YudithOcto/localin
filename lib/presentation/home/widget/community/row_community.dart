@@ -48,7 +48,7 @@ class _RowCommunityState extends State<RowCommunity> {
                     width: 5.0,
                   ),
                   Text(
-                    'Community around you',
+                    'Community around me',
                     textAlign: TextAlign.center,
                     style: ThemeText.sfSemiBoldHeadline,
                   )

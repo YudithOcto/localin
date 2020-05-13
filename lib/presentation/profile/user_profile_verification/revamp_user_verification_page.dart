@@ -12,7 +12,7 @@ import '../../../text_themes.dart';
 import '../../../themes.dart';
 
 class RevampUserVerificationPage extends StatelessWidget {
-  static const routeName = '/userprofileverificationpage';
+  static const routeName = 'UserVerificationPage';
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

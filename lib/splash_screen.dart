@@ -1,6 +1,7 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
@@ -26,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       if (updateAndroidIntent) {
-        checkGps();
+        checkGps('');
         updateAndroidIntent = false;
       }
     }
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
         if (userCache.handphone != null &&
             userCache.handphone.isNotEmpty &&
             isUserAlreadyDoneVerifying) {
-          checkGps();
+          checkGps(userCache.id);
         } else {
           Navigator.of(context)
               .pushReplacementNamed(InputPhoneNumberPage.routeName, arguments: {
@@ -61,7 +62,8 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
-  checkGps() async {
+  checkGps(String userId) async {
+    await AnalyticsService().setUserProperties(userId: userId);
     final isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
         .getUserLocation();
     if (isGpsOn) {

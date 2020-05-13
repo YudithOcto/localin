@@ -5,7 +5,7 @@ import 'package:localin/provider/community/community_event_provider.dart';
 import 'package:provider/provider.dart';
 
 class CommunityCreateEventPage extends StatefulWidget {
-  static const routeName = '/communityCreateEventPage';
+  static const routeName = 'CommunityCreateEventPage';
   @override
   _CommunityCreateEventPageState createState() =>
       _CommunityCreateEventPageState();

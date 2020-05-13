@@ -18,6 +18,7 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
+import 'package:localin/presentation/news/comment_page.dart';
 import 'package:localin/presentation/news/news_detail_page.dart';
 import 'package:localin/presentation/news/news_main_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
@@ -45,6 +46,9 @@ import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'analytics/analytic_service.dart';
+import 'locator.dart';
+
 final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
@@ -62,6 +66,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _initLocalNotification();
     registerNotification();
+    setupLocator();
   }
 
   @override
@@ -78,7 +83,8 @@ class _MyAppState extends State<MyApp> {
           create: (_) => BookingHistoryProvider(),
         ),
         ChangeNotifierProvider<SearchHotelProvider>(
-          create: (_) => SearchHotelProvider(),
+          create: (_) => SearchHotelProvider(
+              analyticsService: locator<AnalyticsService>()),
         ),
         ChangeNotifierProvider<UserProfileProvider>(
           create: (_) => UserProfileProvider(),
@@ -98,9 +104,12 @@ class _MyAppState extends State<MyApp> {
                   body1: ThemeText.sfSemiBoldTitle3,
                   body2: ThemeText.sfMediumTitle3,
                   title: ThemeText.rodinaTitle3)),
-          initialRoute: '/',
+          initialRoute: 'SplashScreenPage',
+          navigatorObservers: [
+            locator<AnalyticsService>().getAnalyticsObserver(),
+          ],
           routes: {
-            '/': (_) => SplashScreen(),
+            'SplashScreenPage': (_) => SplashScreen(),
             LoginPage.routeName: (_) => LoginPage(),
             MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
             ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
@@ -134,6 +143,7 @@ class _MyAppState extends State<MyApp> {
             SearchArticlePage.routeName: (_) => SearchArticlePage(),
             TagsDetailListPage.routeName: (_) => TagsDetailListPage(),
             NewsDetailPage.routeName: (_) => NewsDetailPage(),
+            CommentPage.routeName: (_) => CommentPage(),
           },
         ),
       ),
