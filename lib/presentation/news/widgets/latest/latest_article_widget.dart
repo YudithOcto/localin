@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/presentation/home/widget/row_user_location.dart';
@@ -21,6 +23,7 @@ class _LatestArticleWidgetState extends State<LatestArticleWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
+      locator<AnalyticsService>().setScreenName(name: 'LatestNewsTab');
       Provider.of<NewsArticleProvider>(context, listen: false).getArticleList();
       _scrollController..addListener(_listener);
       _isInit = false;

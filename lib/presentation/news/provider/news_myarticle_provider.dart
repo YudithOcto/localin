@@ -36,34 +36,34 @@ class NewsMyArticleProvider with ChangeNotifier {
   }
 
   /// USER TRASH ARTICLE
-  int _userArticleTrashOffset = 1;
-  int get userArticleTrashOffset => _userArticleTrashOffset;
+  int _userArticleArchiveOffset = 1;
+  int get userArticleArchiveOffset => _userArticleArchiveOffset;
 
-  List<ArticleDetail> _userArticleTrashList = [];
-  List<ArticleDetail> get userArticleTrashList => _userArticleTrashList;
+  List<ArticleDetail> _userArticleArchiveList = [];
+  List<ArticleDetail> get userArticleArchiveList => _userArticleArchiveList;
 
-  bool _canLoadMoreArticleTrashList = true;
-  bool get canLoadMoreTrashArticleList => _canLoadMoreArticleTrashList;
+  bool _canLoadMoreArticleArchiveList = true;
+  bool get canLoadMoreArchiveArticleList => _canLoadMoreArticleArchiveList;
 
   Future<List<ArticleDetail>> getUserTrashArticle({isRefresh = true}) async {
     if (isRefresh) {
-      _userArticleTrashOffset = 1;
-      _userArticleTrashList.clear();
-      _canLoadMoreArticleTrashList = true;
+      _userArticleArchiveOffset = 1;
+      _userArticleArchiveList.clear();
+      _canLoadMoreArticleArchiveList = true;
     }
 
     final response = await _repository.getUserArticle(
-        offset: _userArticleTrashOffset, isTrash: 1);
+        offset: _userArticleArchiveOffset, isTrash: 1);
     if (response != null && response.error == null) {
-      _userArticleTrashList.addAll(response.data);
-      _userArticleTrashOffset += 1;
-      _canLoadMoreArticleTrashList =
-          response.total > _userArticleTrashList.length;
+      _userArticleArchiveList.addAll(response.data);
+      _userArticleArchiveOffset += 1;
+      _canLoadMoreArticleArchiveList =
+          response.total > _userArticleArchiveList.length;
       notifyListeners();
-      return _userArticleTrashList;
+      return _userArticleArchiveList;
     } else {
-      _canLoadMoreArticleTrashList = false;
-      return _userArticleTrashList;
+      _canLoadMoreArticleArchiveList = false;
+      return _userArticleArchiveList;
     }
   }
 

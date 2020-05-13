@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import '../../../themes.dart';
 
 class RevampEditProfilePage extends StatelessWidget {
-  static const routeName = '/revampEditProfilePage';
+  static const routeName = 'UserEditProfilePage';
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RevampEditProfileProvider>(
@@ -136,7 +136,7 @@ class _RevampEditProfileWrapperWidgetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'ABOUT NAME',
+                            'ABOUT',
                             style: ThemeText.rodinaBody
                                 .copyWith(color: ThemeColors.black80),
                           ),
@@ -144,6 +144,7 @@ class _RevampEditProfileWrapperWidgetState
                             style: ThemeText.sfRegularHeadline,
                             controller: editProvider.shortBioController,
                             maxLines: null,
+                            maxLength: 250,
                             decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(

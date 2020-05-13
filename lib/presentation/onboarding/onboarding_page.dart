@@ -6,13 +6,14 @@ import 'package:localin/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingPage extends StatefulWidget {
-  static const routeName = '/onboardingpage';
+  static const routeName = 'OnBoardingPage';
   @override
   _OnBoardingPageState createState() => _OnBoardingPageState();
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final int _numPages = 3;
+  bool showLoginPage = false;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
   final onBoardingImage = [
@@ -27,7 +28,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   ];
   final onBoardingBody = [
     'Get ready for your personal city assistant. What do you expect in only one app can do?',
-    'Go local is going global. Find local service, local news, or even local community that fulfil &  enrich your life.',
+    'Go local is going global. Find local service, local news, or even local community that fulfill &  enrich your life.',
     'Anything, Localin will help. Because Localin #BisaDiandelin'
   ];
 
@@ -127,24 +128,27 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     sf.setBool(kUserCarousel, false);
                   }
                 },
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  height: 48.0,
-                  width: double.infinity,
-                  margin: EdgeInsets.all(22),
-                  decoration: BoxDecoration(
-                      color: _currentPage == _numPages - 1
-                          ? ThemeColors.primaryBlue
-                          : ThemeColors.black10,
-                      borderRadius: BorderRadius.circular(4.0)),
-                  child: Center(
-                    child: Text(
-                      'Join Now',
-                      textAlign: TextAlign.center,
-                      style: ThemeText.rodinaTitle3.copyWith(
-                          color: _currentPage == _numPages - 1
-                              ? ThemeColors.black0
-                              : ThemeColors.black60),
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 500),
+                  opacity: _currentPage == _numPages - 1 ? 1 : 0,
+                  child: Container(
+                    height: 48.0,
+                    width: double.infinity,
+                    margin: EdgeInsets.all(22),
+                    decoration: BoxDecoration(
+                        color: _currentPage == _numPages - 1
+                            ? ThemeColors.primaryBlue
+                            : ThemeColors.black10,
+                        borderRadius: BorderRadius.circular(4.0)),
+                    child: Center(
+                      child: Text(
+                        'Join Now',
+                        textAlign: TextAlign.center,
+                        style: ThemeText.rodinaTitle3.copyWith(
+                            color: _currentPage == _numPages - 1
+                                ? ThemeColors.black0
+                                : ThemeColors.black60),
+                      ),
                     ),
                   ),
                 ),

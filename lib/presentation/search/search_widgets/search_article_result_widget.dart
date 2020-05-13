@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/presentation/search/provider/search_article_provider.dart';
@@ -16,6 +18,7 @@ class _SearchArticleResultWidgetState extends State<SearchArticleResultWidget> {
   @override
   void initState() {
     super.initState();
+    locator<AnalyticsService>().setScreenName(name: 'SearchArticleTab');
     _searchArticleScrollController..addListener(_listen);
   }
 

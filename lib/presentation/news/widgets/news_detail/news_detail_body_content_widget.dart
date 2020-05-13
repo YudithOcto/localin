@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/circle_image.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
+import 'package:localin/presentation/news/shared_widget/mini_user_public_profile.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -98,35 +99,8 @@ class _NewsDetailBodyContentWidgetState
         Padding(
           padding: const EdgeInsets.only(
               top: 8.0, bottom: 9.54, left: 20.0, right: 20.0),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(RevampOthersProfilePage.routeName, arguments: {
-                RevampOthersProfilePage.userId: _articleDetail?.createdBy,
-              });
-            },
-            child: Row(
-              children: <Widget>[
-                CircleImage(
-                  imageUrl: _articleDetail?.authorImage,
-                ),
-                SizedBox(
-                  width: 8.0,
-                ),
-                RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'by ',
-                        style: ThemeText.sfMediumBody
-                            .copyWith(color: ThemeColors.black80)),
-                    TextSpan(
-                        text: '${_articleDetail?.author}',
-                        style: ThemeText.sfMediumBody
-                            .copyWith(color: ThemeColors.primaryBlue)),
-                  ]),
-                )
-              ],
-            ),
+          child: MiniUserPublicProfile(
+            articleDetail: _articleDetail,
           ),
         ),
         Padding(

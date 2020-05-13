@@ -6,7 +6,7 @@ import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:provider/provider.dart';
 
 class HotelDetailPage extends StatefulWidget {
-  static const routeName = '/roomDetailPage';
+  static const routeName = 'HotelDetailPage';
   static const hotelId = '/hotelId';
   static const check_in_time = '/checkinTime';
   static const check_out_time = '/checkoutTime';

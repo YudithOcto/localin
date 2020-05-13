@@ -8,7 +8,7 @@ import 'package:localin/presentation/others_profile/provider/revamp_others_provi
 import 'package:provider/provider.dart';
 
 class RevampOthersProfilePage extends StatelessWidget {
-  static const routeName = '/otherProfilePage';
+  static const routeName = 'PublicProfilePage';
   static const userId = 'userId';
   @override
   Widget build(BuildContext context) {

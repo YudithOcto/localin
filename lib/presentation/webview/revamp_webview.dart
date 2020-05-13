@@ -6,7 +6,7 @@ import 'package:localin/themes.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class RevampWebview extends StatefulWidget {
-  static const routeName = '/revampWebview';
+  static const routeName = 'SettingsWebviewPage';
   static const url = 'url';
   static const isFromProfile = 'isFromProfile';
   static const title = 'title';

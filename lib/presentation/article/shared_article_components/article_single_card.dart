@@ -17,7 +17,9 @@ import 'package:html/parser.dart' as parser;
 
 class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
-  ArticleSingleCard(this.articleDetail);
+  final ValueChanged<bool> onRefresh;
+  final ValueChanged<bool> onUndo;
+  ArticleSingleCard(this.articleDetail, {this.onRefresh, this.onUndo});
 
   @override
   _ArticleSingleCardState createState() => _ArticleSingleCardState();
@@ -102,6 +104,8 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
                       ? rowMessage()
                       : RowBookmark(
                           articleDetail: widget?.articleDetail,
+                          onRefresh: (v) => widget.onRefresh(v),
+                          onUndo: (v) => widget.onUndo(v),
                         ),
                   SizedBox(
                     width: 9.67,

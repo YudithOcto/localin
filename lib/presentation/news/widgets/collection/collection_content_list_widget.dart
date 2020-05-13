@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
@@ -22,10 +24,17 @@ class _CollectionContentListWidgetState
   final ScrollController _scrollController = ScrollController();
   Future getLikedArticle;
 
+  _logScreen() {
+    locator<AnalyticsService>().setScreenName(
+        name:
+            '${widget.isLiked == 1 ? 'ArticleLikedPage' : 'ArticleBookmarkPage'}');
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
+      _logScreen();
       onArticleRefresh();
       _scrollController..addListener(_listener);
       isInit = false;
@@ -90,7 +99,17 @@ class _CollectionContentListWidgetState
                         2) {
                   return EmptyArticle();
                 } else if (index < snapshot.data.length) {
-                  return ArticleSingleCard(snapshot.data[index]);
+                  return ArticleSingleCard(snapshot.data[index], onUndo: (v) {
+                    if (v) {
+                      onArticleRefresh();
+                      setState(() {});
+                    }
+                  }, onRefresh: (v) {
+                    if (v) {
+                      onArticleRefresh();
+                      setState(() {});
+                    }
+                  });
                 } else if (Provider.of<NewsArticleProvider>(context,
                         listen: false)
                     .canLoadMoreArticle) {

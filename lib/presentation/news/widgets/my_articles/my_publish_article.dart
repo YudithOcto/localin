@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
@@ -20,6 +22,7 @@ class _MyPublishArticleState extends State<MyPublishArticle>
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
+      locator<AnalyticsService>().setScreenName(name: 'ArticlePublishTab');
       loadArticle();
       _scrollController = ScrollController()..addListener(_listener);
       _isInit = false;

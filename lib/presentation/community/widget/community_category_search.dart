@@ -4,7 +4,7 @@ import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_category.dart';
 
 class CommunityCategorySearch extends StatefulWidget {
-  static const routeName = '/communityCategorySearch';
+  static const routeName = 'CommunityCategorySearchPage';
   @override
   _CommunityCategorySearchState createState() =>
       _CommunityCategorySearchState();
