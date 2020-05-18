@@ -13,8 +13,9 @@ class CommunityBaseResponseCategory {
     return CommunityBaseResponseCategory(
       error: null,
       message: body['message'],
-      communityCategory:
-          data.map((value) => CommunityCategory.fromJson(value)).toList(),
+      communityCategory: data == null
+          ? List()
+          : data.map((value) => CommunityCategory.fromJson(value)).toList(),
     );
   }
 

@@ -23,6 +23,7 @@ import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -381,17 +382,55 @@ class ApiProvider {
   Future<ArticleBaseResponse> createArticle(FormData form) async {
     try {
       final response = await _dio.post(ApiConstant.kCreateArticle,
-          options: Options(
-            headers: {'requiredToken': true},
-          ),
-          data: form);
-      var model = ArticleBaseResponse.fromJson(response.data);
+          options: Options(headers: {'requiredToken': true}), data: form);
+      final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
-        return ArticleBaseResponse.withError(_handleError(error));
+        if (error.response.statusCode == 500) {
+          return ArticleBaseResponse.withError(
+              'Server unknown error. Please try again later');
+        } else if (error.response.data['judul'] != null) {
+          return ArticleBaseResponse.withError(error.response.data['judul'][0]);
+        } else if (error.response.data['deskripsi'] != null) {
+          return ArticleBaseResponse.withError(
+              error.response.data['deskripsi'][0]);
+        } else if (error.response.data['address'] != null) {
+          return ArticleBaseResponse.withError(
+              error.response.data['address'][0]);
+        } else if (error.response.data['tag'] != null) {
+          return ArticleBaseResponse.withError(error.response.data['tag'][0]);
+        } else {
+          for (int i = 0; i < form.files.length; i++) {
+            if (error.response.data['gambar.$i'][0] != null) {
+              return ArticleBaseResponse.withError(
+                  error.response.data['gambar.$i'][0]);
+            }
+          }
+          return ArticleBaseResponse.withError(error.response.data.toString());
+        }
       } else {
         return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<SearchLocationResponse> searchLocation(
+      int offset, int limit, String search) async {
+    try {
+      final response = await _dio.get(ApiConstant.kSearchLocation,
+          queryParameters: {
+            'page': offset,
+            'limit': limit,
+            'search': '$search',
+          },
+          options: Options(headers: {'requiredToken': true}));
+      return SearchLocationResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return SearchLocationResponse.withError(_handleError(error));
+      } else {
+        return SearchLocationResponse.withError(error.toString());
       }
     }
   }
@@ -434,10 +473,12 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleCommentBaseResponse> getArticleComment(String articleId) async {
+  Future<ArticleCommentBaseResponse> getArticleComment(
+      String articleId, int offset, int limit) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kArticleComment}/$articleId',
+          queryParameters: {'limit': limit, 'page': offset},
           options: Options(headers: {'requiredToken': true}));
       return ArticleCommentBaseResponse.fromJson(response.data);
     } catch (error) {
@@ -461,6 +502,25 @@ class ApiProvider {
     } catch (error) {
       if (error is DioError) {
         return ArticleCommentBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleCommentBaseResponse> replyOtherUserComment(
+      String commentId, String message) async {
+    FormData _formData = FormData.fromMap({'komentar': message});
+    try {
+      final response = await _dio.post(
+          '${ApiConstant.kArticleReplyComment}/$commentId',
+          data: _formData,
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleCommentBaseResponse.publishResponse(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        final errorList = error.response.data;
+        return ArticleCommentBaseResponse.withError(errorList['komentar'][0]);
       } else {
         return ArticleCommentBaseResponse.withError(error.toString());
       }
@@ -498,10 +558,11 @@ class ApiProvider {
 
   /// COMMUNITY
 
-  Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
+  Future<CommunityDetailBaseResponse> getCommunityList(
+      String search, int page, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kCommunity,
-          queryParameters: {'search': '$search'},
+          queryParameters: {'search': '$search', 'limit': limit, 'page': page},
           options: Options(headers: {'requiredToken': true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;

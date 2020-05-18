@@ -6,7 +6,7 @@ import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/shared_article_components/row_like_widget.dart';
 import 'package:localin/presentation/home/widget/articles/row_bookmark.dart';
-import 'package:localin/presentation/news/news_detail_page.dart';
+import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/text_themes.dart';

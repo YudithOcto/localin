@@ -28,6 +28,7 @@ abstract class ThemeText {
       fontFamily: 'Rodina',
       fontStyle: FontStyle.normal,
       fontSize: 18.0,
+      color: ThemeColors.black100,
       letterSpacing: 0.02);
 
   static const TextStyle rodinaBody = const TextStyle(

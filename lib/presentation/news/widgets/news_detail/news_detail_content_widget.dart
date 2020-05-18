@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/widgets/news_detail/appbar_bookmark_share_action_widget.dart';
 import 'package:localin/presentation/news/widgets/news_detail/news_detail_body_content_widget.dart';
 import 'package:localin/presentation/news/widgets/news_detail/news_detail_content_bottom_widget.dart';
-import 'package:localin/text_themes.dart';
-import 'package:localin/themes.dart';
 
 class NewsDetailContentWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
@@ -38,30 +37,15 @@ class _NewsDetailContentWidgetState extends State<NewsDetailContentWidget> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ThemeColors.black0,
-          elevation: 0,
-          leading: InkWell(
-            onTap: () => Navigator.of(context).pop(_articleDetail),
-            child: Icon(
-              Icons.arrow_back,
-              color: ThemeColors.black80,
-            ),
-          ),
-          titleSpacing: 0.0,
-          title: Container(
-            margin: EdgeInsets.only(right: 80.0),
-            child: Text(
-              'Local News',
-              overflow: TextOverflow.ellipsis,
-              style: ThemeText.sfMediumHeadline,
-            ),
-          ),
-          flexibleSpace: SafeArea(
+        appBar: CustomAppBar(
+          onClickBackButton: () => Navigator.of(context).pop(_articleDetail),
+          pageTitle: 'Local News',
+          flexSpace: SafeArea(
             child: AppBarBookMarkShareActionWidget(
               articleDetail: _articleDetail,
             ),
           ),
+          appBar: AppBar(),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

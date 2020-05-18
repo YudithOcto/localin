@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/presentation/search/provider/search_article_provider.dart';
-import 'package:localin/presentation/search/search_widgets/search_article_result_widget.dart';
-import 'package:localin/presentation/search/search_widgets/search_tag_result_widget.dart';
+import 'package:localin/presentation/search/search_article//search_article_result_widget.dart';
+import 'package:localin/presentation/search/search_article//search_tag_result_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';

@@ -10,7 +10,7 @@ import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CreateArticlePage extends StatefulWidget {
-  static const routeName = 'CreateArticlePage';
+  static const routeName = 'CreateArticlePages';
   @override
   _CreateArticlePageState createState() => _CreateArticlePageState();
 }

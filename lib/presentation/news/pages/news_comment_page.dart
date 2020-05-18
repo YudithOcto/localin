@@ -1,20 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:localin/presentation/news/provider/comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_content_wrapper.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommentPage extends StatefulWidget {
+class NewsCommentPage extends StatefulWidget {
   static const routeName = 'CommentPage';
   static const articleDetail = 'articleDetail';
   @override
-  _CommentPageState createState() => _CommentPageState();
+  _NewsCommentPageState createState() => _NewsCommentPageState();
 }
 
-class _CommentPageState extends State<CommentPage> {
+class _NewsCommentPageState extends State<NewsCommentPage> {
+  @override
+  void initState() {
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (!visible) {
+          FocusScope.of(context).unfocus();
+        }
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final articleDetail = routeArgs[NewsCommentPage.articleDetail];
     return Scaffold(
       backgroundColor: ThemeColors.black20,
       appBar: AppBar(
@@ -34,7 +51,10 @@ class _CommentPageState extends State<CommentPage> {
         ),
       ),
       body: ChangeNotifierProvider<CommentProvider>(
-        create: (_) => CommentProvider(),
+        create: (_) => CommentProvider(
+            articleDetail: articleDetail,
+            profile:
+                Provider.of<AuthProvider>(context, listen: false).userModel),
         child: ArticleCommentContentWrapper(),
       ),
     );

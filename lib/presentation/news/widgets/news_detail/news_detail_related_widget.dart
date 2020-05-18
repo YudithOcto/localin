@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/news/news_detail_page.dart';
+import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/news/provider/news_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

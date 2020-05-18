@@ -17,6 +17,7 @@ import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -110,13 +111,19 @@ class Repository {
     return apiProvider.getArticleTags(keyword, offset, limit);
   }
 
-  Future<ArticleCommentBaseResponse> getArticleComment(String articleId) {
-    return apiProvider.getArticleComment(articleId);
+  Future<ArticleCommentBaseResponse> getArticleComment(String articleId,
+      {int offset, int limit}) {
+    return apiProvider.getArticleComment(articleId, offset, limit);
   }
 
   Future<ArticleCommentBaseResponse> publishArticleComment(
       String articleId, String message) {
     return apiProvider.publishArticleComment(articleId, message);
+  }
+
+  Future<ArticleCommentBaseResponse> replyOthersComment(
+      String commentId, String message) {
+    return apiProvider.replyOtherUserComment(commentId, message);
   }
 
   Future<ArticleBaseResponse> getArticleDetail(String articleId) {
@@ -125,8 +132,9 @@ class Repository {
 
   /// COMMUNITY
 
-  Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {
-    return apiProvider.getCommunityList(keyword);
+  Future<CommunityDetailBaseResponse> getCommunityList(
+      {String keyword, int page, int limit}) async {
+    return apiProvider.getCommunityList(keyword, page, limit);
   }
 
   Future<CommunityDetailBaseResponse> getCommunityDetail(
@@ -258,19 +266,24 @@ class Repository {
     return apiProvider.getNotificationList(offset, limit);
   }
 
-  Future<bool> readNotificationUpdate(String notifId) async {
+  Future<bool> readNotificationUpdate(String notifId) {
     return apiProvider.readNotificationUpdate(notifId);
   }
 
-  Future<String> deleteAllNotification() async {
+  Future<String> deleteAllNotification() {
     return apiProvider.deleteAllNotification();
   }
 
-  Future<String> deleteNotificationById(String id) async {
+  Future<String> deleteNotificationById(String id) {
     return apiProvider.deleteNotificationById(id);
   }
 
-  Future<String> undoNotificationDelete(String id) async {
+  Future<String> undoNotificationDelete(String id) {
     return apiProvider.unDeleteNotificationById(id);
+  }
+
+  Future<SearchLocationResponse> searchLocation(
+      {int offset, int limit, String search}) {
+    return apiProvider.searchLocation(offset, limit, search);
   }
 }

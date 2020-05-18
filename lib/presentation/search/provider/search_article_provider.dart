@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';

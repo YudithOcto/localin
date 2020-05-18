@@ -6,6 +6,16 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
 class EmptyArticle extends StatelessWidget {
+  final String title;
+  final String message;
+  final bool isShowButton;
+
+  EmptyArticle(
+      {this.title = 'Can\'t find news around you',
+      this.message =
+          'Read news from other location, or create your own article',
+      this.isShowButton = true});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +26,7 @@ class EmptyArticle extends StatelessWidget {
             'images/empty_article.svg',
           ),
           Text(
-            'Can\'t find news around you',
+            '$title',
             textAlign: TextAlign.center,
             style: ThemeText.sfSemiBoldHeadline
                 .copyWith(color: ThemeColors.black80),
@@ -25,23 +35,26 @@ class EmptyArticle extends StatelessWidget {
             height: 4.0,
           ),
           Text(
-            'Read news from other location, or create your own article',
+            '$message',
             textAlign: TextAlign.center,
             style: ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
           ),
           SizedBox(
             height: 16.0,
           ),
-          OutlineButtonDefault(
-            onPressed: () async {
-              Navigator.of(context).pushNamed(EmptyPage.routeName);
+          Visibility(
+            visible: isShowButton,
+            child: OutlineButtonDefault(
+              onPressed: () async {
+                Navigator.of(context).pushNamed(EmptyPage.routeName);
 //              final result = await Navigator.of(context)
 //                  .pushNamed(CreateArticlePage.routeName);
 //              if (result != null) {
 //                /// refresh current page
 //              }
-            },
-            buttonText: 'Create Article',
+              },
+              buttonText: 'Create Article',
+            ),
           )
         ],
       ),

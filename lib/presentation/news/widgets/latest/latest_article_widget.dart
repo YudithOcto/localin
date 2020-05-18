@@ -6,7 +6,7 @@ import 'package:localin/presentation/article/shared_article_components/article_s
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/presentation/home/widget/row_user_location.dart';
 import 'package:localin/presentation/news/provider/news_article_provider.dart';
-import 'package:localin/presentation/search/search_article_page.dart';
+import 'package:localin/presentation/search/search_article/search_article_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
 

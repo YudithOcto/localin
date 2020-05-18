@@ -36,30 +36,37 @@ class CustomToast {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'images/bookmark_full.svg',
-                      width: 15.46,
-                      height: 16.93,
-                      color: ThemeColors.primaryBlue,
-                    ),
-                    SizedBox(
-                      width: 11.0,
-                    ),
-                    Text(
-                      message,
-                      style: ThemeText.sfSemiBoldBody,
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'images/bookmark_full.svg',
+                        width: 15.46,
+                        height: 16.93,
+                        color: ThemeColors.primaryBlue,
+                      ),
+                      SizedBox(
+                        width: 11.0,
+                      ),
+                      Expanded(
+                        child: Text(
+                          message,
+                          style: ThemeText.sfSemiBoldBody,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                InkWell(
-                  onTap: undoCallback,
-                  child: Text(
-                    'Undo',
-                    style: ThemeText.sfSemiBoldBody
-                        .copyWith(color: ThemeColors.primaryBlue),
+                Visibility(
+                  visible: undoCallback != null,
+                  child: InkWell(
+                    onTap: undoCallback,
+                    child: Text(
+                      'Undo',
+                      style: ThemeText.sfSemiBoldBody
+                          .copyWith(color: ThemeColors.primaryBlue),
+                    ),
                   ),
                 )
               ],

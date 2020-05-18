@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/article/pages/create_article_page.dart';
-import 'package:localin/presentation/community/pages/community_feed_page.dart';
+import 'package:localin/presentation/community/pages/community_discover_page.dart';
+import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/hotel/hotel_detail_page.dart';
@@ -18,9 +19,10 @@ import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
-import 'package:localin/presentation/news/comment_page.dart';
-import 'package:localin/presentation/news/news_detail_page.dart';
-import 'package:localin/presentation/news/news_main_page.dart';
+import 'package:localin/presentation/news/pages/news_comment_page.dart';
+import 'package:localin/presentation/news/pages/news_create_article_page.dart';
+import 'package:localin/presentation/news/pages/news_detail_page.dart';
+import 'package:localin/presentation/news/pages/news_main_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
@@ -28,7 +30,8 @@ import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_pa
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
-import 'package:localin/presentation/search/search_article_page.dart';
+import 'package:localin/presentation/search/search_article/search_article_page.dart';
+import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
 import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/splash_screen.dart';
@@ -101,9 +104,9 @@ class _MyAppState extends State<MyApp> {
               canvasColor: ThemeColors.black0,
               fontFamily: 'SfProText',
               textTheme: ThemeData.light().textTheme.copyWith(
-                  body1: ThemeText.sfSemiBoldTitle3,
-                  body2: ThemeText.sfMediumTitle3,
-                  title: ThemeText.rodinaTitle3)),
+                  bodyText1: ThemeText.sfSemiBoldTitle3,
+                  bodyText2: ThemeText.sfMediumTitle3,
+                  headline6: ThemeText.rodinaTitle3)),
           initialRoute: 'SplashScreenPage',
           navigatorObservers: [
             locator<AnalyticsService>().getAnalyticsObserver(),
@@ -128,7 +131,7 @@ class _MyAppState extends State<MyApp> {
             GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
             WebViewPage.routeName: (_) => WebViewPage(),
             InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
-            CommunityFeedPage.routeName: (_) => CommunityFeedPage(),
+            CommunityDiscoverPage.routeName: (_) => CommunityDiscoverPage(),
             OnBoardingPage.routeName: (_) => OnBoardingPage(),
             RevampProfilePage.routeName: (_) => RevampProfilePage(),
             RevampEditProfilePage.routeName: (_) => RevampEditProfilePage(),
@@ -143,7 +146,10 @@ class _MyAppState extends State<MyApp> {
             SearchArticlePage.routeName: (_) => SearchArticlePage(),
             TagsDetailListPage.routeName: (_) => TagsDetailListPage(),
             NewsDetailPage.routeName: (_) => NewsDetailPage(),
-            CommentPage.routeName: (_) => CommentPage(),
+            NewsCommentPage.routeName: (_) => NewsCommentPage(),
+            NewsCreateArticlePage.routeName: (_) => NewsCreateArticlePage(),
+            MultiPickerGalleryPage.routeName: (_) => MultiPickerGalleryPage(),
+            SearchLocationPage.routeName: (_) => SearchLocationPage(),
           },
         ),
       ),

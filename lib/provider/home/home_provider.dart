@@ -19,7 +19,7 @@ class HomeProvider with ChangeNotifier {
       StreamController<articleState>.broadcast();
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
-    final response = await _repository.getCommunityList(search);
+    final response = await _repository.getCommunityList(keyword: search);
     if (response != null) {
       communityDetail.clear();
       communityDetail.addAll(response.communityDetailList);
