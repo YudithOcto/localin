@@ -383,7 +383,8 @@ class ApiProvider {
     try {
       final response = await _dio.post(ApiConstant.kCreateArticle,
           options: Options(headers: {'requiredToken': true}), data: form);
-      final model = ArticleBaseResponse.fromJson(response.data);
+      print(jsonEncode(response.data));
+      final model = ArticleBaseResponse.withJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {

@@ -20,9 +20,16 @@ class AppBarBookMarkShareActionWidget extends StatefulWidget {
 class _AppBarBookMarkShareActionWidgetState
     extends State<AppBarBookMarkShareActionWidget> {
   ArticleDetail _articleDetail;
+
   @override
   void initState() {
     super.initState();
+    _articleDetail = widget.articleDetail;
+  }
+
+  @override
+  void didUpdateWidget(AppBarBookMarkShareActionWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
     _articleDetail = widget.articleDetail;
   }
 
@@ -38,11 +45,11 @@ class _AppBarBookMarkShareActionWidgetState
           InkWell(
               onTap: () async {
                 final response = await Provider.of<HomeProvider>(context)
-                    .bookmarkArticle(_articleDetail.id);
+                    .bookmarkArticle(_articleDetail?.id);
                 if (response.error != null) {
                   CustomToast.showCustomToast(context, response.error);
                 } else {
-                  if (_articleDetail.isBookmark == 1) {
+                  if (_articleDetail?.isBookmark == 1) {
                     unBookmarkArticle();
                   } else {
                     bookMarkArticle();
@@ -50,10 +57,10 @@ class _AppBarBookMarkShareActionWidgetState
                 }
               },
               child: SvgPicture.asset(
-                _articleDetail.isBookmark == 0
+                _articleDetail?.isBookmark == 0
                     ? 'images/bookmark_outline.svg'
                     : 'images/bookmark_full.svg',
-                color: _articleDetail.isBookmark == 1
+                color: _articleDetail?.isBookmark == 1
                     ? ThemeColors.primaryBlue
                     : null,
               )),
@@ -72,30 +79,30 @@ class _AppBarBookMarkShareActionWidgetState
 
   bookMarkArticle() {
     setState(() {
-      widget.articleDetail?.isBookmark = 1;
+      _articleDetail?.isBookmark = 1;
     });
     CustomToast.showCustomBookmarkToast(context, 'Added to Bookmark',
         undoCallback: () async {
       dismissAllToast(showAnim: true);
       await Provider.of<HomeProvider>(context)
-          .bookmarkArticle(widget.articleDetail.id);
+          .bookmarkArticle(_articleDetail?.id);
       setState(() {
-        widget.articleDetail?.isBookmark = 0;
+        _articleDetail?.isBookmark = 0;
       });
     });
   }
 
   unBookmarkArticle() {
     setState(() {
-      widget.articleDetail?.isBookmark = 0;
+      _articleDetail?.isBookmark = 0;
     });
     CustomToast.showCustomBookmarkToast(context, 'Delete from bookmark',
         undoCallback: () async {
       dismissAllToast(showAnim: true);
       await Provider.of<HomeProvider>(context)
-          .bookmarkArticle(widget.articleDetail.id);
+          .bookmarkArticle(_articleDetail?.id);
       setState(() {
-        widget.articleDetail?.isBookmark = 1;
+        _articleDetail?.isBookmark = 1;
       });
     });
   }

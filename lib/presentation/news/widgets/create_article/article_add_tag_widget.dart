@@ -44,23 +44,47 @@ class ArticleAddTagWidget extends StatelessWidget {
                       itemCount: provider.selectedTags.length + 1,
                       itemBuilder: (context, index) {
                         if (index == provider.selectedTags.length) {
-                          return Container(
-                            width: 100,
-                            margin:
-                                EdgeInsets.only(left: index == 0 ? 0.0 : 12.0),
-                            child: TextFormField(
-                              onTap: () {
-                                controller
-                                    .jumpTo(MediaQuery.of(context).size.height);
-                              },
-                              controller: provider.searchTagController,
-                              style: ThemeText.sfSemiBoldFootnote
-                                  .copyWith(color: ThemeColors.black80),
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintStyle: ThemeText.sfSemiBoldFootnote
-                                      .copyWith(color: ThemeColors.black80),
-                                  hintText: 'add more tags'),
+                          return Visibility(
+                            visible: provider.selectedTags.length < 10,
+                            child: Container(
+                              width: 100,
+                              margin: EdgeInsets.only(
+                                  left: index == 0 ? 0.0 : 12.0),
+                              child: TextFormField(
+                                controller: provider.searchTagController,
+                                style: ThemeText.sfSemiBoldFootnote
+                                    .copyWith(color: ThemeColors.black80),
+                                onFieldSubmitted: (v) {
+                                  if (v.isNotEmpty) {
+                                    provider.addTags =
+                                        provider.searchTagController.text;
+                                    provider.searchTagController.clear();
+                                    FocusScope.of(context).unfocus();
+                                    provider.clearListTags();
+                                  }
+                                },
+                                onChanged: (v) {
+                                  if (v.isNotEmpty &&
+                                      (v.endsWith(' ') || v.endsWith(','))) {
+                                    provider.addTags = provider
+                                        .searchTagController.text
+                                        .substring(
+                                            0,
+                                            provider.searchTagController.text
+                                                    .length -
+                                                1);
+                                    provider.searchTagController.clear();
+                                    FocusScope.of(context).unfocus();
+                                    provider.clearListTags();
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintStyle: ThemeText.sfSemiBoldFootnote
+                                        .copyWith(color: ThemeColors.black80),
+                                    hintText:
+                                        'add ${provider.selectedTags.length > 0 ? 'more tags' : 'tag'} '),
+                              ),
                             ),
                           );
                         } else {
@@ -76,7 +100,7 @@ class ArticleAddTagWidget extends StatelessWidget {
                               child: Row(
                                 children: <Widget>[
                                   Text(
-                                    '${provider?.selectedTags[index]?.tagName}',
+                                    '${provider?.selectedTags[index]}',
                                     textAlign: TextAlign.center,
                                     style: ThemeText.sfSemiBoldFootnote
                                         .copyWith(color: ThemeColors.black80),
@@ -119,8 +143,8 @@ class ArticleAddTagWidget extends StatelessWidget {
                                       provider.listTags.length,
                                       (index) => InkWell(
                                             onTap: () {
-                                              provider.addTags =
-                                                  provider.listTags[index];
+                                              provider.addTags = provider
+                                                  .listTags[index].tagName;
                                               provider.searchTagController
                                                   .clear();
                                               FocusScope.of(context).unfocus();

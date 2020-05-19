@@ -17,6 +17,7 @@ class ArticleAddCaptionWidget extends StatelessWidget {
           padding: const EdgeInsets.only(right: 20.0, bottom: 36.0),
           child: UnderlineTextFormField(
               inputAction: TextInputAction.newline,
+              maxInput: 2200,
               controller:
                   Provider.of<CreateArticleProvider>(context, listen: false)
                       .captionController),

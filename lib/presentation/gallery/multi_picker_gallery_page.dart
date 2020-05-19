@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class MultiPickerGalleryPage extends StatelessWidget {
   static const routeName = 'MultiPickerGallery';
+  static const chosenImage = 'previousChosenImage';
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GalleryProvider>(
@@ -32,8 +33,11 @@ class _GalleryWrapperContentState extends State<GalleryWrapperContent> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      getAsset =
-          Provider.of<GalleryProvider>(context, listen: false).getImage();
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      List<Uint8List> imageList = routeArgs[MultiPickerGalleryPage.chosenImage];
+      getAsset = Provider.of<GalleryProvider>(context, listen: false)
+          .getImage(imageList);
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -44,8 +48,8 @@ class _GalleryWrapperContentState extends State<GalleryWrapperContent> {
     if (scroll.metrics.pixels / scroll.metrics.maxScrollExtent > 0.33) {
       if (provider.currentPage != provider.lastPage) {
         setState(() {
-          getAsset =
-              Provider.of<GalleryProvider>(context, listen: false).getImage();
+          getAsset = Provider.of<GalleryProvider>(context, listen: false)
+              .getImage(null);
         });
       }
     }
@@ -105,13 +109,17 @@ class _GalleryWrapperContentState extends State<GalleryWrapperContent> {
                               return InkWell(
                                 onTap: () {
                                   if (index > 0) {
-                                    provider.selectedAsset
-                                            .contains(snapshot.data[index])
-                                        ? provider.selectedAsset
-                                            .remove(snapshot.data[index])
-                                        : provider.selectedAsset
-                                            .add(snapshot.data[index]);
-                                    setState(() {});
+                                    if (provider.selectedAsset
+                                            .contains(snapshot.data[index]) ||
+                                        provider.selectedBytes.contains(snapshot
+                                            .data[index].lengthInBytes)) {
+                                      provider.removeSelectedImage(
+                                          snapshot.data[index]);
+                                    } else if (provider.selectedAsset.length <
+                                        10) {
+                                      provider.addSelectedImage(
+                                          snapshot.data[index]);
+                                    }
                                   }
                                 },
                                 child: SingleImageGalleryWidget(

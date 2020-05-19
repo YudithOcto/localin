@@ -19,7 +19,9 @@ class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
   final ValueChanged<bool> onRefresh;
   final ValueChanged<bool> onUndo;
-  ArticleSingleCard(this.articleDetail, {this.onRefresh, this.onUndo});
+  final BoxFit imageFit;
+  ArticleSingleCard(this.articleDetail,
+      {this.onRefresh, this.onUndo, this.imageFit = BoxFit.fill});
 
   @override
   _ArticleSingleCardState createState() => _ArticleSingleCardState();
@@ -169,8 +171,8 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
               decoration: BoxDecoration(
                   color: Colors.grey,
                   borderRadius: BorderRadius.circular(8.0),
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.fill)),
+                  image: DecorationImage(
+                      image: imageProvider, fit: widget.imageFit)),
             ),
           );
         },

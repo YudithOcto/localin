@@ -6,10 +6,12 @@ class UnderlineTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputAction inputAction;
   final Function(String) onChanged;
+  final int maxInput;
 
   UnderlineTextFormField(
       {this.controller,
       this.inputAction = TextInputAction.none,
+      this.maxInput,
       this.onChanged});
 
   @override
@@ -18,6 +20,7 @@ class UnderlineTextFormField extends StatelessWidget {
       controller: controller,
       maxLines: null,
       onChanged: onChanged,
+      maxLength: maxInput,
       textInputAction: inputAction,
       style: ThemeText.sfRegularHeadline,
       decoration: InputDecoration(

@@ -79,80 +79,88 @@ class _NewsDetailRelatedWidgetState extends State<NewsDetailRelatedWidget> {
                     physics: ClampingScrollPhysics(),
                     itemCount: snapshot?.data?.length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(NewsDetailPage.routeName, arguments: {
-                            NewsDetailPage.newsSlug: snapshot?.data[index]?.slug
-                          });
-                        },
-                        child: Row(
-                          children: <Widget>[
-                            CachedNetworkImage(
-                              imageUrl: snapshot?.data[index].image ?? '',
-                              imageBuilder: (context, image) {
-                                return Container(
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                NewsDetailPage.routeName,
+                                arguments: {
+                                  NewsDetailPage.newsSlug:
+                                      snapshot?.data[index]?.slug
+                                });
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              CachedNetworkImage(
+                                imageUrl: snapshot?.data[index].image ?? '',
+                                imageBuilder: (context, image) {
+                                  return Container(
+                                    width: 86.0,
+                                    height: 86.0,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
+                                        image: DecorationImage(
+                                          image: image,
+                                          fit: BoxFit.cover,
+                                        )),
+                                  );
+                                },
+                                placeholder: (context, image) => Container(
                                   width: 86.0,
                                   height: 86.0,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6.0),
-                                      image: DecorationImage(
-                                        image: image,
-                                        fit: BoxFit.cover,
-                                      )),
-                                );
-                              },
-                              placeholder: (context, image) => Container(
-                                width: 86.0,
-                                height: 86.0,
-                                decoration: BoxDecoration(
-                                  color: ThemeColors.black80,
-                                  borderRadius: BorderRadius.circular(6.0),
+                                    color: ThemeColors.black80,
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                ),
+                                errorWidget: (context, image, child) =>
+                                    Container(
+                                  width: 86.0,
+                                  height: 86.0,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: ThemeColors.black80),
                                 ),
                               ),
-                              errorWidget: (context, image, child) => Container(
-                                width: 86.0,
-                                height: 86.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4.0),
-                                    color: ThemeColors.black80),
+                              SizedBox(
+                                width: 15.0,
                               ),
-                            ),
-                            SizedBox(
-                              width: 15.0,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    '${snapshot?.data[index]?.title ?? ''}',
-                                    style: ThemeText.rodinaTitle3,
-                                  ),
-                                  SizedBox(
-                                    height: 4.0,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                          text: 'by ',
-                                          style: ThemeText.sfMediumBody
-                                              .copyWith(
-                                                  color: ThemeColors.black80)),
-                                      TextSpan(
-                                          text:
-                                              '${snapshot?.data[index]?.author}',
-                                          style: ThemeText.sfMediumBody
-                                              .copyWith(
-                                                  color:
-                                                      ThemeColors.primaryBlue)),
-                                    ]),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '${snapshot?.data[index]?.title ?? ''}',
+                                      style: ThemeText.rodinaTitle3,
+                                    ),
+                                    SizedBox(
+                                      height: 4.0,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: 'by ',
+                                            style: ThemeText.sfMediumBody
+                                                .copyWith(
+                                                    color:
+                                                        ThemeColors.black80)),
+                                        TextSpan(
+                                            text:
+                                                '${snapshot?.data[index]?.author}',
+                                            style: ThemeText.sfMediumBody
+                                                .copyWith(
+                                                    color: ThemeColors
+                                                        .primaryBlue)),
+                                      ]),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },

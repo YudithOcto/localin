@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
+import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:localin/presentation/search/search_article/search_article_page.dart';
+import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../text_themes.dart';
@@ -40,8 +44,28 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
                         .copyWith(color: ThemeColors.black0),
                   ),
                   InkWell(
-                    onTap: () => Navigator.of(context)
-                        .pushNamed(NewsCreateArticlePage.routeName),
+                    onTap: () async {
+                      if (Provider.of<AuthProvider>(context, listen: false)
+                              .userModel
+                              .status ==
+                          kUserStatusVerified) {
+                        final result = await Navigator.of(context)
+                            .pushNamed(NewsCreateArticlePage.routeName);
+                        if (result != null) {
+                          final provider = Provider.of<NewsMyArticleProvider>(
+                              context,
+                              listen: false);
+                          if (result == 'published') {
+                            provider.getUserArticle();
+                          } else {
+                            provider.getUserDraftArticle();
+                          }
+                        }
+                      } else {
+                        CustomToast.showCustomToast(context,
+                            'You are required to verify your profile to create article');
+                      }
+                    },
                     child: Row(
                       children: <Widget>[
                         Text(

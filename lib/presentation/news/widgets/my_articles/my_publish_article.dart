@@ -48,7 +48,9 @@ class _MyPublishArticleState extends State<MyPublishArticle>
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        loadArticle(isRefresh: true);
+        setState(() {
+          loadArticle(isRefresh: true);
+        });
       },
       child: FutureBuilder<List<ArticleDetail>>(
         future: getPublishedArticle,
@@ -60,40 +62,46 @@ class _MyPublishArticleState extends State<MyPublishArticle>
             return Container(
               alignment: FractionalOffset.center,
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.2),
+                  top: MediaQuery.of(context).size.height * 0.1),
               child: CircularProgressIndicator(),
             );
           } else {
-            return ListView.builder(
-              shrinkWrap: true,
-              controller: _scrollController,
-              primary: false,
-              physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(
-                  top: 0.0, bottom: 20.0, left: 20.0, right: 20.0),
-              itemCount: snapshot.data.isNotNullNorEmpty
-                  ? snapshot.data.length + 1
-                  : 1,
-              itemBuilder: (context, index) {
-                if (snapshot.data.length == 0 &&
-                    Provider.of<NewsMyArticleProvider>(context, listen: false)
-                            .userArticleOffset <=
-                        2) {
-                  return EmptyArticle();
-                } else if (index < snapshot.data.length) {
-                  return ArticleSingleCard(snapshot.data[index]);
-                } else if (Provider.of<NewsMyArticleProvider>(context,
-                        listen: false)
-                    .canLoadMoreArticleList) {
-                  /// This load more should be load more to published article
-                  return Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
+            return Consumer<NewsMyArticleProvider>(
+              builder: (context, provider, child) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  controller: _scrollController,
+                  primary: false,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(
+                      top: 0.0, bottom: 20.0, left: 20.0, right: 20.0),
+                  itemCount: provider.userArticleList.isNotNullNorEmpty
+                      ? provider.userArticleList.length + 1
+                      : 1,
+                  itemBuilder: (context, index) {
+                    if (provider.userArticleList.length == 0 &&
+                        provider.userArticleOffset <= 2) {
+                      return EmptyArticle();
+                    } else if (index < provider.userArticleList.length) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: ArticleSingleCard(
+                          provider.userArticleList[index],
+                          imageFit: BoxFit.cover,
+                        ),
+                      );
+                    } else if (provider.canLoadMoreArticleList) {
+                      /// This load more should be load more to published article
+                      return Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                );
               },
             );
           }

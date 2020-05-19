@@ -75,7 +75,7 @@ class ArticleAddLocationWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              '${provider.selectedLocation[index]?.addressText}',
+                              '${provider.selectedLocation[index]?.city}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: ThemeText.sfMediumBody,

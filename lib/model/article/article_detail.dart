@@ -40,7 +40,6 @@ class ArticleDetail {
   });
 
   factory ArticleDetail.fromJson(Map<String, dynamic> body) {
-    List tags = body['tags'];
     return ArticleDetail(
       id: body['id'],
       title: body['judul'],
@@ -53,7 +52,9 @@ class ArticleDetail {
       author: body['penulis'],
       authorImage: body['penulis_avatar'],
       type: body['type'],
-      tags: tags.map((value) => TagModel.fromJson(value)).toList(),
+      tags: body['tags'] == null
+          ? []
+          : List<TagModel>.from(body['tags'].map((x) => TagModel.fromJson(x))),
       isBookmark: body['is_bookmark'],
       isLike: body['is_like'],
       totalLike: body['total_like'],

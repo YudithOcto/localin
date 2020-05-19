@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/themes.dart';
 
-import '../../../text_themes.dart';
+import '../../text_themes.dart';
 
-class EmptyArticleByTag extends StatelessWidget {
+class EmptyArticleWithCustomMessage extends StatelessWidget {
+  final String title;
+  final String message;
+  EmptyArticleWithCustomMessage({@required this.title, @required this.message});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -15,7 +19,7 @@ class EmptyArticleByTag extends StatelessWidget {
           'images/empty_article.svg',
         ),
         Text(
-          'Can\'t find news with this tag',
+          '$title',
           textAlign: TextAlign.center,
           style:
               ThemeText.sfSemiBoldHeadline.copyWith(color: ThemeColors.black80),
@@ -24,7 +28,7 @@ class EmptyArticleByTag extends StatelessWidget {
           height: 4.0,
         ),
         Text(
-          'Read news from other tag',
+          '$message',
           textAlign: TextAlign.center,
           style: ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
         ),

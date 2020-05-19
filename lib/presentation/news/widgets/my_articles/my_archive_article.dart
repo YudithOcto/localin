@@ -34,7 +34,9 @@ class _MyArchiveArticleState extends State<MyArchiveArticle>
             _scrollController.position.maxScrollExtent &&
         Provider.of<NewsMyArticleProvider>(context, listen: false)
             .canLoadMoreArchiveArticleList) {
-      loadArticle(isRefresh: false);
+      setState(() {
+        loadArticle(isRefresh: false);
+      });
     }
   }
 
@@ -48,7 +50,9 @@ class _MyArchiveArticleState extends State<MyArchiveArticle>
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        loadArticle(isRefresh: true);
+        setState(() {
+          loadArticle(isRefresh: true);
+        });
       },
       child: FutureBuilder<List<ArticleDetail>>(
         future: getTrashedArticle,

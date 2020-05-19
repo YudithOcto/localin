@@ -57,7 +57,7 @@ class _RowCommunityState extends State<RowCommunity> {
               InkWell(
                 onTap: () async {
                   final result = await Navigator.of(context)
-                      .pushNamed(CommunityDiscoverPage.routeName);
+                      .pushNamed(EmptyPage.routeName);
                   if (result != null) {
                     /// refresh the page
                   }

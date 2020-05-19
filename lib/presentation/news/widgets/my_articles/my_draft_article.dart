@@ -70,15 +70,21 @@ class _MyDraftArticleState extends State<MyDraftArticle>
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(
                       top: 0.0, bottom: 20.0, left: 20.0, right: 20.0),
-                  itemCount: snapshot.data.isNotNullNorEmpty
-                      ? snapshot.data.length + 1
+                  itemCount: provider.userArticleDraftList.isNotNullNorEmpty
+                      ? provider.userArticleDraftList.length + 1
                       : 1,
                   itemBuilder: (context, index) {
-                    if (snapshot.data.length == 0 &&
+                    if (provider.userArticleDraftList.length == 0 &&
                         provider.userArticleDraftOffset <= 2) {
                       return EmptyArticle();
-                    } else if (index < snapshot.data.length) {
-                      return ArticleSingleCard(snapshot.data[index]);
+                    } else if (index < provider.userArticleDraftList.length) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: ArticleSingleCard(
+                          provider.userArticleDraftList[index],
+                          imageFit: BoxFit.cover,
+                        ),
+                      );
                     } else if (provider.isCanLoadMoreDraftArticle) {
                       /// This load more should be load more to draft
                       return Container(

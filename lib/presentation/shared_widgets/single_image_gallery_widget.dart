@@ -48,7 +48,7 @@ class SingleImageGalleryWidget extends StatelessWidget {
                 visible: provider != null,
                 child: provider != null
                     ? SvgPicture.asset(
-                        'images/${provider.selectedAsset.contains(imageData) ? 'circle_selected' : 'circle_not_selected'}.svg',
+                        'images/${provider.selectedBytes.contains(imageData.lengthInBytes) ? 'circle_checked_green' : 'circle_not_selected'}.svg',
                         width: 23.0,
                         height: 23.0,
                       )

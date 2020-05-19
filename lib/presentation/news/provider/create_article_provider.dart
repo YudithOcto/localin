@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
-import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/article/tag_model.dart';
 import 'package:localin/model/location/search_location_response.dart';
 
@@ -39,6 +38,18 @@ class CreateArticleProvider with ChangeNotifier {
     searchTagController..addListener(_tagListener);
   }
 
+  bool get isShareButtonActive {
+    if (titleController.text.isNotEmpty &&
+        captionController.text.isNotEmpty &&
+        _selectedImage.isNotEmpty &&
+        _selectedTags.isNotEmpty &&
+        _selectedLocation.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   addSelectedImage(List<Uint8List> images) {
     _selectedImage.clear();
     _selectedImage.addAll(images);
@@ -62,13 +73,12 @@ class CreateArticleProvider with ChangeNotifier {
     Map<String, dynamic> map = Map();
     if (_selectedImage.isNotEmpty) {
       map['gambar'] = _selectedImage
-          .map((value) =>
-              MultipartFile.fromBytes(value, filename: 'gambar0.jpg'))
+          .map(
+              (value) => MultipartFile.fromBytes(value, filename: 'gambar.jpg'))
           .toList();
-      // map['gambar'] = MultipartFile.fromBytes(_selectedImage[0]);
     }
     if (_selectedTags.isNotEmpty) {
-      map['tag'] = _selectedTags.map((e) => e.id).toList();
+      map['tag'] = _selectedTags.map((tagName) => tagName).toList();
     }
     map['judul'] =
         titleController.text.isNotnullNorEmpty ? titleController.text : null;
@@ -79,7 +89,7 @@ class CreateArticleProvider with ChangeNotifier {
       map['address'] = _selectedLocation.map((e) => e.city).toList();
     }
     if (isDraft) {
-      map['is_draft'] = isDraft;
+      map['is_draft'] = isDraft ? 1 : 0;
     }
     final result = await _repository.createArticle(FormData.fromMap(map));
     return result;
@@ -91,16 +101,20 @@ class CreateArticleProvider with ChangeNotifier {
 
   List<TagModel> _listTags = [];
   List<TagModel> get listTags => _listTags;
-
-  List<TagModel> _selectedTags = [];
-  List<TagModel> get selectedTags => _selectedTags;
-  set addTags(TagModel model) {
-    _selectedTags.add(model);
+  void clearListTags() {
+    _listTags.clear();
     notifyListeners();
   }
 
-  set deleteSelectedTag(TagModel model) {
-    _selectedTags.removeWhere((element) => element.id == model.id);
+  List<String> _selectedTags = [];
+  List<String> get selectedTags => _selectedTags;
+  set addTags(String tagName) {
+    _selectedTags.add(tagName);
+    notifyListeners();
+  }
+
+  set deleteSelectedTag(String name) {
+    _selectedTags.removeWhere((element) => element == name);
     notifyListeners();
   }
 

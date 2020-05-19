@@ -55,12 +55,14 @@ class _CreateArticleWrapperWidgetState
         final result =
             await Provider.of<CreateArticleProvider>(context, listen: false)
                 .createArticle(isDraft: true);
+        CustomDialog.closeDialog(context);
         if (result.error == null) {
-          CustomToast.showCustomBookmarkToast(context, 'Article Drafted');
+          CustomToast.showCustomBookmarkToast(context, 'Article Drafted',
+              width: MediaQuery.of(context).size.width * 0.6);
+          Navigator.of(context).pop('draft');
         } else {
           CustomToast.showCustomBookmarkToast(context, result.error);
         }
-        CustomDialog.closeDialog(context);
       }
     } else {
       Navigator.of(context).pop();
@@ -80,32 +82,48 @@ class _CreateArticleWrapperWidgetState
           pageTitle: 'Create Article',
           onClickBackButton: () => draftOrBack(),
         ),
-        bottomNavigationBar: InkWell(
-          onTap: () async {
-            CustomDialog.showCenteredLoadingDialog(context, message: 'Loading');
-            final result =
-                await Provider.of<CreateArticleProvider>(context, listen: false)
-                    .createArticle(isDraft: false);
-            if (result.error == null) {
-              CustomToast.showCustomBookmarkToast(context, 'Article Drafted');
-            } else {
-              CustomToast.showCustomBookmarkToast(context, result.error);
-            }
-            CustomDialog.closeDialog(context);
-          },
-          child: Container(
-            width: double.maxFinite,
-            height: 48.0,
-            color: ThemeColors.primaryBlue,
-            child: Center(
-              child: Text(
-                'Share',
-                textAlign: TextAlign.center,
-                style:
-                    ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
+        bottomNavigationBar: Consumer<CreateArticleProvider>(
+          builder: (context, provider, child) {
+            return InkWell(
+              onTap: () async {
+                if (provider.isShareButtonActive) {
+                  CustomDialog.showCenteredLoadingDialog(context,
+                      message: 'Loading');
+                  final result = await Provider.of<CreateArticleProvider>(
+                          context,
+                          listen: false)
+                      .createArticle(isDraft: false);
+                  CustomDialog.closeDialog(context);
+                  if (result.error == null) {
+                    CustomToast.showCustomBookmarkToast(
+                        context, 'Article Published',
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        icon: 'circle_checked_blue',
+                        iconColor: null);
+                    Navigator.of(context).pop('published');
+                  } else {
+                    CustomToast.showCustomBookmarkToast(context, result.error,
+                        width: MediaQuery.of(context).size.width * 0.6);
+                  }
+                }
+              },
+              child: Container(
+                width: double.maxFinite,
+                height: 48.0,
+                color: provider.isShareButtonActive
+                    ? ThemeColors.primaryBlue
+                    : ThemeColors.black80,
+                child: Center(
+                  child: Text(
+                    'Share',
+                    textAlign: TextAlign.center,
+                    style: ThemeText.rodinaTitle3
+                        .copyWith(color: ThemeColors.black0),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
         body: SingleChildScrollView(
           controller: _scrollController,

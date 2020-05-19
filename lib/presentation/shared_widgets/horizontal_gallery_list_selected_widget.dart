@@ -24,8 +24,12 @@ class HorizontalGalleryListSelectedWidget extends StatelessWidget {
             if (index == 0) {
               return InkWell(
                   onTap: () async {
-                    final result = await Navigator.of(context)
-                        .pushNamed(MultiPickerGalleryPage.routeName);
+                    final result = await Navigator.of(context).pushNamed(
+                        MultiPickerGalleryPage.routeName,
+                        arguments: {
+                          MultiPickerGalleryPage.chosenImage:
+                              provider.selectedImage,
+                        });
                     if (result != null && result is List<Uint8List>) {
                       provider.addSelectedImage(result);
                     }
