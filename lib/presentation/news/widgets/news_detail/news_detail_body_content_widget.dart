@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:localin/components/circle_image.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/presentation/news/shared_widget/mini_user_public_profile.dart';
-import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';

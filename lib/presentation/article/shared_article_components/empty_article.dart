@@ -9,12 +9,14 @@ class EmptyArticle extends StatelessWidget {
   final String title;
   final String message;
   final bool isShowButton;
+  final Function onPressed;
 
-  EmptyArticle(
-      {this.title = 'Can\'t find news around you',
-      this.message =
-          'Read news from other location, or create your own article',
-      this.isShowButton = true});
+  EmptyArticle({
+    this.title = 'Can\'t find news around you',
+    this.message = 'Read news from other location, or create your own article',
+    this.isShowButton = true,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,11 @@ class EmptyArticle extends StatelessWidget {
             visible: isShowButton,
             child: OutlineButtonDefault(
               onPressed: () async {
-                Navigator.of(context).pushNamed(EmptyPage.routeName);
+                if (onPressed != null) {
+                  onPressed();
+                } else {
+                  Navigator.of(context).pushNamed(EmptyPage.routeName);
+                }
 //              final result = await Navigator.of(context)
 //                  .pushNamed(CreateArticlePage.routeName);
 //              if (result != null) {

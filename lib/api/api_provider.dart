@@ -9,6 +9,7 @@ import 'package:localin/main.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
+import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
@@ -487,6 +488,21 @@ class ApiProvider {
         return ArticleCommentBaseResponse.withError(_handleError(error));
       } else {
         return ArticleCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BaseResponse> deleteArticle(String articleId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kArticleDelete}/$articleId',
+          options: Options(headers: {'requiredToken': true}));
+      return BaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BaseResponse.withError(_handleError(error));
+      } else {
+        return BaseResponse.withError(error.toString());
       }
     }
   }

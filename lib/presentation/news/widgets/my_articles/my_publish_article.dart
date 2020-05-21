@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/locator.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
-import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
+import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
+import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class MyPublishArticle extends StatefulWidget {
@@ -32,7 +36,7 @@ class _MyPublishArticleState extends State<MyPublishArticle>
   _listener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
-        Provider.of<NewsMyArticleProvider>(context, listen: false)
+        Provider.of<NewsPublishedArticleProvider>(context, listen: false)
             .canLoadMoreArticleList) {
       loadArticle(isRefresh: false);
     }
@@ -40,7 +44,7 @@ class _MyPublishArticleState extends State<MyPublishArticle>
 
   loadArticle({bool isRefresh = true}) {
     getPublishedArticle =
-        Provider.of<NewsMyArticleProvider>(context, listen: false)
+        Provider.of<NewsPublishedArticleProvider>(context, listen: false)
             .getUserArticle(isRefresh: isRefresh);
   }
 
@@ -48,25 +52,24 @@ class _MyPublishArticleState extends State<MyPublishArticle>
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        setState(() {
-          loadArticle(isRefresh: true);
-        });
+        loadArticle(isRefresh: true);
       },
-      child: FutureBuilder<List<ArticleDetail>>(
-        future: getPublishedArticle,
+      child: StreamBuilder<publishedArticleState>(
+        stream:
+            Provider.of<NewsPublishedArticleProvider>(context).publishedStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
-              Provider.of<NewsMyArticleProvider>(context, listen: false)
+              Provider.of<NewsPublishedArticleProvider>(context, listen: false)
                       .userArticleOffset <=
                   1) {
             return Container(
               alignment: FractionalOffset.center,
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.1),
+                  top: MediaQuery.of(context).size.height * 0.4),
               child: CircularProgressIndicator(),
             );
           } else {
-            return Consumer<NewsMyArticleProvider>(
+            return Consumer<NewsPublishedArticleProvider>(
               builder: (context, provider, child) {
                 return ListView.builder(
                   shrinkWrap: true,
@@ -79,15 +82,20 @@ class _MyPublishArticleState extends State<MyPublishArticle>
                       ? provider.userArticleList.length + 1
                       : 1,
                   itemBuilder: (context, index) {
-                    if (provider.userArticleList.length == 0 &&
-                        provider.userArticleOffset <= 2) {
-                      return EmptyArticle();
+                    if (snapshot.hasData &&
+                        snapshot.data == publishedArticleState.empty) {
+                      return EmptyArticle(
+                        onPressed: () => loadCreateArticlePage(),
+                      );
                     } else if (index < provider.userArticleList.length) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: ArticleSingleCard(
                           provider.userArticleList[index],
                           imageFit: BoxFit.cover,
+                          showPopup: (v) {
+                            provider.deleteArticle(v);
+                          },
                         ),
                       );
                     } else if (provider.canLoadMoreArticleList) {
@@ -108,6 +116,30 @@ class _MyPublishArticleState extends State<MyPublishArticle>
         },
       ),
     );
+  }
+
+  loadCreateArticlePage() async {
+    if (Provider.of<AuthProvider>(context, listen: false).userModel.status ==
+        kUserStatusVerified) {
+      final result = await Navigator.of(context)
+          .pushNamed(NewsCreateArticlePage.routeName, arguments: {
+        NewsCreateArticlePage.previousDraft: null,
+      });
+      if (result != null) {
+        final provider =
+            Provider.of<NewsMyArticleProvider>(context, listen: false);
+        if (result == 'published') {
+          provider.getUserDraftArticle();
+          Provider.of<NewsPublishedArticleProvider>(context, listen: false)
+              .getUserArticle();
+        } else {
+          provider.getUserDraftArticle();
+        }
+      }
+    } else {
+      CustomToast.showCustomToast(
+          context, 'You are required to verify your profile to create article');
+    }
   }
 
   @override

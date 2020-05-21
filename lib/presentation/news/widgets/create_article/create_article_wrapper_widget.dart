@@ -54,14 +54,14 @@ class _CreateArticleWrapperWidgetState
         CustomDialog.showCenteredLoadingDialog(context, message: 'Loading');
         final result =
             await Provider.of<CreateArticleProvider>(context, listen: false)
-                .createArticle(isDraft: true);
+                .createDraftArticle();
         CustomDialog.closeDialog(context);
-        if (result.error == null) {
+        if (result > 0) {
           CustomToast.showCustomBookmarkToast(context, 'Article Drafted',
               width: MediaQuery.of(context).size.width * 0.6);
           Navigator.of(context).pop('draft');
         } else {
-          CustomToast.showCustomBookmarkToast(context, result.error);
+          CustomToast.showCustomBookmarkToast(context, 'error');
         }
       }
     } else {
@@ -95,16 +95,18 @@ class _CreateArticleWrapperWidgetState
                       .createArticle(isDraft: false);
                   CustomDialog.closeDialog(context);
                   if (result.error == null) {
+                    Navigator.of(context).pop('published');
                     CustomToast.showCustomBookmarkToast(
                         context, 'Article Published',
                         width: MediaQuery.of(context).size.width * 0.6,
                         icon: 'circle_checked_blue',
                         iconColor: null);
-                    Navigator.of(context).pop('published');
                   } else {
                     CustomToast.showCustomBookmarkToast(context, result.error,
                         width: MediaQuery.of(context).size.width * 0.6);
                   }
+                } else {
+                  CustomToast.showCustomToast(context, provider.dataChecker);
                 }
               },
               child: Container(

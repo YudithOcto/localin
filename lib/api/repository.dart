@@ -3,6 +3,7 @@ import 'package:localin/api/api_provider.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
+import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
@@ -128,6 +129,10 @@ class Repository {
 
   Future<ArticleBaseResponse> getArticleDetail(String articleId) {
     return apiProvider.getArticleDetail(articleId);
+  }
+
+  Future<BaseResponse> deleteArticle(String articleId) {
+    return apiProvider.deleteArticle(articleId);
   }
 
   /// COMMUNITY

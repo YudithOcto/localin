@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class CreateArticlePage extends StatefulWidget {
   static const routeName = 'CreateArticlePages';
+  static const previousDraftArticle = 'PreviousDraftArticle';
   @override
   _CreateArticlePageState createState() => _CreateArticlePageState();
 }

@@ -1,17 +1,18 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/api/draft_dao.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
-import 'package:localin/model/article/tag_model.dart';
-import 'package:localin/model/location/search_location_response.dart';
+import 'package:localin/model/article/darft_article_model.dart';
+import 'package:localin/model/article/tag_model_model.dart';
 
 class CreateArticleProvider with ChangeNotifier {
   final Repository _repository = Repository();
+  final DraftDao _draftDao = DraftDao();
 
   List<Uint8List> _selectedImage = [];
   List<Uint8List> get selectedImage => _selectedImage;
@@ -19,7 +20,7 @@ class CreateArticleProvider with ChangeNotifier {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController captionController = TextEditingController();
 
-  CreateArticleProvider() {
+  CreateArticleProvider({DraftArticleModel previousDraft}) {
     titleController
       ..addListener(() {
         if (titleController.text.isNotEmpty) {
@@ -36,6 +37,19 @@ class CreateArticleProvider with ChangeNotifier {
     });
 
     searchTagController..addListener(_tagListener);
+
+    if (previousDraft != null) {
+      addDraftComponents(previousDraft);
+    }
+  }
+
+  addDraftComponents(DraftArticleModel detail) {
+    _currentDraftId = detail.id;
+    titleController.text = detail?.title;
+    captionController.text = detail?.caption;
+    detail?.tags?.map((e) => _selectedTags.add(e))?.toList();
+    detail?.resultImage?.map((e) => _selectedImage.add(e))?.toList();
+    detail?.locations?.map((e) => _selectedLocation.add(e))?.toList();
   }
 
   bool get isShareButtonActive {
@@ -50,6 +64,22 @@ class CreateArticleProvider with ChangeNotifier {
     }
   }
 
+  String get dataChecker {
+    if (titleController.text.isEmpty) {
+      return 'Title is required';
+    } else if (captionController.text.isEmpty) {
+      return 'Caption is required';
+    } else if (_selectedImage.isEmpty) {
+      return 'Image is required';
+    } else if (_selectedTags.isEmpty) {
+      return 'Tag is required';
+    } else if (_selectedLocation.isEmpty) {
+      return 'Location is required';
+    } else {
+      return '';
+    }
+  }
+
   addSelectedImage(List<Uint8List> images) {
     _selectedImage.clear();
     _selectedImage.addAll(images);
@@ -60,13 +90,20 @@ class CreateArticleProvider with ChangeNotifier {
   bool _isNeedAskUserToSaveToDraft = false;
   bool get isNeedAskUserToSaveToDraft => _isNeedAskUserToSaveToDraft;
 
-  List<LocationResponseDetail> _selectedLocation = [];
-  List<LocationResponseDetail> get selectedLocation => _selectedLocation;
+  List<String> _selectedLocation = [];
+  List<String> get selectedLocation => _selectedLocation;
 
-  set addLocationSelected(LocationResponseDetail value) {
+  int _currentDraftId;
+
+  set addLocationSelected(String value) {
     _isNeedAskUserToSaveToDraft = true;
     _selectedLocation.add(value);
     notifyListeners();
+  }
+
+  Future<int> createDraftArticle() async {
+    final result = await _draftDao.insert(mappingDratModel());
+    return result;
   }
 
   Future<ArticleBaseResponse> createArticle({bool isDraft = false}) async {
@@ -86,13 +123,34 @@ class CreateArticleProvider with ChangeNotifier {
         ? captionController.text
         : null;
     if (_selectedLocation != null) {
-      map['address'] = _selectedLocation.map((e) => e.city).toList();
+      map['address'] = _selectedLocation.map((e) => e).toList();
     }
     if (isDraft) {
       map['is_draft'] = isDraft ? 1 : 0;
     }
     final result = await _repository.createArticle(FormData.fromMap(map));
+    if (result.error == null) {
+      await DraftDao().delete(mappingDratModel());
+    }
     return result;
+  }
+
+  DraftArticleModel mappingDratModel() {
+    List<String> imageList = List();
+    _selectedImage.map((e) {
+      print(e.lengthInBytes);
+      imageList.add(base64Encode(e));
+    }).toList();
+    DraftArticleModel model = DraftArticleModel(
+      id: _currentDraftId,
+      title: titleController.text,
+      caption: captionController.text,
+      images: imageList,
+      tags: _selectedTags,
+      locations: _selectedLocation.map((e) => e).toList(),
+      dateTime: DateTime.now().millisecondsSinceEpoch,
+    );
+    return model;
   }
 
   StreamController<searchTags> _streamController =

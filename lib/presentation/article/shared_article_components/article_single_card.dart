@@ -14,14 +14,20 @@ import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
 import 'package:html/parser.dart' as parser;
+import 'package:palette_generator/palette_generator.dart';
 
 class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
   final ValueChanged<bool> onRefresh;
   final ValueChanged<bool> onUndo;
   final BoxFit imageFit;
+  final Function(String) showPopup;
+
   ArticleSingleCard(this.articleDetail,
-      {this.onRefresh, this.onUndo, this.imageFit = BoxFit.fill});
+      {this.onRefresh,
+      this.onUndo,
+      this.imageFit = BoxFit.fill,
+      this.showPopup});
 
   @override
   _ArticleSingleCardState createState() => _ArticleSingleCardState();
@@ -29,102 +35,110 @@ class ArticleSingleCard extends StatefulWidget {
 
 const kArticleMediaType = 'media';
 
+const popupItem = ['Archive'];
+
 class _ArticleSingleCardState extends State<ArticleSingleCard> {
+  Future<Color> getImagePalette(ImageProvider imageProvider) async {
+    final PaletteGenerator paletteGenerator =
+        await PaletteGenerator.fromImageProvider(imageProvider);
+    return paletteGenerator.lightMutedColor.color;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.0, top: 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          bigImages(context),
-          SizedBox(
-            height: 12.0,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(RevampOthersProfilePage.routeName, arguments: {
-                RevampOthersProfilePage.userId:
-                    widget?.articleDetail?.createdBy,
-              });
-            },
-            child: Text(
-              'by ${widget?.articleDetail?.author}',
-              style:
-                  ThemeText.sfMediumBody.copyWith(color: ThemeColors.black80),
-            ),
-          ),
-          SizedBox(
-            height: 4.0,
-          ),
-          InkWell(
-            onTap: () async {
-              if (widget?.articleDetail?.type == kArticleMediaType) {
-                final result = await Navigator.of(context)
-                    .pushNamed(ArticleWebView.routeName, arguments: {
-                  ArticleWebView.url: widget.articleDetail.slug
-                          .contains('https')
-                      ? widget.articleDetail.slug
-                      : widget.articleDetail.slug.replaceRange(0, 4, 'https'),
-                  ArticleWebView.articleModel: widget.articleDetail,
-                });
-                if (result != null) {
-                  setState(() {
-                    widget?.articleDetail?.isBookmark = result;
-                  });
-                }
-              } else {
-                final result = await Navigator.of(context)
-                    .pushNamed(NewsDetailPage.routeName, arguments: {
-                  NewsDetailPage.newsSlug: widget?.articleDetail?.slug,
-                });
-                if (result != null && result is ArticleDetail) {
-                  widget.articleDetail.isLike = result.isLike;
-                  widget.articleDetail.totalLike = result.totalLike;
-                  widget.articleDetail.isBookmark = result.isBookmark;
-                  widget.articleDetail.totalComment = result.totalComment;
-                  setState(() {});
-                }
-              }
-            },
-            child: Text(
-              '${parseHtml(widget?.articleDetail?.title)}',
-              style:
-                  ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black100),
-            ),
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  widget?.articleDetail?.type != kArticleMediaType
-                      ? rowMessage()
-                      : RowBookmark(
-                          articleDetail: widget?.articleDetail,
-                          onRefresh: (v) => widget.onRefresh(v),
-                          onUndo: (v) => widget.onUndo(v),
-                        ),
-                  SizedBox(
-                    width: 9.67,
+          Positioned(
+            bottom: 20.0,
+            right: -15.0,
+            child: Visibility(
+              visible: widget.showPopup != null,
+              child: PopupMenuButton(
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: ThemeColors.black100,
                   ),
-                  widget?.articleDetail?.type != kArticleMediaType
-                      ? RowLikeWidget(
-                          articleDetail: widget?.articleDetail,
-                        )
-                      : rowShare(),
-                ],
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),
+                  onSelected: (v) {
+                    widget.showPopup(widget.articleDetail.id);
+                  },
+                  itemBuilder: (context) {
+                    return popupItem
+                        .map((e) => PopupMenuItem(
+                              value: e,
+                              child: Text('$e'),
+                            ))
+                        .toList();
+                  }),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              bigImages(context),
+              SizedBox(
+                height: 12.0,
               ),
-              Text(
-                  '${DateHelper.timeAgo(DateTime.parse(widget?.articleDetail?.createdAt))}',
+              InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                    RevampOthersProfilePage.userId:
+                        widget?.articleDetail?.createdBy,
+                  });
+                },
+                child: Text(
+                  'by ${widget?.articleDetail?.author}',
                   style: ThemeText.sfMediumBody
-                      .copyWith(color: ThemeColors.black80))
+                      .copyWith(color: ThemeColors.black80),
+                ),
+              ),
+              SizedBox(
+                height: 4.0,
+              ),
+              InkWell(
+                onTap: () => openArticle(),
+                child: Text(
+                  '${parseHtml(widget?.articleDetail?.title)}',
+                  style: ThemeText.rodinaTitle3
+                      .copyWith(color: ThemeColors.black100),
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      widget?.articleDetail?.type != kArticleMediaType
+                          ? rowMessage()
+                          : RowBookmark(
+                              articleDetail: widget?.articleDetail,
+                              onRefresh: (v) => widget.onRefresh(v),
+                              onUndo: (v) => widget.onUndo(v),
+                            ),
+                      SizedBox(
+                        width: 9.67,
+                      ),
+                      widget?.articleDetail?.type != kArticleMediaType
+                          ? RowLikeWidget(
+                              articleDetail: widget?.articleDetail,
+                            )
+                          : rowShare(),
+                    ],
+                  ),
+                  Text(
+                      '${DateHelper.timeAgo(DateTime.parse(widget?.articleDetail?.createdAt))}',
+                      style: ThemeText.sfMediumBody
+                          .copyWith(color: ThemeColors.black80))
+                ],
+              )
             ],
-          )
+          ),
         ],
       ),
     );
@@ -132,34 +146,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
 
   Widget bigImages(BuildContext context) {
     return InkWell(
-      onTap: () async {
-        if (widget?.articleDetail?.type == kArticleMediaType) {
-          final result = await Navigator.of(context)
-              .pushNamed(ArticleWebView.routeName, arguments: {
-            ArticleWebView.url: widget.articleDetail.slug.contains('https')
-                ? widget.articleDetail.slug
-                : widget.articleDetail.slug.replaceRange(0, 4, 'https'),
-            ArticleWebView.articleModel: widget.articleDetail,
-          });
-          if (result != null) {
-            setState(() {
-              widget?.articleDetail?.isBookmark = result;
-            });
-          }
-        } else {
-          final result = await Navigator.of(context)
-              .pushNamed(NewsDetailPage.routeName, arguments: {
-            NewsDetailPage.newsSlug: widget?.articleDetail?.slug,
-          });
-          if (result != null && result is ArticleDetail) {
-            widget.articleDetail.isLike = result.isLike;
-            widget.articleDetail.totalLike = result.totalLike;
-            widget.articleDetail.isBookmark = result.isBookmark;
-            widget.articleDetail.totalComment = result.totalComment;
-            setState(() {});
-          }
-        }
-      },
+      onTap: () => openArticle(),
       child: CachedNetworkImage(
         imageUrl: ImageHelper.addSubFixHttp(widget.articleDetail?.image),
         placeholderFadeInDuration: Duration(milliseconds: 250),
@@ -169,7 +156,7 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
             child: Container(
               width: double.maxFinite,
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: ThemeColors.black80,
                   borderRadius: BorderRadius.circular(8.0),
                   image: DecorationImage(
                       image: imageProvider, fit: widget.imageFit)),
@@ -192,6 +179,35 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
         ),
       ),
     );
+  }
+
+  openArticle() async {
+    if (widget?.articleDetail?.type == kArticleMediaType) {
+      final result = await Navigator.of(context)
+          .pushNamed(ArticleWebView.routeName, arguments: {
+        ArticleWebView.url: widget.articleDetail.slug.contains('https')
+            ? widget.articleDetail.slug
+            : widget.articleDetail.slug.replaceRange(0, 4, 'https'),
+        ArticleWebView.articleModel: widget.articleDetail,
+      });
+      if (result != null) {
+        setState(() {
+          widget?.articleDetail?.isBookmark = result;
+        });
+      }
+    } else {
+      final result = await Navigator.of(context)
+          .pushNamed(NewsDetailPage.routeName, arguments: {
+        NewsDetailPage.newsSlug: widget?.articleDetail?.slug,
+      });
+      if (result != null && result is ArticleDetail) {
+        widget.articleDetail.isLike = result.isLike;
+        widget.articleDetail.totalLike = result.totalLike;
+        widget.articleDetail.isBookmark = result.isBookmark;
+        widget.articleDetail.totalComment = result.totalComment;
+        setState(() {});
+      }
+    }
   }
 
   Widget rowMessage() {

@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/news/provider/news_detail_provider.dart';
+import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -31,11 +33,6 @@ class _NewsDetailRelatedWidgetState extends State<NewsDetailRelatedWidget> {
               .getRelatedArticle(_articleDetail.id);
       _isInit = false;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -82,13 +79,44 @@ class _NewsDetailRelatedWidgetState extends State<NewsDetailRelatedWidget> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                                NewsDetailPage.routeName,
-                                arguments: {
-                                  NewsDetailPage.newsSlug:
-                                      snapshot?.data[index]?.slug
+                          onTap: () async {
+                            if (snapshot?.data[index]?.type ==
+                                kArticleMediaType) {
+                              final result = await Navigator.of(context)
+                                  .pushNamed(ArticleWebView.routeName,
+                                      arguments: {
+                                    ArticleWebView.url: snapshot
+                                            .data[index].slug
+                                            .contains('https')
+                                        ? snapshot?.data[index].slug
+                                        : snapshot?.data[index].slug
+                                            .replaceRange(0, 4, 'https'),
+                                    ArticleWebView.articleModel:
+                                        snapshot?.data[index],
+                                  });
+                              if (result != null) {
+                                setState(() {
+                                  widget?.articleDetail?.isBookmark = result;
                                 });
+                              }
+                            } else {
+                              final result = await Navigator.of(context)
+                                  .pushNamed(NewsDetailPage.routeName,
+                                      arguments: {
+                                    NewsDetailPage.newsSlug:
+                                        snapshot?.data[index].slug,
+                                  });
+                              if (result != null && result is ArticleDetail) {
+                                widget.articleDetail.isLike = result.isLike;
+                                widget.articleDetail.totalLike =
+                                    result.totalLike;
+                                widget.articleDetail.isBookmark =
+                                    result.isBookmark;
+                                widget.articleDetail.totalComment =
+                                    result.totalComment;
+                                setState(() {});
+                              }
+                            }
                           },
                           child: Row(
                             children: <Widget>[

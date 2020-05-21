@@ -25,7 +25,7 @@ class ArticleAddLocationWidget extends StatelessWidget {
               CustomToast.showCustomToast(
                   context, 'Already input this location');
             } else {
-              provider.addLocationSelected = result;
+              provider.addLocationSelected = result.city;
             }
           }
         },
@@ -75,7 +75,7 @@ class ArticleAddLocationWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              '${provider.selectedLocation[index]?.city}',
+                              '${provider.selectedLocation[index]}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: ThemeText.sfMediumBody,

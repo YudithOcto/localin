@@ -1,4 +1,4 @@
-import 'package:localin/model/article/tag_model.dart';
+import 'package:localin/model/article/tag_model_model.dart';
 
 class ArticleDetail {
   String id;

@@ -28,7 +28,7 @@ class SingleCardNotification extends StatelessWidget {
           case 'artikel':
             Navigator.of(context)
                 .pushNamed(NewsDetailPage.routeName, arguments: {
-              NewsDetailPage.newsSlug: detailModel?.id,
+              NewsDetailPage.newsSlug: detailModel?.typeId,
             });
             break;
           case 'komunitas':

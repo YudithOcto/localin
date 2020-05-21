@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/article/tag_model.dart';
+import 'package:localin/model/article/tag_model_model.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 

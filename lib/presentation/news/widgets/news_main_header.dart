@@ -5,6 +5,7 @@ import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
+import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
 import 'package:localin/presentation/search/search_article/search_article_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
@@ -44,28 +45,7 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
                         .copyWith(color: ThemeColors.black0),
                   ),
                   InkWell(
-                    onTap: () async {
-                      if (Provider.of<AuthProvider>(context, listen: false)
-                              .userModel
-                              .status ==
-                          kUserStatusVerified) {
-                        final result = await Navigator.of(context)
-                            .pushNamed(NewsCreateArticlePage.routeName);
-                        if (result != null) {
-                          final provider = Provider.of<NewsMyArticleProvider>(
-                              context,
-                              listen: false);
-                          if (result == 'published') {
-                            provider.getUserArticle();
-                          } else {
-                            provider.getUserDraftArticle();
-                          }
-                        }
-                      } else {
-                        CustomToast.showCustomToast(context,
-                            'You are required to verify your profile to create article');
-                      }
-                    },
+                    onTap: () async {},
                     child: Row(
                       children: <Widget>[
                         Text(
@@ -141,5 +121,29 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
         ),
       ],
     );
+  }
+
+  loadCreateArticlePage() async {
+    if (Provider.of<AuthProvider>(context, listen: false).userModel.status ==
+        kUserStatusVerified) {
+      final result = await Navigator.of(context)
+          .pushNamed(NewsCreateArticlePage.routeName, arguments: {
+        NewsCreateArticlePage.previousDraft: null,
+      });
+      if (result != null) {
+        final provider =
+            Provider.of<NewsMyArticleProvider>(context, listen: false);
+        if (result == 'published') {
+          provider.getUserDraftArticle();
+          Provider.of<NewsPublishedArticleProvider>(context, listen: false)
+              .getUserArticle();
+        } else {
+          provider.getUserDraftArticle();
+        }
+      }
+    } else {
+      CustomToast.showCustomToast(
+          context, 'You are required to verify your profile to create article');
+    }
   }
 }

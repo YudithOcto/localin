@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/model/article/tag_model.dart';
+import 'package:localin/model/article/tag_model_model.dart';
 
 class SearchArticleProvider with ChangeNotifier {
   final TextEditingController _searchController = TextEditingController();
