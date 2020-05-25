@@ -45,7 +45,7 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
                         .copyWith(color: ThemeColors.black0),
                   ),
                   InkWell(
-                    onTap: () async {},
+                    onTap: () => loadCreateArticlePage(),
                     child: Row(
                       children: <Widget>[
                         Text(
@@ -142,8 +142,8 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
         }
       }
     } else {
-      CustomToast.showCustomToast(
-          context, 'You are required to verify your profile to create article');
+      CustomToast.showCustomBookmarkToast(
+          context, 'Verify Your Account To Create a Article');
     }
   }
 }

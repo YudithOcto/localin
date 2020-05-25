@@ -25,7 +25,7 @@ class DraftDao {
 
   Future<bool> _shouldInsertData(DraftArticleModel model) async {
     try {
-      final finder = Finder(filter: Filter.byKey(model.id));
+      final finder = Finder(filter: Filter.byKey(parseInt(model.id)));
       final result =
           await _draftStore.update(await _db, model.toJson(), finder: finder);
       return result < 1;
@@ -34,13 +34,21 @@ class DraftDao {
     }
   }
 
+  int parseInt(String id) {
+    if (id == null || id.isEmpty) {
+      return null;
+    } else {
+      return int.parse(id);
+    }
+  }
+
   Future update(DraftArticleModel model) async {
-    final finder = Finder(filter: Filter.byKey(model.id));
+    final finder = Finder(filter: Filter.byKey(parseInt(model.id)));
     await _draftStore.update(await _db, model.toJson(), finder: finder);
   }
 
   Future<int> delete(DraftArticleModel model) async {
-    final finder = Finder(filter: Filter.byKey(model.id));
+    final finder = Finder(filter: Filter.byKey(parseInt(model.id)));
     final result = await _draftStore.delete(await _db, finder: finder);
     return result;
   }
@@ -58,7 +66,7 @@ class DraftDao {
 
       return recordSnapshots.map((snapshot) {
         final draft = DraftArticleModel.fromMap(snapshot.value);
-        draft.id = snapshot.key;
+        draft.id = snapshot.key.toString();
         return draft;
       }).toList();
     } catch (e) {

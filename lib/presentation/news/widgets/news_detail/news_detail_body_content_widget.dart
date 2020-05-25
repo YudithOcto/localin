@@ -30,13 +30,13 @@ class _NewsDetailBodyContentWidgetState
     super.didChangeDependencies();
     if (_isInit) {
       _articleDetail = widget.articleDetail;
-      List<MediaModel> image = List.generate(_articleDetail.media.length,
-          (index) => _articleDetail.media[index]).toList();
+      List<MediaModel> image = List.generate(_articleDetail.image.length,
+          (index) => _articleDetail.image[index]).toList();
       imageSliders = image
           .map((item) => InkWell(
                 onTap: () {
                   List<String> images =
-                      _articleDetail.media.map((v) => v.attachment).toList();
+                      _articleDetail.image.map((v) => v.attachment).toList();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -45,7 +45,7 @@ class _NewsDetailBodyContentWidgetState
                         backgroundDecoration: const BoxDecoration(
                           color: Colors.black,
                         ),
-                        initialIndex: 0,
+                        initialIndex: _articleDetail.image.indexOf(item),
                         scrollDirection: Axis.horizontal,
                       ),
                     ),

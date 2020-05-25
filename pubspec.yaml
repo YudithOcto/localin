@@ -1,7 +1,7 @@
 name: localin
 description: Localin app
 
-version: 1.1.1+111
+version: 1.2.0+120
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -57,6 +57,7 @@ dependencies:
   sembast: ^2.4.4+1
   path_provider: ^1.6.8
   palette_generator: ^0.2.2
+  network_image_to_byte: ^0.0.1
 
 dev_dependencies:
   flutter_test:

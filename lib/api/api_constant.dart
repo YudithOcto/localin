@@ -37,6 +37,7 @@ class ApiConstant {
   static const String kArticleBookmark = 'v1/artikel/bookmark';
   static const String kArticleByTag = 'v1/artikel/tag';
   static const String kArticleDelete = 'v1/artikel/delete';
+  static const String kArticleUnArchive = 'v1/artikel/unarchive';
 
   /// Hotel
   static const String kHotel = 'v1/hotel';

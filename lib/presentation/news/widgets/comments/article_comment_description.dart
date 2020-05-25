@@ -24,8 +24,8 @@ class ArticleCommentDescription extends StatelessWidget {
             width: 70.0,
             placeHolderColor: ThemeColors.black0,
             radius: 8.0,
-            imageUrl: _articleDetail.media.isNotEmpty
-                ? _articleDetail.media.first.attachment
+            imageUrl: _articleDetail.image.isNotEmpty
+                ? _articleDetail.image.first.attachment
                 : null,
           ),
           SizedBox(

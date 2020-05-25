@@ -3,6 +3,7 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/create_article_provider.dart';
 import 'package:localin/presentation/news/widgets/create_article/article_add_caption_widget.dart';
 import 'package:localin/presentation/news/widgets/create_article/article_add_location_widget.dart';
@@ -35,8 +36,13 @@ class _CreateArticleWrapperWidgetState
   }
 
   draftOrBack() async {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    bool fromPublishedArticle =
+        routeArgs[NewsCreateArticlePage.fromPublishedArticle] ?? false;
     if (Provider.of<CreateArticleProvider>(context, listen: false)
-        .isNeedAskUserToSaveToDraft) {
+            .isNeedAskUserToSaveToDraft &&
+        !fromPublishedArticle) {
       final result = await CustomDialog.showCustomDialogWithMultipleButton(
         context,
         isDismissible: false,

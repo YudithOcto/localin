@@ -83,6 +83,10 @@ class Repository {
     return apiProvider.getUserArticle(isDraft, isTrash, offset);
   }
 
+  Future<ArticleBaseResponse> unarchiveArticle(String slug) async {
+    return apiProvider.unArchiveArticle(slug);
+  }
+
   Future<ArticleBaseResponse> getArticleList(int offset, int page,
       {int isLiked, int isBookmark, String keyword}) async {
     return apiProvider.getArticleList(

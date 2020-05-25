@@ -1,33 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/locator.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
-import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/provider/news_article_provider.dart';
 import 'package:provider/provider.dart';
 
-class CollectionContentListWidget extends StatefulWidget {
-  final int isLiked;
-  final int isBookmark;
-  CollectionContentListWidget({this.isLiked, this.isBookmark});
-
+class CollectionLikeListWidget extends StatefulWidget {
   @override
-  _CollectionContentListWidgetState createState() =>
-      _CollectionContentListWidgetState();
+  _CollectionLikeListWidgetState createState() =>
+      _CollectionLikeListWidgetState();
 }
 
-class _CollectionContentListWidgetState
-    extends State<CollectionContentListWidget>
+class _CollectionLikeListWidgetState extends State<CollectionLikeListWidget>
     with AutomaticKeepAliveClientMixin {
   bool isInit = true;
   final ScrollController _scrollController = ScrollController();
   Future getLikedArticle;
 
   _logScreen() {
-    locator<AnalyticsService>().setScreenName(
-        name:
-            '${widget.isLiked == 1 ? 'ArticleLikedPage' : 'ArticleBookmarkPage'}');
+    locator<AnalyticsService>().setScreenName(name: 'ArticleLikedPage');
   }
 
   @override
@@ -47,18 +40,14 @@ class _CollectionContentListWidgetState
             _scrollController.position.maxScrollExtent &&
         provider.canLoadMoreArticle) {
       getLikedArticle = provider.getArticleList(
-          isRefresh: false,
-          isLiked: widget.isLiked.isNotNull ? widget.isLiked : null,
-          isBookmark: widget.isBookmark.isNotNull ? widget.isBookmark : null);
+          isRefresh: false, isLiked: 1, isBookmark: null);
       setState(() {});
     }
   }
 
   onArticleRefresh() {
     getLikedArticle = Provider.of<NewsArticleProvider>(context, listen: false)
-        .getArticleList(
-            isLiked: widget.isLiked.isNotNull ? widget.isLiked : null,
-            isBookmark: widget.isBookmark.isNotNull ? widget.isBookmark : null);
+        .getArticleList(isLiked: 1, isBookmark: null);
   }
 
   @override

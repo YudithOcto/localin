@@ -2,8 +2,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:localin/presentation/article/pages/article_detail_page.dart';
-import 'package:localin/presentation/article/pages/create_article_page.dart';
 import 'package:localin/presentation/community/pages/community_discover_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
@@ -115,7 +113,6 @@ class _MyAppState extends State<MyApp> {
             'SplashScreenPage': (_) => SplashScreen(),
             LoginPage.routeName: (_) => LoginPage(),
             MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
-            ArticleDetailPage.routeName: (_) => ArticleDetailPage(),
             EmptyPage.routeName: (_) => EmptyPage(),
             CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
             CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
@@ -127,7 +124,6 @@ class _MyAppState extends State<MyApp> {
             BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
             HotelDetailPage.routeName: (_) => HotelDetailPage(),
             CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
-            CreateArticlePage.routeName: (_) => CreateArticlePage(),
             GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
             WebViewPage.routeName: (_) => WebViewPage(),
             InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),

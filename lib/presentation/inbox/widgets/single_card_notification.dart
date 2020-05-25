@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/notification/notification_model.dart';
-import 'package:localin/presentation/article/pages/article_detail_page.dart';
 import 'package:localin/presentation/community/pages/community_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/news/pages/news_detail_page.dart';

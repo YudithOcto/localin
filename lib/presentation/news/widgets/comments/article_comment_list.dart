@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
-import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/news/provider/comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +16,11 @@ class ArticleCommentList extends StatefulWidget {
 
 class _ArticleCommentListState extends State<ArticleCommentList> {
   bool _isInit = true;
-  Future getCommentList;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      getCommentList = Provider.of<CommentProvider>(context, listen: false)
+      Provider.of<CommentProvider>(context, listen: false)
           .getCommentList(widget.articleId);
       _isInit = false;
     }
@@ -32,8 +31,8 @@ class _ArticleCommentListState extends State<ArticleCommentList> {
   Widget build(BuildContext context) {
     return Consumer<CommentProvider>(
       builder: (context, provider, child) {
-        return FutureBuilder<List<ArticleCommentDetail>>(
-            future: getCommentList,
+        return StreamBuilder<commentState>(
+            stream: provider.state,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting &&
                   provider.commentRequestOffset <= 1) {
@@ -42,10 +41,9 @@ class _ArticleCommentListState extends State<ArticleCommentList> {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
-                itemCount: snapshot.data.length + 1,
+                itemCount: provider.articleCommentList.length + 1,
                 itemBuilder: (context, index) {
-                  if (snapshot.data.length == 0 &&
-                      provider.commentRequestOffset <= 2) {
+                  if (snapshot.hasData && snapshot.data == commentState.empty) {
                     return Container(
                       margin: EdgeInsets.only(
                           top: MediaQuery.of(context).size.height * 0.1),
@@ -55,9 +53,9 @@ class _ArticleCommentListState extends State<ArticleCommentList> {
                         isShowButton: false,
                       ),
                     );
-                  } else if (index < snapshot.data.length) {
+                  } else if (index < provider.articleCommentList.length) {
                     return ParentCommentCard(
-                      commentDetail: snapshot.data[index],
+                      commentDetail: provider.articleCommentList[index],
                       index: index,
                     );
                   } else if (provider.isCanLoadMoreComment) {

@@ -102,13 +102,17 @@ class ApiProvider {
   }
 
   void setupLoggingInterceptor() async {
+    _dio.interceptors.add(LogInterceptor(
+        request: true,
+        requestBody: true,
+        requestHeader: false,
+        responseBody: true));
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options) async {
-          print('send request：path:${options.uri} ${options.data.toString()}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
-            print("token $token");
+            debugPrint('Token $token');
             options.headers.clear();
             var header = {
               'Content-Type': 'application/json',
@@ -380,6 +384,21 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleBaseResponse> unArchiveArticle(String slug) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kArticleUnArchive}/$slug',
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.withJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return ArticleBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
   Future<ArticleBaseResponse> createArticle(FormData form) async {
     try {
       final response = await _dio.post(ApiConstant.kCreateArticle,
@@ -392,6 +411,8 @@ class ApiProvider {
         if (error.response.statusCode == 500) {
           return ArticleBaseResponse.withError(
               'Server unknown error. Please try again later');
+        } else if (error.response.statusCode == 413) {
+          return ArticleBaseResponse.withError('Image request too large');
         } else if (error.response.data['judul'] != null) {
           return ArticleBaseResponse.withError(error.response.data['judul'][0]);
         } else if (error.response.data['deskripsi'] != null) {
@@ -820,7 +841,7 @@ class ApiProvider {
             'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'room': total,
           },
-          options: Options(headers: {'requiredToken': false}));
+          options: Options(headers: {'requiredToken': true}));
       return HotelListBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -842,7 +863,7 @@ class ApiProvider {
           'timezone': await getFlutterTimezone(),
           'room': roomTotal,
         },
-        options: Options(headers: {'requiredToken': false}),
+        options: Options(headers: {'requiredToken': true}),
       );
       return HotelListBaseResponse.withJson(result.data);
     } catch (error) {
@@ -865,7 +886,7 @@ class ApiProvider {
                 'timezone': await getFlutterTimezone(),
                 'room': room,
               },
-              options: Options(headers: {'requiredToken': false}));
+              options: Options(headers: {'requiredToken': true}));
       return RoomBaseResponse.fromJson(result.data);
     } catch (error) {
       if (error is DioError) {

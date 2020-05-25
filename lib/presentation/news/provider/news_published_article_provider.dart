@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/model/article/darft_article_model.dart';
+import 'package:network_image_to_byte/network_image_to_byte.dart';
 
 class NewsPublishedArticleProvider with ChangeNotifier {
   final Repository _repository = Repository();
@@ -56,6 +59,29 @@ class NewsPublishedArticleProvider with ChangeNotifier {
   deleteArticle(String articleId) async {
     await _repository.deleteArticle(articleId);
     getUserArticle();
+  }
+
+  Future<DraftArticleModel> getArticleModel(ArticleDetail model) async {
+    DraftArticleModel _draftArticleModel;
+    Future<List<Uint8List>> imageListFuture = Future.wait(
+        model.image.map((e) async => await _networkImageToByte(e.attachment)));
+    List<Uint8List> decodedImage = await imageListFuture;
+
+    _draftArticleModel = DraftArticleModel(
+      id: model.id,
+      resultImage: decodedImage,
+      title: model.title,
+      caption: model.description,
+      tags: List<String>.of(model.tags.map((e) => e.tagName)),
+      locations: List<String>.of(model.location.map((e) => e.city)),
+    );
+
+    return _draftArticleModel;
+  }
+
+  Future<Uint8List> _networkImageToByte(String url) async {
+    Uint8List byteImage = await networkImageToByte('$url');
+    return byteImage;
   }
 
   @override

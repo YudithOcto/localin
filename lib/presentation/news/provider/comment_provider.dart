@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
@@ -15,6 +17,8 @@ class CommentProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<bool> showReplay = [];
+
   bool _isCanLoadMoreComment = true;
   bool get isCanLoadMoreComment => _isCanLoadMoreComment;
 
@@ -25,15 +29,21 @@ class CommentProvider with ChangeNotifier {
   final ArticleDetail _currentArticleModel;
   final UserModel _userProfile;
 
+  final StreamController<commentState> _streamController =
+      StreamController<commentState>.broadcast();
+  Stream<commentState> get state => _streamController.stream;
+  bool _isMounted = true;
+
   CommentProvider({ArticleDetail articleDetail, UserModel profile})
       : assert(articleDetail != null, profile != null),
         _currentArticleModel = articleDetail,
         _userProfile = profile;
 
   List<ArticleCommentDetail> _articleComments = [];
+  List<ArticleCommentDetail> get articleCommentList => _articleComments;
 
-  Future<List<ArticleCommentDetail>> getCommentList(String articleId,
-      {bool isRefresh = true}) async {
+  Future<Null> getCommentList(String articleId, {bool isRefresh = true}) async {
+    setState(commentState.loading);
     if (isRefresh) {
       _commentRequestOffset = 1;
       _articleComments.clear();
@@ -45,11 +55,13 @@ class CommentProvider with ChangeNotifier {
       _articleComments.addAll(response.comments);
       _commentRequestOffset += 1;
       _isCanLoadMoreComment = response.total > _articleComments.length;
+      setState(commentState.success);
       notifyListeners();
-      return _articleComments;
     } else {
       _isCanLoadMoreComment = false;
-      return _articleComments;
+      setState(_articleComments.isNotEmpty
+          ? commentState.success
+          : commentState.empty);
     }
   }
 
@@ -59,6 +71,7 @@ class CommentProvider with ChangeNotifier {
 
   ArticleCommentDetail _commentReplayClicked;
   ArticleCommentDetail get commentClickedItem => _commentReplayClicked;
+
   void setReplyToOtherUserCommentModel(ArticleCommentDetail value,
       {bool isNeedRequestFocus = true}) {
     if (isNeedRequestFocus) {
@@ -82,17 +95,24 @@ class CommentProvider with ChangeNotifier {
   }
 
   ///Replay Comment
-
   Future<String> replyOthersComment() async {
     final response = await _repository.replyOthersComment(
-        _commentReplayClicked.commentId, commentController.text);
+        _commentReplayClicked.parentId ?? _commentReplayClicked.commentId,
+        '${_commentReplayClicked.sender.split(' ')[0]} ${commentController.text}');
     if (response != null && !response.error) {
       response.postCommentResult.senderAvatar = _userProfile.imageProfile;
       response.postCommentResult.sender = _userProfile.username;
-      _articleComments
-          .where((e) => e.commentId == _commentReplayClicked.commentId)
-          .map((e) => e.replay.add(response.postCommentResult))
-          .toList();
+      if (_commentReplayClicked.parentId != null) {
+        _articleComments
+            .where((e) => e.commentId == response.postCommentResult.parentId)
+            .map((e) => e.replay.add(response.postCommentResult))
+            .toList();
+      } else {
+        _articleComments
+            .where((e) => e.commentId == _commentReplayClicked.commentId)
+            .map((e) => e.replay.add(response.postCommentResult))
+            .toList();
+      }
     }
     commentController.clear();
     notifyListeners();
@@ -117,10 +137,20 @@ class CommentProvider with ChangeNotifier {
     });
   }
 
+  setState(commentState state) {
+    if (_isMounted) {
+      _streamController.add(state);
+    }
+  }
+
   @override
   void dispose() {
     _focusNode.dispose();
     commentController.dispose();
+    _streamController.close();
+    _isMounted = false;
     super.dispose();
   }
 }
+
+enum commentState { loading, success, empty }

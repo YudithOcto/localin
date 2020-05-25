@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/circle_image.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/presentation/news/provider/comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -43,6 +45,8 @@ class ChildCommentCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             '${replayComment[index]?.sender ?? ''}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: ThemeText.sfMediumBody
                                 .copyWith(color: ThemeColors.brandBlack),
                           ),
@@ -60,11 +64,10 @@ class ChildCommentCard extends StatelessWidget {
                     SizedBox(
                       height: 5.0,
                     ),
-                    Text(
-                      '${replayComment[index]?.comment}',
-                      style: ThemeText.sfRegularBody
-                          .copyWith(color: ThemeColors.brandBlack),
-                    ),
+                    replayComment[index]?.comment != null
+                        ? buildReplayComment(
+                            context, replayComment[index]?.comment)
+                        : Container(),
                     SizedBox(
                       height: 13.0,
                     ),
@@ -96,6 +99,23 @@ class ChildCommentCard extends StatelessWidget {
           ),
         ),
       )),
+    );
+  }
+
+  Widget buildReplayComment(BuildContext context, String message) {
+    List<String> splitMessage = message.split(' ');
+    String body = splitMessage.skip(1).map((e) => e).join(' ');
+    return RichText(
+      text: TextSpan(children: <TextSpan>[
+        TextSpan(
+            text: '@${splitMessage[0] ?? ''}',
+            style: ThemeText.sfRegularBody
+                .copyWith(color: ThemeColors.primaryBlue)),
+        TextSpan(
+            text: ' ${body ?? ''}',
+            style: ThemeText.sfRegularBody
+                .copyWith(color: ThemeColors.brandBlack)),
+      ]),
     );
   }
 }

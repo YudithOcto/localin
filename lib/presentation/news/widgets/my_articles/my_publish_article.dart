@@ -1,14 +1,21 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/locator.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
-import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
+import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/model/article/darft_article_model.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
+import 'package:network_image_to_byte/network_image_to_byte.dart';
 import 'package:provider/provider.dart';
 
 class MyPublishArticle extends StatefulWidget {
@@ -92,9 +99,18 @@ class _MyPublishArticleState extends State<MyPublishArticle>
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: ArticleSingleCard(
                           provider.userArticleList[index],
+                          popupItem: ['Edit', 'Archive'],
                           imageFit: BoxFit.cover,
                           showPopup: (v) {
-                            provider.deleteArticle(v);
+                            if (v != null) {
+                              final key = v.keys.first;
+                              final value = v.values.first;
+                              if (key == 'Edit') {
+                                editPublishedArticle(value);
+                              } else {
+                                provider.deleteArticle(value.id);
+                              }
+                            }
                           },
                         ),
                       );
@@ -118,6 +134,25 @@ class _MyPublishArticleState extends State<MyPublishArticle>
     );
   }
 
+  editPublishedArticle(ArticleDetail model) async {
+    CustomDialog.showLoadingDialog(context, message: 'Opening Article');
+    final convertDraftModel =
+        await Provider.of<NewsPublishedArticleProvider>(context, listen: false)
+            .getArticleModel(model);
+    final result = await Navigator.of(context)
+        .pushNamed(NewsCreateArticlePage.routeName, arguments: {
+      NewsCreateArticlePage.previousDraft: convertDraftModel,
+      NewsCreateArticlePage.fromPublishedArticle: true,
+    });
+    CustomDialog.closeDialog(context);
+    if (result != null) {
+      Provider.of<NewsMyArticleProvider>(context, listen: false)
+          .getUserDraftArticle();
+      Provider.of<NewsPublishedArticleProvider>(context, listen: false)
+          .getUserArticle();
+    }
+  }
+
   loadCreateArticlePage() async {
     if (Provider.of<AuthProvider>(context, listen: false).userModel.status ==
         kUserStatusVerified) {
@@ -137,8 +172,8 @@ class _MyPublishArticleState extends State<MyPublishArticle>
         }
       }
     } else {
-      CustomToast.showCustomToast(
-          context, 'You are required to verify your profile to create article');
+      CustomToast.showCustomBookmarkToast(
+          context, 'Verify Your Account To Create a Article');
     }
   }
 

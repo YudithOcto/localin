@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/news/provider/news_detail_provider.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
@@ -121,7 +121,11 @@ class _NewsDetailRelatedWidgetState extends State<NewsDetailRelatedWidget> {
                           child: Row(
                             children: <Widget>[
                               CachedNetworkImage(
-                                imageUrl: snapshot?.data[index].image ?? '',
+                                imageUrl: snapshot?.data[index].image.isNotEmpty
+                                    ? snapshot?.data[index].image?.first
+                                            ?.attachment ??
+                                        ''
+                                    : '',
                                 imageBuilder: (context, image) {
                                   return Container(
                                     width: 86.0,

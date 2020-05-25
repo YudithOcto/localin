@@ -3,9 +3,9 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/article/pages/article_detail_page.dart';
-import 'package:localin/presentation/article/shared_article_components/row_like_widget.dart';
+import 'package:localin/presentation/shared_widgets/row_like_widget.dart';
 import 'package:localin/presentation/home/widget/articles/row_bookmark.dart';
+import 'package:localin/presentation/news/pages/news_comment_page.dart';
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
@@ -21,21 +21,23 @@ class ArticleSingleCard extends StatefulWidget {
   final ValueChanged<bool> onRefresh;
   final ValueChanged<bool> onUndo;
   final BoxFit imageFit;
-  final Function(String) showPopup;
+  final Function(Map<String, ArticleDetail>) showPopup;
+  final List<String> popupItem;
 
-  ArticleSingleCard(this.articleDetail,
-      {this.onRefresh,
-      this.onUndo,
-      this.imageFit = BoxFit.fill,
-      this.showPopup});
+  ArticleSingleCard(
+    this.articleDetail, {
+    this.onRefresh,
+    this.onUndo,
+    this.imageFit = BoxFit.fill,
+    this.showPopup,
+    this.popupItem,
+  });
 
   @override
   _ArticleSingleCardState createState() => _ArticleSingleCardState();
 }
 
 const kArticleMediaType = 'media';
-
-const popupItem = ['Archive'];
 
 class _ArticleSingleCardState extends State<ArticleSingleCard> {
   Future<Color> getImagePalette(ImageProvider imageProvider) async {
@@ -55,17 +57,19 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
             right: -15.0,
             child: Visibility(
               visible: widget.showPopup != null,
-              child: PopupMenuButton(
+              child: PopupMenuButton<String>(
                   icon: Icon(
                     Icons.more_vert,
                     color: ThemeColors.black100,
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 0.0),
                   onSelected: (v) {
-                    widget.showPopup(widget.articleDetail.id);
+                    Map<String, ArticleDetail> map = Map();
+                    map[v] = widget.articleDetail;
+                    widget.showPopup(map);
                   },
                   itemBuilder: (context) {
-                    return popupItem
+                    return widget.popupItem
                         .map((e) => PopupMenuItem(
                               value: e,
                               child: Text('$e'),
@@ -148,7 +152,10 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
     return InkWell(
       onTap: () => openArticle(),
       child: CachedNetworkImage(
-        imageUrl: ImageHelper.addSubFixHttp(widget.articleDetail?.image),
+        imageUrl: ImageHelper.addSubFixHttp(
+            widget.articleDetail.image.isNotEmpty
+                ? widget.articleDetail?.image?.first?.attachment ?? ''
+                : ''),
         placeholderFadeInDuration: Duration(milliseconds: 250),
         imageBuilder: (context, imageProvider) {
           return AspectRatio(
@@ -215,9 +222,8 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
       onTap: () {
         if (widget?.articleDetail?.type != kArticleMediaType) {
           Navigator.of(context)
-              .pushNamed(ArticleDetailPage.routeName, arguments: {
-            ArticleDetailPage.articleId: widget.articleDetail?.slug,
-            ArticleDetailPage.commentPage: true,
+              .pushNamed(NewsCommentPage.routeName, arguments: {
+            NewsCommentPage.articleDetail: widget.articleDetail,
           });
         }
       },

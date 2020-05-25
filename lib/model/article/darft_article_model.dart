@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 
 class DraftArticleModel extends Equatable {
-  int id;
+  String id;
   String title;
   String caption;
   List<String> tags;

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 class NewsCreateArticlePage extends StatelessWidget {
   static const routeName = 'CreateArticlePage';
   static const previousDraft = 'PreviousDraft';
+  static const fromPublishedArticle = 'fromPublishedArticle';
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +16,12 @@ class NewsCreateArticlePage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     DraftArticleModel _detail =
         routeArgs[NewsCreateArticlePage.previousDraft] ?? null;
+    bool fromPublishedArticle =
+        routeArgs[NewsCreateArticlePage.fromPublishedArticle] ?? false;
     return ChangeNotifierProvider<CreateArticleProvider>(
-      create: (_) => CreateArticleProvider(previousDraft: _detail),
+      create: (_) => CreateArticleProvider(
+          previousArticleModel: _detail,
+          isFromPublishedArticle: fromPublishedArticle),
       child: CreateArticleWrapperWidget(),
     );
   }

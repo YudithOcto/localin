@@ -20,7 +20,13 @@ class CreateArticleProvider with ChangeNotifier {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController captionController = TextEditingController();
 
-  CreateArticleProvider({DraftArticleModel previousDraft}) {
+  bool _isFromPublished = false;
+
+  CreateArticleProvider(
+      {DraftArticleModel previousArticleModel,
+      bool isFromPublishedArticle = false}) {
+    _isFromPublished = isFromPublishedArticle;
+
     titleController
       ..addListener(() {
         if (titleController.text.isNotEmpty) {
@@ -38,8 +44,8 @@ class CreateArticleProvider with ChangeNotifier {
 
     searchTagController..addListener(_tagListener);
 
-    if (previousDraft != null) {
-      addDraftComponents(previousDraft);
+    if (previousArticleModel != null) {
+      addDraftComponents(previousArticleModel);
     }
   }
 
@@ -93,7 +99,7 @@ class CreateArticleProvider with ChangeNotifier {
   List<String> _selectedLocation = [];
   List<String> get selectedLocation => _selectedLocation;
 
-  int _currentDraftId;
+  String _currentDraftId;
 
   set addLocationSelected(String value) {
     _isNeedAskUserToSaveToDraft = true;
@@ -128,8 +134,11 @@ class CreateArticleProvider with ChangeNotifier {
     if (isDraft) {
       map['is_draft'] = isDraft ? 1 : 0;
     }
+    if (_isFromPublished) {
+      map['id'] = _currentDraftId;
+    }
     final result = await _repository.createArticle(FormData.fromMap(map));
-    if (result.error == null) {
+    if (isDraft && result.error == null) {
       await DraftDao().delete(mappingDratModel());
     }
     return result;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/locator.dart';
-import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
@@ -127,8 +127,8 @@ class _MyDraftArticleState extends State<MyDraftArticle>
         }
       }
     } else {
-      CustomToast.showCustomToast(
-          context, 'You are required to verify your profile to create article');
+      CustomToast.showCustomBookmarkToast(
+          context, 'Verify Your Account To Create a Article');
     }
   }
 

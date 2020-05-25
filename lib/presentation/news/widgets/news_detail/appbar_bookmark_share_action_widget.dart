@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:oktoast/oktoast.dart';

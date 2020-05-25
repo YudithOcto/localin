@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/pages/news_comment_page.dart';
-import 'package:localin/presentation/news/provider/comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_description.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_form.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_list.dart';
-import 'package:provider/provider.dart';
 
 class ArticleCommentContentWrapper extends StatefulWidget {
   @override

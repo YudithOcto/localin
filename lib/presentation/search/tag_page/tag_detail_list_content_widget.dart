@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
-import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/tag_model_model.dart';
 import 'package:localin/presentation/search/provider/tag_article_provider.dart';

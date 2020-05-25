@@ -10,7 +10,7 @@ import 'package:html/parser.dart' as parser;
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
-const popupText = ['Edit', 'Archive'];
+const popupText = ['Edit', 'Delete'];
 
 class DraftArticleSingleCard extends StatelessWidget {
   final DraftArticleModel model;

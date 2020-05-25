@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/user/user_model.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_article_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_community_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/revamp_others_profile_header_widget.dart';

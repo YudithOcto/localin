@@ -102,14 +102,14 @@ class _ArticleCommentFormState extends State<ArticleCommentForm> {
                         if (provider.commentClickedItem != null) {
                           await provider.replyOthersComment().then((value) {
                             closeCurrentLoading();
-                            CustomToast.showCustomToast(context, value);
+                            CustomToast.showCustomBookmarkToast(context, value);
                           });
                           provider.setReplyToOtherUserCommentModel(null,
                               isNeedRequestFocus: false);
                         } else {
                           await provider.publishComment().then((value) {
                             closeCurrentLoading(scrollToBottom: true);
-                            CustomToast.showCustomToast(context, value);
+                            CustomToast.showCustomBookmarkToast(context, value);
                           });
                         }
                       },

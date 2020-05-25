@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/draft_dao.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/darft_article_model.dart';
 
@@ -18,7 +19,12 @@ class NewsMyArticleProvider with ChangeNotifier {
   bool _canLoadMoreArticleArchiveList = true;
   bool get canLoadMoreArchiveArticleList => _canLoadMoreArticleArchiveList;
 
-  Future<List<ArticleDetail>> getUserTrashArticle({isRefresh = true}) async {
+  final StreamController<archiveState> _archiveController =
+      StreamController<archiveState>.broadcast();
+  Stream<archiveState> get archiveStream => _archiveController.stream;
+
+  Future<Null> getUserTrashArticle({isRefresh = true}) async {
+    setArchiveState(archiveState.loading);
     if (isRefresh) {
       _userArticleArchiveOffset = 1;
       _userArticleArchiveList.clear();
@@ -32,11 +38,19 @@ class NewsMyArticleProvider with ChangeNotifier {
       _userArticleArchiveOffset += 1;
       _canLoadMoreArticleArchiveList =
           response.total > _userArticleArchiveList.length;
+      setArchiveState(archiveState.success);
       notifyListeners();
-      return _userArticleArchiveList;
     } else {
+      setArchiveState(_userArticleArchiveList.isNotEmpty
+          ? archiveState.success
+          : archiveState.empty);
       _canLoadMoreArticleArchiveList = false;
-      return _userArticleArchiveList;
+    }
+  }
+
+  setArchiveState(archiveState state) {
+    if (_isMounted) {
+      _archiveController.add(state);
     }
   }
 
@@ -94,12 +108,18 @@ class NewsMyArticleProvider with ChangeNotifier {
     return await _draftDao.delete(model);
   }
 
+  Future<ArticleBaseResponse> unarchiveArticle(String slug) async {
+    return await _repository.unarchiveArticle(slug);
+  }
+
   @override
   void dispose() {
     _controller.close();
+    _archiveController.close();
     _isMounted = false;
     super.dispose();
   }
 }
 
 enum draftState { loading, success, empty }
+enum archiveState { loading, success, empty }
