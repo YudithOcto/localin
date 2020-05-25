@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 
 import '../../text_themes.dart';
@@ -18,7 +17,7 @@ class CommunityEmptyPage extends StatelessWidget {
             'images/empty_community.svg',
           ),
           Text(
-            'Can\'t find community around you',
+            'Can\'t find community around me',
             textAlign: TextAlign.center,
             style: ThemeText.sfSemiBoldHeadline
                 .copyWith(color: ThemeColors.black80),

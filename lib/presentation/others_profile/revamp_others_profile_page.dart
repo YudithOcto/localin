@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/user/user_model.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_article_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_community_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/revamp_others_profile_header_widget.dart';
@@ -8,7 +8,7 @@ import 'package:localin/presentation/others_profile/provider/revamp_others_provi
 import 'package:provider/provider.dart';
 
 class RevampOthersProfilePage extends StatelessWidget {
-  static const routeName = '/otherProfilePage';
+  static const routeName = 'PublicProfilePage';
   static const userId = 'userId';
   @override
   Widget build(BuildContext context) {

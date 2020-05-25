@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/provider/community/community_feed_provider.dart';
+import 'package:localin/presentation/community/provider/community_feed_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +65,7 @@ class CommunityFeedBottomRow extends StatelessWidget {
                 visible: !detail.isJoin,
                 child: InkWell(
                   onTap: () {
-                    provider.joinCommunity(detail?.id);
+                    //provider.joinCommunity(detail?.id);
                   },
                   child: Container(
                     height: 30.0,

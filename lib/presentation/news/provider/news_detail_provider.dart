@@ -24,10 +24,13 @@ class NewsDetailProvider with ChangeNotifier {
     return [];
   }
 
+  ArticleDetail _articleDetail;
+  ArticleDetail get articleDetail => _articleDetail;
+
   Future<ArticleBaseResponse> getArticleDetail(String articleId) async {
     final result = await _repository.getArticleDetail(articleId);
     if (result != null && result.detail != null) {
-      //articleModel = result.detail;
+      _articleDetail = result.detail;
       notifyListeners();
       return result;
     } else {

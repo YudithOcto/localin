@@ -1,16 +1,15 @@
 import 'dart:async';
-
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/model/article/tag_model.dart';
+import 'package:localin/model/article/tag_model_model.dart';
 
 class SearchArticleProvider with ChangeNotifier {
   final TextEditingController _searchController = TextEditingController();
   TextEditingController get searchController => _searchController;
 
-  Timer _debounce;
+  AnalyticsService _analyticsService;
   bool _isClearButtonVisible = false;
   bool get isClearButtonVisible => _isClearButtonVisible;
 
@@ -25,8 +24,9 @@ class SearchArticleProvider with ChangeNotifier {
   List<ArticleDetail> _articleList = [];
   List<ArticleDetail> get articleList => _articleList;
 
-  SearchArticleProvider() {
+  SearchArticleProvider({AnalyticsService analyticsService}) {
     _searchController..addListener(_onSearchChanged);
+    _analyticsService = analyticsService;
   }
 
   final StreamController<SearchArticleState> _articleStreamController =
@@ -117,7 +117,8 @@ class SearchArticleProvider with ChangeNotifier {
     if (t != null && t.isActive) {
       t.cancel();
     }
-    t = Timer(Duration(milliseconds: 1000), () {
+    t = Timer(Duration(milliseconds: 400), () {
+      _analyticsService.setCustomSearchEvent(keyword: _searchController.text);
       Future.wait([
         getArticle(keyword: _searchController.text),
         getTags(keyword: _searchController.text)

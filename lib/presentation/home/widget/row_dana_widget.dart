@@ -83,6 +83,8 @@ class _RowDanaWidgetState extends State<RowDanaWidget> {
                           margin: EdgeInsets.only(left: 16.0, right: 19.79),
                           child: Image.asset(
                             'images/dana_logo_white.png',
+                            width: 68.21,
+                            height: 20,
                             fit: BoxFit.cover,
                           ),
                         ),

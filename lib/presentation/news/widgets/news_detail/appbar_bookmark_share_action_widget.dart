@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:oktoast/oktoast.dart';
@@ -20,9 +21,16 @@ class AppBarBookMarkShareActionWidget extends StatefulWidget {
 class _AppBarBookMarkShareActionWidgetState
     extends State<AppBarBookMarkShareActionWidget> {
   ArticleDetail _articleDetail;
+
   @override
   void initState() {
     super.initState();
+    _articleDetail = widget.articleDetail;
+  }
+
+  @override
+  void didUpdateWidget(AppBarBookMarkShareActionWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
     _articleDetail = widget.articleDetail;
   }
 
@@ -38,11 +46,11 @@ class _AppBarBookMarkShareActionWidgetState
           InkWell(
               onTap: () async {
                 final response = await Provider.of<HomeProvider>(context)
-                    .bookmarkArticle(_articleDetail.id);
+                    .bookmarkArticle(_articleDetail?.id);
                 if (response.error != null) {
                   CustomToast.showCustomToast(context, response.error);
                 } else {
-                  if (_articleDetail.isBookmark == 1) {
+                  if (_articleDetail?.isBookmark == 1) {
                     unBookmarkArticle();
                   } else {
                     bookMarkArticle();
@@ -50,21 +58,28 @@ class _AppBarBookMarkShareActionWidgetState
                 }
               },
               child: SvgPicture.asset(
-                _articleDetail.isBookmark == 0
+                _articleDetail?.isBookmark == 0
                     ? 'images/bookmark_outline.svg'
                     : 'images/bookmark_full.svg',
-                color: _articleDetail.isBookmark == 1
+                color: _articleDetail?.isBookmark == 1
                     ? ThemeColors.primaryBlue
                     : null,
               )),
-          SizedBox(
-            width: 10.0,
+          Visibility(
+            visible: _articleDetail?.type == kArticleMediaType,
+            child: SizedBox(
+              width: 10.0,
+            ),
           ),
-          InkWell(
-              onTap: () {
-                Share.text('Localin', '${_articleDetail?.slug}', 'text/plain');
-              },
-              child: SvgPicture.asset('images/share_article.svg')),
+          Visibility(
+            visible: _articleDetail?.type == kArticleMediaType,
+            child: InkWell(
+                onTap: () {
+                  Share.text(
+                      'Localin', '${_articleDetail?.slug}', 'text/plain');
+                },
+                child: SvgPicture.asset('images/share_article.svg')),
+          ),
         ],
       ),
     );
@@ -72,30 +87,30 @@ class _AppBarBookMarkShareActionWidgetState
 
   bookMarkArticle() {
     setState(() {
-      widget.articleDetail?.isBookmark = 1;
+      _articleDetail?.isBookmark = 1;
     });
     CustomToast.showCustomBookmarkToast(context, 'Added to Bookmark',
         undoCallback: () async {
       dismissAllToast(showAnim: true);
       await Provider.of<HomeProvider>(context)
-          .bookmarkArticle(widget.articleDetail.id);
+          .bookmarkArticle(_articleDetail?.id);
       setState(() {
-        widget.articleDetail?.isBookmark = 0;
+        _articleDetail?.isBookmark = 0;
       });
     });
   }
 
   unBookmarkArticle() {
     setState(() {
-      widget.articleDetail?.isBookmark = 0;
+      _articleDetail?.isBookmark = 0;
     });
     CustomToast.showCustomBookmarkToast(context, 'Delete from bookmark',
         undoCallback: () async {
       dismissAllToast(showAnim: true);
       await Provider.of<HomeProvider>(context)
-          .bookmarkArticle(widget.articleDetail.id);
+          .bookmarkArticle(_articleDetail?.id);
       setState(() {
-        widget.articleDetail?.isBookmark = 1;
+        _articleDetail?.isBookmark = 1;
       });
     });
   }

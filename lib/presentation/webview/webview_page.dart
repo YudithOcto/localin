@@ -7,7 +7,7 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
 class WebViewPage extends StatefulWidget {
-  static const routeName = '/webviewPage';
+  static const routeName = 'DanaWebviewPage';
   static const urlName = 'webUrl';
   static const title = 'title';
   @override

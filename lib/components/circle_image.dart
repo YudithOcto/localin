@@ -6,7 +6,12 @@ class CircleImage extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
-  CircleImage({this.imageUrl, this.width = 19.0, this.height = 19.0});
+  final BoxFit fit;
+  CircleImage(
+      {this.imageUrl,
+      this.width = 19.0,
+      this.height = 19.0,
+      this.fit = BoxFit.contain});
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -20,7 +25,7 @@ class CircleImage extends StatelessWidget {
               border: Border.all(color: ThemeColors.black10),
               image: DecorationImage(
                 image: imageProvider,
-                fit: BoxFit.contain,
+                fit: fit,
               )),
         );
       },

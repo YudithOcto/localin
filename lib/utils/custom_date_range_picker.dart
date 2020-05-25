@@ -1058,6 +1058,12 @@ class _DatePickerDialogState extends State<CustomDatePicker> {
         break;
       case TargetPlatform.iOS:
         break;
+      case TargetPlatform.linux:
+        break;
+      case TargetPlatform.macOS:
+        break;
+      case TargetPlatform.windows:
+        break;
     }
   }
 

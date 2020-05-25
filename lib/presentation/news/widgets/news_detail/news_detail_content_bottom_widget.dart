@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/news/pages/news_comment_page.dart';
 import 'package:localin/presentation/news/provider/news_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -68,7 +68,10 @@ class _NewsDetailContentBottomWidgetState
             ),
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed(EmptyPage.routeName);
+                Navigator.of(context)
+                    .pushNamed(NewsCommentPage.routeName, arguments: {
+                  NewsCommentPage.articleDetail: _articleDetail,
+                });
               },
               child: Row(
                 children: <Widget>[

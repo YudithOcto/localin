@@ -4,7 +4,7 @@ import 'package:localin/utils/constants.dart';
 import '../../themes.dart';
 
 class EmptyPage extends StatelessWidget {
-  static const routeName = '/emptyPage';
+  static const routeName = 'EmptyPage';
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;

@@ -5,7 +5,7 @@ import 'package:localin/provider/community/community_createedit_provider.dart';
 import 'package:provider/provider.dart';
 
 class CommunityCreateEditPage extends StatefulWidget {
-  static const routeName = '/communityCreateEdit';
+  static const routeName = 'CommunityCreateEditPage';
   static const isUpdatePage = '/isUpdatePage';
   @override
   _CommunityCreateEditPageState createState() =>

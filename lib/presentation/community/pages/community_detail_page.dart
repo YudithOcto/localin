@@ -8,7 +8,7 @@ import 'package:localin/utils/image_helper.dart';
 import 'package:provider/provider.dart';
 
 class CommunityDetailPage extends StatefulWidget {
-  static const routeName = '/communityProfile';
+  static const routeName = 'CommunityDetailPage';
   static const communitySlug = '/communitySlug';
 
   @override

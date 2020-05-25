@@ -29,12 +29,15 @@ class ApiConstant {
   static const String kUserArticle = 'v1/artikel/me';
   static const String kOtherUserArticle = 'v1/artikel/member';
   static const String kArticleList = 'v1/artikel';
-  static const String kCreateArticle = 'v1/artikel/entri/';
+  static const String kCreateArticle = 'v1/artikel/entri';
   static const String kArticleTags = 'v1/artikel/tags';
   static const String kArticleComment = 'v1/artikel/komentar';
+  static const String kArticleReplyComment = 'v1/artikel/komentar/replay';
   static const String kArticleLike = 'v1/artikel/like';
   static const String kArticleBookmark = 'v1/artikel/bookmark';
   static const String kArticleByTag = 'v1/artikel/tag';
+  static const String kArticleDelete = 'v1/artikel/delete';
+  static const String kArticleUnArchive = 'v1/artikel/unarchive';
 
   /// Hotel
   static const String kHotel = 'v1/hotel';
@@ -56,4 +59,7 @@ class ApiConstant {
       'v1/member/notifications/delete';
   static const String kNotificationUnDeleteById =
       'v1/member/notifications/undelete';
+
+  /// LOCATION
+  static const String kSearchLocation = 'v1/location';
 }

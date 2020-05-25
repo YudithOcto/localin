@@ -19,9 +19,13 @@ class CustomToast {
 
   static showCustomBookmarkToast(BuildContext context, String message,
       {AlignmentGeometry alignment = Alignment.bottomCenter,
-      VoidCallback undoCallback}) {
+      VoidCallback undoCallback,
+      double width,
+      Color iconColor = ThemeColors.primaryBlue,
+      String icon = 'bookmark_full'}) {
     okToast.showToastWidget(
       Container(
+        width: width,
         padding: EdgeInsets.symmetric(horizontal: 30.0),
         child: Material(
           shadowColor: ThemeColors.black80,
@@ -32,34 +36,41 @@ class CustomToast {
           child: Container(
             height: 60.0,
             padding: EdgeInsets.symmetric(horizontal: 20.0),
-            alignment: Alignment.center,
+            alignment: FractionalOffset.center,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      'images/bookmark_full.svg',
-                      width: 15.46,
-                      height: 16.93,
-                      color: ThemeColors.primaryBlue,
-                    ),
-                    SizedBox(
-                      width: 11.0,
-                    ),
-                    Text(
-                      message,
-                      style: ThemeText.sfSemiBoldBody,
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        'images/$icon.svg',
+                        width: 15.46,
+                        height: 16.93,
+                        color: iconColor,
+                      ),
+                      SizedBox(
+                        width: 11.0,
+                      ),
+                      Expanded(
+                        child: Text(
+                          message,
+                          style: ThemeText.sfSemiBoldBody,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                InkWell(
-                  onTap: undoCallback,
-                  child: Text(
-                    'Undo',
-                    style: ThemeText.sfSemiBoldBody
-                        .copyWith(color: ThemeColors.primaryBlue),
+                Visibility(
+                  visible: undoCallback != null,
+                  child: InkWell(
+                    onTap: undoCallback,
+                    child: Text(
+                      'Undo',
+                      style: ThemeText.sfSemiBoldBody
+                          .copyWith(color: ThemeColors.primaryBlue),
+                    ),
                   ),
                 )
               ],

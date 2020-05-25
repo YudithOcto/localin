@@ -1,100 +1,125 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:localin/api/draft_dao.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/model/article/darft_article_model.dart';
 
 class NewsMyArticleProvider with ChangeNotifier {
   final Repository _repository = Repository();
 
-  /// USER ARTICLE
-  int _userArticleOffset = 1;
-  int get userArticleOffset => _userArticleOffset;
-  List<ArticleDetail> _userArticleList = [];
-  List<ArticleDetail> get userArticleList => _userArticleList;
-
-  bool _canLoadMoreArticleList = true;
-  bool get canLoadMoreArticleList => _canLoadMoreArticleList;
-
-  Future<List<ArticleDetail>> getUserArticle({isRefresh = true}) async {
-    if (isRefresh) {
-      _userArticleOffset = 1;
-      _userArticleList.clear();
-      _canLoadMoreArticleList = true;
-    }
-
-    final response =
-        await _repository.getUserArticle(offset: _userArticleOffset);
-    if (response != null && response.error == null) {
-      _userArticleList.addAll(response.data);
-      _userArticleOffset += 1;
-      _canLoadMoreArticleList = response.total > _userArticleList.length;
-      notifyListeners();
-      return _userArticleList;
-    } else {
-      _canLoadMoreArticleList = false;
-      return _userArticleList;
-    }
-  }
-
   /// USER TRASH ARTICLE
-  int _userArticleTrashOffset = 1;
-  int get userArticleTrashOffset => _userArticleTrashOffset;
+  int _userArticleArchiveOffset = 1;
+  int get userArticleArchiveOffset => _userArticleArchiveOffset;
 
-  List<ArticleDetail> _userArticleTrashList = [];
-  List<ArticleDetail> get userArticleTrashList => _userArticleTrashList;
+  List<ArticleDetail> _userArticleArchiveList = [];
+  List<ArticleDetail> get userArticleArchiveList => _userArticleArchiveList;
 
-  bool _canLoadMoreArticleTrashList = true;
-  bool get canLoadMoreTrashArticleList => _canLoadMoreArticleTrashList;
+  bool _canLoadMoreArticleArchiveList = true;
+  bool get canLoadMoreArchiveArticleList => _canLoadMoreArticleArchiveList;
 
-  Future<List<ArticleDetail>> getUserTrashArticle({isRefresh = true}) async {
+  final StreamController<archiveState> _archiveController =
+      StreamController<archiveState>.broadcast();
+  Stream<archiveState> get archiveStream => _archiveController.stream;
+
+  Future<Null> getUserTrashArticle({isRefresh = true}) async {
+    setArchiveState(archiveState.loading);
     if (isRefresh) {
-      _userArticleTrashOffset = 1;
-      _userArticleTrashList.clear();
-      _canLoadMoreArticleTrashList = true;
+      _userArticleArchiveOffset = 1;
+      _userArticleArchiveList.clear();
+      _canLoadMoreArticleArchiveList = true;
     }
 
     final response = await _repository.getUserArticle(
-        offset: _userArticleTrashOffset, isTrash: 1);
+        offset: _userArticleArchiveOffset, isTrash: 1);
     if (response != null && response.error == null) {
-      _userArticleTrashList.addAll(response.data);
-      _userArticleTrashOffset += 1;
-      _canLoadMoreArticleTrashList =
-          response.total > _userArticleTrashList.length;
+      _userArticleArchiveList.addAll(response.data);
+      _userArticleArchiveOffset += 1;
+      _canLoadMoreArticleArchiveList =
+          response.total > _userArticleArchiveList.length;
+      setArchiveState(archiveState.success);
       notifyListeners();
-      return _userArticleTrashList;
     } else {
-      _canLoadMoreArticleTrashList = false;
-      return _userArticleTrashList;
+      setArchiveState(_userArticleArchiveList.isNotEmpty
+          ? archiveState.success
+          : archiveState.empty);
+      _canLoadMoreArticleArchiveList = false;
+    }
+  }
+
+  setArchiveState(archiveState state) {
+    if (_isMounted) {
+      _archiveController.add(state);
     }
   }
 
   /// USER DRAFT ARTICLE
-  int _userArticleDraftOffset = 1;
+  int _userArticleDraftOffset = 0;
   int get userArticleDraftOffset => _userArticleDraftOffset;
-  List<ArticleDetail> _userArticleDraftList = [];
-  List<ArticleDetail> get userArticleDraftList => _userArticleDraftList;
+  List<DraftArticleModel> _userArticleDraftList = [];
+  List<DraftArticleModel> get userArticleDraftList => _userArticleDraftList;
+  final DraftDao _draftDao = DraftDao();
 
   bool _isCanLoadMoreDraftArticle = true;
   bool get isCanLoadMoreDraftArticle => _isCanLoadMoreDraftArticle;
 
-  Future<List<ArticleDetail>> getUserDraftArticle({isRefresh = true}) async {
+  final StreamController<draftState> _controller =
+      StreamController<draftState>.broadcast();
+  Stream<draftState> get draftStream => _controller.stream;
+
+  bool _isMounted = true;
+
+  Future<List<DraftArticleModel>> getUserDraftArticle(
+      {isRefresh = true}) async {
+    notifyDraftState(draftState.loading);
     if (isRefresh) {
-      _userArticleDraftOffset = 1;
+      _userArticleDraftOffset = 0;
       _userArticleDraftList.clear();
       _isCanLoadMoreDraftArticle = true;
     }
 
-    final response = await _repository.getUserArticle(
-        offset: _userArticleDraftOffset, isDraft: 1);
-    if (response != null && response.error == null) {
-      _userArticleDraftList.addAll(response.data);
-      _userArticleDraftOffset += 1;
-      _isCanLoadMoreDraftArticle =
-          response.total > _userArticleDraftList.length;
+    final response = await _draftDao.getAllDraft(_userArticleDraftOffset, 10);
+    if (response != null && response.isNotEmpty) {
+      _userArticleDraftList.addAll(response);
+      _isCanLoadMoreDraftArticle = response.length >= 10;
+      notifyDraftState(draftState.success);
       notifyListeners();
       return _userArticleDraftList;
     } else {
       _isCanLoadMoreDraftArticle = false;
+      if (_userArticleDraftList.isNotEmpty) {
+        notifyDraftState(draftState.success);
+      } else {
+        notifyDraftState(draftState.empty);
+      }
       return _userArticleDraftList;
     }
   }
+
+  notifyDraftState(draftState state) {
+    if (_isMounted) {
+      _controller.add(state);
+    }
+  }
+
+  Future<int> deleteDraftArticle(DraftArticleModel model) async {
+    final DraftDao _draftDao = DraftDao();
+    return await _draftDao.delete(model);
+  }
+
+  Future<ArticleBaseResponse> unarchiveArticle(String slug) async {
+    return await _repository.unarchiveArticle(slug);
+  }
+
+  @override
+  void dispose() {
+    _controller.close();
+    _archiveController.close();
+    _isMounted = false;
+    super.dispose();
+  }
 }
+
+enum draftState { loading, success, empty }
+enum archiveState { loading, success, empty }

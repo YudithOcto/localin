@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/components/decorated_tab_bar.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
-import 'package:localin/presentation/news/widgets/collection/collection_content_list_widget.dart';
+import 'package:localin/presentation/news/widgets/collection/collection_bookmark_list_widget.dart';
+import 'package:localin/presentation/news/widgets/collection/collection_like_list_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,7 @@ class _CollectionArticleWidgetState extends State<CollectionArticleWidget>
   TabController _tabBarController;
 
   void initState() {
+    locator<AnalyticsService>().setScreenName(name: 'ArticleCollectionsTab');
     _tabBarController = new TabController(vsync: this, length: 2);
     super.initState();
   }
@@ -87,12 +91,8 @@ class _CollectionArticleWidgetState extends State<CollectionArticleWidget>
             child: TabBarView(
               controller: _tabBarController,
               children: <Widget>[
-                CollectionContentListWidget(
-                  isBookmark: 1,
-                ),
-                CollectionContentListWidget(
-                  isLiked: 1,
-                ),
+                CollectionBookmarkListWidget(),
+                CollectionLikeListWidget(),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:localin/api/api_provider.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
+import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
@@ -17,6 +18,7 @@ import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -81,6 +83,10 @@ class Repository {
     return apiProvider.getUserArticle(isDraft, isTrash, offset);
   }
 
+  Future<ArticleBaseResponse> unarchiveArticle(String slug) async {
+    return apiProvider.unArchiveArticle(slug);
+  }
+
   Future<ArticleBaseResponse> getArticleList(int offset, int page,
       {int isLiked, int isBookmark, String keyword}) async {
     return apiProvider.getArticleList(
@@ -110,8 +116,9 @@ class Repository {
     return apiProvider.getArticleTags(keyword, offset, limit);
   }
 
-  Future<ArticleCommentBaseResponse> getArticleComment(String articleId) {
-    return apiProvider.getArticleComment(articleId);
+  Future<ArticleCommentBaseResponse> getArticleComment(String articleId,
+      {int offset, int limit}) {
+    return apiProvider.getArticleComment(articleId, offset, limit);
   }
 
   Future<ArticleCommentBaseResponse> publishArticleComment(
@@ -119,14 +126,24 @@ class Repository {
     return apiProvider.publishArticleComment(articleId, message);
   }
 
+  Future<ArticleCommentBaseResponse> replyOthersComment(
+      String commentId, String message) {
+    return apiProvider.replyOtherUserComment(commentId, message);
+  }
+
   Future<ArticleBaseResponse> getArticleDetail(String articleId) {
     return apiProvider.getArticleDetail(articleId);
   }
 
+  Future<BaseResponse> deleteArticle(String articleId) {
+    return apiProvider.deleteArticle(articleId);
+  }
+
   /// COMMUNITY
 
-  Future<CommunityDetailBaseResponse> getCommunityList(String keyword) async {
-    return apiProvider.getCommunityList(keyword);
+  Future<CommunityDetailBaseResponse> getCommunityList(
+      {String keyword, int page, int limit}) async {
+    return apiProvider.getCommunityList(keyword, page, limit);
   }
 
   Future<CommunityDetailBaseResponse> getCommunityDetail(
@@ -258,19 +275,24 @@ class Repository {
     return apiProvider.getNotificationList(offset, limit);
   }
 
-  Future<bool> readNotificationUpdate(String notifId) async {
+  Future<bool> readNotificationUpdate(String notifId) {
     return apiProvider.readNotificationUpdate(notifId);
   }
 
-  Future<String> deleteAllNotification() async {
+  Future<String> deleteAllNotification() {
     return apiProvider.deleteAllNotification();
   }
 
-  Future<String> deleteNotificationById(String id) async {
+  Future<String> deleteNotificationById(String id) {
     return apiProvider.deleteNotificationById(id);
   }
 
-  Future<String> undoNotificationDelete(String id) async {
+  Future<String> undoNotificationDelete(String id) {
     return apiProvider.unDeleteNotificationById(id);
+  }
+
+  Future<SearchLocationResponse> searchLocation(
+      {int offset, int limit, String search}) {
+    return apiProvider.searchLocation(offset, limit, search);
   }
 }

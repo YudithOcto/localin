@@ -9,6 +9,7 @@ import 'package:localin/main.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
+import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
@@ -23,6 +24,7 @@ import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
+import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -100,13 +102,17 @@ class ApiProvider {
   }
 
   void setupLoggingInterceptor() async {
+    _dio.interceptors.add(LogInterceptor(
+        request: true,
+        requestBody: true,
+        requestHeader: false,
+        responseBody: true));
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options) async {
-          print('send request：path:${options.uri} ${options.data.toString()}');
           if (options.headers.containsKey("requiredToken")) {
             String token = await getToken();
-            print("token $token");
+            debugPrint('Token $token');
             options.headers.clear();
             var header = {
               'Content-Type': 'application/json',
@@ -378,20 +384,76 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleBaseResponse> createArticle(FormData form) async {
+  Future<ArticleBaseResponse> unArchiveArticle(String slug) async {
     try {
-      final response = await _dio.post(ApiConstant.kCreateArticle,
-          options: Options(
-            headers: {'requiredToken': true},
-          ),
-          data: form);
-      var model = ArticleBaseResponse.fromJson(response.data);
+      final response = await _dio.get('${ApiConstant.kArticleUnArchive}/$slug',
+          options: Options(headers: {'requiredToken': true}));
+      final model = ArticleBaseResponse.withJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
         return ArticleBaseResponse.withError(_handleError(error));
       } else {
         return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleBaseResponse> createArticle(FormData form) async {
+    try {
+      final response = await _dio.post(ApiConstant.kCreateArticle,
+          options: Options(headers: {'requiredToken': true}), data: form);
+      print(jsonEncode(response.data));
+      final model = ArticleBaseResponse.withJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response.statusCode == 500) {
+          return ArticleBaseResponse.withError(
+              'Server unknown error. Please try again later');
+        } else if (error.response.statusCode == 413) {
+          return ArticleBaseResponse.withError('Image request too large');
+        } else if (error.response.data['judul'] != null) {
+          return ArticleBaseResponse.withError(error.response.data['judul'][0]);
+        } else if (error.response.data['deskripsi'] != null) {
+          return ArticleBaseResponse.withError(
+              error.response.data['deskripsi'][0]);
+        } else if (error.response.data['address'] != null) {
+          return ArticleBaseResponse.withError(
+              error.response.data['address'][0]);
+        } else if (error.response.data['tag'] != null) {
+          return ArticleBaseResponse.withError(error.response.data['tag'][0]);
+        } else {
+          for (int i = 0; i < form.files.length; i++) {
+            if (error.response.data['gambar.$i'][0] != null) {
+              return ArticleBaseResponse.withError(
+                  error.response.data['gambar.$i'][0]);
+            }
+          }
+          return ArticleBaseResponse.withError(error.response.data.toString());
+        }
+      } else {
+        return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<SearchLocationResponse> searchLocation(
+      int offset, int limit, String search) async {
+    try {
+      final response = await _dio.get(ApiConstant.kSearchLocation,
+          queryParameters: {
+            'page': offset,
+            'limit': limit,
+            'search': '$search',
+          },
+          options: Options(headers: {'requiredToken': true}));
+      return SearchLocationResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return SearchLocationResponse.withError(_handleError(error));
+      } else {
+        return SearchLocationResponse.withError(error.toString());
       }
     }
   }
@@ -434,10 +496,12 @@ class ApiProvider {
     }
   }
 
-  Future<ArticleCommentBaseResponse> getArticleComment(String articleId) async {
+  Future<ArticleCommentBaseResponse> getArticleComment(
+      String articleId, int offset, int limit) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kArticleComment}/$articleId',
+          queryParameters: {'limit': limit, 'page': offset},
           options: Options(headers: {'requiredToken': true}));
       return ArticleCommentBaseResponse.fromJson(response.data);
     } catch (error) {
@@ -445,6 +509,21 @@ class ApiProvider {
         return ArticleCommentBaseResponse.withError(_handleError(error));
       } else {
         return ArticleCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BaseResponse> deleteArticle(String articleId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kArticleDelete}/$articleId',
+          options: Options(headers: {'requiredToken': true}));
+      return BaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BaseResponse.withError(_handleError(error));
+      } else {
+        return BaseResponse.withError(error.toString());
       }
     }
   }
@@ -461,6 +540,25 @@ class ApiProvider {
     } catch (error) {
       if (error is DioError) {
         return ArticleCommentBaseResponse.withError(_handleError(error));
+      } else {
+        return ArticleCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ArticleCommentBaseResponse> replyOtherUserComment(
+      String commentId, String message) async {
+    FormData _formData = FormData.fromMap({'komentar': message});
+    try {
+      final response = await _dio.post(
+          '${ApiConstant.kArticleReplyComment}/$commentId',
+          data: _formData,
+          options: Options(headers: {'requiredToken': true}));
+      return ArticleCommentBaseResponse.publishResponse(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        final errorList = error.response.data;
+        return ArticleCommentBaseResponse.withError(errorList['komentar'][0]);
       } else {
         return ArticleCommentBaseResponse.withError(error.toString());
       }
@@ -498,10 +596,11 @@ class ApiProvider {
 
   /// COMMUNITY
 
-  Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
+  Future<CommunityDetailBaseResponse> getCommunityList(
+      String search, int page, int limit) async {
     try {
       final response = await _dio.get(ApiConstant.kCommunity,
-          queryParameters: {'search': '$search'},
+          queryParameters: {'search': '$search', 'limit': limit, 'page': page},
           options: Options(headers: {'requiredToken': true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
@@ -742,7 +841,7 @@ class ApiProvider {
             'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'room': total,
           },
-          options: Options(headers: {'requiredToken': false}));
+          options: Options(headers: {'requiredToken': true}));
       return HotelListBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -764,7 +863,7 @@ class ApiProvider {
           'timezone': await getFlutterTimezone(),
           'room': roomTotal,
         },
-        options: Options(headers: {'requiredToken': false}),
+        options: Options(headers: {'requiredToken': true}),
       );
       return HotelListBaseResponse.withJson(result.data);
     } catch (error) {
@@ -787,7 +886,7 @@ class ApiProvider {
                 'timezone': await getFlutterTimezone(),
                 'room': room,
               },
-              options: Options(headers: {'requiredToken': false}));
+              options: Options(headers: {'requiredToken': true}));
       return RoomBaseResponse.fromJson(result.data);
     } catch (error) {
       if (error is DioError) {

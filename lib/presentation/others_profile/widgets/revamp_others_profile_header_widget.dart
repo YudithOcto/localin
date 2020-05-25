@@ -86,10 +86,13 @@ class _RevampOthersProfileHeaderWidgetState
                     SizedBox(
                       width: 16.0,
                     ),
-                    RowUserCommunityArticleWidget(
-                      icon: 'images/other_profile_community_icon.svg',
-                      title: 'community',
-                      value: '${widget.userModel?.totalCommunity ?? 0}',
+                    Visibility(
+                      visible: widget.userModel.type != 'media',
+                      child: RowUserCommunityArticleWidget(
+                        icon: 'images/other_profile_community_icon.svg',
+                        title: 'community',
+                        value: '${widget.userModel?.totalCommunity ?? 0}',
+                      ),
                     ),
                     SizedBox(
                       width: 26.0,

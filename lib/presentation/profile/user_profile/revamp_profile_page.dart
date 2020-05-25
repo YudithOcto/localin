@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/login/login_page.dart';
@@ -13,8 +14,10 @@ import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
+import '../../../locator.dart';
+
 class RevampProfilePage extends StatelessWidget {
-  static const routeName = '/revampProfilePage';
+  static const routeName = 'UserProfilePage';
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,8 @@ class _RevampProfileContentWidgetState
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
+      locator<AnalyticsService>().setScreenName(name: 'ProfilePage');
+
       final provider = Provider.of<UserProfileProvider>(context, listen: false);
       provider.getUserDanaStatus();
       provider.getUserProfile().then((value) {
