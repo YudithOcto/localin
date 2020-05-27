@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
+import 'package:localin/presentation/community/pages/community_create_page.dart';
+import 'package:localin/presentation/community/pages/search_community_page.dart';
 import 'package:localin/presentation/community/provider/community_feed_provider.dart';
 import 'package:localin/presentation/community/widgets/community_discover_category_widget.dart';
 import 'package:localin/presentation/community/widgets/community_my_group_widget.dart';
@@ -52,10 +54,16 @@ class _ScrollContentState extends State<ScrollContent> {
         pageTitle: 'Community',
         appBar: AppBar(),
         flexSpace: SafeArea(
-            child: Container(
-                alignment: FractionalOffset.centerRight,
-                margin: EdgeInsets.only(right: 20.0),
-                child: SvgPicture.asset('images/search_grey.svg'))),
+            child: InkWell(
+          onTap: () async {
+            final result = await Navigator.of(context)
+                .pushNamed(SearchCommunity.routeName);
+          },
+          child: Container(
+              alignment: FractionalOffset.centerRight,
+              margin: EdgeInsets.only(right: 20.0),
+              child: SvgPicture.asset('images/search_grey.svg')),
+        )),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -79,18 +87,24 @@ class _ScrollContentState extends State<ScrollContent> {
                       )
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        'Create',
-                        style: ThemeText.sfSemiBoldBody
-                            .copyWith(color: ThemeColors.primaryBlue),
-                      ),
-                      SizedBox(
-                        width: 5.67,
-                      ),
-                      SvgPicture.asset('images/plus_icon.svg'),
-                    ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(CommunityCreatePage.routeName);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          'Create',
+                          style: ThemeText.sfSemiBoldBody
+                              .copyWith(color: ThemeColors.primaryBlue),
+                        ),
+                        SizedBox(
+                          width: 5.67,
+                        ),
+                        SvgPicture.asset('images/plus_icon.svg'),
+                      ],
+                    ),
                   ),
                 ],
               ),

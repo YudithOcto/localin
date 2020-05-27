@@ -24,8 +24,14 @@ class UnderlineTextFormField extends StatelessWidget {
       textInputAction: inputAction,
       style: ThemeText.sfRegularHeadline,
       decoration: InputDecoration(
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: ThemeColors.black20, width: 1.5)),
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: ThemeColors.black20, width: 1.5)),
+        disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: ThemeColors.black20, width: 1.5)),
         border: UnderlineInputBorder(
-          borderSide: BorderSide(color: ThemeColors.black20, width: 4.0),
+          borderSide: BorderSide(color: ThemeColors.black20, width: 1.5),
         ),
       ),
     );

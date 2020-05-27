@@ -2,7 +2,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:localin/presentation/community/pages/community_create_page.dart';
 import 'package:localin/presentation/community/pages/community_discover_page.dart';
+import 'package:localin/presentation/community/pages/search_community_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
@@ -146,6 +148,8 @@ class _MyAppState extends State<MyApp> {
             NewsCreateArticlePage.routeName: (_) => NewsCreateArticlePage(),
             MultiPickerGalleryPage.routeName: (_) => MultiPickerGalleryPage(),
             SearchLocationPage.routeName: (_) => SearchLocationPage(),
+            SearchCommunity.routeName: (_) => SearchCommunity(),
+            CommunityCreatePage.routeName: (_) => CommunityCreatePage(),
           },
         ),
       ),
