@@ -165,6 +165,12 @@ class Repository {
     return apiProvider.getCategoryListCommunity(search);
   }
 
+  Future<CommunityDetailBaseResponse> getPopularCommunity(
+      {int limit, int offset, String categoryId}) async {
+    return apiProvider.getPopularCommunity(
+        limit: limit, offset: offset, categoryId: categoryId);
+  }
+
   Future<CommunityJoinResponse> joinCommunity(String id) async {
     return apiProvider.joinCommunity(id);
   }
@@ -192,8 +198,9 @@ class Repository {
   }
 
   Future<CommunityCommentBaseResponse> getCommunityCommentList(
-      String communityId) async {
-    return apiProvider.getCommentList(communityId);
+      String communityId, int page, int limit, String parentId) async {
+    return apiProvider.getCommentList(communityId, page, limit,
+        parentId: parentId);
   }
 
   Future<void> createCommunityEvent(

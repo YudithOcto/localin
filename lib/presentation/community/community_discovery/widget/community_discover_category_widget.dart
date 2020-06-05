@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_category.dart';
+import 'package:localin/presentation/community/community_discovery/community_category_list_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
@@ -25,7 +26,13 @@ class CommunityDiscoverCategoryWidget extends StatelessWidget {
               backgroundColor: ThemeColors.black40,
               label: Text('${communityCategoryList[index]?.categoryName}'),
               labelStyle: ThemeText.sfMediumBody,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(CommunityCategoryListPage.routeName, arguments: {
+                  CommunityCategoryListPage.categorySlug:
+                      communityCategoryList[index]?.id
+                });
+              },
             ),
           );
         },

@@ -1,3 +1,5 @@
+import 'package:localin/model/article/article_detail.dart';
+
 class CommunityCommentBaseResponse {
   String error;
   int total;
@@ -9,21 +11,21 @@ class CommunityCommentBaseResponse {
       {this.error, this.total, this.data, this.message, this.commentResult});
 
   factory CommunityCommentBaseResponse.fromJson(Map<String, dynamic> body) {
-    List commentList = body['data'];
     return CommunityCommentBaseResponse(
       error: null,
       total: body['pagination'] != null ? body['pagination']['total'] : 0,
       message: body['message'],
-      data: commentList
-          .map((comment) => CommunityComment.fromJson(comment))
-          .toList(),
+      data: body['data'] == null
+          ? []
+          : List<CommunityComment>.from(
+              body['data'].map((v) => CommunityComment.fromJson(v))),
     );
   }
 
   CommunityCommentBaseResponse.withError(String value)
       : error = value,
         message = null,
-        data = null;
+        data = [];
 
   CommunityCommentBaseResponse.addComment(Map<String, dynamic> body)
       : message = body['message'],
@@ -34,6 +36,7 @@ class CommunityCommentBaseResponse {
 class CommunityComment {
   CommunityComment({
     this.id,
+    this.communityId,
     this.commentContent,
     this.status,
     this.createdBy,
@@ -45,11 +48,13 @@ class CommunityComment {
     this.type,
     this.parentId,
     this.childComment,
+    this.childCommentList,
     this.createdName,
     this.createdAvatar,
   });
 
-  String id;
+  int id;
+  String communityId;
   String commentContent;
   String status;
   String createdBy;
@@ -59,14 +64,16 @@ class CommunityComment {
   String createdAt;
   String updatedAt;
   String deletedAt;
-  String attachment;
+  List<MediaModel> attachment;
+  List<CommunityComment> childCommentList;
   String type;
   String parentId;
   int childComment;
 
   factory CommunityComment.fromJson(Map<String, dynamic> body) {
     return CommunityComment(
-      id: body['komunitas_id'],
+      id: body['id'],
+      communityId: body['komunitas_id'],
       commentContent: body['komentar'],
       status: body['status'],
       createdBy: body['created_by'],
@@ -74,10 +81,17 @@ class CommunityComment {
       createdAt: body['created_at'],
       updatedAt: body['updated_at'],
       deletedAt: body['deleted_at'],
-      attachment: body['lampiran'],
+      attachment: body['lampiran'] == null
+          ? []
+          : List<MediaModel>.from(
+              body['lampiran'].map((e) => MediaModel.fromJson(e))),
+      childCommentList: body['data'] == null
+          ? []
+          : List<CommunityComment>.from(
+              body['data'].map((v) => CommunityComment.fromJson(v))),
       type: body['tipe'],
       parentId: body['parent_id'],
-      childComment: body['komentar_child'],
+      childComment: body['komentar_child'] ?? 0,
       createdAvatar: body['created_avatar'],
       createdName: body['created_name'],
     );

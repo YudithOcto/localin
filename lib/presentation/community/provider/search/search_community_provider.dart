@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_detail.dart';
@@ -19,22 +18,15 @@ class SearchCommunityProvider with ChangeNotifier {
 
   final Repository _repository = Repository();
 
-  final TextEditingController _searchTextController = TextEditingController();
-  TextEditingController get searchTextController => _searchTextController;
-
   bool _isMounted = true;
   final Debounce _debounce = Debounce(milliseconds: 300);
 
   List<CommunityDetail> _communityDetailList = [];
   List<CommunityDetail> get resultCommunityList => _communityDetailList;
 
-  SearchCommunityProvider() {
-    _searchTextController.addListener(_searchCommunity);
-  }
-
-  _searchCommunity() {
-    if (_searchTextController.text.isNotEmpty) {
-      _debounce.run(() => getSearchResult(isRefresh: true));
+  searchCommunity(String value) {
+    if (value.isNotEmpty) {
+      _debounce.run(() => getSearchResult(isRefresh: true, keyword: value));
     } else {
       _debounce.cancel();
       _offset = 1;
@@ -44,7 +36,8 @@ class SearchCommunityProvider with ChangeNotifier {
     }
   }
 
-  Future<Null> getSearchResult({bool isRefresh = false}) async {
+  Future<Null> getSearchResult(
+      {bool isRefresh = false, String keyword = ''}) async {
     if (isRefresh) {
       _isCanLoadMore = true;
       _communityDetailList.clear();
@@ -53,7 +46,7 @@ class SearchCommunityProvider with ChangeNotifier {
 
     setState(searchCommunityState.loading);
     final result = await _repository.getCommunityList(
-        keyword: _searchTextController.text, page: _offset, limit: _limit);
+        keyword: keyword, page: _offset, limit: _limit);
     if (result.error == null && result.total > 0) {
       setState(searchCommunityState.success);
       _communityDetailList.addAll(result.communityDetailList);
@@ -75,8 +68,6 @@ class SearchCommunityProvider with ChangeNotifier {
   void dispose() {
     _searchController.close();
     _isMounted = false;
-    _searchTextController.removeListener(_searchCommunity);
-    _searchTextController.dispose();
     super.dispose();
   }
 }

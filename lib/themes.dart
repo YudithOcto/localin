@@ -27,6 +27,7 @@ abstract class ThemeColors {
   static const darkGrey = Color(0xFFA9A9A9);
   static const grey = Color(0xFF808080);
   static const dimGrey = Color(0xFF696969);
+  static const greyDark = Color(0xFFE5E5E5);
 
   /// SHADE AND TINTS
   static const yellow80 = Color(0xFF97690E);

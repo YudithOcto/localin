@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
-import 'package:localin/presentation/community/pages/community_discover_page.dart';
+import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/components/shared_community_components/community_single_card.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';

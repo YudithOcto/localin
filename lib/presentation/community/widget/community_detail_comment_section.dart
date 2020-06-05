@@ -24,7 +24,7 @@ class _CommunityDetailCommentSectionState
     super.initState();
     final provider =
         Provider.of<CommunityDetailProvider>(context, listen: false);
-    comment = provider.getCommentList(provider?.communityDetail?.id);
+    // comment = provider.getCommentList(provider?.communityDetail?.id);
   }
 
   @override
@@ -90,7 +90,7 @@ class _CommunityDetailCommentSectionState
         CommunityFormInput(
           onRefresh: () {
             setState(() {
-              comment = provider.getCommentList(provider?.communityDetail?.id);
+              //  comment = provider.getCommentList(provider?.communityDetail?.id);
             });
           },
         ),

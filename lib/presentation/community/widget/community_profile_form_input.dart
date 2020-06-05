@@ -232,23 +232,23 @@ class _CommunityFormInputState extends State<CommunityFormInput> {
             actions: <Widget>[
               RaisedButton(
                 onPressed: () async {
-                  var res = await provider.getImageFromStorage();
-                  if (res == null) {
-                    Navigator.of(context).pop('success');
-                  } else {
-                    Navigator.of(context).pop('$res');
-                  }
+//                  var res = await provider.getImageFromStorage();
+//                  if (res == null) {
+//                    Navigator.of(context).pop('success');
+//                  } else {
+//                    Navigator.of(context).pop('$res');
+//                  }
                 },
                 child: Text('Image'),
               ),
               RaisedButton(
                 onPressed: () async {
-                  var res = await provider.getVideoFromStorage();
-                  if (res == null) {
-                    Navigator.of(context).pop('success');
-                  } else {
-                    Navigator.of(context).pop('$res');
-                  }
+//                  var res = await provider.getVideoFromStorage();
+//                  if (res == null) {
+//                    Navigator.of(context).pop('success');
+//                  } else {
+//                    Navigator.of(context).pop('$res');
+//                  }
                 },
                 child: Text('Video'),
               )

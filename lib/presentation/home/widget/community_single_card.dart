@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/community/pages/community_detail_page.dart';
+import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 
@@ -29,7 +29,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             onTap: () async {
               var result = await Navigator.of(context)
                   .pushNamed(CommunityDetailPage.routeName, arguments: {
-                CommunityDetailPage.communitySlug: widget.model.slug,
+                CommunityDetailPage.communityData: widget.model,
               });
 
               if (result == 'refresh') {
@@ -125,7 +125,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                 onTap: () async {
                   var result = await Navigator.of(context)
                       .pushNamed(CommunityDetailPage.routeName, arguments: {
-                    CommunityDetailPage.communitySlug: widget.model.slug,
+                    CommunityDetailPage.communityData: widget.model,
                   });
 
                   if (result == 'refresh') {
@@ -211,8 +211,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
                         var result = await Navigator.of(context).pushNamed(
                             CommunityDetailPage.routeName,
                             arguments: {
-                              CommunityDetailPage.communitySlug:
-                                  widget.model.slug,
+                              CommunityDetailPage.communityData: widget.model,
                             });
 
                         if (result == 'refresh') {

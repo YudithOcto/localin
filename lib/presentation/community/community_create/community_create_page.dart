@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
+import 'package:localin/presentation/community/community_create/community_type_page.dart';
 import 'package:localin/presentation/community/provider/community_category_provider.dart';
 import 'package:localin/presentation/community/provider/community_create_provider.dart';
-import 'package:localin/presentation/community/widgets/create_community/community_add_category_widget.dart';
-import 'package:localin/presentation/community/widgets/create_community/community_add_description_widget.dart';
-import 'package:localin/presentation/community/widgets/create_community/community_add_location_widget.dart';
-import 'package:localin/presentation/community/widgets/create_community/community_add_title_widget.dart';
-import 'package:localin/presentation/community/widgets/create_community/community_basic_info_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
+
+import 'create_community/community_add_category_widget.dart';
+import 'create_community/community_add_description_widget.dart';
+import 'create_community/community_add_location_widget.dart';
+import 'create_community/community_add_title_widget.dart';
+import 'create_community/community_basic_info_widget.dart';
 
 class CommunityCreatePage extends StatelessWidget {
   static const routeName = 'RevampCommunityCreatePage';
@@ -59,6 +61,7 @@ class _CommunityCreateWrapperWidgetState
         builder: (context, provider, child) {
           return InkWell(
             onTap: () async {
+              Navigator.of(context).pushNamed(CommunityTypePage.routeName);
 //              if (provider.isContinueButtonActive) {
 //                CustomDialog.showCenteredLoadingDialog(context,
 //                    message: 'Loading');

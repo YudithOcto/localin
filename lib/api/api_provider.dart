@@ -599,8 +599,14 @@ class ApiProvider {
   Future<CommunityDetailBaseResponse> getCommunityList(
       String search, int page, int limit) async {
     try {
+      Map<String, dynamic> map = Map();
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      map['page'] = page ?? 1;
+      map['limit'] = limit ?? 10;
       final response = await _dio.get(ApiConstant.kCommunity,
-          queryParameters: {'search': '$search', 'limit': limit, 'page': page},
+          queryParameters: map,
           options: Options(headers: {'requiredToken': true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
@@ -667,13 +673,34 @@ class ApiProvider {
       final response = await _dio.get(ApiConstant.kSearchCategory,
           queryParameters: {'keyword': search},
           options: Options(headers: {'requiredToken': true}));
-      var model = CommunityBaseResponseCategory.fromJson(response.data);
+      final model = CommunityBaseResponseCategory.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
         return CommunityBaseResponseCategory.withError(_handleError(error));
       } else {
         return CommunityBaseResponseCategory.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> getPopularCommunity(
+      {int offset, int limit, String categoryId}) async {
+    try {
+      final response = await _dio.get(ApiConstant.kPopularCommunity,
+          queryParameters: {
+            'limit': limit,
+            'page': offset,
+            'kategori_id': categoryId,
+          },
+          options: Options(headers: {'requiredToken': true}));
+      final model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error.toString());
       }
     }
   }
@@ -790,10 +817,18 @@ class ApiProvider {
   }
 
   Future<CommunityCommentBaseResponse> getCommentList(
-      String communityId) async {
+      String communityId, int page, int limit,
+      {String parentId}) async {
     try {
+      Map<String, dynamic> map = Map();
+      map['limit'] = limit;
+      map['page'] = page;
+      if (parentId != null && parentId.isNotEmpty) {
+        map['parent'] = parentId;
+      }
       final response = await _dio.get(
           '${ApiConstant.kCommentCommunity}$communityId',
+          queryParameters: map,
           options: Options(headers: {'requiredToken': true}));
       return CommunityCommentBaseResponse.fromJson(response.data);
     } catch (error) {

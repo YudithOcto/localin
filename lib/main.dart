@@ -2,18 +2,20 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:localin/presentation/community/pages/community_create_page.dart';
-import 'package:localin/presentation/community/pages/community_discover_page.dart';
-import 'package:localin/presentation/community/pages/search_community_page.dart';
+import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
+import 'package:localin/presentation/community/community_discovery/community_category_list_page.dart';
+import 'package:localin/presentation/community/community_create/community_create_page.dart';
+import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
+import 'package:localin/presentation/community/community_create/community_type_page.dart';
+import 'package:localin/presentation/community/community_search/search_community_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/hotel/hotel_detail_page.dart';
 import 'package:localin/presentation/hotel/success_booking_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
-import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
 import 'package:localin/presentation/community/pages/community_create_event_page.dart';
-import 'package:localin/presentation/community/pages/community_detail_page.dart';
+import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/community/widget/community_category_search.dart';
@@ -117,7 +119,6 @@ class _MyAppState extends State<MyApp> {
             MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
             EmptyPage.routeName: (_) => EmptyPage(),
             CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
-            CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
             CommunityCreateEventPage.routeName: (_) =>
                 CommunityCreateEventPage(),
             NotificationListPage.routeName: (_) => NotificationListPage(),
@@ -150,6 +151,10 @@ class _MyAppState extends State<MyApp> {
             SearchLocationPage.routeName: (_) => SearchLocationPage(),
             SearchCommunity.routeName: (_) => SearchCommunity(),
             CommunityCreatePage.routeName: (_) => CommunityCreatePage(),
+            CommunityTypePage.routeName: (_) => CommunityTypePage(),
+            CommunityCategoryListPage.routeName: (_) =>
+                CommunityCategoryListPage(),
+            CommunityCommentPage.routeName: (_) => CommunityCommentPage(),
           },
         ),
       ),

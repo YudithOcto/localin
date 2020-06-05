@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/utils/image_helper.dart';
 import 'package:superellipse_shape/superellipse_shape.dart';
 
 import '../themes.dart';
@@ -10,11 +11,12 @@ import '../themes.dart';
 class UserProfileImageWidget extends StatelessWidget {
   final String imageUrl;
   final File imageFile;
-  UserProfileImageWidget({this.imageUrl, this.imageFile});
+  final BoxFit fit;
+  UserProfileImageWidget(
+      {this.imageUrl, this.imageFile, this.fit = BoxFit.fitWidth});
 
   @override
   Widget build(BuildContext context) {
-    print(imageUrl);
     return Material(
       clipBehavior: Clip.antiAlias,
       shape: SuperellipseShape(
@@ -30,7 +32,7 @@ class UserProfileImageWidget extends StatelessWidget {
               height: 62.0,
             )
           : CachedNetworkImage(
-              imageUrl: imageUrl ?? '',
+              imageUrl: ImageHelper.addSubFixHttp(imageUrl) ?? '',
               imageBuilder: (context, imageProvider) {
                 return Container(
                   height: 62.0,
@@ -38,7 +40,7 @@ class UserProfileImageWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                     image: imageProvider,
-                    fit: BoxFit.fitWidth,
+                    fit: fit,
                   )),
                 );
               },

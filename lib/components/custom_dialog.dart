@@ -68,11 +68,15 @@ class CustomDialog {
   }
 
   static Future<T> showCustomDialogWithMultipleButton<T>(BuildContext context,
-      {String title,
+      {@required String title,
       String message,
       @required String cancelText,
       @required String okText,
       bool isDismissible = true,
+      Color cancelBtnColor = ThemeColors.black0,
+      Color cancelTxtColor = ThemeColors.primaryBlue,
+      Color okBtnColor = ThemeColors.primaryBlue,
+      Color okTxtColor = ThemeColors.black0,
       VoidCallback onCancel,
       VoidCallback okCallback}) async {
     return showDialog(
@@ -101,19 +105,25 @@ class CustomDialog {
                     height: 20.0,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child: RaisedButton(
-                          elevation: 1.0,
-                          onPressed: onCancel,
-                          color: ThemeColors.black0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Text(
-                            '$cancelText',
-                            style: ThemeText.rodinaTitle3
-                                .copyWith(color: ThemeColors.primaryBlue),
+                        child: InkWell(
+                          onTap: onCancel,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: ThemeColors.black40),
+                                color: cancelBtnColor,
+                                borderRadius: BorderRadius.circular(4.0)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text(
+                                '$cancelText',
+                                textAlign: TextAlign.center,
+                                style: ThemeText.rodinaTitle3
+                                    .copyWith(color: cancelTxtColor),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -121,19 +131,21 @@ class CustomDialog {
                         width: 7.0,
                       ),
                       Expanded(
-                        child: RaisedButton(
-                          elevation: 1.0,
-                          color: ThemeColors.primaryBlue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              side: BorderSide(
-                                color: ThemeColors.primaryBlue,
-                              )),
-                          onPressed: okCallback,
-                          child: Text(
-                            '$okText',
-                            style: ThemeText.rodinaTitle3
-                                .copyWith(color: ThemeColors.black0),
+                        child: InkWell(
+                          onTap: okCallback,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                color: okBtnColor),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text(
+                                '$okText',
+                                textAlign: TextAlign.center,
+                                style: ThemeText.rodinaTitle3
+                                    .copyWith(color: okTxtColor),
+                              ),
+                            ),
                           ),
                         ),
                       )
@@ -143,6 +155,15 @@ class CustomDialog {
               ),
             ),
           );
+        });
+  }
+
+  static Future<T> showCustomDialogVerticalMultipleButton<T>(
+      BuildContext context, List<Widget> dialogButtons) async {
+    return showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog();
         });
   }
 

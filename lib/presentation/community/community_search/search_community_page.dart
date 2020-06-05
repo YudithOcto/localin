@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_image_radius.dart';
-import 'package:localin/presentation/community/provider/search_community_provider.dart';
+import 'package:localin/presentation/community/provider/search/search_community_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +57,7 @@ class _SearchCommunityContentWidgetState
           child: Consumer<SearchCommunityProvider>(
             builder: (context, provider, child) {
               return TextFormField(
-                controller: provider.searchTextController,
+                onChanged: (value) => provider.searchCommunity(value),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: ThemeColors.black10,

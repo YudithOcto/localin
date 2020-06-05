@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_category.dart';
 import 'package:localin/presentation/community/provider/community_category_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
-import 'package:localin/presentation/shared_widgets/underline_text_form_field.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
