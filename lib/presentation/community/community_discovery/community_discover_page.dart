@@ -97,7 +97,7 @@ class _ScrollContentState extends State<ScrollContent> {
                         width: 5.67,
                       ),
                       Text(
-                        'My Group',
+                        'My Communities',
                         style: ThemeText.sfSemiBoldHeadline,
                       )
                     ],

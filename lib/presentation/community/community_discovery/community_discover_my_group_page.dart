@@ -32,7 +32,7 @@ class _CommunityMyGroupWidgetState extends State<CommunityMyGroupWidget> {
     return Scaffold(
       backgroundColor: ThemeColors.black10,
       appBar: CustomAppBar(
-        pageTitle: 'My Groups',
+        pageTitle: 'My Communities',
         appBar: AppBar(),
         flexSpace: SafeArea(
             child: InkWell(
