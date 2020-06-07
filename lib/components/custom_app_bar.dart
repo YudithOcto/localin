@@ -9,6 +9,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   final AppBar appBar;
   final Widget leadingIcon;
   final TextStyle titleStyle;
+  final PreferredSizeWidget bottomAppBar;
+
   CustomAppBar({
     Key key,
     @required this.appBar,
@@ -17,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
     this.flexSpace,
     this.leadingIcon,
     this.titleStyle = ThemeText.sfMediumHeadline,
+    this.bottomAppBar,
   });
   @override
   Widget build(BuildContext context) {
@@ -42,6 +45,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
         ),
       ),
       flexibleSpace: flexSpace,
+      bottom: bottomAppBar,
     );
   }
 

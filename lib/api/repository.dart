@@ -9,6 +9,7 @@ import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
+import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
@@ -201,6 +202,10 @@ class Repository {
       String communityId, int page, int limit, String parentId) async {
     return apiProvider.getCommentList(communityId, page, limit,
         parentId: parentId);
+  }
+
+  Future<CommunityMyGroupResponse> getLatestPost(int limit, int offset) async {
+    return apiProvider.getLatestPost(offset, limit);
   }
 
   Future<void> createCommunityEvent(

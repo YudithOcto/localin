@@ -51,6 +51,11 @@ class CommunityComment {
     this.childCommentList,
     this.createdName,
     this.createdAvatar,
+    this.communityName,
+    this.communityLogo,
+    this.communityTotalMember,
+    this.communityCategoryId,
+    this.communityCategoryName,
   });
 
   int id;
@@ -69,6 +74,11 @@ class CommunityComment {
   String type;
   String parentId;
   int childComment;
+  String communityName;
+  String communityLogo;
+  int communityTotalMember;
+  String communityCategoryId;
+  String communityCategoryName;
 
   factory CommunityComment.fromJson(Map<String, dynamic> body) {
     return CommunityComment(
@@ -94,6 +104,11 @@ class CommunityComment {
       childComment: body['komentar_child'] ?? 0,
       createdAvatar: body['created_avatar'],
       createdName: body['created_name'],
+      communityLogo: body['komunitas_logo'] ?? null,
+      communityName: body['komunitas_name'] ?? null,
+      communityTotalMember: body['komunitas_total_member'] ?? null,
+      communityCategoryId: body['komunitas_kategori'] ?? null,
+      communityCategoryName: body['komunitas_kategori_name'] ?? null,
     );
   }
 }

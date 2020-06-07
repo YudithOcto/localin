@@ -13,13 +13,8 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommunityDiscoverPage extends StatefulWidget {
+class CommunityDiscoverPage extends StatelessWidget {
   static const routeName = 'CommunityDiscoverPage';
-  @override
-  _CommunityDiscoverPageState createState() => _CommunityDiscoverPageState();
-}
-
-class _CommunityDiscoverPageState extends State<CommunityDiscoverPage> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

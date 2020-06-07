@@ -5,9 +5,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
 import 'package:localin/presentation/community/community_discovery/community_category_list_page.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
+import 'package:localin/presentation/community/community_discovery/community_discover_my_group_page.dart';
 import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
 import 'package:localin/presentation/community/community_create/community_type_page.dart';
+import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
+import 'package:localin/presentation/community/pages/community_member_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
@@ -155,6 +158,9 @@ class _MyAppState extends State<MyApp> {
             CommunityCategoryListPage.routeName: (_) =>
                 CommunityCategoryListPage(),
             CommunityCommentPage.routeName: (_) => CommunityCommentPage(),
+            CommunityMembersPage.routeName: (_) => CommunityMembersPage(),
+            CommunityDiscoverMyGroupPage.routeName: (_) =>
+                CommunityDiscoverMyGroupPage(),
           },
         ),
       ),

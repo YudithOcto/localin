@@ -25,6 +25,7 @@ class ApiConstant {
   static const String kCreateEventCommunity = 'v1/komunitas/event/';
   static const String kEventCategory = 'v1/komunitas/event/kategori';
   static const String kPopularCommunity = 'v1/komunitas/populer';
+  static const String kLatestPostCommunity = 'v1/komunitas/latest-post';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';

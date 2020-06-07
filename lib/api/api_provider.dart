@@ -15,6 +15,7 @@ import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
+import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
@@ -763,6 +764,21 @@ class ApiProvider {
         return CommunityMemberResponse.withError(_handleError(error));
       } else {
         return CommunityMemberResponse.withError(error);
+      }
+    }
+  }
+
+  Future<CommunityMyGroupResponse> getLatestPost(int offset, int limit) async {
+    try {
+      final response = await _dio.get(ApiConstant.kLatestPostCommunity,
+          queryParameters: {'limit': limit, 'page': offset},
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityMyGroupResponse.withJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityMyGroupResponse.withError(_handleError(error));
+      } else {
+        return CommunityMyGroupResponse.withError(error);
       }
     }
   }
