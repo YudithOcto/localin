@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
+import 'package:localin/presentation/community/community_discovery/widget/community_discover_subtitle_widget.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
 import 'package:localin/presentation/community/provider/community_feed_provider.dart';
 import 'package:localin/presentation/community/provider/community_nearby_provider.dart';
@@ -90,17 +91,9 @@ class _ScrollContentState extends State<ScrollContent> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      SvgPicture.asset('images/star_orange.svg'),
-                      SizedBox(
-                        width: 5.67,
-                      ),
-                      Text(
-                        'My Communities',
-                        style: ThemeText.sfSemiBoldHeadline,
-                      )
-                    ],
+                  CommunityDiscoverSubtitleWidget(
+                    svgAsset: 'images/star_orange.svg',
+                    title: 'My Communities',
                   ),
                   InkWell(
                     onTap: () {

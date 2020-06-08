@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_app_bar.dart';
+import 'package:localin/model/community/community_comment_base_response.dart';
+import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/community/community_heading_type.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_my_group_latest_post.dart';
-import 'package:localin/presentation/community/community_discovery/widget/community_my_group_other_communities.dart';
+import 'package:localin/presentation/community/community_discovery/widget/community_other_row_widget.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
 import 'package:localin/presentation/community/provider/discover/latest_post_mygroup_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -56,40 +59,30 @@ class _CommunityMyGroupWidgetState extends State<CommunityMyGroupWidget> {
                   );
                 }
                 return ListView.builder(
-                  itemCount: provider.latestPost.length +
-                      2 +
-                      provider.otherCommunity.length,
+                  itemCount: provider.communityType.length,
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    if (index == 0) {
+                    final item = provider.communityType[index];
+                    if (item is CommunityHeadingType) {
                       return Container(
                         margin: EdgeInsets.all(20.0),
                         child: Text(
-                          'LATEST POST IN COMMUNITIES',
+                          '${item.title}',
                           style: ThemeText.sfSemiBoldFootnote
                               .copyWith(color: ThemeColors.black80),
                         ),
                       );
-                    } else if (index <= 3) {
+                    } else if (item is CommunityComment) {
                       return CommunityMyGroupLatestPost(
-                        singlePost: provider.latestPost[index - 1],
+                        singlePost: item,
                       );
-                    } else if (index == 4) {
-                      return Container(
-                        margin: EdgeInsets.all(20.0),
-                        child: Text(
-                          'OTHER COMMUNITIES',
-                          style: ThemeText.sfSemiBoldFootnote
-                              .copyWith(color: ThemeColors.black80),
-                        ),
+                    } else if (item is CommunityDetail) {
+                      return CommunityOtherRowWidget(
+                        detail: item,
                       );
                     } else {
-                      //because list should be start from 0, so current index in here is 5 should
-                      // subtracted by 5 then become 0. So it is not out of range
-                      return CommunityMyGroupOtherCommunities(
-                        communityDetail: provider.otherCommunity[index - 5],
-                      );
+                      return Container();
                     }
                   },
                 );

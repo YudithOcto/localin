@@ -1,4 +1,6 @@
 import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/model/community/community_discover_type.dart';
+import 'package:localin/presentation/community/community_create/community_type_page.dart';
 
 class CommunityCommentBaseResponse {
   String error;
@@ -33,7 +35,7 @@ class CommunityCommentBaseResponse {
         error = null;
 }
 
-class CommunityComment {
+class CommunityComment implements CommunityDiscoverType {
   CommunityComment({
     this.id,
     this.communityId,

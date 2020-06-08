@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/community/community_discover_type.dart';
+import 'package:localin/model/community/community_heading_type.dart';
 
 class LatestPostMyGroupProvider with ChangeNotifier {
   final _repository = Repository();
@@ -12,17 +14,26 @@ class LatestPostMyGroupProvider with ChangeNotifier {
   Stream<myGroupState> get state => _streamController.stream;
 
   List<CommunityComment> _latestPost = [];
-  List<CommunityComment> get latestPost => _latestPost;
-
   List<CommunityDetail> _otherCommunity = [];
-  List<CommunityDetail> get otherCommunity => _otherCommunity;
+  List<CommunityDiscoverType> communityType = [];
 
   LatestPostMyGroupProvider() {
     _streamController.add(myGroupState.loading);
     Future.wait([
       getLatestPost(),
       getOtherCommunity(),
-    ]).then((value) => _streamController.add(myGroupState.success));
+    ]).then((value) {
+      if (_latestPost.isNotEmpty) {
+        communityType
+            .add(CommunityHeadingType(title: 'LATEST POST IN COMMUNITIES'));
+        communityType.addAll(_latestPost);
+      }
+      if (_otherCommunity.isNotEmpty) {
+        communityType.add(CommunityHeadingType(title: 'OTHER COMMUNITIES'));
+        communityType.addAll(_otherCommunity);
+      }
+      _streamController.add(myGroupState.success);
+    });
   }
 
   Future<List<CommunityComment>> getLatestPost() async {

@@ -1,4 +1,6 @@
-class CommunityDetail {
+import 'package:localin/model/community/community_discover_type.dart';
+
+class CommunityDetail implements CommunityDiscoverType {
   String id;
   String slug;
   String name;

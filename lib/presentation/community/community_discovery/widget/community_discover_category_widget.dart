@@ -29,8 +29,8 @@ class CommunityDiscoverCategoryWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context)
                     .pushNamed(CommunityCategoryListPage.routeName, arguments: {
-                  CommunityCategoryListPage.categorySlug:
-                      communityCategoryList[index]?.id
+                  CommunityCategoryListPage.categoryDetail:
+                      communityCategoryList[index]
                 });
               },
             ),
