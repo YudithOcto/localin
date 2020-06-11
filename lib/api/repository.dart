@@ -177,8 +177,15 @@ class Repository {
   }
 
   Future<CommunityMemberResponse> getCommunityMember(
-      String communityId, int page, int limit, String type) async {
-    return apiProvider.getMemberCommunity(communityId, page, limit, type);
+      String communityId, int page, int limit, String type,
+      {String search}) async {
+    return apiProvider.getMemberCommunity(communityId, page, limit, type,
+        search: search);
+  }
+
+  Future<CommunityMemberResponse> moderateMember(
+      String communityId, String status) async {
+    return apiProvider.moderateMemberCommunity(communityId, status);
   }
 
   Future<CommunityMemberResponse> approveMember(

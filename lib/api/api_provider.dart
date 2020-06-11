@@ -755,11 +755,18 @@ class ApiProvider {
   }
 
   Future<CommunityMemberResponse> getMemberCommunity(
-      String communityId, page, limit, String type) async {
+      String communityId, page, limit, String type,
+      {String search}) async {
     try {
+      Map<String, dynamic> map = Map();
+      map['page'] = page;
+      map['limit'] = limit;
+      if (search != null) {
+        map['search'] = search;
+      }
       final response = await _dio.get(
           '${ApiConstant.kMemberCommunity}$communityId/$type',
-          queryParameters: {'page': page, 'limit': limit},
+          queryParameters: map,
           options: Options(headers: {'requiredToken': true}));
       return CommunityMemberResponse.fromJson(response.data);
     } catch (error) {
@@ -782,6 +789,23 @@ class ApiProvider {
         return CommunityMyGroupResponse.withError(_handleError(error));
       } else {
         return CommunityMyGroupResponse.withError(error);
+      }
+    }
+  }
+
+  /// status == approve || decline. this api to bulk insert/delete
+  Future<CommunityMemberResponse> moderateMemberCommunity(
+      String communityId, String status) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kModerateMemberCommunity}$communityId/$status',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityMemberResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityMemberResponse.withError(_handleError(error));
+      } else {
+        return CommunityMemberResponse.withError(error);
       }
     }
   }
