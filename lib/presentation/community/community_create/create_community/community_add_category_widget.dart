@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_category.dart';
-import 'package:localin/presentation/community/provider/community_category_provider.dart';
+import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -20,9 +20,8 @@ class _CommunityAddCategoryWidgetState
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      getCategory =
-          Provider.of<CommunityCategoryProvider>(context, listen: false)
-              .getCommunityCategory();
+      getCategory = Provider.of<CommunityCreateProvider>(context, listen: false)
+          .getCategoryList();
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -71,19 +70,35 @@ class _CommunityAddCategoryWidgetState
                       itemCount: snapshot.data?.length ?? 0,
                       itemBuilder: (context, index) {
                         final category = snapshot.data[index];
-                        return Container(
-                          margin: EdgeInsets.only(left: index == 0 ? 0.0 : 4.0),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 16.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: ThemeColors.black40)),
-                          child: Text(
-                            '${category.categoryName}',
-                            maxLines: 1,
-                            style: ThemeText.sfSemiBoldFootnote
-                                .copyWith(color: ThemeColors.black80),
-                          ),
+                        return Consumer<CommunityCreateProvider>(
+                          builder: (context, provider, child) {
+                            return InkWell(
+                              onTap: () {
+                                provider.selectCategory(index);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: index == 0 ? 0.0 : 4.0),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                    color: provider.isCategorySelected(index)
+                                        ? ThemeColors.primaryBlue
+                                        : ThemeColors.black0,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border:
+                                        Border.all(color: ThemeColors.black40)),
+                                child: Text(
+                                  '${category.categoryName}',
+                                  maxLines: 1,
+                                  style: ThemeText.sfSemiBoldFootnote.copyWith(
+                                      color: provider.isCategorySelected(index)
+                                          ? ThemeColors.black0
+                                          : ThemeColors.black80),
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/blocked_tab/community_blocked_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/single_member_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommunityMembersTabWidget extends StatefulWidget {
+class CommunityBlockedTabWidget extends StatefulWidget {
   @override
-  _CommunityMembersTabWidgetState createState() =>
-      _CommunityMembersTabWidgetState();
+  _CommunityBlockedTabWidgetState createState() =>
+      _CommunityBlockedTabWidgetState();
 }
 
-class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
+class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
   bool _isInit = true;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<CommunityMembersTabProvider>(context, listen: false)
-          .getMembersCommunity();
+      Provider.of<CommunityBlockedTabProvider>(context, listen: false)
+          .getBlockedUser();
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -58,10 +58,10 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
           ),
           StreamBuilder<communityMemberState>(
             stream:
-                Provider.of<CommunityMembersTabProvider>(context, listen: false)
-                    .memberStream,
+                Provider.of<CommunityBlockedTabProvider>(context, listen: false)
+                    .blockedStream,
             builder: (context, snapshot) {
-              final provider = Provider.of<CommunityMembersTabProvider>(context,
+              final provider = Provider.of<CommunityBlockedTabProvider>(context,
                   listen: false);
               if (snapshot.connectionState == ConnectionState.waiting &&
                   provider.currentPageRequest <= 1) {
@@ -72,25 +72,23 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                 return ListView.builder(
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: provider.memberList.length + 1,
+                  itemCount: provider.blockedList.length + 1,
                   itemBuilder: (context, index) {
                     if (snapshot.data == communityMemberState.empty) {
                       return Container(
                         child: Text(
-                          'No Member',
-                          textAlign: TextAlign.center,
+                          'No BlockedUser',
                           style: ThemeText.rodinaTitle3,
                         ),
                       );
-                    } else if (index < provider.memberList.length) {
-                      final item = provider.memberList[index];
+                    } else if (index < provider.blockedList.length) {
+                      final item = provider.blockedList[index];
                       return SingleMemberWidget(
                         detail: item,
                         isGroupCreator: index == 0,
                         popupItem: [
-                          'Make Admin',
-                          'Remove',
-                          'Block',
+                          'Remove Block',
+                          'Remove Member',
                           'View Profile',
                         ],
                       );

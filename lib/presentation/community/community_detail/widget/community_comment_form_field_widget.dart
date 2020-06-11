@@ -88,29 +88,24 @@ class CommunityCommentFormFieldWidget extends StatelessWidget {
                           closeCurrentLoading(context);
                           CustomToast.showCustomBookmarkToast(
                               context, result.message);
+                          if (provider.currentClickedReplyData != null) {
+                            Provider.of<CommunityRetrieveCommentProvider>(
+                                    context,
+                                    listen: false)
+                                .addChildComment(result.commentResult);
+                          } else {
+                            Provider.of<CommunityRetrieveCommentProvider>(
+                                    context,
+                                    listen: false)
+                                .addParentComment(result.commentResult);
+                          }
                           provider.setReplyOthersCommentData(null,
                               needFocus: false);
-                          Provider.of<CommunityRetrieveCommentProvider>(context,
-                                  listen: false)
-                              .addChildComment(result.commentResult);
                         } else {
                           closeCurrentLoading(context);
                           CustomToast.showCustomBookmarkToast(
                               context, result.error);
                         }
-//                        if (provider.currentClickedReplyData != null) {
-//                          await provider.replyOthersComment().then((value) {
-//                            closeCurrentLoading();
-//                            CustomToast.showCustomBookmarkToast(context, value);
-//                          });
-//                          provider.setReplyToOtherUserCommentModel(null,
-//                              isNeedRequestFocus: false);
-//                        } else {
-//                          await provider.publishComment().then((value) {
-//                            closeCurrentLoading();
-//                            CustomToast.showCustomBookmarkToast(context, value);
-//                          });
-//                        }
                       },
                       child: SvgPicture.asset(
                           'images/${provider.isTextEmpty ? 'send' : 'send_active'}.svg')),

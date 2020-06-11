@@ -102,7 +102,7 @@ class CommunityComment implements CommunityDiscoverType {
           : List<CommunityComment>.from(
               body['data'].map((v) => CommunityComment.fromJson(v))),
       type: body['tipe'],
-      parentId: body['parent_id'],
+      parentId: body['parent_id'].toString(),
       childComment: body['komentar_child'] ?? 0,
       createdAvatar: body['created_avatar'],
       createdName: body['created_name'],

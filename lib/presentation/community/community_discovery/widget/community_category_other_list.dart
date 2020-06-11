@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_discover_subtitle_widget.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_other_row_widget.dart';
 import 'package:localin/presentation/community/provider/community_category_provider.dart';
-import 'package:localin/text_themes.dart';
-import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityCategoryOtherList extends StatefulWidget {

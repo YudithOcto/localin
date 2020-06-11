@@ -21,6 +21,7 @@ class CommunityDetailPage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     CommunityDetail _communityDetail =
         routeArgs[CommunityDetailPage.communityData];
+    print('COMMMUNITY ${_communityDetail.loginStatusType}');
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<CommunityDetailProvider>(
@@ -33,13 +34,15 @@ class CommunityDetailPage extends StatelessWidget {
         ],
         child: CommunityDetailColumn(
           adminId: _communityDetail.createBy,
+          communityDetail: _communityDetail,
         ));
   }
 }
 
 class CommunityDetailColumn extends StatelessWidget {
   final String adminId;
-  CommunityDetailColumn({this.adminId});
+  final CommunityDetail communityDetail;
+  CommunityDetailColumn({this.adminId, @required this.communityDetail});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,10 +66,12 @@ class CommunityDetailColumn extends StatelessWidget {
                           topLeft: Radius.circular(12.0),
                           topRight: Radius.circular(12.0))),
                   builder: (ctx) => CommunitySettingsWidget(
-                        isAdmin: adminId ==
+                        isAdmin:
                             Provider.of<AuthProvider>(context, listen: false)
-                                .userModel
-                                .id,
+                                    .userModel
+                                    .id ==
+                                adminId,
+                        communityDetail: communityDetail,
                       ));
             },
             child: Padding(

@@ -23,30 +23,33 @@ class CommunityDetail implements CommunityDiscoverType {
   String longitude;
   bool isJoin;
   int totalMember;
+  String loginStatusType;
 
-  CommunityDetail(
-      {this.id,
-      this.slug,
-      this.name,
-      this.category,
-      this.description,
-      this.address,
-      this.logo,
-      this.ranting,
-      this.status,
-      this.createBy,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.cover,
-      this.latitude,
-      this.longitude,
-      this.categoryName,
-      this.follower,
-      this.imageCount,
-      this.logoUrl,
-      this.isJoin,
-      this.totalMember});
+  CommunityDetail({
+    this.id,
+    this.slug,
+    this.name,
+    this.category,
+    this.description,
+    this.address,
+    this.logo,
+    this.ranting,
+    this.status,
+    this.createBy,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.cover,
+    this.latitude,
+    this.longitude,
+    this.categoryName,
+    this.follower,
+    this.imageCount,
+    this.logoUrl,
+    this.isJoin,
+    this.totalMember,
+    this.loginStatusType,
+  });
 
   factory CommunityDetail.fromJson(Map<String, dynamic> body) {
     return CommunityDetail(
@@ -72,6 +75,7 @@ class CommunityDetail implements CommunityDiscoverType {
       logoUrl: body['logo_url'],
       isJoin: body['is_join'],
       totalMember: body['total_member'],
+      loginStatusType: body['status_loggin'],
     );
   }
 }

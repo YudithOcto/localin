@@ -20,7 +20,8 @@ class _CommunityMemberPageState extends State<CommunityMemberPage> {
   Future member;
 
   Future<List<MemberListItem>> getMembers(String communityId) async {
-    var response = await Repository().getCommunityMember(communityId);
+    //var response = await Repository().getCommunityMember(communityId);
+    final response = null;
     return mapperFromApi(response);
   }
 

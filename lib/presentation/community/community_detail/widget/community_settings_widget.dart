@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
 class CommunitySettingsWidget extends StatelessWidget {
   final bool isAdmin;
-  CommunitySettingsWidget({@required this.isAdmin});
+  final CommunityDetail communityDetail;
+  CommunitySettingsWidget(
+      {@required this.isAdmin, @required this.communityDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +22,27 @@ class CommunitySettingsWidget extends StatelessWidget {
         ),
         Visibility(
           visible: isAdmin,
-          child: RowSettings(
-            icon: 'images/community_settings.svg',
-            title: 'Group Settings',
+          child: InkWell(
+            onTap: () {},
+            child: RowSettings(
+              icon: 'images/community_settings.svg',
+              title: 'Group Settings',
+            ),
           ),
         ),
         Visibility(
           visible: isAdmin,
-          child: RowSettings(
-            icon: 'images/community_settings_member.svg',
-            title: 'Members',
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(CommunityMembersPage.routeName, arguments: {
+                CommunityMembersPage.communityId: communityDetail.id,
+              });
+            },
+            child: RowSettings(
+              icon: 'images/community_settings_member.svg',
+              title: 'Members',
+            ),
           ),
         ),
         RowSettings(

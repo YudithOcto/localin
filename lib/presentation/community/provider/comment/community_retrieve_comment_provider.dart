@@ -76,22 +76,30 @@ class CommunityRetrieveCommentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Null> addChildComment(CommunityComment comment) async {
+  void addChildComment(CommunityComment comment) {
     _commentList
-        .where((element) => element.id == comment.id)
+        .where((element) => element.id.toString() == comment.parentId)
         .map((e) => e.childCommentList.add(comment))
         .toList();
+    notifyListeners();
+  }
+
+  void addParentComment(CommunityComment comment) {
+    _commentList.insert(0, comment);
     notifyListeners();
   }
 
   Future<List<CommunityComment>> getChildCommentList(
       {String communityId,
       String parentId,
-      int limit = 1,
+      int limit = 10,
       int page = 1}) async {
     final response = await _repository.getCommunityCommentList(
         communityId, page, limit, parentId);
-    return response.data;
+    if (response.error == null) {
+      return response.data;
+    }
+    return [];
   }
 }
 

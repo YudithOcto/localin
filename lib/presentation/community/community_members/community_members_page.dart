@@ -1,18 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/custom_app_bar.dart';
+import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_widget.dart';
+import 'package:localin/presentation/community/community_members/blocked_tab/community_blocked_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/blocked_tab/community_blocked_tab_widget.dart';
 import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_widget.dart';
+import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../../text_themes.dart';
 import '../../../themes.dart';
 
-class CommunityMembersPage extends StatefulWidget {
+class CommunityMembersPage extends StatelessWidget {
   static const routeName = 'CommunityMembersPage';
+  static const communityId = 'CommunityId';
 
   @override
-  _CommunityMembersPageState createState() => _CommunityMembersPageState();
+  Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    String comId = routeArgs[CommunityMembersPage.communityId];
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CommunityAdminTabProvider>(
+          create: (_) => CommunityAdminTabProvider(communityId: comId),
+        ),
+        ChangeNotifierProvider<CommunityMembersTabProvider>(
+          create: (_) => CommunityMembersTabProvider(communityId: comId),
+        ),
+        ChangeNotifierProvider<CommunityRequestTabProvider>(
+          create: (_) => CommunityRequestTabProvider(communityId: comId),
+        ),
+        ChangeNotifierProvider<CommunityBlockedTabProvider>(
+          create: (_) => CommunityBlockedTabProvider(communityId: comId),
+        )
+      ],
+      child: CommunityMemberWrapperContent(),
+    );
+  }
 }
 
-class _CommunityMembersPageState extends State<CommunityMembersPage>
+class CommunityMemberWrapperContent extends StatefulWidget {
+  @override
+  _CommunityMemberWrapperContentState createState() =>
+      _CommunityMemberWrapperContentState();
+}
+
+class _CommunityMemberWrapperContentState
+    extends State<CommunityMemberWrapperContent>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
@@ -66,9 +102,9 @@ class _CommunityMembersPageState extends State<CommunityMembersPage>
           controller: _tabController,
           children: <Widget>[
             CommunityMembersTabWidget(),
-            Container(),
-            Container(),
-            Container(),
+            CommunityAdminTabWidget(),
+            CommunityRequestTabWidget(),
+            CommunityBlockedTabWidget(),
           ],
         ),
       ),

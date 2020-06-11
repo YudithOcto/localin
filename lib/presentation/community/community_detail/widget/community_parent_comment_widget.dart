@@ -133,6 +133,7 @@ class CommunityParentCommentWidget extends StatelessWidget {
                 visible: provider.isShowChildComment(communityComment.id),
                 child: CommunityChildCommentWidget(
                   replayComment: communityComment.childCommentList,
+                  totalComment: communityComment.childComment,
                 ),
               );
             },

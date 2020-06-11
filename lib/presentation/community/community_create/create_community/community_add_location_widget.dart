@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/location/search_location_response.dart';
-import 'package:localin/presentation/community/provider/community_create_provider.dart';
+import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

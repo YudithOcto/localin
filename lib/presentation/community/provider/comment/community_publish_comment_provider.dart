@@ -32,6 +32,8 @@ class CommunityPublishCommentProvider with ChangeNotifier {
       {bool needFocus = true}) {
     if (needFocus) {
       _focusNode.requestFocus(FocusNode());
+    } else {
+      _focusNode.unfocus();
     }
     _currentClickedReplyCommentData = value;
     notifyListeners();
@@ -41,12 +43,15 @@ class CommunityPublishCommentProvider with ChangeNotifier {
       String communityId) async {
     Map<String, dynamic> map = Map();
     if (_currentClickedReplyCommentData != null) {
-      map['parent_id'] = _currentClickedReplyCommentData.parentId;
+      map['parent_id'] = _currentClickedReplyCommentData.id.toString();
+      map['komentar'] =
+          '${_currentClickedReplyCommentData.createdName.split(' ')[0]} ${commentTextController.text}';
+    } else {
+      map['komentar'] = commentTextController.text;
     }
-    map['komentar'] =
-        '${_currentClickedReplyCommentData.createdName.split(' ')[0]} ${commentTextController.text}';
     final _form = FormData.fromMap(map);
     final response = await _repository.postComment(communityId, _form);
+    commentTextController.clear();
     return response;
   }
 }

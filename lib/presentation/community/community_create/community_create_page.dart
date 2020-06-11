@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/presentation/community/community_create/community_type_page.dart';
-import 'package:localin/presentation/community/provider/community_category_provider.dart';
-import 'package:localin/presentation/community/provider/community_create_provider.dart';
+import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -22,9 +21,6 @@ class CommunityCreatePage extends StatelessWidget {
         ChangeNotifierProvider<CommunityCreateProvider>(
           create: (_) => CommunityCreateProvider(),
         ),
-        ChangeNotifierProvider<CommunityCategoryProvider>(
-          create: (_) => CommunityCategoryProvider(),
-        )
       ],
       child: CommunityCreateWrapperWidget(),
     );

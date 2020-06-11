@@ -610,6 +610,7 @@ class ApiProvider {
           queryParameters: map,
           options: Options(headers: {'requiredToken': true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
+      print(model.communityDetailList.toString());
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -753,10 +754,12 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityMemberResponse> getMemberCommunity(String communityId) async {
+  Future<CommunityMemberResponse> getMemberCommunity(
+      String communityId, page, limit, String type) async {
     try {
       final response = await _dio.get(
-          '${ApiConstant.kMemberCommunity}$communityId',
+          '${ApiConstant.kMemberCommunity}$communityId/$type',
+          queryParameters: {'page': page, 'limit': limit},
           options: Options(headers: {'requiredToken': true}));
       return CommunityMemberResponse.fromJson(response.data);
     } catch (error) {

@@ -27,7 +27,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
         children: <Widget>[
           InkWell(
             onTap: () async {
-              var result = await Navigator.of(context)
+              final result = await Navigator.of(context)
                   .pushNamed(CommunityDetailPage.routeName, arguments: {
                 CommunityDetailPage.communityData: widget.model,
               });

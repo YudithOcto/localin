@@ -63,14 +63,17 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
               style: ThemeText.sfRegularBody,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12.0),
-            child: CustomImageRadius(
-              imageUrl: commentData.attachment.isNotEmpty
-                  ? commentData?.attachment?.first?.attachment ?? ''
-                  : '',
-              width: double.maxFinite,
-              height: 200.0,
+          Visibility(
+            visible: commentData.attachment.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: CustomImageRadius(
+                imageUrl: commentData.attachment.isNotEmpty
+                    ? commentData?.attachment?.first?.attachment ?? ''
+                    : '',
+                width: double.maxFinite,
+                height: 200.0,
+              ),
             ),
           ),
           Padding(
@@ -94,7 +97,7 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
                             width: 5.59,
                           ),
                           Text(
-                            '100',
+                            '0',
                             style: ThemeText.sfSemiBoldBody
                                 .copyWith(color: ThemeColors.black80),
                           ),
@@ -117,7 +120,7 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
                             width: 5.59,
                           ),
                           Text(
-                            '100',
+                            '${commentData.childCommentList.length}',
                             style: ThemeText.sfSemiBoldBody
                                 .copyWith(color: ThemeColors.black80),
                           ),

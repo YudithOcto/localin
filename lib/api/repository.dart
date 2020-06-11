@@ -176,8 +176,9 @@ class Repository {
     return apiProvider.joinCommunity(id);
   }
 
-  Future<CommunityMemberResponse> getCommunityMember(String communityId) async {
-    return apiProvider.getMemberCommunity(communityId);
+  Future<CommunityMemberResponse> getCommunityMember(
+      String communityId, int page, int limit, String type) async {
+    return apiProvider.getMemberCommunity(communityId, page, limit, type);
   }
 
   Future<CommunityMemberResponse> approveMember(

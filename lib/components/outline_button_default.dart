@@ -7,12 +7,19 @@ class OutlineButtonDefault extends StatelessWidget {
   final Function onPressed;
   final Color backgroundColor;
   final double width;
+  final TextStyle textStyle;
+  final Color textColor;
+  final Color sideColor;
 
-  OutlineButtonDefault(
-      {@required this.buttonText,
-      @required this.onPressed,
-      this.width = double.infinity,
-      this.backgroundColor = ThemeColors.black0});
+  OutlineButtonDefault({
+    @required this.buttonText,
+    @required this.onPressed,
+    this.width = double.infinity,
+    this.backgroundColor = ThemeColors.black0,
+    this.textStyle = ThemeText.rodinaTitle3,
+    this.textColor = ThemeColors.primaryBlue,
+    this.sideColor = ThemeColors.primaryBlue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +33,11 @@ class OutlineButtonDefault extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4.0),
             side: BorderSide(
-              color: ThemeColors.primaryBlue,
+              color: sideColor,
             )),
         child: Text(
           '$buttonText',
-          style:
-              ThemeText.rodinaTitle3.copyWith(color: ThemeColors.primaryBlue),
+          style: textStyle.copyWith(color: textColor),
         ),
       ),
     );

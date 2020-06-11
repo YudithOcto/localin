@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/single_member_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommunityMembersTabWidget extends StatefulWidget {
+class CommunityAdminTabWidget extends StatefulWidget {
   @override
-  _CommunityMembersTabWidgetState createState() =>
-      _CommunityMembersTabWidgetState();
+  _CommunityAdminTabWidgetState createState() =>
+      _CommunityAdminTabWidgetState();
 }
 
-class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
+class _CommunityAdminTabWidgetState extends State<CommunityAdminTabWidget> {
   bool _isInit = true;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<CommunityMembersTabProvider>(context, listen: false)
-          .getMembersCommunity();
+      Provider.of<CommunityAdminTabProvider>(context, listen: false)
+          .getAdminCommunity();
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -58,10 +58,10 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
           ),
           StreamBuilder<communityMemberState>(
             stream:
-                Provider.of<CommunityMembersTabProvider>(context, listen: false)
-                    .memberStream,
+                Provider.of<CommunityAdminTabProvider>(context, listen: false)
+                    .adminStream,
             builder: (context, snapshot) {
-              final provider = Provider.of<CommunityMembersTabProvider>(context,
+              final provider = Provider.of<CommunityAdminTabProvider>(context,
                   listen: false);
               if (snapshot.connectionState == ConnectionState.waiting &&
                   provider.currentPageRequest <= 1) {
@@ -72,24 +72,23 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                 return ListView.builder(
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: provider.memberList.length + 1,
+                  itemCount: provider.adminList.length + 1,
                   itemBuilder: (context, index) {
                     if (snapshot.data == communityMemberState.empty) {
                       return Container(
                         child: Text(
-                          'No Member',
-                          textAlign: TextAlign.center,
+                          'No Admin',
                           style: ThemeText.rodinaTitle3,
                         ),
                       );
-                    } else if (index < provider.memberList.length) {
-                      final item = provider.memberList[index];
+                    } else if (index < provider.adminList.length) {
+                      final item = provider.adminList[index];
                       return SingleMemberWidget(
                         detail: item,
                         isGroupCreator: index == 0,
                         popupItem: [
-                          'Make Admin',
-                          'Remove',
+                          'Remove Admin',
+                          'Remove Member',
                           'Block',
                           'View Profile',
                         ],
