@@ -37,6 +37,7 @@ class _CommunityMyGroupWidgetState extends State<CommunityMyGroupWidget> {
       appBar: CustomAppBar(
         pageTitle: 'My Communities',
         appBar: AppBar(),
+        onClickBackButton: () => Navigator.of(context).pop(),
         flexSpace: SafeArea(
             child: InkWell(
           onTap: () async {

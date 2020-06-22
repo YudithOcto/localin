@@ -55,7 +55,9 @@ class _CommunityByCategoryContentWidgetState
         backgroundColor: ThemeColors.black0,
         elevation: 0,
         leading: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pop();
+          },
           child: Icon(
             Icons.arrow_back,
             color: ThemeColors.black80,

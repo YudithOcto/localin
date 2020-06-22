@@ -33,7 +33,7 @@ class SingleCardNotification extends StatelessWidget {
           case 'komunitas':
             Navigator.of(context)
                 .pushNamed(CommunityDetailPage.routeName, arguments: {
-              CommunityDetailPage.communityData: detailModel,
+              CommunityDetailPage.communitySlug: detailModel.id,
             });
             break;
         }

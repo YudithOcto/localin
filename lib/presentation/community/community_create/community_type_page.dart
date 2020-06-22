@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/model/community/community_create_request_model.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
-import 'package:localin/presentation/community/community_create/community_create_page.dart';
-import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/community/provider/create/community_type_provider.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/text_themes.dart';
@@ -96,7 +92,7 @@ class _CommunityTypeCreateContentState
             Navigator.of(context).pushNamedAndRemoveUntil(
                 CommunityDetailPage.routeName, (route) => false,
                 arguments: {
-                  CommunityDetailPage.communityData: communityDetail,
+                  CommunityDetailPage.communitySlug: communityDetail.slug,
                   CommunityDetailPage.needBackToHome: true,
                 });
           } else {

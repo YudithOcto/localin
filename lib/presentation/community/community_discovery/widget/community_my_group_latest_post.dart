@@ -66,7 +66,7 @@ class CommunityMyGroupLatestPost extends StatelessWidget {
             height: 4.0,
           ),
           Text(
-            '${singlePost.commentContent}',
+            '${singlePost.commentContent.replaceAll('<br />', '\n')}',
             style: ThemeText.sfRegularBody,
           ),
           SizedBox(

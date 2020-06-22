@@ -15,7 +15,7 @@ class CommunityOtherRowWidget extends StatelessWidget {
       onTap: () {
         Navigator.of(context)
             .pushNamed(CommunityDetailPage.routeName, arguments: {
-          CommunityDetailPage.communityData: detail,
+          CommunityDetailPage.communitySlug: detail.slug,
         });
       },
       child: Container(

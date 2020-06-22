@@ -74,6 +74,7 @@ class _ScrollContentState extends State<ScrollContent> {
       appBar: CustomAppBar(
         pageTitle: 'Community',
         appBar: AppBar(),
+        onClickBackButton: () => Navigator.of(context).pop(),
         flexSpace: SafeArea(
             child: InkWell(
           onTap: () async {

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/circle_image.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
+import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -50,9 +51,12 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.more_vert,
-                color: ThemeColors.black80,
+              Visibility(
+                visible: false,
+                child: Icon(
+                  Icons.more_vert,
+                  color: ThemeColors.black80,
+                ),
               ),
             ],
           ),
@@ -65,14 +69,33 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
           ),
           Visibility(
             visible: commentData.attachment.isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: CustomImageRadius(
-                imageUrl: commentData.attachment.isNotEmpty
-                    ? commentData?.attachment?.first?.attachment ?? ''
-                    : '',
-                width: double.maxFinite,
-                height: 200.0,
+            child: InkWell(
+              onTap: () {
+                List<String> gallery = List();
+                gallery.add(commentData.attachment.first.attachment);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GalleryPhotoView(
+                      galleryItems: gallery,
+                      backgroundDecoration: const BoxDecoration(
+                        color: Colors.black,
+                      ),
+                      initialIndex: 0,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: CustomImageRadius(
+                  imageUrl: commentData.attachment.isNotEmpty
+                      ? commentData?.attachment?.first?.attachment ?? ''
+                      : '',
+                  width: double.maxFinite,
+                  height: 200.0,
+                ),
               ),
             ),
           ),

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
-import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import '../../text_themes.dart';
 import '../../themes.dart';
 
@@ -23,7 +22,7 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
       onTap: () async {
         final result = await Navigator.of(context)
             .pushNamed(CommunityDetailPage.routeName, arguments: {
-          CommunityDetailPage.communityData: widget.model,
+          CommunityDetailPage.communitySlug: widget.model.slug,
         });
 //        final result = await Navigator.of(context)
 //            .pushNamed(TransactionCommunityDetailPage.routeName, arguments: {

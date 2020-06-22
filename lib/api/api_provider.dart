@@ -753,6 +753,22 @@ class ApiProvider {
     }
   }
 
+  Future<CommunityDetailBaseResponse> leaveCommunity(String communityId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kLeaveCommunity}/$communityId',
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityDetailBaseResponse.uploadSuccess(
+          response.data['message']);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error.toString());
+      }
+    }
+  }
+
   Future<CommunityCommentBaseResponse> createPostCommunity(
       FormData form, String communityId) async {
     try {

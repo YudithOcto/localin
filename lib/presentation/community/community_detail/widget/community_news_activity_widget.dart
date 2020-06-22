@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 import '../../../../text_themes.dart';
 import '../../../../themes.dart';
 import '../community_comment_page.dart';
-import '../community_detail_page.dart';
 
 class CommunityNewsActivityWidget extends StatefulWidget {
+  final CommunityDetail communityDetail;
+  CommunityNewsActivityWidget({@required this.communityDetail});
+
   @override
   _CommunityNewsActivityWidgetState createState() =>
       _CommunityNewsActivityWidgetState();
@@ -23,9 +25,7 @@ class _CommunityNewsActivityWidgetState
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final routeArgs =
-          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      _communityDetail = routeArgs[CommunityDetailPage.communityData];
+      _communityDetail = widget.communityDetail;
       loadCommentData(true);
       _isInit = false;
     }

@@ -58,6 +58,16 @@ class CommunitySettingsWidget extends StatelessWidget {
             final canLogout =
                 await provider.getAdmin(communityId: communityDetail.id);
             if (canLogout) {
+              CustomDialog.showLoadingDialog(context, message: 'Loading . . .');
+              final response =
+                  await provider.leaveCommunity(communityDetail.id);
+              CustomDialog.closeDialog(context);
+              final result = await CustomDialog.showCustomDialogWithButton(
+                  context, 'Leave Community', '${response.message ?? ''}',
+                  btnText: 'Close');
+              if (result == 'success') {
+                Navigator.of(context).pop();
+              }
             } else {
               CustomDialog.showCustomDialogWithButton(
                   context,

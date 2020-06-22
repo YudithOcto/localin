@@ -29,6 +29,7 @@ class ApiConstant {
   static const String kLatestPostCommunity = 'v1/komunitas/latest-post';
   static const String kCommunityPrice = 'v1/komunitas/upgrade-price';
   static const String kCreatePostCommunity = 'v1/komunitas/konten';
+  static const String kLeaveCommunity = 'v1/komunitas/leave';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';

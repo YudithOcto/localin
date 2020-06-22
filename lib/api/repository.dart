@@ -182,6 +182,10 @@ class Repository {
     return apiProvider.createPostCommunity(form, communityId);
   }
 
+  Future<CommunityDetailBaseResponse> leaveCommunity(String commId) {
+    return apiProvider.leaveCommunity(commId);
+  }
+
   Future<CommunityMemberResponse> getCommunityMember(
       String communityId, int page, int limit, String type,
       {String search}) async {

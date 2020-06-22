@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
 
@@ -17,10 +18,6 @@ class CommunityDetailProvider extends BaseModelProvider {
   Repository _repository = Repository();
   File attachmentFileImage, attachmentFileVideo;
   TextEditingController commentController = TextEditingController();
-
-  CommunityDetailProvider({this.communitySlug}) {
-    getCommunityDetail(communitySlug);
-  }
 
   @override
   void dispose() {
@@ -50,12 +47,13 @@ class CommunityDetailProvider extends BaseModelProvider {
       StreamController<communityDetailState>.broadcast();
   Stream<communityDetailState> get streamDetailState => _detailState.stream;
 
-  Future<Null> getCommunityDetail(String communityId) async {
+  Future<Null> getCommunityDetail(String communitySlug) async {
     _detailState.add(communityDetailState.loading);
-    final response = await _repository.getCommunityDetail(communityId);
+    final response = await _repository.getCommunityDetail(communitySlug);
     if (response.error == null) {
       _detailState.add(communityDetailState.success);
       communityDetail = response.detailCommunity;
+      notifyListeners();
     } else {
       _detailState.add(communityDetailState.empty);
     }
@@ -68,6 +66,11 @@ class CommunityDetailProvider extends BaseModelProvider {
       return response.data.length > 1;
     }
     return false;
+  }
+
+  Future<CommunityDetailBaseResponse> leaveCommunity(String commId) async {
+    final response = await _repository.leaveCommunity(commId);
+    return response;
   }
 
   Future<CommunityCommentBaseResponse> postComment() async {
