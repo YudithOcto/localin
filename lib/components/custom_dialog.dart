@@ -159,18 +159,52 @@ class CustomDialog {
   }
 
   static Future<T> showCustomDialogVerticalMultipleButton<T>(
-      BuildContext context, List<Widget> dialogButtons) async {
+      BuildContext context,
+      {List<Widget> dialogButtons,
+      String title,
+      String message}) async {
     return showDialog(
         context: context,
         builder: (ctx) {
-          return AlertDialog();
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  '$title',
+                  textAlign: TextAlign.center,
+                  style: ThemeText.sfMediumTitle3,
+                ),
+                SizedBox(
+                  height: 18.0,
+                ),
+                Text(
+                  '$message',
+                  textAlign: TextAlign.center,
+                  style: ThemeText.sfRegularBody
+                      .copyWith(color: ThemeColors.black80),
+                ),
+                SizedBox(
+                  height: 24.0,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: dialogButtons,
+                )
+              ],
+            ),
+          );
         });
   }
 
   static Future<T> showCustomDialogWithButton<T>(
-      BuildContext context, String title, String message) async {
+      BuildContext context, String title, String message,
+      {String btnText = 'Yes', bool barrierDismissible = true}) async {
     return showDialog(
         context: context,
+        barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
@@ -184,6 +218,7 @@ class CustomDialog {
                 ),
                 SizedBox(height: 8.0),
                 Text('$message',
+                    textAlign: TextAlign.center,
                     style: ThemeText.sfMediumBody
                         .copyWith(color: ThemeColors.black80)),
                 SizedBox(
@@ -197,7 +232,7 @@ class CustomDialog {
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   child: Text(
-                    'Yes',
+                    '$btnText',
                     style: ThemeText.rodinaTitle3
                         .copyWith(color: ThemeColors.black0),
                   ),

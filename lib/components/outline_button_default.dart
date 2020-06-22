@@ -7,6 +7,7 @@ class OutlineButtonDefault extends StatelessWidget {
   final Function onPressed;
   final Color backgroundColor;
   final double width;
+  final double height;
   final TextStyle textStyle;
   final Color textColor;
   final Color sideColor;
@@ -15,6 +16,7 @@ class OutlineButtonDefault extends StatelessWidget {
     @required this.buttonText,
     @required this.onPressed,
     this.width = double.infinity,
+    this.height = 48.0,
     this.backgroundColor = ThemeColors.black0,
     this.textStyle = ThemeText.rodinaTitle3,
     this.textColor = ThemeColors.primaryBlue,
@@ -24,7 +26,7 @@ class OutlineButtonDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48.0,
+      height: height,
       width: width,
       child: RaisedButton(
         elevation: 1.0,
@@ -35,9 +37,12 @@ class OutlineButtonDefault extends StatelessWidget {
             side: BorderSide(
               color: sideColor,
             )),
-        child: Text(
-          '$buttonText',
-          style: textStyle.copyWith(color: textColor),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          child: Text(
+            '$buttonText',
+            style: textStyle.copyWith(color: textColor),
+          ),
         ),
       ),
     );

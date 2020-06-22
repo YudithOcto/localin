@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_news_activity_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_settings_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/sliver_appbar_widget.dart';
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
-import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class CommunityDetailPage extends StatelessWidget {
   static const routeName = 'CommunityDetailPage';
   static const communityData = '/communityData';
+  static const needBackToHome = 'needBackToHome';
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class CommunityDetailPage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     CommunityDetail _communityDetail =
         routeArgs[CommunityDetailPage.communityData];
-    print('COMMMUNITY ${_communityDetail.loginStatusType}');
+    bool isNeedToBackHome =
+        routeArgs[CommunityDetailPage.needBackToHome] ?? false;
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<CommunityDetailProvider>(
@@ -32,9 +34,21 @@ class CommunityDetailPage extends StatelessWidget {
             create: (_) => CommunityRetrieveCommentProvider(),
           )
         ],
-        child: CommunityDetailColumn(
-          adminId: _communityDetail.createBy,
-          communityDetail: _communityDetail,
+        child: WillPopScope(
+          onWillPop: () async {
+            if (isNeedToBackHome) {
+              Navigator.of(context)
+                  .pushReplacementNamed(MainBottomNavigation.routeName);
+            } else {
+              Navigator.of(context).pop();
+            }
+            return false;
+          },
+          child: CommunityDetailColumn(
+            adminId: _communityDetail.createBy,
+            communityDetail: _communityDetail,
+            isNeedToBackHome: isNeedToBackHome,
+          ),
         ));
   }
 }
@@ -42,13 +56,30 @@ class CommunityDetailPage extends StatelessWidget {
 class CommunityDetailColumn extends StatelessWidget {
   final String adminId;
   final CommunityDetail communityDetail;
-  CommunityDetailColumn({this.adminId, @required this.communityDetail});
+  final bool isNeedToBackHome;
+  CommunityDetailColumn(
+      {this.adminId,
+      @required this.communityDetail,
+      this.isNeedToBackHome = false});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ThemeColors.greyDark,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        leading: InkWell(
+          onTap: () {
+            if (isNeedToBackHome) {
+              Navigator.of(context)
+                  .pushReplacementNamed(MainBottomNavigation.routeName);
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: ThemeColors.black0,
+          ),
+        ),
         backgroundColor: Color(0xFF1F75E1),
         elevation: 0.0,
         title: Text(
@@ -58,6 +89,8 @@ class CommunityDetailColumn extends StatelessWidget {
         actions: <Widget>[
           InkWell(
             onTap: () {
+              final provider =
+                  Provider.of<CommunityDetailProvider>(context, listen: false);
               showModalBottomSheet(
                   context: context,
                   enableDrag: true,
@@ -66,11 +99,8 @@ class CommunityDetailColumn extends StatelessWidget {
                           topLeft: Radius.circular(12.0),
                           topRight: Radius.circular(12.0))),
                   builder: (ctx) => CommunitySettingsWidget(
-                        isAdmin:
-                            Provider.of<AuthProvider>(context, listen: false)
-                                    .userModel
-                                    .id ==
-                                adminId,
+                        provider: provider,
+                        isAdmin: provider.communityDetail.loginStatusType,
                         communityDetail: communityDetail,
                       ));
             },
@@ -84,33 +114,46 @@ class CommunityDetailColumn extends StatelessWidget {
           ),
         ],
       ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBox) {
-          return <Widget>[
-            SliverPersistentHeader(
-              floating: false,
-              pinned: true,
-              delegate: SliverAppBarWidget(),
-            )
-          ];
-        },
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 24.0, left: 20.0, bottom: 8.0),
-              child: Text(
-                'NEWS ACTIVITY',
-                style: ThemeText.sfSemiBoldFootnote
-                    .copyWith(color: ThemeColors.black80),
-              ),
+      body: StreamBuilder(
+        stream: Provider.of<CommunityDetailProvider>(context, listen: false)
+            .streamDetailState,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return NestedScrollView(
+            headerSliverBuilder: (context, innerBox) {
+              return <Widget>[
+                SliverPersistentHeader(
+                  floating: false,
+                  pinned: true,
+                  delegate: SliverAppBarWidget(),
+                )
+              ];
+            },
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 24.0, left: 20.0, bottom: 8.0),
+                  child: Text(
+                    'NEWS ACTIVITY',
+                    style: ThemeText.sfSemiBoldFootnote
+                        .copyWith(color: ThemeColors.black80),
+                  ),
+                ),
+                CommunityNewsActivityWidget(),
+              ],
             ),
-            CommunityNewsActivityWidget(),
-          ],
-        ),
+          );
+        },
       ),
-      floatingActionButton: SvgPicture.asset('images/chat_room.svg'),
+      floatingActionButton: Visibility(
+          visible: communityDetail.communityType == 'paid',
+          child: SvgPicture.asset('images/chat_room.svg')),
     );
   }
 }

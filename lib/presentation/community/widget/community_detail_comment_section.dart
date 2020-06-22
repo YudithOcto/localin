@@ -3,7 +3,7 @@ import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/community/widget/community_comment_card.dart';
 import 'package:localin/presentation/community/widget/community_description.dart';
 import 'package:localin/presentation/community/widget/community_profile_form_input.dart';
-import 'package:localin/provider/community/community_detail_provider.dart';
+import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 

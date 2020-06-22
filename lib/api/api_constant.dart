@@ -27,6 +27,8 @@ class ApiConstant {
   static const String kEventCategory = 'v1/komunitas/event/kategori';
   static const String kPopularCommunity = 'v1/komunitas/populer';
   static const String kLatestPostCommunity = 'v1/komunitas/latest-post';
+  static const String kCommunityPrice = 'v1/komunitas/upgrade-price';
+  static const String kCreatePostCommunity = 'v1/komunitas/konten';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';
@@ -65,4 +67,8 @@ class ApiConstant {
 
   /// LOCATION
   static const String kSearchLocation = 'v1/location';
+
+  /// TRANSACTION
+  static const String kTransactionDetail = 'v1/transaksi';
+  static const String kTransactionPayment = 'v1/transaksi/pay';
 }

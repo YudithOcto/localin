@@ -27,6 +27,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -404,7 +405,6 @@ class ApiProvider {
     try {
       final response = await _dio.post(ApiConstant.kCreateArticle,
           options: Options(headers: {'requiredToken': true}), data: form);
-      print(jsonEncode(response.data));
       final model = ArticleBaseResponse.withJson(response.data);
       return model;
     } catch (error) {
@@ -711,8 +711,7 @@ class ApiProvider {
     try {
       final response = await _dio.post(ApiConstant.kCreateCommunity,
           data: form, options: Options(headers: {'requiredToken': true}));
-      return CommunityDetailBaseResponse.uploadSuccess(
-          response.data['message']);
+      return CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityDetailBaseResponse.hasError(_handleError(error));
@@ -754,6 +753,35 @@ class ApiProvider {
     }
   }
 
+  Future<CommunityCommentBaseResponse> createPostCommunity(
+      FormData form, String communityId) async {
+    try {
+      final response = await _dio.post(
+          '${ApiConstant.kCreatePostCommunity}/$communityId',
+          options: Options(headers: {'requiredToken': true}),
+          data: form);
+      return CommunityCommentBaseResponse.addComment(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response.statusCode == 500) {
+          return CommunityCommentBaseResponse.withError(
+              'Server unknown error. Please try again later');
+        } else if (error.response.statusCode == 413) {
+          return CommunityCommentBaseResponse.withError(
+              'Image request too large');
+        } else if (error.response.data['tag'] != null) {
+          return CommunityCommentBaseResponse.withError(
+              error.response.data['tag'][0]);
+        } else {
+          return CommunityCommentBaseResponse.withError(error.toString());
+        }
+      } else {
+        return CommunityCommentBaseResponse.withError(
+            error.response.data.toString());
+      }
+    }
+  }
+
   Future<CommunityMemberResponse> getMemberCommunity(
       String communityId, page, limit, String type,
       {String search}) async {
@@ -771,6 +799,9 @@ class ApiProvider {
       return CommunityMemberResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
+        if (error.response.statusCode == 500) {
+          return CommunityMemberResponse.withError('Server Failure');
+        }
         return CommunityMemberResponse.withError(_handleError(error));
       } else {
         return CommunityMemberResponse.withError(error);
@@ -794,13 +825,13 @@ class ApiProvider {
   }
 
   /// status == approve || decline. this api to bulk insert/delete
-  Future<CommunityMemberResponse> moderateMemberCommunity(
+  Future<CommunityMemberResponse> moderateAllCommunityMember(
       String communityId, String status) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kModerateMemberCommunity}$communityId/$status',
           options: Options(headers: {'requiredToken': true}));
-      return CommunityMemberResponse.fromJson(response.data);
+      return CommunityMemberResponse.moderateResponse(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityMemberResponse.withError(_handleError(error));
@@ -810,18 +841,18 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityMemberResponse> approveMemberCommunity(
-      String communityId, String memberId) async {
+  Future<CommunityMemberResponse> moderateSingleCommunityMember(
+      String communityId, String memberId, String status) async {
     try {
       final response = await _dio.get(
-          '${ApiConstant.kMemberCommunity}$communityId/$memberId/approve',
+          '${ApiConstant.kMemberCommunity}$communityId/$memberId/$status',
           options: Options(headers: {'requiredToken': true}));
-      return CommunityMemberResponse.fromJson(response.data);
+      return CommunityMemberResponse.moderateResponse(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityMemberResponse.withError(_handleError(error));
       } else {
-        return CommunityMemberResponse.withError(error);
+        return CommunityMemberResponse.withError(error.toString());
       }
     }
   }
@@ -855,6 +886,20 @@ class ApiProvider {
         return CommunityCommentBaseResponse.withError(_handleError(error));
       } else {
         return CommunityCommentBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<String> getPaidCommunityPrice() async {
+    try {
+      final response = await _dio.get(ApiConstant.kCommunityPrice,
+          options: Options(headers: {'requiredToken': true}));
+      return response.data['data']['biaya'].toString();
+    } catch (error) {
+      if (error is DioError) {
+        return error.response.data.toString();
+      } else {
+        return error.toString();
       }
     }
   }
@@ -1172,6 +1217,36 @@ class ApiProvider {
         return UserBaseModel.withError(_handleError(error));
       } else {
         return UserBaseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<TransactionResponseModel> getTransactionDetail(String transId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kTransactionDetail}/$transId',
+          options: Options(headers: {'requiredToken': true}));
+      return TransactionResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return TransactionResponseModel.withError(_handleError(error));
+      } else {
+        return TransactionResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<TransactionResponseModel> payTransaction(String transId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kTransactionPayment}/$transId',
+          options: Options(headers: {'requiredToken': true}));
+      return TransactionResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return TransactionResponseModel.withError(_handleError(error));
+      } else {
+        return TransactionResponseModel.withError(error.toString());
       }
     }
   }

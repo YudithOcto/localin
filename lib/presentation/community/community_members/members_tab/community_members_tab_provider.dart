@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_member_detail.dart';
+import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
 
 class CommunityMembersTabProvider with ChangeNotifier {
@@ -27,7 +28,9 @@ class CommunityMembersTabProvider with ChangeNotifier {
 
   bool _isMounted = true;
 
-  Future<Null> getMembersCommunity({bool isRefresh = true}) async {
+  Future<Null> getMembersCommunity(
+      {bool isRefresh = true, String keyword}) async {
+    setState(communityMemberState.loading);
     if (isRefresh) {
       _pageRequest = 1;
       _memberList.clear();
@@ -35,9 +38,10 @@ class CommunityMembersTabProvider with ChangeNotifier {
     }
 
     final response = await _repository.getCommunityMember(
-        _communityId, _pageRequest, 10, 'member');
+        _communityId, _pageRequest, 10, 'member',
+        search: keyword);
     if (response.error == null &&
-        (_memberList.isNotEmpty && response.data.isNotEmpty)) {
+        (_memberList.isNotEmpty || response.data.isNotEmpty)) {
       _memberList.addAll(response.data);
       _canLoadMore = response.total > _memberList.length;
       _pageRequest += 1;

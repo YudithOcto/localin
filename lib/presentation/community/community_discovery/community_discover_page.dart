@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_app_bar.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_discover_subtitle_widget.dart';
@@ -10,8 +11,11 @@ import 'package:localin/presentation/community/provider/community_nearby_provide
 import 'package:localin/presentation/community/community_discovery/widget/community_discover_category_widget.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_my_group_widget.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_nearby_widget.dart';
+import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class CommunityDiscoverPage extends StatelessWidget {
@@ -97,8 +101,23 @@ class _ScrollContentState extends State<ScrollContent> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(CommunityCreatePage.routeName);
+                      final auth =
+                          Provider.of<AuthProvider>(context, listen: false);
+                      if (auth.userModel.status == kUserStatusVerified) {
+                        Navigator.of(context)
+                            .pushNamed(CommunityCreatePage.routeName);
+                      } else {
+                        CustomDialog.showCustomDialogWithMultipleButton(context,
+                            title: 'Create Community',
+                            message:
+                                'Your Account Has Not Been Verified, Please Verify Your Account',
+                            cancelText: 'Close',
+                            okText: 'Verified', okCallback: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context)
+                              .pushNamed(RevampUserVerificationPage.routeName);
+                        });
+                      }
                     },
                     child: Row(
                       children: <Widget>[
@@ -120,6 +139,7 @@ class _ScrollContentState extends State<ScrollContent> {
             FutureBuilder(
               future: getCommunityData,
               builder: (context, snapshot) {
+                print(snapshot);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),

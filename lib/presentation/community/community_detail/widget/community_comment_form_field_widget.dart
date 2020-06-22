@@ -80,6 +80,10 @@ class CommunityCommentFormFieldWidget extends StatelessWidget {
                         if (provider.commentTextController.text.isEmpty) {
                           return;
                         }
+                        final retrieveProvider =
+                            Provider.of<CommunityRetrieveCommentProvider>(
+                                context,
+                                listen: false);
                         CustomDialog.showLoadingDialog(context,
                             message: 'please wait');
                         final result =
@@ -89,23 +93,21 @@ class CommunityCommentFormFieldWidget extends StatelessWidget {
                           CustomToast.showCustomBookmarkToast(
                               context, result.message);
                           if (provider.currentClickedReplyData != null) {
-                            Provider.of<CommunityRetrieveCommentProvider>(
-                                    context,
-                                    listen: false)
+                            retrieveProvider
                                 .addChildComment(result.commentResult);
+                            retrieveProvider.setChildCommentDisplay(
+                                true, int.parse(result.commentResult.parentId));
                           } else {
-                            Provider.of<CommunityRetrieveCommentProvider>(
-                                    context,
-                                    listen: false)
+                            retrieveProvider
                                 .addParentComment(result.commentResult);
                           }
-                          provider.setReplyOthersCommentData(null,
-                              needFocus: false);
                         } else {
                           closeCurrentLoading(context);
                           CustomToast.showCustomBookmarkToast(
                               context, result.error);
                         }
+                        provider.setReplyOthersCommentData(null,
+                            needFocus: false);
                       },
                       child: SvgPicture.asset(
                           'images/${provider.isTextEmpty ? 'send' : 'send_active'}.svg')),

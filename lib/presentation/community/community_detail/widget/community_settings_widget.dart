@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
+import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class CommunitySettingsWidget extends StatelessWidget {
   final bool isAdmin;
   final CommunityDetail communityDetail;
+  final CommunityDetailProvider provider;
   CommunitySettingsWidget(
-      {@required this.isAdmin, @required this.communityDetail});
+      {@required this.isAdmin, @required this.communityDetail, this.provider});
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +54,17 @@ class CommunitySettingsWidget extends StatelessWidget {
           title: 'Events',
         ),
         InkWell(
-          onTap: () {
-            Navigator.of(context).pushNamed(CommunityMembersPage.routeName);
+          onTap: () async {
+            final canLogout =
+                await provider.getAdmin(communityId: communityDetail.id);
+            if (canLogout) {
+            } else {
+              CustomDialog.showCustomDialogWithButton(
+                  context,
+                  'Leave Community',
+                  'You are able to leave community if there are others admin',
+                  btnText: 'Close');
+            }
           },
           child: RowSettings(
             icon: 'images/community_settings_exit.svg',

@@ -4,6 +4,8 @@ import 'package:localin/presentation/community/community_members/shared_members_
 import 'package:localin/presentation/community/community_members/shared_members_widget/single_member_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
 class CommunityBlockedTabWidget extends StatefulWidget {
@@ -84,12 +86,15 @@ class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
                     } else if (index < provider.blockedList.length) {
                       final item = provider.blockedList[index];
                       return SingleMemberWidget(
+                        isOnlyAdmin: false,
                         detail: item,
-                        isGroupCreator: index == 0,
+                        rowDescription:
+                            'Blocked by ${item.name} ${DateHelper.timeAgo(DateTime.parse(item.joinedDate))}',
+                        onRefresh: () => provider.getBlockedUser(),
                         popupItem: [
-                          'Remove Block',
-                          'Remove Member',
-                          'View Profile',
+                          kPopupRemoveBlock,
+                          kPopupRemoveMember,
+                          kPopupViewProfile,
                         ],
                       );
                     } else if (provider.canLoadMore) {

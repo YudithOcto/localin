@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_provider.dart';
+import 'package:localin/model/community/community_member_detail.dart';
 import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/shared_members_widget/custom_member_text_form_field_widget.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/single_member_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
 class CommunityRequestTabWidget extends StatefulWidget {
@@ -28,36 +32,54 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
     super.didChangeDependencies();
   }
 
+  showSortingDialog() {
+    final provider =
+        Provider.of<CommunityRequestTabProvider>(context, listen: false);
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          provider.sortingList.length,
+          (index) {
+            return InkWell(
+              onTap: () {
+                provider.selectSort = provider.sortingList[index];
+                Navigator.of(context).pop();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '${provider.sortingList[index]}',
+                    style: ThemeText.sfMediumHeadline,
+                  ),
+                  Radio(
+                    value: provider.sortingList[index],
+                    activeColor: ThemeColors.black80,
+                    groupValue: provider.selectedSort,
+                    onChanged: (category) {
+                      provider.selectSort = category;
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         children: <Widget>[
-          SizedBox(
-            height: 20.0,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: ThemeColors.black10,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(color: ThemeColors.black0)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(color: ThemeColors.black0)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(color: ThemeColors.black0)),
-              hintText: 'Search by name',
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              hintStyle:
-                  ThemeText.sfRegularBody.copyWith(color: ThemeColors.black60),
-            ),
-          ),
-          SizedBox(
-            height: 20.0,
+          CustomMemberTextFormFieldWidget(
+            onChange: (v) {},
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,7 +91,7 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '20 matching request',
+                        '${provider.requestList.length} matching request',
                         style: ThemeText.sfSemiBoldBody,
                       ),
                       SizedBox(
@@ -86,9 +108,6 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
               ),
               InkWell(
                 onTap: () {
-                  final provider = Provider.of<CommunityRequestTabProvider>(
-                      context,
-                      listen: false);
                   showGeneralDialog(
                       context: context,
                       barrierDismissible: true,
@@ -96,49 +115,8 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
                           .modalBarrierDismissLabel,
                       transitionDuration: const Duration(milliseconds: 150),
                       barrierColor: ThemeColors.brandBlack.withOpacity(0.8),
-                      pageBuilder: (context, anim1, anim2) => StatefulBuilder(
-                            builder: (context, setState) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: List.generate(
-                                    provider.sortingList.length,
-                                    (index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          provider.selectSort =
-                                              provider.sortingList[index];
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              '${provider.sortingList[index]}',
-                                              style: ThemeText.sfMediumHeadline,
-                                            ),
-                                            Radio(
-                                              value:
-                                                  provider.sortingList[index],
-                                              activeColor: ThemeColors.black80,
-                                              groupValue: provider.selectedSort,
-                                              onChanged: (category) {
-                                                provider.selectSort = category;
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ));
+                      pageBuilder: (context, anim1, anim2) =>
+                          showSortingDialog());
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -196,14 +174,12 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
                       } else if (index < provider.requestList.length) {
                         final item = provider.requestList[index];
                         return SingleMemberWidget(
+                          onRefresh: () => provider.getRequestList(),
+                          isOnlyAdmin: provider.requestList.length == 1,
                           detail: item,
-                          isGroupCreator: index == 0,
-                          popupItem: [
-                            'Remove Admin',
-                            'Remove Member',
-                            'Block',
-                            'View Profile',
-                          ],
+                          rowDescription:
+                              'Requested ${DateHelper.timeAgo(DateTime.parse(item.joinedDate))}',
+                          isRequestPage: true,
                         );
                       } else if (provider.canLoadMore) {
                         return Center(
@@ -221,7 +197,7 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
           Consumer<CommunityRequestTabProvider>(
             builder: (context, provider, child) {
               return Visibility(
-                visible: provider.requestList.isEmpty,
+                visible: provider.requestList.isNotEmpty,
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
                   child: Row(

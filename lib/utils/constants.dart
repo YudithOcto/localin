@@ -35,6 +35,25 @@ const kValueStyle = TextStyle(
 const kTitleStyle = TextStyle(
     fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w500);
 
+const kPopupMakeAdmin = 'Make Admin';
+const kPopupRemoveMember = 'Remove Member';
+const kPopupRemoveBlock = 'Remove Block';
+const kPopupBlock = 'Block';
+const kPopupRemoveAdmin = 'Remove Admin';
+const kPopupViewProfile = 'View Profile';
+const kPopupApproveMember = 'Approve';
+const kPopupDeclineMember = 'Decline';
+
+const kApproveAll = 'approve-all';
+const kDeclineAll = 'delete-all';
+const kApproveStatus = 'approve';
+const kDeclineStatus = 'delete';
+const kBlockedStatus = 'blocked';
+const kAdminStatus = 'admin';
+const kRemoveMemberStatus = 'decline';
+const kUnblockStatus = 'unblocked';
+const kRemoveAdminStatus = 'admin';
+
 class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'

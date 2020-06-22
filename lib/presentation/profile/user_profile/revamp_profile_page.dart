@@ -58,6 +58,7 @@ class _RevampProfileContentWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0.0,
         backgroundColor: ThemeColors.black0,
         title: Padding(

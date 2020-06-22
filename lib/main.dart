@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
+import 'package:localin/presentation/community/community_detail/create_post_page.dart';
 import 'package:localin/presentation/community/community_discovery/community_category_list_page.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/community/community_discovery/community_discover_my_group_page.dart';
@@ -10,7 +11,6 @@ import 'package:localin/presentation/community/community_discovery/community_dis
 import 'package:localin/presentation/community/community_create/community_type_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
-import 'package:localin/presentation/community/pages/community_member_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
@@ -38,6 +38,8 @@ import 'package:localin/presentation/profile/user_profile_verification/revamp_us
 import 'package:localin/presentation/search/search_article/search_article_page.dart';
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
+import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
+import 'package:localin/provider/community_member_provider.dart';
 import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
@@ -99,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<LocationProvider>(
           create: (_) => LocationProvider(),
-        )
+        ),
       ],
       child: OKToast(
         child: MaterialApp(
@@ -161,6 +163,9 @@ class _MyAppState extends State<MyApp> {
             CommunityMembersPage.routeName: (_) => CommunityMembersPage(),
             CommunityDiscoverMyGroupPage.routeName: (_) =>
                 CommunityDiscoverMyGroupPage(),
+            TransactionCommunityDetailPage.routeName: (_) =>
+                TransactionCommunityDetailPage(),
+            CreatePostPage.routeName: (_) => CreatePostPage(),
           },
         ),
       ),

@@ -32,6 +32,8 @@ class CommunityRetrieveCommentProvider with ChangeNotifier {
     final isHaveChildComment = _childComment.containsKey(commentId);
     if (isHaveChildComment) {
       _childComment.update(commentId, (v) => value);
+    } else {
+      _childComment.putIfAbsent(commentId, () => true);
     }
     notifyListeners();
   }

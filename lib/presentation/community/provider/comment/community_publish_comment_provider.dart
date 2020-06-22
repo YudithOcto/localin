@@ -43,7 +43,9 @@ class CommunityPublishCommentProvider with ChangeNotifier {
       String communityId) async {
     Map<String, dynamic> map = Map();
     if (_currentClickedReplyCommentData != null) {
-      map['parent_id'] = _currentClickedReplyCommentData.id.toString();
+      map['parent_id'] = _currentClickedReplyCommentData.parentId == 'null'
+          ? _currentClickedReplyCommentData.id
+          : _currentClickedReplyCommentData.parentId;
       map['komentar'] =
           '${_currentClickedReplyCommentData.createdName.split(' ')[0]} ${commentTextController.text}';
     } else {

@@ -104,7 +104,7 @@ class CommunityComment implements CommunityDiscoverType {
       type: body['tipe'],
       parentId: body['parent_id'].toString(),
       childComment: body['komentar_child'] ?? 0,
-      createdAvatar: body['created_avatar'],
+      createdAvatar: body['created_avatar'] ?? '',
       createdName: body['created_name'],
       communityLogo: body['komunitas_logo'] ?? null,
       communityName: body['komunitas_name'] ?? null,

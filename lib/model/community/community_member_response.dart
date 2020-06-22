@@ -19,8 +19,15 @@ class CommunityMemberResponse {
     );
   }
 
+  factory CommunityMemberResponse.moderateResponse(Map<String, dynamic> body) {
+    return CommunityMemberResponse(
+      error: null,
+      message: body['message'],
+    );
+  }
+
   CommunityMemberResponse.withError(String value)
       : error = value,
-        message = null,
+        message = value,
         data = null;
 }

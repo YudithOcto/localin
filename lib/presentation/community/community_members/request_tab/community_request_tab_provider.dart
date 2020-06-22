@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_member_detail.dart';
+import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
 
 class CommunityRequestTabProvider with ChangeNotifier {
@@ -37,8 +38,7 @@ class CommunityRequestTabProvider with ChangeNotifier {
     final response = await _repository.getCommunityMember(
         _communityId, _pageRequest, 10, 'request');
     if (response.error == null &&
-        response.data.isNotEmpty &&
-        _requestList.isNotEmpty) {
+        (response.data.isNotEmpty || _requestList.isNotEmpty)) {
       _requestList.addAll(response.data);
       _canLoadMore = response.total > _requestList.length;
       _pageRequest += 1;
@@ -46,10 +46,22 @@ class CommunityRequestTabProvider with ChangeNotifier {
     } else {
       _canLoadMore = false;
       setState(_requestList.isEmpty
-          ? communityMemberState.empty
+          ? communityMemberState.success
           : communityMemberState.success);
     }
     notifyListeners();
+  }
+
+  Future<CommunityMemberResponse> moderateSingleMember(
+      {String status, String memberId}) async {
+    final response =
+        await _repository.moderateSingleMember(_communityId, memberId, status);
+    return response;
+  }
+
+  Future<CommunityMemberResponse> moderateAllMember({String status}) async {
+    final response = await _repository.moderateMember(_communityId, status);
+    return response;
   }
 
   setState(communityMemberState state) {

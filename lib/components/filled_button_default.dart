@@ -21,6 +21,7 @@ class FilledButtonDefault extends StatelessWidget {
     return Container(
       height: 48.0,
       child: RaisedButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         onPressed: onPressed,
         color: backgroundColor,
         child: !isLoading

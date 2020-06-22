@@ -20,23 +20,26 @@ class CommunityFeedProvider extends BaseModelProvider {
   }
 
   Future getDataFromApi() async {
-    Future.wait([
+    await Future.wait([
       getCategoryList(),
       getUserCommunityList(),
     ]).then((value) => notifyListeners());
   }
 
-  Future<Null> getCategoryList() async {
+  Future<List<CommunityCategory>> getCategoryList() async {
     final response = await _repository.getCategoryListCommunity('');
     if (response.error == null) {
       _communityCategoryList.addAll(response.communityCategory);
     }
+    return _communityCategoryList;
   }
 
-  Future<Null> getUserCommunityList({bool isRefresh = true}) async {
+  Future<List<CommunityDetail>> getUserCommunityList(
+      {bool isRefresh = true}) async {
     final response = await _repository.getUserCommunityList();
     if (response.error == null) {
       _userCommunityList.addAll(response.communityDetailList);
     }
+    return _userCommunityList;
   }
 }

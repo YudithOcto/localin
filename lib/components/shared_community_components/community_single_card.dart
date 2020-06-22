@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
+import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import '../../text_themes.dart';
 import '../../themes.dart';
 
@@ -24,6 +25,11 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
             .pushNamed(CommunityDetailPage.routeName, arguments: {
           CommunityDetailPage.communityData: widget.model,
         });
+//        final result = await Navigator.of(context)
+//            .pushNamed(TransactionCommunityDetailPage.routeName, arguments: {
+//          TransactionCommunityDetailPage.transactionId:
+//              '5cf1b698-e35c-4be3-b2a2-9f2625be8c98',
+//        });
 
         if (result == 'refresh') {
           setState(() {

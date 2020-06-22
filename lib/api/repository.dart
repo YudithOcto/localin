@@ -21,6 +21,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -176,6 +177,11 @@ class Repository {
     return apiProvider.joinCommunity(id);
   }
 
+  Future<CommunityCommentBaseResponse> createPostCommunity(
+      FormData form, String communityId) {
+    return apiProvider.createPostCommunity(form, communityId);
+  }
+
   Future<CommunityMemberResponse> getCommunityMember(
       String communityId, int page, int limit, String type,
       {String search}) async {
@@ -185,12 +191,13 @@ class Repository {
 
   Future<CommunityMemberResponse> moderateMember(
       String communityId, String status) async {
-    return apiProvider.moderateMemberCommunity(communityId, status);
+    return apiProvider.moderateAllCommunityMember(communityId, status);
   }
 
-  Future<CommunityMemberResponse> approveMember(
-      String communityId, String memberId) async {
-    return apiProvider.approveMemberCommunity(communityId, memberId);
+  Future<CommunityMemberResponse> moderateSingleMember(
+      String communityId, String memberId, String status) async {
+    return apiProvider.moderateSingleCommunityMember(
+        communityId, memberId, status);
   }
 
   Future<CommunityDetailBaseResponse> getCommunityListByCategory(
@@ -204,6 +211,10 @@ class Repository {
 
   Future<CommunityDetailBaseResponse> getOtherCommunityList(String id) async {
     return apiProvider.getOtherUserCommunityList(id);
+  }
+
+  Future<String> getCommunityPrice() async {
+    return apiProvider.getPaidCommunityPrice();
   }
 
   Future<CommunityCommentBaseResponse> getCommunityCommentList(
@@ -314,5 +325,13 @@ class Repository {
   Future<SearchLocationResponse> searchLocation(
       {int offset, int limit, String search}) {
     return apiProvider.searchLocation(offset, limit, search);
+  }
+
+  Future<TransactionResponseModel> getTransactionDetail(String transId) {
+    return apiProvider.getTransactionDetail(transId);
+  }
+
+  Future<TransactionResponseModel> payTransaction(String transId) {
+    return apiProvider.payTransaction(transId);
   }
 }

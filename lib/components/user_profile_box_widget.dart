@@ -44,16 +44,43 @@ class UserProfileImageWidget extends StatelessWidget {
                   )),
                 );
               },
-              placeholder: (context, placeHolder) => Container(
-                height: 62.0,
-                width: 62.0,
-                color: ThemeColors.black40,
+              placeholder: (context, placeHolder) => Stack(
+                alignment: Alignment.centerLeft,
+                children: <Widget>[
+                  Container(
+                    height: 62.0,
+                    width: 62.0,
+                    color: ThemeColors.black10,
+                  ),
+                  Positioned(
+                    top: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                    child: Icon(
+                      Icons.photo,
+                      color: ThemeColors.black80,
+                    ),
+                  ),
+                ],
               ),
               placeholderFadeInDuration: Duration(milliseconds: 250),
-              errorWidget: (context, errorMsg, child) => Container(
-                height: 62.0,
-                width: 62.0,
-                color: ThemeColors.black40,
+              errorWidget: (context, errorMsg, child) => Stack(
+                alignment: Alignment.centerLeft,
+                children: <Widget>[
+                  Container(
+                    height: 62.0,
+                    width: 62.0,
+                    color: ThemeColors.black10,
+                  ),
+                  Positioned(
+                    top: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                    child: Icon(Icons.photo, color: ThemeColors.black80),
+                  ),
+                ],
               ),
             ),
     );

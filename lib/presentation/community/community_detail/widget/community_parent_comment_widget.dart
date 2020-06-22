@@ -62,7 +62,7 @@ class CommunityParentCommentWidget extends StatelessWidget {
                       height: 5.0,
                     ),
                     Text(
-                      '${communityComment.commentContent}',
+                      '${communityComment.commentContent.replaceAll('<br />', '\n')}',
                       style: ThemeText.sfRegularBody
                           .copyWith(color: ThemeColors.brandBlack),
                     ),

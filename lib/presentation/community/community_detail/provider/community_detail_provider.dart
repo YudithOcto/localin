@@ -7,9 +7,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/community/community_join_response.dart';
-import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/provider/base_model_provider.dart';
-import 'package:localin/utils/helper_permission.dart';
 
 class CommunityDetailProvider extends BaseModelProvider {
   CommunityDetail communityDetail;
@@ -41,21 +39,9 @@ class CommunityDetailProvider extends BaseModelProvider {
     notifyListeners();
   }
 
-  Future<CommunityMemberResponse> approveMember(
-      String communityId, String memberId) async {
-    setState(ViewState.Busy);
-    var response = await _repository.approveMember(communityId, memberId);
-    if (response != null) setState(ViewState.Idle);
-    return response;
-  }
-
   Future<CommunityJoinResponse> joinCommunity(String communityId) async {
     setSentCommentLoading(true);
     final response = await _repository.joinCommunity(communityId);
-    if (response != null && response.error == null) {
-      communityDetail.isJoin = true;
-      notifyListeners();
-    }
     setSentCommentLoading(true);
     return response;
   }
@@ -75,6 +61,15 @@ class CommunityDetailProvider extends BaseModelProvider {
     }
   }
 
+  Future<bool> getAdmin({@required String communityId}) async {
+    final response =
+        await _repository.getCommunityMember(communityId, 1, 10, 'admin');
+    if (response.error == null) {
+      return response.data.length > 1;
+    }
+    return false;
+  }
+
   Future<CommunityCommentBaseResponse> postComment() async {
     setSentCommentLoading(true);
     String type = attachmentFileImage != null
@@ -91,7 +86,7 @@ class CommunityDetailProvider extends BaseModelProvider {
             ? null
             : MultipartFile.fromFileSync(
                 attachmentFilePath,
-                filename: '$attachmentFilePath}',
+                filename: '$attachmentFilePath',
               ),
       },
     );

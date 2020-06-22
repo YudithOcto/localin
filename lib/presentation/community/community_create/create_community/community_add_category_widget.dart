@@ -74,7 +74,7 @@ class _CommunityAddCategoryWidgetState
                           builder: (context, provider, child) {
                             return InkWell(
                               onTap: () {
-                                provider.selectCategory(index);
+                                provider.selectCategory(category);
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
@@ -82,7 +82,7 @@ class _CommunityAddCategoryWidgetState
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 16.0),
                                 decoration: BoxDecoration(
-                                    color: provider.isCategorySelected(index)
+                                    color: provider.isCategorySelected(category)
                                         ? ThemeColors.primaryBlue
                                         : ThemeColors.black0,
                                     borderRadius: BorderRadius.circular(8.0),
@@ -92,9 +92,10 @@ class _CommunityAddCategoryWidgetState
                                   '${category.categoryName}',
                                   maxLines: 1,
                                   style: ThemeText.sfSemiBoldFootnote.copyWith(
-                                      color: provider.isCategorySelected(index)
-                                          ? ThemeColors.black0
-                                          : ThemeColors.black80),
+                                      color:
+                                          provider.isCategorySelected(category)
+                                              ? ThemeColors.black0
+                                              : ThemeColors.black80),
                                 ),
                               ),
                             );

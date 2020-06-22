@@ -59,7 +59,7 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: Text(
-              '${commentData?.commentContent}',
+              '${commentData.commentContent.replaceAll('<br />', '\n')}',
               style: ThemeText.sfRegularBody,
             ),
           ),

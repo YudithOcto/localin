@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/presentation/community/community_create/community_type_page.dart';
 import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
+import 'package:localin/provider/core/image_picker_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'create_community/community_add_category_widget.dart';
 import 'create_community/community_add_description_widget.dart';
 import 'create_community/community_add_location_widget.dart';
+import 'create_community/community_add_picture_widget.dart';
 import 'create_community/community_add_title_widget.dart';
 import 'create_community/community_basic_info_widget.dart';
 
@@ -21,6 +24,9 @@ class CommunityCreatePage extends StatelessWidget {
         ChangeNotifierProvider<CommunityCreateProvider>(
           create: (_) => CommunityCreateProvider(),
         ),
+        ChangeNotifierProvider<ImagePickerProvider>(
+          create: (_) => ImagePickerProvider(),
+        )
       ],
       child: CommunityCreateWrapperWidget(),
     );
@@ -36,65 +42,66 @@ class CommunityCreateWrapperWidget extends StatefulWidget {
 class _CommunityCreateWrapperWidgetState
     extends State<CommunityCreateWrapperWidget> {
   @override
+  void initState() {
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (!visible) {
+          FocusScope.of(context).unfocus();
+        }
+      },
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         pageTitle: 'Create Community',
         appBar: AppBar(),
+        onClickBackButton: () => Navigator.of(context).pop(),
       ),
       body: SingleChildScrollView(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CommunityBasicInfoWidget(),
-          CommunityAddLocationWidget(),
+          CommunityAddPictureWidget(),
           CommunityAddTitleWidget(),
           CommunityAddDescriptionWidget(),
           CommunityAddCategoryWidget(),
+          CommunityAddLocationWidget(),
         ],
       )),
       bottomNavigationBar: Consumer<CommunityCreateProvider>(
         builder: (context, provider, child) {
           return InkWell(
             onTap: () async {
-              Navigator.of(context).pushNamed(CommunityTypePage.routeName);
-//              if (provider.isContinueButtonActive) {
-//                CustomDialog.showCenteredLoadingDialog(context,
-//                    message: 'Loading');
-//                final result = await Provider.of<CommunityCreateProvider>(
-//                        context,
-//                        listen: false)
-//                    .createArticle(isDraft: false);
-//                CustomDialog.closeDialog(context);
-//                if (result.error == null) {
-//                  Navigator.of(context).pop('published');
-//                  CustomToast.showCustomBookmarkToast(
-//                      context, 'Article Published',
-//                      width: MediaQuery.of(context).size.width * 0.6,
-//                      icon: 'circle_checked_blue',
-//                      iconColor: null);
-//                } else {
-//                  CustomToast.showCustomBookmarkToast(context, result.error,
-//                      width: MediaQuery.of(context).size.width * 0.6);
-//                }
-//              } else {
-//                CustomToast.showCustomToast(context, provider.dataChecker);
-//              }
+              if (provider.isFormValid.isEmpty) {
+                Navigator.of(context).pushNamed(CommunityTypePage.routeName,
+                    arguments: {
+                      CommunityTypePage.requestModel: provider.requestModel
+                    });
+              }
             },
-            child: Container(
-              width: double.maxFinite,
-              height: 48.0,
-              color: provider.isContinueButtonActive
-                  ? ThemeColors.primaryBlue
-                  : ThemeColors.black80,
-              child: Center(
-                child: Text(
-                  'Continue',
-                  textAlign: TextAlign.center,
-                  style: ThemeText.rodinaTitle3
-                      .copyWith(color: ThemeColors.black0),
-                ),
-              ),
+            child: Consumer<CommunityCreateProvider>(
+              builder: (context, provider, child) {
+                return Container(
+                  width: double.maxFinite,
+                  height: 48.0,
+                  color: provider.isFormValid.isEmpty
+                      ? ThemeColors.primaryBlue
+                      : ThemeColors.black80,
+                  child: Center(
+                    child: Text(
+                      'Continue',
+                      textAlign: TextAlign.center,
+                      style: ThemeText.rodinaTitle3
+                          .copyWith(color: ThemeColors.black0),
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },
