@@ -53,6 +53,11 @@ const kAdminStatus = 'admin';
 const kRemoveMemberStatus = 'decline';
 const kUnblockStatus = 'unblocked';
 const kRemoveAdminStatus = 'admin';
+const kSortMemberNew = 'new';
+const kSortMemberOld = 'old';
+const kSortMemberName = 'name';
+const kSortMemberVerified = 'verified';
+const kSortMemberUnverified = 'unverified';
 
 class Constants {
   static const kAddress =

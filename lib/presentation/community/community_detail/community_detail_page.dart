@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_news_activity_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_settings_widget.dart';

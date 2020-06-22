@@ -6,6 +6,7 @@ import 'package:localin/presentation/community/community_members/shared_members_
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/debounce.dart';
 import 'package:provider/provider.dart';
 
 class CommunityMembersTabWidget extends StatefulWidget {
@@ -17,6 +18,7 @@ class CommunityMembersTabWidget extends StatefulWidget {
 class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
   bool _isInit = true;
   final _scrollController = ScrollController();
+  final _debounce = Debounce(milliseconds: 400);
 
   @override
   void didChangeDependencies() {
@@ -26,7 +28,7 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
         ..addListener(() {
           if (_scrollController.offset >
               _scrollController.position.maxScrollExtent) {
-            loadData();
+            loadData(isRefresh: false);
           }
         });
       _isInit = false;
@@ -47,11 +49,11 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
         builder: (context, provider, child) {
           return Column(
             children: <Widget>[
-              CustomMemberTextFormFieldWidget(
-                onChange: (v) => provider.getMembersCommunity(
-                  isRefresh: true,
-                ),
-              ),
+              CustomMemberTextFormFieldWidget(onChange: (v) {
+                _debounce.run(() {
+                  provider.requestSearchKeyword = v;
+                });
+              }),
               StreamBuilder<communityMemberState>(
                 stream: provider.memberStream,
                 builder: (context, snapshot) {
@@ -64,6 +66,7 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                     return ListView.builder(
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
+                      controller: _scrollController,
                       itemCount: provider.memberList.length + 1,
                       itemBuilder: (context, index) {
                         if (snapshot.data == communityMemberState.empty) {

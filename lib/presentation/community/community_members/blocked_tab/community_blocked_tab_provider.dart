@@ -27,15 +27,22 @@ class CommunityBlockedTabProvider with ChangeNotifier {
 
   bool _isMounted = true;
 
+  String _userSearch = '';
+  set requestSearchKeyword(String value) {
+    _userSearch = value;
+    getBlockedUser(isRefresh: true);
+  }
+
   Future<Null> getBlockedUser({bool isRefresh = true}) async {
     if (isRefresh) {
       _pageRequest = 1;
       _blockedList.clear();
       _canLoadMore = true;
     }
-
+    setState(communityMemberState.loading);
     final response = await _repository.getCommunityMember(
-        _communityId, _pageRequest, 10, 'blocked');
+        _communityId, _pageRequest, 10, 'blocked',
+        search: _userSearch);
     if (response.error == null &&
         (response.data.isNotEmpty || _blockedList.isNotEmpty)) {
       _blockedList.addAll(response.data);

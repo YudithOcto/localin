@@ -166,7 +166,7 @@ class _TransactionCommunityContentWidgetState
             ),
           ],
         ),
-        body: FutureBuilder<TransactionResponseModel>(
+        body: FutureBuilder<TransactionCommunityResponseModel>(
           future: getTransactionData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

@@ -5,6 +5,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_member_detail.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
+import 'package:localin/utils/constants.dart';
 
 class CommunityRequestTabProvider with ChangeNotifier {
   final _repository = Repository();
@@ -34,9 +35,10 @@ class CommunityRequestTabProvider with ChangeNotifier {
       _requestList.clear();
       _canLoadMore = true;
     }
-
+    setState(communityMemberState.loading);
     final response = await _repository.getCommunityMember(
-        _communityId, _pageRequest, 10, 'request');
+        _communityId, _pageRequest, 10, 'request',
+        search: _userSearch, sort: _apiSelectedSort);
     if (response.error == null &&
         (response.data.isNotEmpty || _requestList.isNotEmpty)) {
       _requestList.addAll(response.data);
@@ -81,9 +83,40 @@ class CommunityRequestTabProvider with ChangeNotifier {
 
   String _selectedSort = 'Suggested First';
   String get selectedSort => _selectedSort;
+  String _apiSelectedSort = kSortMemberNew;
+
   set selectSort(String value) {
     _selectedSort = value;
+    _apiSelectedSort = getSelectedSort(value);
+    getRequestList(isRefresh: true);
     notifyListeners();
+  }
+
+  String getSelectedSort(String value) {
+    switch (value) {
+      case 'Suggested First':
+        return kSortMemberName;
+        break;
+      case 'Newest First':
+        return kSortMemberNew;
+        break;
+      case 'Oldest First':
+        return kSortMemberOld;
+        break;
+      case 'User Verified':
+        return kSortMemberVerified;
+        break;
+      case 'User Unverified':
+        return kSortMemberUnverified;
+        break;
+    }
+    return '';
+  }
+
+  String _userSearch = '';
+  set requestSearchKeyword(String value) {
+    _userSearch = value;
+    getRequestList(isRefresh: true);
   }
 
   @override

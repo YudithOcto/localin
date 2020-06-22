@@ -800,13 +800,16 @@ class ApiProvider {
 
   Future<CommunityMemberResponse> getMemberCommunity(
       String communityId, page, limit, String type,
-      {String search}) async {
+      {String search, String sort}) async {
     try {
       Map<String, dynamic> map = Map();
       map['page'] = page;
       map['limit'] = limit;
-      if (search != null) {
+      if (search != null && search.isNotEmpty) {
         map['search'] = search;
+      }
+      if (sort != null) {
+        map['sort'] = sort;
       }
       final response = await _dio.get(
           '${ApiConstant.kMemberCommunity}$communityId/$type',
@@ -1237,32 +1240,53 @@ class ApiProvider {
     }
   }
 
-  Future<TransactionResponseModel> getTransactionDetail(String transId) async {
+  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+      int page, int limit) async {
     try {
-      final response = await _dio.get(
-          '${ApiConstant.kTransactionDetail}/$transId',
+      final response = await _dio.get(ApiConstant.kTransaction,
+          queryParameters: {
+            'limit': limit,
+            'page': page,
+          },
           options: Options(headers: {'requiredToken': true}));
-      return TransactionResponseModel.fromJson(response.data);
+      return TransactionCommunityResponseModel.getListJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return TransactionResponseModel.withError(_handleError(error));
+        return TransactionCommunityResponseModel.withError(_handleError(error));
       } else {
-        return TransactionResponseModel.withError(error.toString());
+        return TransactionCommunityResponseModel.withError(error.toString());
       }
     }
   }
 
-  Future<TransactionResponseModel> payTransaction(String transId) async {
+  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
+      String transId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kTransactionDetail}/$transId',
+          options: Options(headers: {'requiredToken': true}));
+      return TransactionCommunityResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return TransactionCommunityResponseModel.withError(_handleError(error));
+      } else {
+        return TransactionCommunityResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<TransactionCommunityResponseModel> payTransaction(
+      String transId) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kTransactionPayment}/$transId',
           options: Options(headers: {'requiredToken': true}));
-      return TransactionResponseModel.fromJson(response.data);
+      return TransactionCommunityResponseModel.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return TransactionResponseModel.withError(_handleError(error));
+        return TransactionCommunityResponseModel.withError(_handleError(error));
       } else {
-        return TransactionResponseModel.withError(error.toString());
+        return TransactionCommunityResponseModel.withError(error.toString());
       }
     }
   }

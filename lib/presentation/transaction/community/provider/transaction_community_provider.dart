@@ -5,12 +5,13 @@ import 'package:localin/model/transaction/transaction_response_model.dart';
 class TransactionCommunityProvider with ChangeNotifier {
   final _repository = Repository();
 
-  Future<TransactionResponseModel> getCommunityTransactionDetail(
+  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
       String transactionId) async {
-    return await _repository.getTransactionDetail(transactionId);
+    return await _repository.getCommunityTransactionDetail(transactionId);
   }
 
-  Future<TransactionResponseModel> payTransaction(String transactionId) async {
+  Future<TransactionCommunityResponseModel> payTransaction(
+      String transactionId) async {
     return await _repository.payTransaction(transactionId);
   }
 

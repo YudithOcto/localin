@@ -28,18 +28,22 @@ class CommunityMembersTabProvider with ChangeNotifier {
 
   bool _isMounted = true;
 
-  Future<Null> getMembersCommunity(
-      {bool isRefresh = true, String keyword}) async {
-    setState(communityMemberState.loading);
+  String _userSearch = '';
+  set requestSearchKeyword(String value) {
+    _userSearch = value;
+    getMembersCommunity(isRefresh: true);
+  }
+
+  Future<Null> getMembersCommunity({bool isRefresh = true}) async {
     if (isRefresh) {
       _pageRequest = 1;
       _memberList.clear();
       _canLoadMore = true;
     }
-
+    setState(communityMemberState.loading);
     final response = await _repository.getCommunityMember(
         _communityId, _pageRequest, 10, 'member',
-        search: keyword);
+        search: _userSearch);
     if (response.error == null &&
         (_memberList.isNotEmpty || response.data.isNotEmpty)) {
       _memberList.addAll(response.data);

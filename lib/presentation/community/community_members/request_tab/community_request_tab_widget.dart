@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/model/community/community_member_detail.dart';
 import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/custom_member_text_form_field_widget.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
@@ -11,6 +9,7 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/debounce.dart';
 import 'package:provider/provider.dart';
 
 class CommunityRequestTabWidget extends StatefulWidget {
@@ -21,15 +20,25 @@ class CommunityRequestTabWidget extends StatefulWidget {
 
 class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
   bool _isInit = true;
+  Debounce _debounce = Debounce(milliseconds: 300);
+  final _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
       Provider.of<CommunityRequestTabProvider>(context, listen: false)
           .getRequestList();
+      _scrollController..addListener(_listener);
       _isInit = false;
     }
     super.didChangeDependencies();
+  }
+
+  _listener() {
+    if (_scrollController.offset > _scrollController.position.maxScrollExtent) {
+      Provider.of<CommunityRequestTabProvider>(context, listen: false)
+          .getRequestList(isRefresh: false);
+    }
   }
 
   showSortingDialog() {
@@ -79,7 +88,12 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
       child: Column(
         children: <Widget>[
           CustomMemberTextFormFieldWidget(
-            onChange: (v) {},
+            onChange: (v) {
+              _debounce.run(() {
+                Provider.of<CommunityRequestTabProvider>(context, listen: false)
+                    .requestSearchKeyword = v;
+              });
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,6 +175,7 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
                   child: ListView.builder(
                     physics: ClampingScrollPhysics(),
                     shrinkWrap: true,
+                    controller: _scrollController,
                     itemCount: provider.requestList.length + 1,
                     itemBuilder: (context, index) {
                       if (snapshot.data == communityMemberState.empty) {
@@ -230,5 +245,11 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _debounce.cancel();
+    super.dispose();
   }
 }

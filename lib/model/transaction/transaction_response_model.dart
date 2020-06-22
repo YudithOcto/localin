@@ -1,26 +1,39 @@
-import 'package:flutter/material.dart';
-
-class TransactionResponseModel {
+class TransactionCommunityResponseModel {
   bool error;
   String message;
-  TransactionDetail data;
+  TransactionCommunityDetail data;
+  int total;
+  List<TransactionCommunityDetail> transactionList;
 
-  TransactionResponseModel({this.error, this.message, this.data});
+  TransactionCommunityResponseModel(
+      {this.error, this.message, this.data, this.transactionList, this.total});
 
-  factory TransactionResponseModel.fromJson(Map<String, dynamic> data) {
-    return TransactionResponseModel(
+  factory TransactionCommunityResponseModel.fromJson(
+      Map<String, dynamic> data) {
+    return TransactionCommunityResponseModel(
         error: false,
         message: null,
-        data: TransactionDetail.fromMap(data['data']));
+        data: TransactionCommunityDetail.fromMap(data['data']));
   }
 
-  TransactionResponseModel.withError(String value)
+  factory TransactionCommunityResponseModel.getListJson(
+      Map<String, dynamic> data) {
+    return TransactionCommunityResponseModel(
+        error: false,
+        message: data['message'],
+        total: data['data']['paging']['total'],
+        transactionList: List<TransactionCommunityDetail>.from(data['data']
+                ['data']
+            .map((e) => TransactionCommunityDetail.fromMap(e))));
+  }
+
+  TransactionCommunityResponseModel.withError(String value)
       : error = true,
         message = value,
         data = null;
 }
 
-class TransactionDetail {
+class TransactionCommunityDetail {
   String transactionId;
   String description;
   int adminFee;
@@ -30,20 +43,23 @@ class TransactionDetail {
   String createdAt;
   String expiredAt;
   int basicPayment;
+  String transactionTypeId;
 
-  TransactionDetail(
-      {this.transactionId,
-      this.description,
-      this.adminFee,
-      this.discount,
-      this.totalPayment,
-      this.status,
-      this.createdAt,
-      this.expiredAt,
-      this.basicPayment});
+  TransactionCommunityDetail({
+    this.transactionId,
+    this.description,
+    this.adminFee,
+    this.discount,
+    this.totalPayment,
+    this.status,
+    this.createdAt,
+    this.expiredAt,
+    this.basicPayment,
+    this.transactionTypeId,
+  });
 
-  factory TransactionDetail.fromMap(Map<String, dynamic> body) {
-    return TransactionDetail(
+  factory TransactionCommunityDetail.fromMap(Map<String, dynamic> body) {
+    return TransactionCommunityDetail(
       transactionId: body['transaksi_id'],
       description: body['keterangan'],
       discount: body['discount'],
@@ -53,6 +69,7 @@ class TransactionDetail {
       createdAt: body['created_at'],
       expiredAt: body['expired_at'],
       basicPayment: body['dasar_bayar'],
+      transactionTypeId: body['modul_id'],
     );
   }
 }

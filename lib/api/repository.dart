@@ -188,9 +188,9 @@ class Repository {
 
   Future<CommunityMemberResponse> getCommunityMember(
       String communityId, int page, int limit, String type,
-      {String search}) async {
+      {String search, String sort}) async {
     return apiProvider.getMemberCommunity(communityId, page, limit, type,
-        search: search);
+        search: search, sort: sort);
   }
 
   Future<CommunityMemberResponse> moderateMember(
@@ -331,11 +331,17 @@ class Repository {
     return apiProvider.searchLocation(offset, limit, search);
   }
 
-  Future<TransactionResponseModel> getTransactionDetail(String transId) {
-    return apiProvider.getTransactionDetail(transId);
+  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
+      String transId) {
+    return apiProvider.getCommunityTransactionDetail(transId);
   }
 
-  Future<TransactionResponseModel> payTransaction(String transId) {
+  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+      int page, int limit) {
+    return apiProvider.getCommunityTransactionList(page, limit);
+  }
+
+  Future<TransactionCommunityResponseModel> payTransaction(String transId) {
     return apiProvider.payTransaction(transId);
   }
 }

@@ -72,4 +72,5 @@ class ApiConstant {
   /// TRANSACTION
   static const String kTransactionDetail = 'v1/transaksi';
   static const String kTransactionPayment = 'v1/transaksi/pay';
+  static const String kTransaction = 'v1/transaksi';
 }

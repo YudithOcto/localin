@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/community_members/blocked_tab/community_blocked_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/shared_members_widget/custom_member_text_form_field_widget.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/enum_members.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/single_member_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/debounce.dart';
 import 'package:provider/provider.dart';
 
 class CommunityBlockedTabWidget extends StatefulWidget {
@@ -16,15 +18,27 @@ class CommunityBlockedTabWidget extends StatefulWidget {
 
 class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
   bool _isInit = true;
+  final _scrollController = ScrollController();
+  final _debounce = Debounce(milliseconds: 400);
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<CommunityBlockedTabProvider>(context, listen: false)
-          .getBlockedUser();
+      loadData();
+      _scrollController.addListener(() {
+        if (_scrollController.offset >
+            _scrollController.position.maxScrollExtent) {
+          loadData(isRefresh: false);
+        }
+      });
       _isInit = false;
     }
     super.didChangeDependencies();
+  }
+
+  loadData({bool isRefresh = true}) {
+    Provider.of<CommunityBlockedTabProvider>(context, listen: false)
+        .getBlockedUser(isRefresh: isRefresh);
   }
 
   @override
@@ -33,30 +47,13 @@ class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         children: <Widget>[
-          SizedBox(
-            height: 20.0,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: ThemeColors.black10,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(color: ThemeColors.black0)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(color: ThemeColors.black0)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(color: ThemeColors.black0)),
-              hintText: 'Search by name',
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              hintStyle:
-                  ThemeText.sfRegularBody.copyWith(color: ThemeColors.black60),
-            ),
-          ),
-          SizedBox(
-            height: 20.0,
+          CustomMemberTextFormFieldWidget(
+            onChange: (v) {
+              _debounce.run(() => Provider.of<CommunityBlockedTabProvider>(
+                      context,
+                      listen: false)
+                  .requestSearchKeyword = v);
+            },
           ),
           StreamBuilder<communityMemberState>(
             stream:
@@ -74,6 +71,7 @@ class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
                 return ListView.builder(
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
+                  controller: _scrollController,
                   itemCount: provider.blockedList.length + 1,
                   itemBuilder: (context, index) {
                     if (snapshot.data == communityMemberState.empty) {

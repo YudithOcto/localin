@@ -27,15 +27,22 @@ class CommunityAdminTabProvider with ChangeNotifier {
 
   bool _isMounted = true;
 
+  String _userSearch = '';
+  set requestSearchKeyword(String value) {
+    _userSearch = value;
+    getAdminCommunity(isRefresh: true);
+  }
+
   Future<Null> getAdminCommunity({bool isRefresh = true}) async {
     if (isRefresh) {
       _pageRequest = 1;
       _adminList.clear();
       _canLoadMore = true;
     }
-
+    setState(communityMemberState.loading);
     final response = await _repository.getCommunityMember(
-        _communityId, _pageRequest, 10, 'admin');
+        _communityId, _pageRequest, 10, 'admin',
+        search: _userSearch);
     if (response.error == null &&
         (response.data.isNotEmpty || _adminList.isNotEmpty)) {
       _adminList.addAll(response.data);

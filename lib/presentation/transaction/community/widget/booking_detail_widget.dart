@@ -8,7 +8,7 @@ import 'package:localin/utils/countdown.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class BookingDetailWidget extends StatefulWidget {
-  final TransactionDetail detail;
+  final TransactionCommunityDetail detail;
   final bool showPaymentRow;
   BookingDetailWidget({@required this.detail, this.showPaymentRow = false});
   @override
@@ -27,8 +27,15 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
   }
 
   @override
+  void initState() {
+    startCountDown();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.maxFinite,
       color: ThemeColors.black0,
       margin: EdgeInsets.only(top: 4.0),
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
@@ -55,7 +62,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           ),
           SizedBox(height: 8.0),
           Text(
-            'Berlangganan Komunitas Pro Berbayar',
+            '${widget.detail.description}',
             style: ThemeText.rodinaHeadline,
           ),
           SizedBox(

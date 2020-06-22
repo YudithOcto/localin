@@ -26,6 +26,9 @@ class Countdown {
       _timer.cancel();
       _counterStream.close();
     }
+    if (expiredTime.isBefore(DateTime.now())) {
+      return;
+    }
     if (_counterStream == null || _counterStream.isClosed) {
       _counterStream = StreamController<String>.broadcast();
     }
