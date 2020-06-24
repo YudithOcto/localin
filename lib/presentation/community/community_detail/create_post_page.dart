@@ -49,7 +49,7 @@ class CreatePostContentWidget extends StatelessWidget {
                     context, 'Create Post', result.message,
                     btnText: 'Close');
                 if (dialog == 'success') {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop('success');
                 }
               } else {
                 CustomDialog.showCustomDialogWithButton(

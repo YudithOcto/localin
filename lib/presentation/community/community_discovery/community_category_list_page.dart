@@ -98,7 +98,7 @@ class _CommunityByCategoryContentWidgetState
             CommunityCategoryPopularList(
               categoryId: _catDetail.id,
             ),
-            CommunityCategoryOtherList()
+            CommunityCategoryOtherList(categoryId: _catDetail.id)
           ],
         ),
       ),

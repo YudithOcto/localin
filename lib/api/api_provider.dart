@@ -13,6 +13,7 @@ import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
+import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/community/community_my_group_response.dart';
@@ -947,17 +948,37 @@ class ApiProvider {
     }
   }
 
-  Future<void> createEventCommunity(
+  Future<CommunityEventResponseModel> createEventCommunity(
       String communityId, FormData formData) async {
     try {
       final response = await _dio.post(
           '${ApiConstant.kCreateEventCommunity}/$communityId',
           data: formData,
           options: Options(headers: {'requiredToken': true}));
-      return response;
+      return CommunityEventResponseModel.fromMap(response.data);
     } catch (error) {
-      print(error);
-      return error;
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityEventResponseModel> getUpComingList(
+      String communityId, int page, int limit) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kUpcomingCommunityEvent}$communityId',
+          queryParameters: {'page': page, 'limit': limit},
+          options: Options(headers: {'requiredToken': true}));
+      return CommunityEventResponseModel.fromMapList(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
     }
   }
 
@@ -1275,18 +1296,17 @@ class ApiProvider {
     }
   }
 
-  Future<TransactionCommunityResponseModel> payTransaction(
-      String transId) async {
+  Future<BookingPaymentResponse> payTransaction(String transId) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kTransactionPayment}/$transId',
           options: Options(headers: {'requiredToken': true}));
-      return TransactionCommunityResponseModel.fromJson(response.data);
+      return BookingPaymentResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return TransactionCommunityResponseModel.withError(_handleError(error));
+        return BookingPaymentResponse.withError(_handleError(error));
       } else {
-        return TransactionCommunityResponseModel.withError(error.toString());
+        return BookingPaymentResponse.withError(error.toString());
       }
     }
   }

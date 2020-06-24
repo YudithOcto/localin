@@ -149,7 +149,7 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
                 child: EmptyCommunityWithCustomMessage(
                   title: 'Community',
                   message:
-                      'You are not elligible yet to view this community. Please wait until your member request '
+                      'You are not eligible yet to view this community. Please wait until your member request '
                       'accepted by the admin.',
                 ),
               );
@@ -193,7 +193,9 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
       floatingActionButton: Consumer<CommunityDetailProvider>(
         builder: (context, provider, child) {
           return Visibility(
-              visible: provider.communityDetail?.communityType == 'paid',
+              visible: provider.communityDetail?.communityType == 'paid' &&
+                      provider.communityDetail.isJoin ??
+                  false,
               child: SvgPicture.asset('images/chat_room.svg'));
         },
       ),

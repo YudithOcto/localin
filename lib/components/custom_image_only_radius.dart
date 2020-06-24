@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/themes.dart';
 
 class CustomImageOnlyRadius extends StatelessWidget {
@@ -53,6 +54,12 @@ class CustomImageOnlyRadius extends StatelessWidget {
             bottomRight: Radius.circular(bottomRight),
           ),
           color: placeHolderColor,
+        ),
+        child: SvgPicture.asset(
+          'images/image_icon.svg',
+          fit: BoxFit.scaleDown,
+          height: 20.0,
+          width: 20.0,
         ),
       ),
       placeholder: (context, child) => Container(

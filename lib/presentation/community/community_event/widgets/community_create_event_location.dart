@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/location/search_location_response.dart';
-import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
+import 'package:localin/presentation/community/community_event/provider/community_create_event_provider.dart';
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommunityAddLocationWidget extends StatelessWidget {
+class CommunityCreateEventLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-      child: Consumer<CommunityCreateProvider>(
+      child: Consumer<CommunityCreateEventProvider>(
         builder: (context, provider, child) {
           return ListView.builder(
             shrinkWrap: true,
@@ -28,9 +28,9 @@ class CommunityAddLocationWidget extends StatelessWidget {
                       SearchLocationPage.routeName,
                     );
                     if (result != null && result is LocationResponseDetail) {
-                      final provider = Provider.of<CommunityCreateProvider>(
-                          context,
-                          listen: false);
+                      final provider =
+                          Provider.of<CommunityCreateEventProvider>(context,
+                              listen: false);
                       provider.addLocationSelected = result.city;
                     }
                   },
@@ -94,9 +94,9 @@ class CommunityAddLocationWidget extends StatelessWidget {
                         );
                         if (result != null &&
                             result is LocationResponseDetail) {
-                          final provider = Provider.of<CommunityCreateProvider>(
-                              context,
-                              listen: false);
+                          final provider =
+                              Provider.of<CommunityCreateEventProvider>(context,
+                                  listen: false);
                           provider.addLocationSelected = result.city;
                         }
                       },

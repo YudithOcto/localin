@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/presentation/community/community_event/community_event_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:provider/provider.dart';
 
 class CommunitySettingsWidget extends StatelessWidget {
   final bool isAdmin;
@@ -49,9 +49,17 @@ class CommunitySettingsWidget extends StatelessWidget {
             ),
           ),
         ),
-        RowSettings(
-          icon: 'images/community_settings_promo.svg',
-          title: 'Events',
+        InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(CommunityEventPage.routeName, arguments: {
+              CommunityEventPage.communityId: communityDetail.id,
+            });
+          },
+          child: RowSettings(
+            icon: 'images/community_settings_promo.svg',
+            title: 'Events',
+          ),
         ),
         InkWell(
           onTap: () async {

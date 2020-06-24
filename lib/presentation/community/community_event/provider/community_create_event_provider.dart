@@ -1,0 +1,182 @@
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:localin/api/repository.dart';
+import 'package:localin/model/community/community_event_response_model.dart';
+
+class CommunityCreateEventProvider with ChangeNotifier {
+  final _repository = Repository();
+  final eventFormNameController = TextEditingController();
+  final eventFormDescriptionController = TextEditingController();
+  final eventFormAudienceController = TextEditingController();
+  final eventStartDateController = TextEditingController();
+  final eventEndDateController = TextEditingController();
+
+  var _communityId = '';
+
+  CommunityCreateEventProvider(String communityId) {
+    eventFormNameController.addListener(() {
+      notifyListeners();
+    });
+    eventFormDescriptionController.addListener(() {
+      notifyListeners();
+    });
+    eventFormAudienceController.addListener(() {
+      notifyListeners();
+    });
+    eventStartDateController.addListener(() {
+      notifyListeners();
+    });
+    eventEndDateController.addListener(() {
+      notifyListeners();
+    });
+    _communityId = communityId;
+  }
+
+  String _selectedLocation = '';
+  String get selectedLocation => _selectedLocation;
+
+  set addLocationSelected(String value) {
+    _selectedLocation = value;
+    notifyListeners();
+  }
+
+  bool _isOnlineEvent = false;
+  bool get isOnlineEvent => _isOnlineEvent;
+  set enabledOnlineEvent(bool value) {
+    _isOnlineEvent = value;
+    notifyListeners();
+  }
+
+  List<Uint8List> _selectedImage = [];
+  List<Uint8List> get selectedImage => _selectedImage;
+  addSelectedImage(List<Uint8List> images) {
+    _selectedImage.clear();
+    _selectedImage.addAll(images);
+    notifyListeners();
+  }
+
+  removeSelectedImage(int index) {
+    _selectedImage.removeAt(index);
+    notifyListeners();
+  }
+
+  DateTime _selectedStartDate;
+  DateTime get selectedStartDate => _selectedStartDate;
+  TimeOfDay _selectedStartTime;
+
+  DateTime _selectedEndDate;
+  DateTime get initialEndDate => _selectedStartDate != null
+      ? _selectedStartDate.add(Duration(days: 1))
+      : DateTime.now().add(Duration(days: 1));
+  TimeOfDay _selectedEndTime;
+
+  final format = DateFormat('EEEE, MMM dd, yyyy');
+  String get startTime {
+    return '${format.format(_selectedStartDate)} '
+        'at ${_selectedStartTime.customHour}:${_selectedStartTime.customMinute} ${_selectedStartTime.customPeriod}';
+  }
+
+  String get endTime {
+    String formatter = '${format.format(_selectedEndDate)} '
+        'at ${_selectedEndTime.customHour}:${_selectedEndTime.customMinute}  ${_selectedStartTime.customPeriod}';
+    return formatter;
+  }
+
+  void startEventDateTime(DateTime value, TimeOfDay timeValue) {
+    _selectedStartDate = value;
+    _selectedStartTime = timeValue;
+    eventStartDateController.text = startTime;
+    notifyListeners();
+  }
+
+  void endEventDateTime(DateTime value, TimeOfDay timeValue) {
+    _selectedEndDate = value;
+    _selectedEndTime = timeValue;
+    eventEndDateController.text = endTime;
+    notifyListeners();
+  }
+
+  String get isShareButtonActive {
+    if (eventStartDateController.text.isEmpty) {
+      return 'Start date time is required';
+    } else if (eventEndDateController.text.isEmpty) {
+      return 'End date time is required';
+    } else if (eventFormNameController.text.isEmpty) {
+      return 'Name of event is required';
+    } else if (eventFormDescriptionController.text.isEmpty) {
+      return 'Description of event is required';
+    } else if (eventFormAudienceController.text.isEmpty) {
+      return 'Audience of event is required';
+    } else if (_selectedLocation.isEmpty) {
+      return 'Location of event is required';
+    } else if (_selectedImage.isEmpty) {
+      return 'Image of event is required';
+    } else {
+      return '';
+    }
+  }
+
+  final formatter = DateFormat('yyyy-MM-dd');
+
+  FormData get eventFormModel {
+    Map<String, dynamic> map = Map();
+    map['judul'] = eventFormNameController.text ?? null;
+    map['deskripsi'] = eventFormDescriptionController.text ?? null;
+    map['start_date'] = formatter.format(_selectedStartDate);
+    map['end_date'] = formatter.format(_selectedEndDate);
+    map['start_time'] = '${_selectedStartTime.hour}:${_selectedEndTime.minute}';
+    map['end_time'] = '${_selectedEndTime.hour}:${_selectedEndTime.minute}';
+    map['alamat'] = _selectedLocation;
+    map['peserta'] = eventFormAudienceController.text;
+    map['lampiran_tipe'] = 'gambar';
+    if (_selectedImage != null) {
+      map['lampiran'] = _selectedImage
+          .map((e) => MultipartFile.fromBytes(e, filename: 'eventGambar'))
+          .toList();
+    }
+    return FormData.fromMap(map);
+  }
+
+  Future<CommunityEventResponseModel> createEvent() async {
+    final response =
+        await _repository.createCommunityEvent(_communityId, eventFormModel);
+    return response;
+  }
+
+  @override
+  void dispose() {
+    eventFormNameController.dispose();
+    eventFormDescriptionController.dispose();
+    super.dispose();
+  }
+}
+
+extension on TimeOfDay {
+  String get customHour {
+    if (this.hourOfPeriod < 10) {
+      return '0${this.hourOfPeriod}';
+    }
+    return '${this.hourOfPeriod}';
+  }
+
+  String get customMinute {
+    if (this.minute < 10) {
+      return '0${this.minute}';
+    }
+    return '${this.minute}';
+  }
+
+  String get customPeriod {
+    print(this.period);
+    if (this.period == DayPeriod.am) {
+      return 'AM';
+    } else {
+      return 'PM';
+    }
+  }
+}

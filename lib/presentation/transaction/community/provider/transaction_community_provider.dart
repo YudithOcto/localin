@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/hotel/booking_payment_response.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 
 class TransactionCommunityProvider with ChangeNotifier {
@@ -10,8 +11,7 @@ class TransactionCommunityProvider with ChangeNotifier {
     return await _repository.getCommunityTransactionDetail(transactionId);
   }
 
-  Future<TransactionCommunityResponseModel> payTransaction(
-      String transactionId) async {
+  Future<BookingPaymentResponse> payTransaction(String transactionId) async {
     return await _repository.payTransaction(transactionId);
   }
 

@@ -5,6 +5,9 @@ import 'package:localin/presentation/community/provider/community_category_provi
 import 'package:provider/provider.dart';
 
 class CommunityCategoryOtherList extends StatefulWidget {
+  final String categoryId;
+  CommunityCategoryOtherList({this.categoryId});
+
   @override
   _CommunityCategoryOtherListState createState() =>
       _CommunityCategoryOtherListState();
@@ -18,7 +21,7 @@ class _CommunityCategoryOtherListState
   void didChangeDependencies() {
     if (_isInit) {
       Provider.of<CommunityCategoryProvider>(context, listen: false)
-          .getCommunityCategory();
+          .getCommunityByCategory(categoryId: widget.categoryId);
       _isInit = false;
     }
     super.didChangeDependencies();

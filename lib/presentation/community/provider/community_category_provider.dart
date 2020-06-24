@@ -20,14 +20,15 @@ class CommunityCategoryProvider with ChangeNotifier {
   List<CommunityDetail> _otherCommunity = [];
   List<CommunityDetail> get otherCommunity => _otherCommunity;
 
-  Future<Null> getCommunityCategory({bool isRefresh = true}) async {
+  Future<Null> getCommunityByCategory(
+      {bool isRefresh = true, String categoryId}) async {
     if (isRefresh) {
       _page = 1;
       _canLoadMore = true;
       _otherCommunity.clear();
     }
 
-    final result = await _repository.getCommunityList(page: _page, limit: 10);
+    final result = await _repository.getCommunityListByCategory(categoryId);
     if (result.error == null) {
       _otherCommunity.addAll(result.communityDetailList);
       _otherCommunityStream.add(othersCommunityState.success);

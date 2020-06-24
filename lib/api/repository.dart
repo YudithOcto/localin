@@ -7,6 +7,7 @@ import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/community/community_my_group_response.dart';
@@ -231,9 +232,14 @@ class Repository {
     return apiProvider.getLatestPost(offset, limit);
   }
 
-  Future<void> createCommunityEvent(
-      String communityId, FormData formData) async {
+  Future<CommunityEventResponseModel> createCommunityEvent(
+      String communityId, FormData formData) {
     return apiProvider.createEventCommunity(communityId, formData);
+  }
+
+  Future<CommunityEventResponseModel> getUpcomingEvent(
+      String communityId, int page, int limit) {
+    return apiProvider.getUpComingList(communityId, page, limit);
   }
 
   Future<CommunityCommentBaseResponse> postComment(
@@ -341,7 +347,7 @@ class Repository {
     return apiProvider.getCommunityTransactionList(page, limit);
   }
 
-  Future<TransactionCommunityResponseModel> payTransaction(String transId) {
+  Future<BookingPaymentResponse> payTransaction(String transId) {
     return apiProvider.payTransaction(transId);
   }
 }

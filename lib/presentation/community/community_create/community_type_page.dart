@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/model/community/community_create_request_model.dart';
-import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/provider/create/community_type_provider.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/text_themes.dart';
@@ -54,11 +53,26 @@ class _CommunityTypeCreateContentState
               .createCommunity(type: type, model: model);
       if (response.error == null) {
         CustomDialog.closeDialog(context);
-        CustomDialog.showCustomDialogVerticalMultipleButton(context,
-            dialogButtons: getDialogWidget(response.detailCommunity),
-            title: 'Congratulations!',
-            message:
-                'You have successfully create your own community. Invite your friends into your community.');
+        if (response.detailCommunity.transactionId == null ||
+            response.detailCommunity.transactionId.isEmpty) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              CommunityDetailPage.routeName, (route) => false,
+              arguments: {
+                CommunityDetailPage.communitySlug:
+                    response.detailCommunity.slug,
+                CommunityDetailPage.needBackToHome: true,
+              });
+        } else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              TransactionCommunityDetailPage.routeName, (route) => false,
+              arguments: {
+                TransactionCommunityDetailPage.transactionId:
+                    response.detailCommunity.transactionId,
+                TransactionCommunityDetailPage.onBackPressedHome: true,
+                TransactionCommunityDetailPage.communitySlug:
+                    response.detailCommunity.slug,
+              });
+        }
       } else {
         CustomDialog.closeDialog(context);
         CustomDialog.showCustomDialogVerticalMultipleButton(context,
@@ -74,47 +88,6 @@ class _CommunityTypeCreateContentState
                     )));
       }
     }
-  }
-
-  List<Widget> getDialogWidget(CommunityDetail communityDetail) {
-    List<Widget> widgetList = List();
-    widgetList.add(buttonDialog1(communityDetail));
-    return widgetList;
-  }
-
-  Widget buttonDialog1(CommunityDetail communityDetail) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: InkWell(
-        onTap: () {
-          if (communityDetail.transactionId == null ||
-              communityDetail.transactionId.isEmpty) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                CommunityDetailPage.routeName, (route) => false,
-                arguments: {
-                  CommunityDetailPage.communitySlug: communityDetail.slug,
-                  CommunityDetailPage.needBackToHome: true,
-                });
-          } else {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                TransactionCommunityDetailPage.routeName, (route) => false,
-                arguments: {
-                  TransactionCommunityDetailPage.transactionId:
-                      communityDetail.transactionId,
-                });
-          }
-        },
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-          child: Text(
-            'Close',
-            textAlign: TextAlign.center,
-            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black80),
-          ),
-        ),
-      ),
-    );
   }
 
   @override

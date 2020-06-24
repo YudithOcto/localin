@@ -4,6 +4,7 @@ import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/community/community_detail/create_post_page.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
+import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
               Wrap(
                 children: <Widget>[
                   expandedRow(context, provider, shrinkOffset),
-                  collapsedRow(provider, shrinkOffset)
+                  collapsedRow(context, provider, shrinkOffset)
                 ],
               ),
             ],
@@ -159,8 +160,11 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                               provider.communityDetail.id,
                         });
                         if (result == 'success') {
-                          provider
-                              .getCommunityDetail(provider.communityDetail.id);
+                          Provider.of<CommunityRetrieveCommentProvider>(context,
+                                  listen: false)
+                              .getCommentList(
+                                  communityId: provider.communityDetail.id,
+                                  isRefresh: true);
                         }
                       },
                       child: Row(
@@ -189,7 +193,8 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget collapsedRow(CommunityDetailProvider provider, double shrinkOffset) {
+  Widget collapsedRow(BuildContext context, CommunityDetailProvider provider,
+      double shrinkOffset) {
     return AnimatedOpacity(
       opacity: shrinkOffset > 150 ? 1 : 0,
       duration: Duration(milliseconds: 150),
@@ -228,16 +233,29 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                 visible: provider.communityDetail == null
                     ? false
                     : !provider.communityDetail.isJoin,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                  decoration: BoxDecoration(
-                      color: ThemeColors.yellow,
-                      borderRadius: BorderRadius.circular(4.0)),
-                  child: Text(
-                    'Join',
-                    style: ThemeText.rodinaHeadline
-                        .copyWith(color: ThemeColors.black100),
+                child: InkWell(
+                  onTap: () async {
+                    final result = await provider
+                        .joinCommunity(provider.communityDetail.id);
+                    if (result.error == null) {
+                      CustomDialog.showCustomDialogWithButton(context,
+                          'Join Community', '${result.message ?? 'Failed'}');
+                    } else {
+                      CustomDialog.showCustomDialogWithButton(context,
+                          'Join Community', '${result.message ?? 'Success'}');
+                    }
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                    decoration: BoxDecoration(
+                        color: ThemeColors.yellow,
+                        borderRadius: BorderRadius.circular(4.0)),
+                    child: Text(
+                      'Join',
+                      style: ThemeText.rodinaHeadline
+                          .copyWith(color: ThemeColors.black100),
+                    ),
                   ),
                 ),
               )

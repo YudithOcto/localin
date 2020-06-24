@@ -4,12 +4,14 @@ import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
 import 'package:localin/presentation/transaction/community/provider/transaction_community_provider.dart';
 import 'package:localin/presentation/transaction/community/widget/row_price_widget.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/countdown.dart';
 import 'package:localin/utils/number_helper.dart';
@@ -21,6 +23,7 @@ class TransactionCommunityDetailPage extends StatelessWidget {
   static const routeName = 'TransactionCommunityDetailPage';
   static const transactionId = 'transactionId';
   static const onBackPressedHome = 'onBackPressedHome';
+  static const communitySlug = 'communitySlug';
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +47,13 @@ class _TransactionCommunityContentWidgetState
   Countdown _countdown;
   String _transactionId;
   bool _isNeedToBackHome = false;
+  String _communitySlug;
 
   loadData() {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     _transactionId = routeArgs[TransactionCommunityDetailPage.transactionId];
+    _communitySlug = routeArgs[TransactionCommunityDetailPage.communitySlug];
     _isNeedToBackHome =
         routeArgs[TransactionCommunityDetailPage.onBackPressedHome] ?? false;
     getTransactionData =
@@ -63,6 +68,37 @@ class _TransactionCommunityContentWidgetState
         message: 'You will get more features by purchase');
   }
 
+  List<Widget> getDialogWidget() {
+    List<Widget> widgetList = List();
+    widgetList.add(buttonDialog1());
+    return widgetList;
+  }
+
+  Widget buttonDialog1() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              CommunityDetailPage.routeName, (route) => false,
+              arguments: {
+                CommunityDetailPage.communitySlug: _communitySlug,
+                CommunityDetailPage.needBackToHome: true,
+              });
+        },
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+          child: Text(
+            'Close',
+            textAlign: TextAlign.center,
+            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black80),
+          ),
+        ),
+      ),
+    );
+  }
+
   List<Widget> getButtonWidget() {
     List<Widget> widget = List();
     widget.add(FilledButtonDefault(
@@ -74,11 +110,17 @@ class _TransactionCommunityContentWidgetState
                 listen: false)
             .payTransaction(_transactionId);
         CustomDialog.closeDialog(context);
-        final dialog = await CustomDialog.showCustomDialogWithButton(
-            context, 'Purchase', result?.message);
-        if (!result.error && dialog == 'success') {
-          Navigator.of(context)
-              .pushReplacementNamed(MainBottomNavigation.routeName);
+        final response = await Navigator.of(context)
+            .pushNamed(WebViewPage.routeName, arguments: {
+          WebViewPage.urlName: result?.urlRedirect,
+          WebViewPage.title: 'Dana',
+        });
+        if (response != null && response == SUCCESS_VERIFICATION) {
+          CustomDialog.showCustomDialogVerticalMultipleButton(context,
+              dialogButtons: getDialogWidget(),
+              title: 'Congratulations!',
+              message:
+                  'You have successfully create your own community. Invite your friends into your community.');
         }
       },
       backgroundColor: ThemeColors.primaryBlue,
