@@ -39,7 +39,7 @@ class _CommunityNewsActivityWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Consumer<CommunityRetrieveCommentProvider>(
+    return Consumer<CommunityRetrieveCommentProvider>(
       builder: (context, provider, child) {
         return StreamBuilder<communityCommentState>(
             stream: provider.commentListState,
@@ -86,6 +86,8 @@ class _CommunityNewsActivityWidgetState
                     } else if (index < provider.commentList.length) {
                       return SingleCardCommunityNewsWidget(
                         commentData: provider.commentList[index],
+                        communityDetail: _communityDetail,
+                        index: index,
                         onCommentPressed: () async {
                           Navigator.of(context).pushNamed(
                               CommunityCommentPage.routeName,
@@ -107,6 +109,6 @@ class _CommunityNewsActivityWidgetState
               }
             });
       },
-    ));
+    );
   }
 }

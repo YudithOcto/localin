@@ -23,7 +23,7 @@ class ApiConstant {
   static const String kModerateMemberCommunity = 'v1/komunitas/moderate-all';
   static const String kOtherUserCommunity = 'v1/komunitas/member';
   static const String kCommentCommunity = 'v1/komunitas/komentar/';
-  static const String kCreateEventCommunity = 'v1/komunitas/event/';
+  static const String kEventCommunity = 'v1/komunitas/event/';
   static const String kEventCategory = 'v1/komunitas/event/kategori';
   static const String kPopularCommunity = 'v1/komunitas/populer';
   static const String kLatestPostCommunity = 'v1/komunitas/latest-post';
@@ -31,6 +31,8 @@ class ApiConstant {
   static const String kCreatePostCommunity = 'v1/komunitas/konten';
   static const String kLeaveCommunity = 'v1/komunitas/leave';
   static const String kUpcomingCommunityEvent = 'v1/komunitas/event/upcoming/';
+  static const String kPastCommunityEvent = 'v1/komunitas/event/ended/';
+  static const String kJoinEvent = 'v1/komunitas/event/join';
 
   /// ARTICLE
   static const String kUserArticle = 'v1/artikel/me';

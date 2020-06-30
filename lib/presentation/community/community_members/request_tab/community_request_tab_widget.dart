@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_provider.dart';
@@ -7,7 +9,6 @@ import 'package:localin/presentation/community/community_members/shared_members_
 import 'package:localin/presentation/community/community_members/shared_members_widget/single_member_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/debounce.dart';
 import 'package:provider/provider.dart';
@@ -224,17 +225,22 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
                           textTheme: ThemeText.rodinaTitle3
                               .copyWith(color: ThemeColors.black0),
                           backgroundColor: ThemeColors.primaryBlue,
-                          onPressed: () {},
+                          onPressed: () {
+                            onModerateAllMember(provider, 'approved-all');
+                          },
                         ),
                       ),
                       SizedBox(width: 11),
                       Expanded(
                         child: OutlineButtonDefault(
-                            textStyle: ThemeText.rodinaTitle3,
-                            textColor: ThemeColors.black80,
-                            sideColor: ThemeColors.black80,
-                            buttonText: 'Decline All',
-                            onPressed: () {}),
+                          textStyle: ThemeText.rodinaTitle3,
+                          textColor: ThemeColors.black80,
+                          sideColor: ThemeColors.black80,
+                          buttonText: 'Decline All',
+                          onPressed: () {
+                            onModerateAllMember(provider, 'decline-all');
+                          },
+                        ),
                       )
                     ],
                   ),
@@ -245,6 +251,18 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
         ],
       ),
     );
+  }
+
+  onModerateAllMember(
+      CommunityRequestTabProvider provider, String status) async {
+    CustomDialog.showLoadingDialog(context, message: 'Loading ...');
+    final result = await provider.moderateAllMember(status: '$status');
+    if (result.error == null) {
+      provider.getRequestList();
+    }
+    CustomDialog.closeDialog(context);
+    CustomToast.showCustomBookmarkToast(context, result?.message,
+        icon: 'circle_checked_blue');
   }
 
   @override

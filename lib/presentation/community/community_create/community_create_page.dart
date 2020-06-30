@@ -8,12 +8,12 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-import 'create_community/community_add_category_widget.dart';
-import 'create_community/community_add_description_widget.dart';
-import 'create_community/community_add_location_widget.dart';
-import 'create_community/community_add_picture_widget.dart';
-import 'create_community/community_add_title_widget.dart';
-import 'create_community/community_basic_info_widget.dart';
+import 'widgets/community_add_category_widget.dart';
+import 'widgets/community_add_description_widget.dart';
+import 'widgets/community_add_location_widget.dart';
+import 'widgets/community_add_picture_widget.dart';
+import 'widgets/community_add_title_widget.dart';
+import 'widgets/community_basic_info_widget.dart';
 
 class CommunityCreatePage extends StatelessWidget {
   static const routeName = 'RevampCommunityCreatePage';

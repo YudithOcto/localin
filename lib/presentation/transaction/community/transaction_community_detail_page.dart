@@ -82,7 +82,7 @@ class _TransactionCommunityContentWidgetState
           Navigator.of(context).pushNamedAndRemoveUntil(
               CommunityDetailPage.routeName, (route) => false,
               arguments: {
-                CommunityDetailPage.communitySlug: _communitySlug,
+                CommunityDetailPage.communityData: _communitySlug,
                 CommunityDetailPage.needBackToHome: true,
               });
         },

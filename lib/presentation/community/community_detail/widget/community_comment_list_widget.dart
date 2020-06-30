@@ -16,6 +16,7 @@ class CommunityCommentListWidget extends StatefulWidget {
 class _CommunityCommentListWidgetState
     extends State<CommunityCommentListWidget> {
   bool _isInit = true;
+  final _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
@@ -23,7 +24,15 @@ class _CommunityCommentListWidgetState
     if (_isInit) {
       Provider.of<CommunityRetrieveCommentProvider>(context, listen: false)
           .getCommentList(communityId: widget.communityId);
+      _scrollController..addListener(_listener);
       _isInit = false;
+    }
+  }
+
+  _listener() {
+    if (_scrollController.offset > _scrollController.position.maxScrollExtent) {
+      Provider.of<CommunityRetrieveCommentProvider>(context, listen: false)
+          .getCommentList(communityId: widget.communityId, isRefresh: false);
     }
   }
 
@@ -36,11 +45,16 @@ class _CommunityCommentListWidgetState
             print(snapshot);
             if (snapshot.connectionState == ConnectionState.waiting &&
                 provider.page <= 1) {
-              return Center(child: CircularProgressIndicator());
+              return Container(
+                  alignment: FractionalOffset.center,
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.4),
+                  child: CircularProgressIndicator());
             } else {
               return Expanded(
                 child: ListView.builder(
                   primary: false,
+                  controller: _scrollController,
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: provider.commentList.length + 1,

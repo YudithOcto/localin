@@ -88,6 +88,7 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                                 provider.getMembersCommunity(isRefresh: true),
                             popupItem: [
                               kPopupMakeAdmin,
+                              kPopupRemoveMember,
                               kPopupBlock,
                               kPopupViewProfile,
                             ],

@@ -7,6 +7,7 @@ import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/community/community_event_member_response.dart';
 import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
@@ -218,6 +219,25 @@ class Repository {
     return apiProvider.getOtherUserCommunityList(id);
   }
 
+  Future<CommunityEventResponseModel> getEventDetail(String eventId) {
+    return apiProvider.getEventDetail(eventId);
+  }
+
+  Future<CommunityEventMemberResponse> getMemberEventByType(
+      String type, String eventId, int page, int limit) {
+    return apiProvider.getEventMemberByType(type, eventId, page, limit);
+  }
+
+  Future<CommunityEventResponseModel> adminUpdateEventData(
+      String eventId, String status) {
+    return apiProvider.adminUpdateEventStatus(status, eventId);
+  }
+
+  Future<CommunityEventResponseModel> updateJoinEvent(
+      String status, String eventId) {
+    return apiProvider.updateJoinEvent(eventId, status);
+  }
+
   Future<String> getCommunityPrice() async {
     return apiProvider.getPaidCommunityPrice();
   }
@@ -232,6 +252,10 @@ class Repository {
     return apiProvider.getLatestPost(offset, limit);
   }
 
+  Future<String> likeUnlikeCommunity(String type, String postId) async {
+    return apiProvider.communityLikeUnlike(type, postId);
+  }
+
   Future<CommunityEventResponseModel> createCommunityEvent(
       String communityId, FormData formData) {
     return apiProvider.createEventCommunity(communityId, formData);
@@ -240,6 +264,11 @@ class Repository {
   Future<CommunityEventResponseModel> getUpcomingEvent(
       String communityId, int page, int limit) {
     return apiProvider.getUpComingList(communityId, page, limit);
+  }
+
+  Future<CommunityEventResponseModel> getPastCommunityEvent(
+      String communityId, int page, int limit) {
+    return apiProvider.getPastCommunityEvent(communityId, page, limit);
   }
 
   Future<CommunityCommentBaseResponse> postComment(

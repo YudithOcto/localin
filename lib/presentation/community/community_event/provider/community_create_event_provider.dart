@@ -4,9 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_place/google_place.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/community/community_event_request_model.dart';
 import 'package:localin/model/community/community_event_response_model.dart';
+import 'package:localin/utils/location_helper.dart';
 
 class CommunityCreateEventProvider with ChangeNotifier {
   final _repository = Repository();
@@ -15,10 +18,14 @@ class CommunityCreateEventProvider with ChangeNotifier {
   final eventFormAudienceController = TextEditingController();
   final eventStartDateController = TextEditingController();
   final eventEndDateController = TextEditingController();
+  GooglePlace googlePlace;
+  String _communityId = '';
+  String get communityId => _communityId;
+  String _eventId;
 
-  var _communityId = '';
-
-  CommunityCreateEventProvider(String communityId) {
+  CommunityCreateEventProvider(String communityId,
+      {CommunityEventRequestModel model}) {
+    googlePlace = GooglePlace(kGoogleApiKey);
     eventFormNameController.addListener(() {
       notifyListeners();
     });
@@ -35,14 +42,51 @@ class CommunityCreateEventProvider with ChangeNotifier {
       notifyListeners();
     });
     _communityId = communityId;
+
+    if (model != null) {
+      setPreviousModel(model);
+    }
+  }
+
+  setPreviousModel(CommunityEventRequestModel model) {
+    _eventId = model.eventSlug;
+    eventFormNameController.text = model.eventName;
+    eventFormAudienceController.text = model.eventAudience;
+    eventFormDescriptionController.text = model.eventDesc;
+    _selectedStartTime = TimeOfDay(
+        hour: int.parse(model.startTime.substring(0, 2)),
+        minute: int.parse(model.startTime.substring(3, 5)));
+    _selectedEndTime = TimeOfDay(
+        hour: int.parse(model.endTime.substring(0, 2)),
+        minute: int.parse(model.endTime.substring(3, 5)));
+    _selectedStartDate = model.startDate;
+    _selectedEndDate = model.endDate;
+    eventStartDateController.text = startTime;
+    eventEndDateController.text = endTime;
+    _selectedImage = model.selectedImage;
+    _selectedLocation = model.location;
+    _isOnlineEvent = model.isOnlineEvent;
   }
 
   String _selectedLocation = '';
   String get selectedLocation => _selectedLocation;
+  double _latitude = 0.0;
+  double _longitude = 0.0;
 
-  set addLocationSelected(String value) {
-    _selectedLocation = value;
+  void setLocation(AutocompletePrediction value) async {
+    _selectedLocation = value.description;
+    if (value != null && value.placeId != null && value.placeId.isNotEmpty) {
+      await getMapDetails(value.placeId);
+    }
     notifyListeners();
+  }
+
+  Future<void> getMapDetails(String placeId) async {
+    var result = await this.googlePlace.details.get(placeId);
+    if (result != null && result.result != null) {
+      _latitude = result?.result?.geometry?.location?.lat;
+      _longitude = result?.result?.geometry?.location?.lng;
+    }
   }
 
   bool _isOnlineEvent = false;
@@ -112,7 +156,7 @@ class CommunityCreateEventProvider with ChangeNotifier {
       return 'Description of event is required';
     } else if (eventFormAudienceController.text.isEmpty) {
       return 'Audience of event is required';
-    } else if (_selectedLocation.isEmpty) {
+    } else if (!_isOnlineEvent && _selectedLocation.isEmpty) {
       return 'Location of event is required';
     } else if (_selectedImage.isEmpty) {
       return 'Image of event is required';
@@ -125,6 +169,9 @@ class CommunityCreateEventProvider with ChangeNotifier {
 
   FormData get eventFormModel {
     Map<String, dynamic> map = Map();
+    if (_eventId != null) {
+      map['id'] = _eventId;
+    }
     map['judul'] = eventFormNameController.text ?? null;
     map['deskripsi'] = eventFormDescriptionController.text ?? null;
     map['start_date'] = formatter.format(_selectedStartDate);
@@ -134,6 +181,11 @@ class CommunityCreateEventProvider with ChangeNotifier {
     map['alamat'] = _selectedLocation;
     map['peserta'] = eventFormAudienceController.text;
     map['lampiran_tipe'] = 'gambar';
+    map['is_online'] = _isOnlineEvent;
+    if (!_isOnlineEvent) {
+      map['latitude'] = _latitude;
+      map['longitude'] = _longitude;
+    }
     if (_selectedImage != null) {
       map['lampiran'] = _selectedImage
           .map((e) => MultipartFile.fromBytes(e, filename: 'eventGambar'))

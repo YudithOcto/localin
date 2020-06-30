@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/presentation/community/community_event/community_create_event_page.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_provider.dart';
-import 'package:localin/presentation/community/community_event/widgets/community_list_upcoming_events.dart';
-import 'package:localin/presentation/community/community_event/widgets/empty_event.dart';
+import 'package:localin/presentation/community/community_event/widgets/community_event_past_list.dart';
+import 'package:localin/presentation/community/community_event/widgets/community_event_upcoming_list.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityEventPage extends StatelessWidget {
   static const routeName = 'CommunityEventPage';
-  static const communityId = 'CommunityId';
+  static const communityId = 'CommunityDetail';
 
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    String communityId = routeArgs[CommunityEventPage.communityId];
+    CommunityDetail _communityDetail =
+        routeArgs[CommunityEventPage.communityId];
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CommunityEventProvider>(
-          create: (_) => CommunityEventProvider(communityId),
+          create: (_) => CommunityEventProvider(_communityDetail.id),
         )
       ],
-      child: CommunityEventWrapper(),
+      child: CommunityEventWrapper(
+        communityDetail: _communityDetail,
+      ),
     );
   }
 }
 
 class CommunityEventWrapper extends StatefulWidget {
+  final CommunityDetail communityDetail;
+  CommunityEventWrapper({this.communityDetail});
+
   @override
   _CommunityEventWrapperState createState() => _CommunityEventWrapperState();
 }
@@ -60,6 +69,27 @@ class _CommunityEventWrapperState extends State<CommunityEventWrapper>
           Container(
             margin: EdgeInsets.only(right: 20.0),
             child: InkWell(
+              onTap: () async {
+                if (widget.communityDetail.isAdmin &&
+                    widget.communityDetail.features.event) {
+                  final response = await Navigator.of(context).pushNamed(
+                      CommunityCreateEventPage.routeName,
+                      arguments: {
+                        CommunityCreateEventPage.communityData:
+                            widget.communityDetail,
+                      });
+                  if (response != null && response == 'success') {
+                    Provider.of<CommunityEventProvider>(context, listen: false)
+                        .getUpcomingEvent();
+                  }
+                } else {
+                  if (!widget.communityDetail.features.event) {
+                    CustomDialog.showCustomDialogWithButton(context, 'Event',
+                        'You need to upgrade to pro community to use this feature.',
+                        btnText: 'Close');
+                  }
+                }
+              },
               child: Row(
                 children: <Widget>[
                   Text(
@@ -106,10 +136,8 @@ class _CommunityEventWrapperState extends State<CommunityEventWrapper>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          CommunityListUpcomingEvents(),
-          EmptyEvent(
-            text: 'This group doesn’t have any past events',
-          ),
+          CommunityEventUpcomingList(),
+          CommunityEventPastList(),
         ],
       ),
     );

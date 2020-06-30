@@ -91,6 +91,18 @@ class CommunityRetrieveCommentProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> setLike(int id, String type, int index) async {
+    final result = await _repository.likeUnlikeCommunity(type, id.toString());
+    _commentList[index].isLike = !_commentList[index].isLike;
+    if (!_commentList[index].isLike) {
+      _commentList[index].totalLike -= 1;
+    } else {
+      _commentList[index].totalLike += 1;
+    }
+    notifyListeners();
+    return result;
+  }
+
   Future<List<CommunityComment>> getChildCommentList(
       {String communityId,
       String parentId,

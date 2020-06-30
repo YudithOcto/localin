@@ -66,25 +66,11 @@ class _RevampEditProfileWrapperWidgetState
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Stack(
-                          children: <Widget>[
-                            UserProfileImageWidget(
-                              imageUrl: provider.userModel.imageProfile,
-                              imageFile: editProvider.userImageFile,
-                            ),
-                            Positioned(
-                              right: -4.0,
-                              bottom: -4.0,
-                              child: Visibility(
-                                visible: provider.userModel.status ==
-                                    kUserStatusVerified,
-                                child: SvgPicture.asset(
-                                  'images/verified_profile.svg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ],
+                        UserProfileImageWidget(
+                          imageUrl: provider.userModel.imageProfile,
+                          imageFile: editProvider.userImageFile,
+                          isVerifyUser:
+                              provider.userModel?.status == kUserStatusVerified,
                         ),
                         SizedBox(
                           width: 16.0,

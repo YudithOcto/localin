@@ -10,6 +10,8 @@ import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
+const NO_COMMENT = 'No';
+
 class CommunityParentCommentWidget extends StatelessWidget {
   final CommunityComment communityComment;
   final int index;
@@ -87,6 +89,9 @@ class CommunityParentCommentWidget extends StatelessWidget {
                                         CommunityRetrieveCommentProvider>(
                                     context,
                                     listen: false);
+                                if (commentCountReply.contains(NO_COMMENT)) {
+                                  return;
+                                }
                                 provider.setChildCommentDisplay(
                                     !provider.isShowChildComment(
                                         communityComment.id),
@@ -95,9 +100,10 @@ class CommunityParentCommentWidget extends StatelessWidget {
                               child: Text(
                                 '${provider.isShowChildComment(communityComment.id) ? 'Hide replies' : commentCountReply}',
                                 style: ThemeText.sfMediumBody.copyWith(
-                                    color: commentCountReply.contains('No')
-                                        ? ThemeColors.black80
-                                        : ThemeColors.primaryBlue),
+                                    color:
+                                        commentCountReply.contains(NO_COMMENT)
+                                            ? ThemeColors.black80
+                                            : ThemeColors.primaryBlue),
                               ),
                             );
                           },

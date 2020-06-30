@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/community/community_join_response.dart';
 
 class CommunityNearbyProvider with ChangeNotifier {
   bool _isMounted = true;
@@ -40,6 +41,14 @@ class CommunityNearbyProvider with ChangeNotifier {
           ? communityNearbyState.empty
           : communityNearbyState.success);
     }
+  }
+
+  Future<CommunityJoinResponse> joinCommunity(String communityId) async {
+    final response = await _repository.joinCommunity(communityId);
+    if (response.error == null) {
+      getNearbyCommunity(isRefresh: true);
+    }
+    return response;
   }
 
   setState(communityNearbyState state) {

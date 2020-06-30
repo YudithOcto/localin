@@ -60,6 +60,13 @@ class DateHelper {
     return dateFormat.format(date);
   }
 
+  static String formatDate(
+      {DateTime date, String format = 'EEE, dd MMMM yyyy'}) {
+    DateFormat dateFormat = DateFormat(format);
+    if (date == null) return dateFormat.format(DateTime.now());
+    return dateFormat.format(date);
+  }
+
   static String timeAgo(DateTime d) {
     Duration diff = DateTime.now().difference(d);
     if (diff.inDays > 365)

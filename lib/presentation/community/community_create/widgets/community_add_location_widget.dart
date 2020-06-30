@@ -24,6 +24,7 @@ class CommunityAddLocationWidget extends StatelessWidget {
                   provider.selectedLocation.length == index) {
                 return InkWell(
                   onTap: () async {
+                    FocusScope.of(context).unfocus();
                     final result = await Navigator.of(context).pushNamed(
                       SearchLocationPage.routeName,
                     );

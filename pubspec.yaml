@@ -58,6 +58,10 @@ dependencies:
   path_provider: ^1.6.8
   palette_generator: ^0.2.2
   network_image_to_byte: ^0.0.1
+  qiscus_chat_sdk: ^1.0.0+beta1
+  add_2_calendar: ^1.4.0
+  google_place: ^0.3.1
+  sliding_up_panel: ^1.0.2
 
 dev_dependencies:
   flutter_test:

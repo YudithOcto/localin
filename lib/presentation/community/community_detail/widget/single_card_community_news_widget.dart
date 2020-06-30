@@ -2,18 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/circle_image.dart';
 import 'package:localin/components/custom_image_radius.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
+import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
+import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
 import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 class SingleCardCommunityNewsWidget extends StatelessWidget {
   final CommunityComment commentData;
+  final CommunityDetail communityDetail;
   final VoidCallback onCommentPressed;
-  SingleCardCommunityNewsWidget(
-      {Key key, this.commentData, @required this.onCommentPressed})
-      : super(key: key);
+  final int index;
+  SingleCardCommunityNewsWidget({
+    Key key,
+    this.commentData,
+    @required this.onCommentPressed,
+    this.communityDetail,
+    this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +82,10 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
             visible: commentData.attachment.isNotEmpty,
             child: InkWell(
               onTap: () {
-                List<String> gallery = List();
-                gallery.add(commentData.attachment.first.attachment);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GalleryPhotoView(
-                      galleryItems: gallery,
-                      backgroundDecoration: const BoxDecoration(
-                        color: Colors.black,
-                      ),
-                      initialIndex: 0,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                  ),
-                );
+                Navigator.of(context)
+                    .pushNamed(CommunityCommentPage.routeName, arguments: {
+                  CommunityCommentPage.communityData: communityDetail,
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 12.0),
@@ -107,12 +107,23 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        final provider =
+                            Provider.of<CommunityRetrieveCommentProvider>(
+                                context,
+                                listen: false);
+                        final result = await provider.setLike(commentData.id,
+                            commentData.isLike ? 'unlike' : 'like', index);
+                        CustomToast.showCustomBookmarkToast(context, result,
+                            icon: 'ic_like_full');
+                      },
                       child: Row(
                         children: <Widget>[
                           SvgPicture.asset(
-                            'images/ic_like_full.svg',
-                            color: ThemeColors.black80,
+                            'images/${commentData.isLike ? 'ic_like_full' : 'ic_like_outline'}.svg',
+                            color: commentData.isLike
+                                ? ThemeColors.primaryBlue
+                                : ThemeColors.black80,
                             width: 16.0,
                             height: 16.0,
                           ),
@@ -120,7 +131,7 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
                             width: 5.59,
                           ),
                           Text(
-                            '0',
+                            '${commentData.totalLike}',
                             style: ThemeText.sfSemiBoldBody
                                 .copyWith(color: ThemeColors.black80),
                           ),

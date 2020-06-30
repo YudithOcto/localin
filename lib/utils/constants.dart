@@ -43,6 +43,7 @@ const kPopupRemoveAdmin = 'Remove Admin';
 const kPopupViewProfile = 'View Profile';
 const kPopupApproveMember = 'Approve';
 const kPopupDeclineMember = 'Decline';
+const kPopupApproveAllMember = 'ApproveAll';
 
 const kApproveAll = 'approve-all';
 const kDeclineAll = 'delete-all';
@@ -50,7 +51,7 @@ const kApproveStatus = 'approve';
 const kDeclineStatus = 'delete';
 const kBlockedStatus = 'blocked';
 const kAdminStatus = 'admin';
-const kRemoveMemberStatus = 'decline';
+const kRemoveMemberStatus = 'remove';
 const kUnblockStatus = 'unblocked';
 const kRemoveAdminStatus = 'admin';
 const kSortMemberNew = 'new';

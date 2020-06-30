@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
+import 'package:localin/presentation/community/provider/community_nearby_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class CommunityOtherRowWidget extends StatelessWidget {
   final CommunityDetail detail;
@@ -12,11 +15,28 @@ class CommunityOtherRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context)
-            .pushNamed(CommunityDetailPage.routeName, arguments: {
-          CommunityDetailPage.communitySlug: detail.slug,
-        });
+      onTap: () async {
+        if (detail?.joinStatus == 'Waiting') {
+          return;
+        } else if (detail?.joinStatus == 'View') {
+          Navigator.of(context)
+              .pushNamed(CommunityDetailPage.routeName, arguments: {
+            CommunityDetailPage.communityData: detail,
+          });
+        } else {
+          CustomDialog.showLoadingDialog(context, message: 'Please wait ...');
+          final result =
+              await Provider.of<CommunityNearbyProvider>(context, listen: false)
+                  .joinCommunity(detail.id);
+          CustomDialog.closeDialog(context);
+          if (result.error == null) {
+            CustomDialog.showCustomDialogWithButton(
+                context, 'Join Community', '${result.message ?? 'Failed'}');
+          } else {
+            CustomDialog.showCustomDialogWithButton(
+                context, 'Join Community', '${result.message ?? 'Success'}');
+          }
+        }
       },
       child: Container(
         color: ThemeColors.black0,
@@ -49,27 +69,29 @@ class CommunityOtherRowWidget extends StatelessWidget {
                     style: ThemeText.rodinaHeadline,
                   ),
                   Text(
-                    '${detail?.totalMember} members',
+                    '${detail?.follower} members',
                     style: ThemeText.sfMediumBody
                         .copyWith(color: ThemeColors.black80),
                   )
                 ],
               ),
             ),
-            Visibility(
-              visible: !detail.isJoin,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.0),
-                    border: Border.all(color: ThemeColors.black20)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 20.0),
-                  child: Text(
-                    'Join',
-                    style: ThemeText.rodinaHeadline
-                        .copyWith(color: ThemeColors.primaryBlue),
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                  color: detail?.joinStatus == 'Waiting'
+                      ? ThemeColors.black80
+                      : ThemeColors.black0,
+                  borderRadius: BorderRadius.circular(4.0),
+                  border: Border.all(color: ThemeColors.black20)),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                child: Text(
+                  '${detail?.joinStatus}',
+                  style: ThemeText.rodinaHeadline.copyWith(
+                      color: detail?.joinStatus == 'Waiting'
+                          ? ThemeColors.black0
+                          : ThemeColors.primaryBlue),
                 ),
               ),
             )

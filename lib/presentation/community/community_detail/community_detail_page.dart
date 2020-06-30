@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/community/community_detail/provider/community_detail_event_provider.dart';
+import 'package:localin/presentation/community/community_detail/widget/community_detail_upcoming_events_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_news_activity_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_settings_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/sliver_appbar_widget.dart';
@@ -13,7 +16,7 @@ import 'package:provider/provider.dart';
 
 class CommunityDetailPage extends StatelessWidget {
   static const routeName = 'CommunityDetailPage';
-  static const communitySlug = 'communitySlug';
+  static const communityData = 'CommunityData';
   static const needBackToHome = 'needBackToHome';
 
   @override
@@ -22,6 +25,8 @@ class CommunityDetailPage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     bool isNeedToBackHome =
         routeArgs[CommunityDetailPage.needBackToHome] ?? false;
+    CommunityDetail cDetail =
+        routeArgs[CommunityDetailPage.communityData] ?? CommunityDetail();
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<CommunityDetailProvider>(
@@ -29,7 +34,12 @@ class CommunityDetailPage extends StatelessWidget {
           ),
           ChangeNotifierProvider<CommunityRetrieveCommentProvider>(
             create: (_) => CommunityRetrieveCommentProvider(),
-          )
+          ),
+          ChangeNotifierProvider<CommunityDetailEventProvider>(
+            create: (_) => CommunityDetailEventProvider(
+              comId: cDetail.id,
+            ),
+          ),
         ],
         child: WillPopScope(
           onWillPop: () async {
@@ -43,6 +53,7 @@ class CommunityDetailPage extends StatelessWidget {
           },
           child: CommunityDetailColumn(
             isNeedToBackHome: isNeedToBackHome,
+            slug: cDetail.slug,
           ),
         ));
   }
@@ -50,7 +61,8 @@ class CommunityDetailPage extends StatelessWidget {
 
 class CommunityDetailColumn extends StatefulWidget {
   final bool isNeedToBackHome;
-  CommunityDetailColumn({this.isNeedToBackHome = false});
+  final String slug;
+  CommunityDetailColumn({this.isNeedToBackHome = false, this.slug});
 
   @override
   _CommunityDetailColumnState createState() => _CommunityDetailColumnState();
@@ -62,11 +74,10 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final routeArgs =
-          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      String slug = routeArgs[CommunityDetailPage.communitySlug];
       Provider.of<CommunityDetailProvider>(context, listen: false)
-          .getCommunityDetail(slug);
+          .getCommunityDetail(widget.slug);
+      Provider.of<CommunityDetailEventProvider>(context, listen: false)
+          .getUpcomingEvent();
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -101,7 +112,8 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
           Consumer<CommunityDetailProvider>(
             builder: (context, provider, child) {
               return Visibility(
-                visible: provider.communityDetail != null,
+                visible: provider.communityDetail != null &&
+                    provider.communityDetail.joinStatus == 'View',
                 child: InkWell(
                   onTap: () {
                     final provider = Provider.of<CommunityDetailProvider>(
@@ -164,9 +176,11 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
                     )
                   ];
                 },
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                body: ListView(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
                   children: <Widget>[
+                    CommunityDetailUpcomingEventsWidget(),
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 24.0, left: 20.0, bottom: 8.0),
@@ -193,9 +207,11 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
       floatingActionButton: Consumer<CommunityDetailProvider>(
         builder: (context, provider, child) {
           return Visibility(
-              visible: provider.communityDetail?.communityType == 'paid' &&
-                      provider.communityDetail.isJoin ??
-                  false,
+              visible: provider.communityDetail == null
+                  ? false
+                  : provider.communityDetail.features.chat &&
+                          provider.communityDetail.isJoin ??
+                      false,
               child: SvgPicture.asset('images/chat_room.svg'));
         },
       ),

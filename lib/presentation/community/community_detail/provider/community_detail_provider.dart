@@ -39,6 +39,7 @@ class CommunityDetailProvider extends BaseModelProvider {
   Future<CommunityJoinResponse> joinCommunity(String communityId) async {
     setSentCommentLoading(true);
     final response = await _repository.joinCommunity(communityId);
+    if (response.error == null) communityDetail.joinStatus = 'Waiting';
     setSentCommentLoading(true);
     return response;
   }

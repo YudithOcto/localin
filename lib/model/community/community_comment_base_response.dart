@@ -58,6 +58,8 @@ class CommunityComment implements CommunityDiscoverType {
     this.communityTotalMember,
     this.communityCategoryId,
     this.communityCategoryName,
+    this.isLike,
+    this.totalLike,
   });
 
   int id;
@@ -81,6 +83,8 @@ class CommunityComment implements CommunityDiscoverType {
   int communityTotalMember;
   String communityCategoryId;
   String communityCategoryName;
+  bool isLike;
+  int totalLike;
 
   factory CommunityComment.fromJson(Map<String, dynamic> body) {
     return CommunityComment(
@@ -111,6 +115,9 @@ class CommunityComment implements CommunityDiscoverType {
       communityTotalMember: body['komunitas_total_member'] ?? null,
       communityCategoryId: body['komunitas_kategori'] ?? null,
       communityCategoryName: body['komunitas_kategori_name'] ?? null,
+      isLike:
+          body['is_like'] == null ? false : body['is_like'] == 1 ? true : false,
+      totalLike: body['total_like'] == null ? 0 : body['total_like'],
     );
   }
 }

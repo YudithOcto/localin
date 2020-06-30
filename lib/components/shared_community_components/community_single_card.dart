@@ -22,13 +22,8 @@ class _CommunitySingleCardState extends State<CommunitySingleCard> {
       onTap: () async {
         final result = await Navigator.of(context)
             .pushNamed(CommunityDetailPage.routeName, arguments: {
-          CommunityDetailPage.communitySlug: widget.model.slug,
+          CommunityDetailPage.communityData: widget.model,
         });
-//        final result = await Navigator.of(context)
-//            .pushNamed(TransactionCommunityDetailPage.routeName, arguments: {
-//          TransactionCommunityDetailPage.transactionId:
-//              '5cf1b698-e35c-4be3-b2a2-9f2625be8c98',
-//        });
 
         if (result == 'refresh') {
           setState(() {

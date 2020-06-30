@@ -87,7 +87,6 @@ class CommunityEventProvider extends BaseModelProvider {
               filename: attachmentImage.path)
           : null,
     });
-    print(formData);
   }
 
   void setStartDate(DateTime value) {

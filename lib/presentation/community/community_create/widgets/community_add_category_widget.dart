@@ -75,6 +75,7 @@ class _CommunityAddCategoryWidgetState
                             return InkWell(
                               onTap: () {
                                 provider.selectCategory(category);
+                                FocusScope.of(context).unfocus();
                               },
                               child: Container(
                                 margin: EdgeInsets.only(

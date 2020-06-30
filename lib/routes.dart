@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/community/community_create/widgets/community_payment_successful_page.dart';
 import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
 import 'package:localin/presentation/community/community_detail/create_post_page.dart';
 import 'package:localin/presentation/community/community_discovery/community_category_list_page.dart';
@@ -7,7 +8,10 @@ import 'package:localin/presentation/community/community_discovery/community_dis
 import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
 import 'package:localin/presentation/community/community_create/community_type_page.dart';
 import 'package:localin/presentation/community/community_event/community_create_event_page.dart';
+import 'package:localin/presentation/community/community_event/community_event_detail_page.dart';
+import 'package:localin/presentation/community/community_event/community_event_member_page.dart';
 import 'package:localin/presentation/community/community_event/community_event_page.dart';
+import 'package:localin/presentation/community/community_event/widgets/search_google_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
@@ -89,5 +93,10 @@ Map<String, WidgetBuilder> get generalRoutes {
     CreatePostPage.routeName: (_) => CreatePostPage(),
     CommunityCreateEventPage.routeName: (_) => CommunityCreateEventPage(),
     CommunityEventPage.routeName: (_) => CommunityEventPage(),
+    CommunityEventDetailPage.routeName: (_) => CommunityEventDetailPage(),
+    CommunityEventMemberPage.routeName: (_) => CommunityEventMemberPage(),
+    SearchGooglePage.routeName: (_) => SearchGooglePage(),
+    CommunityPaymentSuccessfulPage.routeName: (_) =>
+        CommunityPaymentSuccessfulPage(),
   };
 }

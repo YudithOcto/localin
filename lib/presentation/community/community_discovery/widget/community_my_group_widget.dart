@@ -29,8 +29,7 @@ class CommunityMyGroupWidget extends StatelessWidget {
               onTap: () {
                 Navigator.of(context)
                     .pushNamed(CommunityDetailPage.routeName, arguments: {
-                  CommunityDetailPage.communitySlug:
-                      userCommunityDetail[index].slug,
+                  CommunityDetailPage.communityData: userCommunityDetail[index],
                 });
               },
               child: Card(

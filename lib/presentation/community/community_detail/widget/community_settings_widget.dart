@@ -51,10 +51,16 @@ class CommunitySettingsWidget extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(CommunityEventPage.routeName, arguments: {
-              CommunityEventPage.communityId: communityDetail.id,
-            });
+            if (provider.communityDetail.features.event) {
+              Navigator.of(context)
+                  .pushNamed(CommunityEventPage.routeName, arguments: {
+                CommunityEventPage.communityId: communityDetail,
+              });
+            } else {
+              CustomDialog.showCustomDialogWithButton(context, 'Event',
+                  'You need to upgrade to pro community to use this feature.',
+                  btnText: 'Close');
+            }
           },
           child: RowSettings(
             icon: 'images/community_settings_promo.svg',

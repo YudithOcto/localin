@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/circle_image.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/community/community_detail/create_post_page.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
+import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -13,7 +15,7 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
   @override
   double get minExtent => 160 - kToolbarHeight;
   @override
-  double get maxExtent => 300 - kToolbarHeight;
+  double get maxExtent => 350 - kToolbarHeight;
 
   @override
   Widget build(
@@ -78,21 +80,17 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                           style: ThemeText.rodinaTitle3
                               .copyWith(color: ThemeColors.black0),
                         ),
-                        Visibility(
-                          visible:
-                              provider.communityDetail?.totalMember == null,
-                          child: Text(
-                            '${provider.communityDetail?.totalMember ?? 0} members',
-                            textAlign: TextAlign.end,
-                            style: ThemeText.sfMediumBody.copyWith(
-                                color: ThemeColors.black0.withOpacity(0.6)),
-                          ),
+                        Text(
+                          '${provider.communityDetail?.follower ?? 0} members',
+                          textAlign: TextAlign.end,
+                          style: ThemeText.sfMediumBody.copyWith(
+                              color: ThemeColors.black0.withOpacity(0.6)),
                         )
                       ],
                     )
                   ],
                 ),
-                memberRow(provider),
+                memberRow(context, provider),
                 Text(
                   '${provider.communityDetail?.categoryName} • ${provider.communityDetail?.address}',
                   style: ThemeText.sfMediumFootnote
@@ -109,18 +107,26 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                 Visibility(
                   visible: provider.communityDetail == null
                       ? false
-                      : !provider.communityDetail.isJoin,
+                      : provider.communityDetail.joinStatus != 'View',
                   child: Container(
                     width: double.infinity,
                     height: 48.0,
                     child: RaisedButton(
                       elevation: 2.0,
-                      color: ThemeColors.black0,
+                      color: provider.communityDetail.joinStatus == 'Waiting'
+                          ? ThemeColors.black80
+                          : ThemeColors.black0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0)),
                       onPressed: () async {
+                        if (provider.communityDetail.joinStatus == 'Waiting') {
+                          return;
+                        }
+                        CustomDialog.showLoadingDialog(context,
+                            message: 'Please wait ...');
                         final result = await provider
                             .joinCommunity(provider.communityDetail.id);
+                        CustomDialog.closeDialog(context);
                         if (result.error == null) {
                           CustomDialog.showCustomDialogWithButton(
                               context,
@@ -134,9 +140,12 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                         }
                       },
                       child: Text(
-                        'Join Community',
-                        style: ThemeText.rodinaTitle3
-                            .copyWith(color: ThemeColors.primaryBlue),
+                        '${provider.communityDetail.joinStatus == 'Waiting' ? 'Waiting Response' : 'Join Community'}',
+                        style: ThemeText.rodinaTitle3.copyWith(
+                            color:
+                                provider.communityDetail.joinStatus == 'Waiting'
+                                    ? ThemeColors.black0
+                                    : ThemeColors.primaryBlue),
                       ),
                     ),
                   ),
@@ -144,7 +153,7 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                 Visibility(
                   visible: provider.communityDetail == null
                       ? false
-                      : provider.communityDetail.isJoin,
+                      : provider.communityDetail.joinStatus == 'View',
                   child: Container(
                     width: double.infinity,
                     height: 48.0,
@@ -154,17 +163,30 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0)),
                       onPressed: () async {
-                        final result = await Navigator.of(context)
-                            .pushNamed(CreatePostPage.routeName, arguments: {
-                          CreatePostPage.communityId:
-                              provider.communityDetail.id,
-                        });
-                        if (result == 'success') {
-                          Provider.of<CommunityRetrieveCommentProvider>(context,
-                                  listen: false)
-                              .getCommentList(
-                                  communityId: provider.communityDetail.id,
-                                  isRefresh: true);
+                        if (provider.communityDetail.isAdmin &&
+                            provider.communityDetail.features.createPost) {
+                          final result = await Navigator.of(context)
+                              .pushNamed(CreatePostPage.routeName, arguments: {
+                            CreatePostPage.communityId:
+                                provider.communityDetail.id,
+                          });
+                          if (result == 'success') {
+                            Provider.of<CommunityRetrieveCommentProvider>(
+                                    context,
+                                    listen: false)
+                                .getCommentList(
+                                    communityId: provider.communityDetail.id,
+                                    isRefresh: true);
+                          }
+                        } else {
+                          if (!provider.communityDetail.isAdmin) {
+                            CustomToast.showCustomBookmarkToast(
+                                context, 'Only admin can post');
+                          } else if (!provider
+                              .communityDetail.features.createPost) {
+                            CustomToast.showCustomBookmarkToast(context,
+                                'This feature only pro community can use');
+                          }
                         }
                       },
                       child: Row(
@@ -222,7 +244,7 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                           .copyWith(color: ThemeColors.black0),
                     ),
                     Text(
-                      '${provider.communityDetail?.totalMember ?? 0} members',
+                      '${provider.communityDetail?.follower ?? 0} members',
                       style: ThemeText.sfMediumFootnote
                           .copyWith(color: ThemeColors.black0.withOpacity(0.6)),
                     ),
@@ -232,11 +254,17 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
               Visibility(
                 visible: provider.communityDetail == null
                     ? false
-                    : !provider.communityDetail.isJoin,
+                    : provider.communityDetail.joinStatus != 'View',
                 child: InkWell(
                   onTap: () async {
+                    if (provider.communityDetail.joinStatus == 'Waiting') {
+                      return;
+                    }
+                    CustomDialog.showLoadingDialog(context,
+                        message: 'Please wait ...');
                     final result = await provider
                         .joinCommunity(provider.communityDetail.id);
+                    CustomDialog.closeDialog(context);
                     if (result.error == null) {
                       CustomDialog.showCustomDialogWithButton(context,
                           'Join Community', '${result.message ?? 'Failed'}');
@@ -249,12 +277,17 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                     decoration: BoxDecoration(
-                        color: ThemeColors.yellow,
+                        color: provider.communityDetail.joinStatus == 'Waiting'
+                            ? ThemeColors.black80
+                            : ThemeColors.yellow,
                         borderRadius: BorderRadius.circular(4.0)),
                     child: Text(
-                      'Join',
-                      style: ThemeText.rodinaHeadline
-                          .copyWith(color: ThemeColors.black100),
+                      '${provider.communityDetail.joinStatus == 'Waiting' ? 'Waiting ' : 'Join'}',
+                      style: ThemeText.rodinaHeadline.copyWith(
+                          color:
+                              provider.communityDetail.joinStatus == 'Waiting'
+                                  ? ThemeColors.black0
+                                  : ThemeColors.black100),
                     ),
                   ),
                 ),
@@ -266,19 +299,22 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget memberRow(CommunityDetailProvider provider) {
+  Widget memberRow(BuildContext context, CommunityDetailProvider provider) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
       child: Visibility(
-        visible: provider.communityDetail?.totalMember != null,
+        visible: provider.communityDetail.listMember.isNotEmpty,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Row(
-              children: List.generate(4, (index) {
+              children: List.generate(
+                  provider.communityDetail.listMember.take(4).length, (index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: CircleImage(
+                    imageUrl:
+                        provider.communityDetail.listMember[index].imageProfile,
                     width: 32.0,
                     height: 32.0,
                   ),
@@ -289,15 +325,26 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
               width: 34.0,
             ),
             Expanded(
-              child: Text(
-                '${provider.communityDetail?.totalMember ?? 0} members',
-                textAlign: TextAlign.end,
-                style:
-                    ThemeText.sfMediumBody.copyWith(color: ThemeColors.black0),
+              child: InkWell(
+                onTap: () {
+                  if (provider.communityDetail.isAdmin) {
+                    Navigator.of(context)
+                        .pushNamed(CommunityMembersPage.routeName, arguments: {
+                      CommunityMembersPage.communityId:
+                          provider.communityDetail.id,
+                    });
+                  } else {
+                    CustomToast.showCustomBookmarkToast(
+                        context, 'You are not admin of this group');
+                  }
+                },
+                child: Text(
+                  '${provider.communityDetail?.follower ?? 0} members',
+                  textAlign: TextAlign.end,
+                  style: ThemeText.sfMediumBody
+                      .copyWith(color: ThemeColors.black0),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 14.0,
             ),
             Icon(
               Icons.chevron_right,
