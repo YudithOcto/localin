@@ -113,11 +113,13 @@ class _ScrollContentState extends State<ScrollContent> {
                             message:
                                 'Your Account Has Not Been Verified, Please Verify Your Account',
                             cancelText: 'Close',
-                            okText: 'Verified', okCallback: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context)
-                              .pushNamed(RevampUserVerificationPage.routeName);
-                        });
+                            onCancel: () => Navigator.of(context).pop(),
+                            okText: 'Verified',
+                            okCallback: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pushNamed(
+                                  RevampUserVerificationPage.routeName);
+                            });
                       }
                     },
                     child: Row(

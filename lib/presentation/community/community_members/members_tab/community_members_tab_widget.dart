@@ -80,7 +80,7 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                         } else if (index < provider.memberList.length) {
                           final item = provider.memberList[index];
                           return SingleMemberWidget(
-                            isOnlyAdmin: false,
+                            isOnlyAdminTab: false,
                             detail: item,
                             rowDescription:
                                 'Joined ${DateHelper.timeAgo(DateTime.parse(item.joinedDate))}',
@@ -92,6 +92,7 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                               kPopupBlock,
                               kPopupViewProfile,
                             ],
+                            isAdminUser: provider.isAdmin,
                           );
                         } else if (provider.canLoadMore) {
                           return Center(

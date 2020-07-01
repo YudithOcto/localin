@@ -82,7 +82,7 @@ class _CommunityAdminTabWidgetState extends State<CommunityAdminTabWidget> {
                     } else if (index < provider.adminList.length) {
                       final item = provider.adminList[index];
                       return SingleMemberWidget(
-                        isOnlyAdmin: provider.adminList.length == 1,
+                        isOnlyAdminTab: provider.adminList.length == 1,
                         detail: item,
                         onRefresh: () => provider.getAdminCommunity(),
                         rowDescription:
@@ -92,6 +92,7 @@ class _CommunityAdminTabWidgetState extends State<CommunityAdminTabWidget> {
                           kPopupBlock,
                           kPopupMakeAdmin,
                         ],
+                        isAdminUser: provider.isAdmin,
                       );
                     } else if (provider.canLoadMore) {
                       return Center(

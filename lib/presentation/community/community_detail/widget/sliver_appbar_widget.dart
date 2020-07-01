@@ -9,6 +9,7 @@ import 'package:localin/presentation/community/community_members/community_membe
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
@@ -327,16 +328,16 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  if (provider.communityDetail.isAdmin) {
-                    Navigator.of(context)
-                        .pushNamed(CommunityMembersPage.routeName, arguments: {
-                      CommunityMembersPage.communityId:
-                          provider.communityDetail.id,
-                    });
-                  } else {
-                    CustomToast.showCustomBookmarkToast(
-                        context, 'You are not admin of this group');
+                  if (provider.communityDetail.joinStatus != kJoinStatusView) {
+                    return;
                   }
+                  Navigator.of(context)
+                      .pushNamed(CommunityMembersPage.routeName, arguments: {
+                    CommunityMembersPage.communityId:
+                        provider.communityDetail.id,
+                    CommunityMembersPage.isAdmin:
+                        provider.communityDetail.isAdmin,
+                  });
                 },
                 child: Text(
                   '${provider.communityDetail?.follower ?? 0} members',

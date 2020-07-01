@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/community/community_event/community_event_page.dart';
+import 'package:localin/presentation/community/community_event/community_event_tab_list_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -34,27 +34,25 @@ class CommunitySettingsWidget extends StatelessWidget {
             ),
           ),
         ),
-        Visibility(
-          visible: isAdmin,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(CommunityMembersPage.routeName, arguments: {
-                CommunityMembersPage.communityId: communityDetail.id,
-              });
-            },
-            child: RowSettings(
-              icon: 'images/community_settings_member.svg',
-              title: 'Members',
-            ),
+        InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(CommunityMembersPage.routeName, arguments: {
+              CommunityMembersPage.communityId: communityDetail.id,
+              CommunityMembersPage.isAdmin: communityDetail.isAdmin,
+            });
+          },
+          child: RowSettings(
+            icon: 'images/community_settings_member.svg',
+            title: 'Members',
           ),
         ),
         InkWell(
           onTap: () {
             if (provider.communityDetail.features.event) {
               Navigator.of(context)
-                  .pushNamed(CommunityEventPage.routeName, arguments: {
-                CommunityEventPage.communityId: communityDetail,
+                  .pushNamed(CommunityEventTabListPage.routeName, arguments: {
+                CommunityEventTabListPage.communityId: communityDetail,
               });
             } else {
               CustomDialog.showCustomDialogWithButton(context, 'Event',

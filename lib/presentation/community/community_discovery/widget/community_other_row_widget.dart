@@ -6,6 +6,7 @@ import 'package:localin/presentation/community/community_detail/community_detail
 import 'package:localin/presentation/community/provider/community_nearby_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class CommunityOtherRowWidget extends StatelessWidget {
@@ -16,27 +17,10 @@ class CommunityOtherRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        if (detail?.joinStatus == 'Waiting') {
-          return;
-        } else if (detail?.joinStatus == 'View') {
-          Navigator.of(context)
-              .pushNamed(CommunityDetailPage.routeName, arguments: {
-            CommunityDetailPage.communityData: detail,
-          });
-        } else {
-          CustomDialog.showLoadingDialog(context, message: 'Please wait ...');
-          final result =
-              await Provider.of<CommunityNearbyProvider>(context, listen: false)
-                  .joinCommunity(detail.id);
-          CustomDialog.closeDialog(context);
-          if (result.error == null) {
-            CustomDialog.showCustomDialogWithButton(
-                context, 'Join Community', '${result.message ?? 'Failed'}');
-          } else {
-            CustomDialog.showCustomDialogWithButton(
-                context, 'Join Community', '${result.message ?? 'Success'}');
-          }
-        }
+        Navigator.of(context)
+            .pushNamed(CommunityDetailPage.routeName, arguments: {
+          CommunityDetailPage.communityData: detail,
+        });
       },
       child: Container(
         color: ThemeColors.black0,
@@ -69,29 +53,54 @@ class CommunityOtherRowWidget extends StatelessWidget {
                     style: ThemeText.rodinaHeadline,
                   ),
                   Text(
-                    '${detail?.follower} members',
+                    '${detail?.follower ?? 0} members',
                     style: ThemeText.sfMediumBody
                         .copyWith(color: ThemeColors.black80),
                   )
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  color: detail?.joinStatus == 'Waiting'
-                      ? ThemeColors.black80
-                      : ThemeColors.black0,
-                  borderRadius: BorderRadius.circular(4.0),
-                  border: Border.all(color: ThemeColors.black20)),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-                child: Text(
-                  '${detail?.joinStatus}',
-                  style: ThemeText.rodinaHeadline.copyWith(
-                      color: detail?.joinStatus == 'Waiting'
-                          ? ThemeColors.black0
-                          : ThemeColors.primaryBlue),
+            InkWell(
+              onTap: () async {
+                if (detail.joinStatus == kJoinStatusNotJoin) {
+                  CustomDialog.showLoadingDialog(context,
+                      message: 'Please wait ...');
+                  final result = await Provider.of<CommunityNearbyProvider>(
+                          context,
+                          listen: false)
+                      .joinCommunity(detail.id);
+                  CustomDialog.closeDialog(context);
+                  if (result.error == null) {
+                    CustomDialog.showCustomDialogWithButton(context,
+                        'Join Community', '${result.message ?? 'Failed'}');
+                  } else {
+                    CustomDialog.showCustomDialogWithButton(context,
+                        'Join Community', '${result.message ?? 'Success'}');
+                  }
+                } else {
+                  Navigator.of(context)
+                      .pushNamed(CommunityDetailPage.routeName, arguments: {
+                    CommunityDetailPage.communityData: detail,
+                  });
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: detail?.joinStatus == kJoinStatusWaiting
+                        ? ThemeColors.black80
+                        : ThemeColors.black0,
+                    borderRadius: BorderRadius.circular(4.0),
+                    border: Border.all(color: ThemeColors.black20)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 20.0),
+                  child: Text(
+                    '${detail?.joinStatus}',
+                    style: ThemeText.rodinaHeadline.copyWith(
+                        color: detail?.joinStatus == kJoinStatusWaiting
+                            ? ThemeColors.black0
+                            : ThemeColors.primaryBlue),
+                  ),
                 ),
               ),
             )

@@ -191,11 +191,12 @@ class _CommunityRequestTabWidgetState extends State<CommunityRequestTabWidget> {
                         final item = provider.requestList[index];
                         return SingleMemberWidget(
                           onRefresh: () => provider.getRequestList(),
-                          isOnlyAdmin: provider.requestList.length == 1,
+                          isOnlyAdminTab: provider.requestList.length == 1,
                           detail: item,
                           rowDescription:
                               'Requested ${DateHelper.timeAgo(DateTime.parse(item.joinedDate))}',
                           isRequestPage: true,
+                          isAdminUser: provider.isAdmin,
                         );
                       } else if (provider.canLoadMore) {
                         return Center(

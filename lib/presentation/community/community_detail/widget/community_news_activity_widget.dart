@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_detail/widget/single_card_community_news_widget.dart';
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
@@ -89,6 +90,12 @@ class _CommunityNewsActivityWidgetState
                         communityDetail: _communityDetail,
                         index: index,
                         onCommentPressed: () async {
+                          if (_communityDetail.joinStatus != 'View') {
+                            CustomToast.showCustomBookmarkToast(context,
+                                'You must be a member to comment a post',
+                                duration: 1);
+                            return;
+                          }
                           Navigator.of(context).pushNamed(
                               CommunityCommentPage.routeName,
                               arguments: {

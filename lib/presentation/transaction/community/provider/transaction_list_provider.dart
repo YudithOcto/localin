@@ -29,7 +29,8 @@ class TransactionListProvider with ChangeNotifier {
       _listCommunityTransaction.clear();
     }
 
-    final result = await _repository.getCommunityTransactionList(page, 10);
+    final result = await _repository.getCommunityTransactionList(page, 10,
+        type: 'community');
     if (!result.error) {
       _listCommunityTransaction.addAll(result.transactionList);
       _canLoadMore = result.total > _listCommunityTransaction.length;

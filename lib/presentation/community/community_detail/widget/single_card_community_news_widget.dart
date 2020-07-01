@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/circle_image.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
@@ -82,6 +83,11 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
             visible: commentData.attachment.isNotEmpty,
             child: InkWell(
               onTap: () {
+                if (communityDetail.joinStatus != 'View') {
+                  CustomToast.showCustomBookmarkToast(
+                      context, 'You must be a member to view detail post');
+                  return;
+                }
                 Navigator.of(context)
                     .pushNamed(CommunityCommentPage.routeName, arguments: {
                   CommunityCommentPage.communityData: communityDetail,
@@ -108,6 +114,12 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       onTap: () async {
+                        if (communityDetail.joinStatus != 'View') {
+                          CustomToast.showCustomBookmarkToast(
+                              context, 'You must be a member to like a post',
+                              duration: 1);
+                          return;
+                        }
                         final provider =
                             Provider.of<CommunityRetrieveCommentProvider>(
                                 context,

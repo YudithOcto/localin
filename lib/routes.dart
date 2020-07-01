@@ -10,7 +10,7 @@ import 'package:localin/presentation/community/community_create/community_type_p
 import 'package:localin/presentation/community/community_event/community_create_event_page.dart';
 import 'package:localin/presentation/community/community_event/community_event_detail_page.dart';
 import 'package:localin/presentation/community/community_event/community_event_member_page.dart';
-import 'package:localin/presentation/community/community_event/community_event_page.dart';
+import 'package:localin/presentation/community/community_event/community_event_tab_list_page.dart';
 import 'package:localin/presentation/community/community_event/widgets/search_google_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
@@ -92,7 +92,7 @@ Map<String, WidgetBuilder> get generalRoutes {
         TransactionCommunityDetailPage(),
     CreatePostPage.routeName: (_) => CreatePostPage(),
     CommunityCreateEventPage.routeName: (_) => CommunityCreateEventPage(),
-    CommunityEventPage.routeName: (_) => CommunityEventPage(),
+    CommunityEventTabListPage.routeName: (_) => CommunityEventTabListPage(),
     CommunityEventDetailPage.routeName: (_) => CommunityEventDetailPage(),
     CommunityEventMemberPage.routeName: (_) => CommunityEventMemberPage(),
     SearchGooglePage.routeName: (_) => SearchGooglePage(),

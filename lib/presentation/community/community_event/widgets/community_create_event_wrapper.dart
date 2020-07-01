@@ -124,10 +124,12 @@ class _CommunityCreateEventWrapperState
                 InputFormWithSubtitleWidget(
                   subtitle: 'EVENT NAME',
                   controller: provider.eventFormNameController,
+                  maxInput: 200,
                 ),
                 InputFormWithSubtitleWidget(
                   subtitle: 'DESCRIPTION',
                   controller: provider.eventFormDescriptionController,
+                  maxInput: 2200,
                 ),
                 InputFormWithSubtitleWidget(
                   subtitle: 'START DATE & TIME',
@@ -135,8 +137,8 @@ class _CommunityCreateEventWrapperState
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
                     onPickedDateTime(context, true, initialDate: DateTime.now(),
-                        onComplete: (DateTime date, TimeOfDay time) {
-                      provider.startEventDateTime(date, time);
+                        onComplete: (DateTime date) {
+                      provider.startEventDateTime(date);
                     });
                   },
                   isFormDisabled: true,
@@ -145,11 +147,17 @@ class _CommunityCreateEventWrapperState
                   subtitle: 'END DATE & TIME',
                   controller: provider.eventEndDateController,
                   onPressed: () {
+                    if (provider.initialEndDate == null) {
+                      CustomToast.showCustomBookmarkToast(
+                          context, 'Please choose start date first',
+                          duration: 1);
+                      return;
+                    }
                     FocusScope.of(context).unfocus();
                     onPickedDateTime(context, false,
                         initialDate: provider.initialEndDate,
-                        onComplete: (DateTime date, TimeOfDay time) {
-                      provider.endEventDateTime(date, time);
+                        onComplete: (DateTime date) {
+                      provider.endEventDateTime(date);
                     });
                   },
                   isFormDisabled: true,
@@ -176,30 +184,57 @@ class _CommunityCreateEventWrapperState
   }
 
   onPickedDateTime(BuildContext context, bool isStartDate,
-      {Function(DateTime, TimeOfDay) onComplete, DateTime initialDate}) async {
-    DateTime date = await showDatePicker(
+      {Function(DateTime) onComplete, DateTime initialDate}) async {
+    DateTime picked = await showDatePicker(
       context: context,
       firstDate: initialDate ?? DateTime.now().add(Duration(days: 1)),
       lastDate: DateTime(DateTime.now().year + 5),
       initialDate: initialDate ?? DateTime.now().add(Duration(days: 1)),
     );
-    if (date != null) {
-      TimeOfDay t = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-      if (t != null) {
-        if (isStartDate) {
-          final finalDate =
-              DateTime(date.year, date.month, date.day, t.hour, t.minute);
-          if (finalDate.isBefore(DateTime.now())) {
-            CustomToast.showCustomBookmarkToast(
-                context, 'You cannot set time before now');
-          } else {
-            onComplete(date, t);
-          }
+    if (picked != null) {
+      var timeOfDay = TimeOfDay(
+          hour: TimeOfDay.now().hour + 1, minute: TimeOfDay.now().minute);
+      if (!isStartDate) {
+        timeOfDay =
+            TimeOfDay(hour: initialDate.hour + 1, minute: initialDate.minute);
+      }
+      onPickedTime(
+          onComplete: onComplete,
+          picked: picked,
+          selectedTime: timeOfDay,
+          isStartDate: isStartDate,
+          initialDate: initialDate);
+    }
+  }
+
+  onPickedTime(
+      {Function(DateTime) onComplete,
+      DateTime picked,
+      TimeOfDay selectedTime,
+      bool isStartDate,
+      DateTime initialDate}) async {
+    TimeOfDay t = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (t != null) {
+      final finalDate =
+          DateTime(picked.year, picked.month, picked.day, t.hour, t.minute);
+      if (isStartDate) {
+        if (finalDate.isBefore(DateTime.now())) {
+          CustomToast.showCustomBookmarkToast(
+              context, 'You cannot set time before now',
+              duration: 1);
         } else {
-          onComplete(date, t);
+          onComplete(finalDate);
+        }
+      } else {
+        if (finalDate.isBefore(initialDate)) {
+          CustomToast.showCustomBookmarkToast(
+              context, 'You cannot set time before now',
+              duration: 1);
+        } else {
+          onComplete(finalDate);
         }
       }
     }

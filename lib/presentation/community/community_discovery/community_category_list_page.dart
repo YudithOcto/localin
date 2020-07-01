@@ -6,6 +6,7 @@ import 'package:localin/presentation/community/community_discovery/widget/commun
 import 'package:localin/presentation/community/community_discovery/widget/community_category_popular_list.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
 import 'package:localin/presentation/community/provider/community_category_provider.dart';
+import 'package:localin/presentation/community/provider/community_nearby_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,15 @@ class CommunityCategoryListPage extends StatelessWidget {
   static const categoryDetail = 'categoryDetail';
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CommunityCategoryProvider>(
-      create: (_) => CommunityCategoryProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CommunityCategoryProvider>(
+          create: (_) => CommunityCategoryProvider(),
+        ),
+        ChangeNotifierProvider<CommunityNearbyProvider>(
+          create: (_) => CommunityNearbyProvider(),
+        ),
+      ],
       child: CommunityByCategoryContentWidget(),
     );
   }

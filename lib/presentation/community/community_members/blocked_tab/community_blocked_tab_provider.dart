@@ -8,9 +8,12 @@ import 'package:localin/presentation/community/community_members/shared_members_
 class CommunityBlockedTabProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId = '';
+  bool _isAdmin = true;
+  bool get isAdmin => _isAdmin;
 
-  CommunityBlockedTabProvider({String communityId}) {
+  CommunityBlockedTabProvider({String communityId, bool isAdmin}) {
     _communityId = communityId;
+    _isAdmin = isAdmin;
   }
 
   List<CommunityMemberDetail> _blockedList = List();

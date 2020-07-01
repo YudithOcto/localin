@@ -5,10 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_create_request_model.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/community/community_type_request_model.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/number_helper.dart';
 
 class CommunityTypeProvider with ChangeNotifier {
   final _repository = Repository();
+
+  CommunityTypeRequestModel _communityTypeRequest;
+  CommunityTypeRequestModel get communityTypeRequestModel =>
+      _communityTypeRequest;
+  void setCommunityType(String type) {
+    if (type == 'paid') {
+      _communityTypeRequest = CommunityTypeRequestModel(
+          duration: '1 Year',
+          communityType: 'Paid',
+          until: ''
+              '${DateHelper.formatDate(date: DateTime(DateTime.now().year + 1, DateTime.now().month, DateTime.now().day), format: 'dd MMM yyyy')}',
+          price: '${getFormattedCurrency(int.parse(price))}');
+    } else {
+      _communityTypeRequest = CommunityTypeRequestModel(
+          duration: 'Lifetime',
+          communityType: 'Free',
+          until: '-',
+          price: 'IDR 0');
+    }
+    notifyListeners();
+  }
 
   Future<CommunityDetailBaseResponse> createCommunity(
       {CommunityCreateRequestModel model}) async {

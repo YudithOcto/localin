@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_event/community_create_event_page.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_provider.dart';
@@ -10,7 +11,7 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommunityEventPage extends StatelessWidget {
+class CommunityEventTabListPage extends StatelessWidget {
   static const routeName = 'CommunityEventPage';
   static const communityId = 'CommunityDetail';
 
@@ -19,7 +20,7 @@ class CommunityEventPage extends StatelessWidget {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     CommunityDetail _communityDetail =
-        routeArgs[CommunityEventPage.communityId];
+        routeArgs[CommunityEventTabListPage.communityId];
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CommunityEventProvider>(
@@ -84,9 +85,13 @@ class _CommunityEventWrapperState extends State<CommunityEventWrapper>
                   }
                 } else {
                   if (!widget.communityDetail.features.event) {
-                    CustomDialog.showCustomDialogWithButton(context, 'Event',
+                    CustomToast.showCustomBookmarkToast(context,
                         'You need to upgrade to pro community to use this feature.',
-                        btnText: 'Close');
+                        duration: 1);
+                  } else {
+                    CustomToast.showCustomBookmarkToast(
+                        context, 'Only admin can create event',
+                        duration: 1);
                   }
                 }
               },

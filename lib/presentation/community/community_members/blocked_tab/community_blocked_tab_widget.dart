@@ -84,7 +84,7 @@ class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
                     } else if (index < provider.blockedList.length) {
                       final item = provider.blockedList[index];
                       return SingleMemberWidget(
-                        isOnlyAdmin: false,
+                        isOnlyAdminTab: false,
                         detail: item,
                         rowDescription:
                             'Blocked by ${item.name} ${DateHelper.timeAgo(DateTime.parse(item.joinedDate))}',
@@ -94,6 +94,7 @@ class _CommunityBlockedTabWidgetState extends State<CommunityBlockedTabWidget> {
                           kPopupRemoveMember,
                           kPopupViewProfile,
                         ],
+                        isAdminUser: provider.isAdmin,
                       );
                     } else if (provider.canLoadMore) {
                       return Center(

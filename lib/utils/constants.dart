@@ -60,6 +60,10 @@ const kSortMemberName = 'name';
 const kSortMemberVerified = 'verified';
 const kSortMemberUnverified = 'unverified';
 
+const kJoinStatusWaiting = 'Waiting';
+const kJoinStatusView = 'View';
+const kJoinStatusNotJoin = 'Join';
+
 class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'

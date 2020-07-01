@@ -19,8 +19,9 @@ class SingleMemberWidget extends StatelessWidget {
   final bool isRequestPage;
   final String rowDescription;
   final Function onRefresh;
+  final bool isAdminUser;
   // for admin tab only, other than that give false
-  final bool isOnlyAdmin;
+  final bool isOnlyAdminTab;
 
   SingleMemberWidget({
     @required this.detail,
@@ -28,7 +29,8 @@ class SingleMemberWidget extends StatelessWidget {
     this.isRequestPage = false,
     @required this.rowDescription,
     @required this.onRefresh,
-    @required this.isOnlyAdmin,
+    @required this.isOnlyAdminTab,
+    @required this.isAdminUser,
   });
 
   @override
@@ -111,7 +113,7 @@ class SingleMemberWidget extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible: popupItem != null,
+            visible: popupItem != null && isAdminUser,
             child: PopupMenuButton<String>(
                 icon: Icon(
                   Icons.more_vert,
@@ -194,7 +196,7 @@ class SingleMemberWidget extends StatelessWidget {
                 resultDialogTitle: 'Admin', status: kAdminStatus));
         break;
       case kPopupRemoveAdmin:
-        if (isOnlyAdmin) {
+        if (isOnlyAdminTab) {
           CustomDialog.showCustomDialogWithButton(context, 'Blocked',
               'You cannot remove yourself or remove the only member',
               btnText: 'Close');
@@ -229,7 +231,7 @@ class SingleMemberWidget extends StatelessWidget {
         });
         break;
       case kPopupBlock:
-        if (isOnlyAdmin || isSelfAdmin) {
+        if (isOnlyAdminTab || isSelfAdmin) {
           CustomDialog.showCustomDialogWithButton(context, 'Blocked',
               'You cannot block yourself or block the only member',
               btnText: 'Close');

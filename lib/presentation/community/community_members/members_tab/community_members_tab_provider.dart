@@ -9,9 +9,12 @@ import 'package:localin/presentation/community/community_members/shared_members_
 class CommunityMembersTabProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId = '';
+  bool _isAdmin = true;
+  bool get isAdmin => _isAdmin;
 
-  CommunityMembersTabProvider({String communityId}) {
+  CommunityMembersTabProvider({String communityId, bool isAdmin}) {
     _communityId = communityId;
+    _isAdmin = isAdmin;
   }
 
   List<CommunityMemberDetail> _memberList = List();

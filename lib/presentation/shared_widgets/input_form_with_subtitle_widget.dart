@@ -7,12 +7,14 @@ class InputFormWithSubtitleWidget extends StatelessWidget {
   final TextEditingController controller;
   final Function onPressed;
   final bool isFormDisabled;
+  final int maxInput;
 
   InputFormWithSubtitleWidget(
       {Key key,
       @required this.subtitle,
       @required this.controller,
       this.isFormDisabled = false,
+      this.maxInput,
       this.onPressed})
       : super(key: key);
   @override
@@ -29,6 +31,7 @@ class InputFormWithSubtitleWidget extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 36.0, right: 20.0),
             child: UnderlineTextFormField(
               isFormDisabled: isFormDisabled,
+              maxInput: maxInput,
               onTap: onPressed,
               controller: controller,
             ),

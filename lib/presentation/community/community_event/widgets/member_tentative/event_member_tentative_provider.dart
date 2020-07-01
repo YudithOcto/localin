@@ -28,7 +28,7 @@ class EventMemberTentativeProvider with ChangeNotifier {
       _pageRequest = 1;
     }
     final response = await _repository.getMemberEventByType(
-        'waiting', eventId, _pageRequest, 10);
+        'tentative', eventId, _pageRequest, 10);
     if (!response.error && response.total > 0) {
       _memberTentativeList.addAll(response.memberList);
       _pageRequest += 1;

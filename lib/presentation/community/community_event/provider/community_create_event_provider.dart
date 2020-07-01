@@ -114,33 +114,31 @@ class CommunityCreateEventProvider with ChangeNotifier {
   TimeOfDay _selectedStartTime;
 
   DateTime _selectedEndDate;
-  DateTime get initialEndDate => _selectedStartDate != null
-      ? _selectedStartDate.add(Duration(days: 1))
-      : DateTime.now().add(Duration(days: 1));
+  DateTime get initialEndDate => _selectedStartDate;
   TimeOfDay _selectedEndTime;
 
   final format = DateFormat('EEEE, MMM dd, yyyy');
   String get startTime {
     return '${format.format(_selectedStartDate)} '
-        'at ${_selectedStartTime.customHour}:${_selectedStartTime.customMinute} ${_selectedStartTime.customPeriod}';
+        'at ${_selectedStartTime.hour}:${_selectedStartTime.minute}  ${_selectedStartTime.customPeriod}';
   }
 
   String get endTime {
     String formatter = '${format.format(_selectedEndDate)} '
-        'at ${_selectedEndTime.customHour}:${_selectedEndTime.customMinute}  ${_selectedStartTime.customPeriod}';
+        'at ${_selectedEndTime.hour}:${_selectedEndTime.minute}  ${_selectedStartTime.customPeriod}';
     return formatter;
   }
 
-  void startEventDateTime(DateTime value, TimeOfDay timeValue) {
+  void startEventDateTime(DateTime value) {
     _selectedStartDate = value;
-    _selectedStartTime = timeValue;
+    _selectedStartTime = TimeOfDay(hour: value.hour, minute: value.minute);
     eventStartDateController.text = startTime;
     notifyListeners();
   }
 
-  void endEventDateTime(DateTime value, TimeOfDay timeValue) {
+  void endEventDateTime(DateTime value) {
     _selectedEndDate = value;
-    _selectedEndTime = timeValue;
+    _selectedEndTime = TimeOfDay(hour: value.hour, minute: value.minute);
     eventEndDateController.text = endTime;
     notifyListeners();
   }
@@ -209,22 +207,7 @@ class CommunityCreateEventProvider with ChangeNotifier {
 }
 
 extension on TimeOfDay {
-  String get customHour {
-    if (this.hourOfPeriod < 10) {
-      return '0${this.hourOfPeriod}';
-    }
-    return '${this.hourOfPeriod}';
-  }
-
-  String get customMinute {
-    if (this.minute < 10) {
-      return '0${this.minute}';
-    }
-    return '${this.minute}';
-  }
-
   String get customPeriod {
-    print(this.period);
     if (this.period == DayPeriod.am) {
       return 'AM';
     } else {

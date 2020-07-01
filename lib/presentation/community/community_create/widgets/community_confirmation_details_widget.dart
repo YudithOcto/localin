@@ -3,13 +3,13 @@ import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/model/community/community_create_request_model.dart';
+import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/community/provider/create/community_type_provider.dart';
+import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/date_helper.dart';
-import 'package:localin/utils/number_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../community_type_page.dart';
@@ -35,12 +35,11 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
         CustomDialog.closeDialog(context);
         if (response.detailCommunity.transactionId == null ||
             response.detailCommunity.transactionId.isEmpty) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              CommunityDetailPage.routeName, (route) => false,
-              arguments: {
-                CommunityDetailPage.communityData: response.detailCommunity,
-                CommunityDetailPage.needBackToHome: true,
-              });
+          Navigator.of(context)
+              .pushNamed(CommunityPaymentSuccessfulPage.routeName, arguments: {
+            CommunityPaymentSuccessfulPage.communityData:
+                response.detailCommunity
+          });
         } else {
           CustomDialog.showLoadingDialog(context, message: 'Please wait');
           final result = await provider
@@ -57,6 +56,16 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
                 arguments: {
                   CommunityPaymentSuccessfulPage.communityData:
                       response.detailCommunity
+                });
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                TransactionCommunityDetailPage.routeName, (route) => false,
+                arguments: {
+                  TransactionCommunityDetailPage.transactionId:
+                      response?.detailCommunity?.transactionId,
+                  TransactionCommunityDetailPage.onBackPressedHome: true,
+                  TransactionCommunityDetailPage.communitySlug:
+                      response?.detailCommunity?.slug
                 });
           }
         }
@@ -118,17 +127,16 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 SingleRowDetails(
-                  title: 'Tipe Komunitas',
-                  value: 'Berbayar',
+                  title: 'Community Type',
+                  value: '${provider.communityTypeRequestModel?.communityType}',
                 ),
                 SingleRowDetails(
-                  title: 'Durasi',
-                  value: '1 Tahun',
+                  title: 'Duration',
+                  value: '${provider.communityTypeRequestModel?.duration}',
                 ),
                 SingleRowDetails(
-                  title: 'Berakhir Pada',
-                  value:
-                      '${DateHelper.formatDate(date: DateTime(DateTime.now().year + 1, DateTime.now().month, DateTime.now().day), format: 'dd MMM yyyy')}',
+                  title: 'Until',
+                  value: '${provider.communityTypeRequestModel?.until}',
                 ),
                 Divider(
                   height: 1,
@@ -136,8 +144,8 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
                   thickness: 1.5,
                 ),
                 SingleRowDetails(
-                  title: 'Komunitas',
-                  value: '${getFormattedCurrency(int.parse(provider.price))}',
+                  title: 'Sub Total',
+                  value: '${provider.communityTypeRequestModel?.price}',
                 ),
                 SingleRowDetails(
                   title: 'Admin Fee',
@@ -145,7 +153,7 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
                 ),
                 SingleRowDetails(
                   title: 'Total Amount',
-                  value: '${getFormattedCurrency(int.parse(provider.price))}',
+                  value: '${provider.communityTypeRequestModel?.price}',
                   isTotalAmount: true,
                 ),
               ],

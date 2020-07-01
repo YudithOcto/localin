@@ -160,16 +160,20 @@ class _TransactionCommunityContentWidgetState
     super.dispose();
   }
 
+  onBackPressed() {
+    if (_isNeedToBackHome) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          MainBottomNavigation.routeName, (route) => false);
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (_isNeedToBackHome) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              MainBottomNavigation.routeName, (route) => false);
-        } else {
-          Navigator.of(context).pop();
-        }
+        onBackPressed();
         return false;
       },
       child: Scaffold(
@@ -177,12 +181,7 @@ class _TransactionCommunityContentWidgetState
         appBar: CustomAppBar(
           appBar: AppBar(),
           onClickBackButton: () {
-            if (_isNeedToBackHome) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  MainBottomNavigation.routeName, (route) => false);
-            } else {
-              Navigator.of(context).pop();
-            }
+            onBackPressed();
           },
           pageTitle: 'Purchase Details',
           titleStyle: ThemeText.sfMediumHeadline,
@@ -190,20 +189,43 @@ class _TransactionCommunityContentWidgetState
         bottomNavigationBar: Row(
           children: <Widget>[
             Expanded(
-              child: FilledButtonDefault(
-                backgroundColor: ThemeColors.black60,
-                textTheme:
-                    ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
-                buttonText: 'Cancel',
-                onPressed: () => Navigator.of(context).pop(),
+              child: InkWell(
+                onTap: () => onBackPressed(),
+                child: Container(
+                  height: 48.0,
+                  alignment: FractionalOffset.center,
+                  decoration: BoxDecoration(
+                    color: ThemeColors.black60,
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(4.0)),
+                  ),
+                  child: Text(
+                    'Cancel',
+                    textAlign: TextAlign.center,
+                    style: ThemeText.rodinaTitle3
+                        .copyWith(color: ThemeColors.black0),
+                  ),
+                ),
               ),
             ),
             Expanded(
-              child: FilledButtonDefault(
-                buttonText: 'Pay Now',
-                textTheme:
-                    ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
-                onPressed: onPressedPayment,
+              child: InkWell(
+                onTap: onPressedPayment,
+                child: Container(
+                  height: 48.0,
+                  alignment: FractionalOffset.center,
+                  decoration: BoxDecoration(
+                    color: ThemeColors.primaryBlue,
+                    borderRadius:
+                        BorderRadius.only(topRight: Radius.circular(4.0)),
+                  ),
+                  child: Text(
+                    'Pay Now',
+                    textAlign: TextAlign.center,
+                    style: ThemeText.rodinaTitle3
+                        .copyWith(color: ThemeColors.black0),
+                  ),
+                ),
               ),
             ),
           ],

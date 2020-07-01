@@ -2,6 +2,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
+import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_detail_provider.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -28,8 +29,7 @@ class CommunityEventDetailBottomButtonWidget extends StatelessWidget {
                     message: 'Please wait . . .');
                 final result = await provider.updateJoinEvent(status: 'going');
                 CustomDialog.closeDialog(context);
-                showDescriptiveDialog(context, result?.message,
-                    result.data.startDate, result.data.endDate);
+                showDescriptiveDialog(context, result?.message, result.data);
                 provider.getEventDetail();
               } else {
                 showRsvpDialog(context);
@@ -142,7 +142,7 @@ class CommunityEventDetailBottomButtonWidget extends StatelessWidget {
   }
 
   showDescriptiveDialog(
-      BuildContext context, String joinResult, DateTime start, DateTime end) {
+      BuildContext context, String joinResult, EventResponseData event) {
     String success = 'You’re going to this event!';
     showDialog(
         context: context,
@@ -189,7 +189,7 @@ class CommunityEventDetailBottomButtonWidget extends StatelessWidget {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: buttonWidget(context, start, end),
+                  children: buttonWidget(context, event),
                 )
               ],
             ),
@@ -197,17 +197,16 @@ class CommunityEventDetailBottomButtonWidget extends StatelessWidget {
         });
   }
 
-  List<Widget> buttonWidget(
-      BuildContext context, DateTime start, DateTime end) {
+  List<Widget> buttonWidget(BuildContext context, EventResponseData data) {
     List<Widget> widget = List();
     widget.add(FilledButtonDefault(
       onPressed: () async {
         final Event event = Event(
-          title: 'Event title',
-          description: 'Event description',
-          location: 'Event location',
-          startDate: start,
-          endDate: end,
+          title: data.title,
+          description: data?.description,
+          location: '${data?.address ?? ''}',
+          startDate: data.startDate,
+          endDate: data.endDate,
         );
         Add2Calendar.addEvent2Cal(event);
       },

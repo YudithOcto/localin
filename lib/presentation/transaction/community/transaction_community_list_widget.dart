@@ -26,7 +26,8 @@ class _TransactionCommunityListWidgetState
   }
 
   _pageListener() {
-    if (_scrollController.offset > _scrollController.position.maxScrollExtent) {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
       loadData(isRefresh: false);
     }
   }
@@ -52,6 +53,7 @@ class _TransactionCommunityListWidgetState
               return ListView.separated(
                 separatorBuilder: (context, index) => Divider(),
                 shrinkWrap: true,
+                controller: _scrollController,
                 physics: ClampingScrollPhysics(),
                 itemCount: provider.listCommunityTransaction.length + 1,
                 itemBuilder: (context, index) {

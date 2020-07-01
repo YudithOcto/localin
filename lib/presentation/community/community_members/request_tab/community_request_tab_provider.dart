@@ -10,9 +10,12 @@ import 'package:localin/utils/constants.dart';
 class CommunityRequestTabProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId = '';
+  bool _isAdmin = true;
+  bool get isAdmin => _isAdmin;
 
-  CommunityRequestTabProvider({String communityId}) {
+  CommunityRequestTabProvider({String communityId, bool isAdmin}) {
     _communityId = communityId;
+    _isAdmin = isAdmin;
   }
 
   List<CommunityMemberDetail> _requestList = List();

@@ -32,6 +32,8 @@ class _CommunityTypeCreateContentState
     extends State<CommunityTypeCreateContent> {
   PanelController _pc = new PanelController();
   createCommunity({@required String type}) async {
+    Provider.of<CommunityTypeProvider>(context, listen: false)
+        .setCommunityType(type);
     final result = await CustomDialog.showCustomDialogWithMultipleButton(
         context,
         title: 'Confirm Membership',
@@ -65,7 +67,8 @@ class _CommunityTypeCreateContentState
       onWillPop: () async => _onBackPressed(),
       child: Scaffold(
         bottomNavigationBar: StreamBuilder<bool>(
-            stream: Provider.of<CommunityTypeProvider>(context).panelStream,
+            stream: Provider.of<CommunityTypeProvider>(context, listen: false)
+                .panelStream,
             builder: (context, snapshot) {
               return Visibility(
                 visible: snapshot.data == null ? true : !snapshot.data,

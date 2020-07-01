@@ -372,8 +372,9 @@ class Repository {
   }
 
   Future<TransactionCommunityResponseModel> getCommunityTransactionList(
-      int page, int limit) {
-    return apiProvider.getCommunityTransactionList(page, limit);
+      int page, int limit,
+      {String type}) {
+    return apiProvider.getCommunityTransactionList(page, limit, type);
   }
 
   Future<BookingPaymentResponse> payTransaction(String transId) {

@@ -16,36 +16,48 @@ import '../../../themes.dart';
 class CommunityMembersPage extends StatelessWidget {
   static const routeName = 'CommunityMembersPage';
   static const communityId = 'CommunityId';
+  static const isAdmin = 'isAdmin';
 
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String comId = routeArgs[CommunityMembersPage.communityId];
+    bool isAdmin = routeArgs[CommunityMembersPage.isAdmin];
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CommunityAdminTabProvider>(
-          create: (_) => CommunityAdminTabProvider(communityId: comId),
+          create: (_) =>
+              CommunityAdminTabProvider(communityId: comId, isAdmin: isAdmin),
         ),
         ChangeNotifierProvider<CommunityMembersTabProvider>(
-          create: (_) => CommunityMembersTabProvider(communityId: comId),
+          create: (_) =>
+              CommunityMembersTabProvider(communityId: comId, isAdmin: isAdmin),
         ),
         ChangeNotifierProvider<CommunityRequestTabProvider>(
-          create: (_) => CommunityRequestTabProvider(communityId: comId),
+          create: (_) =>
+              CommunityRequestTabProvider(communityId: comId, isAdmin: isAdmin),
         ),
         ChangeNotifierProvider<CommunityBlockedTabProvider>(
-          create: (_) => CommunityBlockedTabProvider(communityId: comId),
+          create: (_) =>
+              CommunityBlockedTabProvider(communityId: comId, isAdmin: isAdmin),
         ),
         ChangeNotifierProvider<CommunityMemberProvider>(
-          create: (_) => CommunityMemberProvider(communityId: comId),
+          create: (_) =>
+              CommunityMemberProvider(communityId: comId, isAdmin: isAdmin),
         )
       ],
-      child: CommunityMemberWrapperContent(),
+      child: CommunityMemberWrapperContent(
+        isAdmin: isAdmin,
+      ),
     );
   }
 }
 
 class CommunityMemberWrapperContent extends StatefulWidget {
+  final bool isAdmin;
+  CommunityMemberWrapperContent({this.isAdmin});
+
   @override
   _CommunityMemberWrapperContentState createState() =>
       _CommunityMemberWrapperContentState();
@@ -55,11 +67,39 @@ class _CommunityMemberWrapperContentState
     extends State<CommunityMemberWrapperContent>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  List<Widget> tabs = List();
+  List<Widget> tabBarViewList = List();
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: widget.isAdmin ? 4 : 2, vsync: this);
+    _initializeTab();
+    _initializeTabViewList();
     super.initState();
+  }
+
+  _initializeTabViewList() {
+    tabBarViewList.add(CommunityMembersTabWidget());
+    tabBarViewList.add(CommunityAdminTabWidget());
+    if (widget.isAdmin) {
+      tabBarViewList.add(CommunityRequestTabWidget());
+      tabBarViewList.add(CommunityBlockedTabWidget());
+    }
+  }
+
+  _initializeTab() {
+    tabs.add(insertTab('Members'));
+    tabs.add(insertTab('Admin'));
+    if (widget.isAdmin) {
+      tabs.add(insertTab('Request'));
+      tabs.add(insertTab('Blocked'));
+    }
+  }
+
+  insertTab(String text) {
+    return Tab(
+      text: text,
+    );
   }
 
   @override
@@ -86,30 +126,12 @@ class _CommunityMemberWrapperContentState
             unselectedLabelStyle: ThemeText.sfSemiBoldBody,
             labelStyle: ThemeText.sfSemiBoldBody,
             controller: _tabController,
-            tabs: <Widget>[
-              Tab(
-                text: 'Members',
-              ),
-              Tab(
-                text: 'Admin',
-              ),
-              Tab(
-                text: 'Request',
-              ),
-              Tab(
-                text: 'Blocked',
-              )
-            ],
+            tabs: tabs,
           ),
         ),
         body: TabBarView(
           controller: _tabController,
-          children: <Widget>[
-            CommunityMembersTabWidget(),
-            CommunityAdminTabWidget(),
-            CommunityRequestTabWidget(),
-            CommunityBlockedTabWidget(),
-          ],
+          children: tabBarViewList,
         ),
       ),
     );

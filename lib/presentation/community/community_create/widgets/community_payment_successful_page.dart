@@ -12,6 +12,10 @@ class CommunityPaymentSuccessfulPage extends StatelessWidget {
   static const communityData = 'communityData';
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    CommunityDetail detail =
+        routeArgs[CommunityPaymentSuccessfulPage.communityData];
     return Scaffold(
       body: Stack(
         overflow: Overflow.visible,
@@ -50,7 +54,7 @@ class CommunityPaymentSuccessfulPage extends StatelessWidget {
                   height: 33.0,
                 ),
                 Text(
-                  'Payment Successfull',
+                  '${detail.transactionId == null ? 'Registration Successful' : 'Payment Successful'}',
                   textAlign: TextAlign.center,
                   style: ThemeText.rodinaTitle2
                       .copyWith(color: ThemeColors.black0),
@@ -59,7 +63,7 @@ class CommunityPaymentSuccessfulPage extends StatelessWidget {
                   height: 4.0,
                 ),
                 Text(
-                  'We have received your payment. An email information regarding this payment will be sent to you shortly with your order details.',
+                  '${detail.transactionId == null ? 'We have received your registration' : 'We have received your payment. An email information regarding this payment will be sent to you shortly with your order details.'}',
                   textAlign: TextAlign.center,
                   style: ThemeText.sfRegularBody
                       .copyWith(color: ThemeColors.black0),
@@ -69,10 +73,6 @@ class CommunityPaymentSuccessfulPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    final routeArgs = ModalRoute.of(context).settings.arguments
-                        as Map<String, dynamic>;
-                    CommunityDetail detail =
-                        routeArgs[CommunityPaymentSuccessfulPage.communityData];
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         CommunityDetailPage.routeName, (route) => false,
                         arguments: {

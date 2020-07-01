@@ -62,7 +62,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           ),
           SizedBox(height: 8.0),
           Text(
-            '${widget.detail.description}',
+            'Berlangganan Komunitas Pro berbayar.',
             style: ThemeText.rodinaHeadline,
           ),
           SizedBox(

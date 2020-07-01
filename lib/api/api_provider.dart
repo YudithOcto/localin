@@ -718,7 +718,15 @@ class ApiProvider {
       return CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
     } catch (error) {
       if (error is DioError) {
-        return CommunityDetailBaseResponse.hasError(_handleError(error));
+        if (error.response.statusCode == 500) {
+          return CommunityDetailBaseResponse.hasError(
+              'Server unknown error. Please try again later');
+        } else if (error.response.statusCode == 422) {
+          return CommunityDetailBaseResponse.hasError(
+              error.response.data['logo'][0]);
+        } else {
+          return CommunityDetailBaseResponse.hasError(_handleError(error));
+        }
       } else {
         return CommunityDetailBaseResponse.hasError(error.toString());
       }
@@ -1362,12 +1370,13 @@ class ApiProvider {
   }
 
   Future<TransactionCommunityResponseModel> getCommunityTransactionList(
-      int page, int limit) async {
+      int page, int limit, String transactionType) async {
     try {
       final response = await _dio.get(ApiConstant.kTransaction,
           queryParameters: {
             'limit': limit,
             'page': page,
+            'type': transactionType
           },
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return TransactionCommunityResponseModel.getListJson(response.data);

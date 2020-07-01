@@ -8,9 +8,12 @@ import 'package:localin/presentation/community/community_members/shared_members_
 class CommunityAdminTabProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId = '';
+  bool _isAdmin = true;
+  bool get isAdmin => _isAdmin;
 
-  CommunityAdminTabProvider({String communityId}) {
+  CommunityAdminTabProvider({String communityId, bool isAdmin}) {
     _communityId = communityId;
+    _isAdmin = isAdmin;
   }
 
   List<CommunityMemberDetail> _adminList = List();
@@ -44,7 +47,7 @@ class CommunityAdminTabProvider with ChangeNotifier {
         _communityId, _pageRequest, 10, 'admin',
         search: _userSearch);
     if (response.error == null &&
-        (response.data.isNotEmpty || _adminList.isNotEmpty)) {
+        (_adminList.isNotEmpty || response.data.isNotEmpty)) {
       _adminList.addAll(response.data);
       _canLoadMore = response.total > _adminList.length;
       _pageRequest += 1;
