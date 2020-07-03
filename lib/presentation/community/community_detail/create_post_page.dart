@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_create_post_provider.dart';
@@ -21,7 +22,31 @@ class CreatePostPage extends StatelessWidget {
   }
 }
 
-class CreatePostContentWidget extends StatelessWidget {
+class CreatePostContentWidget extends StatefulWidget {
+  @override
+  _CreatePostContentWidgetState createState() =>
+      _CreatePostContentWidgetState();
+}
+
+class _CreatePostContentWidgetState extends State<CreatePostContentWidget> {
+  @override
+  void initState() {
+    KeyboardVisibilityNotification().addNewListener(onChange: (bool visible) {
+      if (!visible) {
+        final provider = Provider.of<CommunityCreatePostProvider>(context);
+        if (provider.searchTagController.text.isNotEmpty) {
+          provider.addTags = provider.searchTagController.text;
+          provider.searchTagController.clear();
+          FocusScope.of(context).unfocus();
+          provider.clearListTags();
+        } else {
+          Navigator.of(context).pop();
+        }
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

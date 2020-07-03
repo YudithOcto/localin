@@ -44,25 +44,26 @@ class TransactionCommunityDetail {
   String expiredAt;
   int basicPayment;
   String transactionTypeId;
+  ServiceDetail serviceDetail;
 
-  TransactionCommunityDetail({
-    this.transactionId,
-    this.description,
-    this.adminFee,
-    this.discount,
-    this.totalPayment,
-    this.status,
-    this.createdAt,
-    this.expiredAt,
-    this.basicPayment,
-    this.transactionTypeId,
-  });
+  TransactionCommunityDetail(
+      {this.transactionId,
+      this.description,
+      this.adminFee,
+      this.discount,
+      this.totalPayment,
+      this.status,
+      this.createdAt,
+      this.expiredAt,
+      this.basicPayment,
+      this.transactionTypeId,
+      this.serviceDetail});
 
   factory TransactionCommunityDetail.fromMap(Map<String, dynamic> body) {
     return TransactionCommunityDetail(
       transactionId: body['transaksi_id'],
-      description: body['keterangan'],
       discount: body['discount'],
+      description: body['keterangan'],
       adminFee: body['admin_fee'],
       totalPayment: body['total_bayar'],
       status: body['status'],
@@ -70,6 +71,38 @@ class TransactionCommunityDetail {
       expiredAt: body['expired_at'],
       basicPayment: body['dasar_bayar'],
       transactionTypeId: body['modul_id'],
+      serviceDetail: body['service_detail'] == null
+          ? null
+          : ServiceDetail.fromJson(body['service_detail']),
+    );
+  }
+}
+
+class ServiceDetail {
+  String invoiceId;
+  String bookingCode;
+  String title;
+  String duration;
+  int totalPayment;
+  String communitySlug;
+
+  ServiceDetail({
+    this.invoiceId,
+    this.bookingCode,
+    this.title,
+    this.duration,
+    this.totalPayment,
+    this.communitySlug,
+  });
+
+  factory ServiceDetail.fromJson(Map<String, dynamic> body) {
+    return ServiceDetail(
+      invoiceId: body['invoice_id'],
+      bookingCode: body['booking_kode'],
+      title: body['keterangan'],
+      duration: body['quantity'],
+      totalPayment: body['invoice_payment_total'],
+      communitySlug: body['community_slug'],
     );
   }
 }

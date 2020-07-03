@@ -32,6 +32,7 @@ class CommunityDetail implements CommunityDiscoverType {
   String communityType;
   String transactionId;
   Feature features;
+  String expiredAt;
   List<CommunityMemberDetail> listMember;
 
   CommunityDetail({
@@ -64,6 +65,7 @@ class CommunityDetail implements CommunityDiscoverType {
     this.isAdmin,
     this.joinStatus,
     this.listMember,
+    this.expiredAt,
   });
 
   factory CommunityDetail.fromJson(Map<String, dynamic> body) {
@@ -101,6 +103,7 @@ class CommunityDetail implements CommunityDiscoverType {
               .map((e) => CommunityMemberDetail.fromJson(e))),
       features:
           body['feature'] == null ? null : Feature.fromMap(body["feature"]),
+      expiredAt: body['expired_at'] ?? '',
     );
   }
 }

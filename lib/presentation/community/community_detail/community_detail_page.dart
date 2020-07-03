@@ -36,9 +36,7 @@ class CommunityDetailPage extends StatelessWidget {
             create: (_) => CommunityRetrieveCommentProvider(),
           ),
           ChangeNotifierProvider<CommunityDetailEventProvider>(
-            create: (_) => CommunityDetailEventProvider(
-              comId: cDetail.id,
-            ),
+            create: (_) => CommunityDetailEventProvider(),
           ),
         ],
         child: WillPopScope(
@@ -76,8 +74,6 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
     if (_isInit) {
       Provider.of<CommunityDetailProvider>(context, listen: false)
           .getCommunityDetail(widget.slug);
-      Provider.of<CommunityDetailEventProvider>(context, listen: false)
-          .getUpcomingEvent();
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -176,28 +172,30 @@ class _CommunityDetailColumnState extends State<CommunityDetailColumn> {
                     )
                   ];
                 },
-                body: ListView(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  children: <Widget>[
-                    CommunityDetailUpcomingEventsWidget(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 24.0, left: 20.0, bottom: 8.0),
-                      child: Text(
-                        'NEWS ACTIVITY',
-                        style: ThemeText.sfSemiBoldFootnote
-                            .copyWith(color: ThemeColors.black80),
-                      ),
-                    ),
-                    Consumer<CommunityDetailProvider>(
-                      builder: (context, provider, child) {
-                        return CommunityNewsActivityWidget(
-                          communityDetail: provider.communityDetail,
-                        );
-                      },
-                    ),
-                  ],
+                body: Consumer<CommunityDetailProvider>(
+                  builder: (context, provider, child) {
+                    return ListView(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      children: <Widget>[
+                        CommunityDetailUpcomingEventsWidget(
+                          communityId: provider?.communityDetail?.id,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 24.0, left: 20.0, bottom: 8.0),
+                          child: Text(
+                            'NEWS ACTIVITY',
+                            style: ThemeText.sfSemiBoldFootnote
+                                .copyWith(color: ThemeColors.black80),
+                          ),
+                        ),
+                        CommunityNewsActivityWidget(
+                          communityDetail: provider?.communityDetail ?? null,
+                        )
+                      ],
+                    );
+                  },
                 ),
               );
             }

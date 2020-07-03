@@ -3,21 +3,18 @@ import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/model/community/community_create_request_model.dart';
-import 'package:localin/presentation/community/community_create/community_create_page.dart';
-import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/community/provider/create/community_type_provider.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
-
-import '../community_type_page.dart';
 import 'community_payment_successful_page.dart';
 
 class CommunityConfirmationDetailsWidget extends StatelessWidget {
   final Function onBackPressed;
-  CommunityConfirmationDetailsWidget({Key key, this.onBackPressed})
+  final CommunityCreateRequestModel model;
+  CommunityConfirmationDetailsWidget({Key key, this.onBackPressed, this.model})
       : super(key: key);
 
   @override
@@ -26,11 +23,7 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
       CustomDialog.showCenteredLoadingDialog(context, message: 'Loading ...');
       final provider =
           Provider.of<CommunityTypeProvider>(context, listen: false);
-      final routeArgs =
-          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      CommunityCreateRequestModel model =
-          routeArgs[CommunityTypePage.requestModel];
-      final response = await provider.createCommunity(model: model);
+      final response = await provider.createEditCommunity(model: model);
       if (response.error == null) {
         CustomDialog.closeDialog(context);
         if (response.detailCommunity.transactionId == null ||

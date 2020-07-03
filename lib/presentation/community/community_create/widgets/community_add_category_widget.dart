@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_category.dart';
-import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
+import 'package:localin/presentation/community/community_category_search_page.dart';
+import 'package:localin/presentation/community/provider/create/category_list_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityAddCategoryWidget extends StatefulWidget {
+  final CommunityCategory category;
+  CommunityAddCategoryWidget({this.category});
+
   @override
   _CommunityAddCategoryWidgetState createState() =>
       _CommunityAddCategoryWidgetState();
@@ -15,16 +19,32 @@ class CommunityAddCategoryWidget extends StatefulWidget {
 class _CommunityAddCategoryWidgetState
     extends State<CommunityAddCategoryWidget> {
   bool _isInit = true;
-  Future getCategory;
+  final _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      getCategory = Provider.of<CommunityCreateProvider>(context, listen: false)
-          .getCategoryList();
+      loadData();
+      if (widget.category != null) {
+        Provider.of<CategoryListProvider>(context, listen: false)
+            .previousCategory = widget.category;
+      }
+      _scrollController..addListener(_listener);
       _isInit = false;
     }
     super.didChangeDependencies();
+  }
+
+  _listener() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
+      loadData(isRefresh: false);
+    }
+  }
+
+  loadData({bool isRefresh = true}) {
+    Provider.of<CategoryListProvider>(context, listen: false)
+        .getCategoryList(isRefresh: isRefresh);
   }
 
   @override
@@ -50,65 +70,86 @@ class _CommunityAddCategoryWidgetState
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 36.0, right: 20.0, left: 20.0),
-          child: FutureBuilder<List<CommunityCategory>>(
-            future: getCategory,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                if (snapshot.hasData) {
-                  return Container(
-                    height: 36.0,
-                    margin: EdgeInsets.only(top: 12.0),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: snapshot.data?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        final category = snapshot.data[index];
-                        return Consumer<CommunityCreateProvider>(
-                          builder: (context, provider, child) {
-                            return InkWell(
-                              onTap: () {
-                                provider.selectCategory(category);
-                                FocusScope.of(context).unfocus();
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    left: index == 0 ? 0.0 : 4.0),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 16.0),
-                                decoration: BoxDecoration(
-                                    color: provider.isCategorySelected(category)
-                                        ? ThemeColors.primaryBlue
-                                        : ThemeColors.black0,
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    border:
-                                        Border.all(color: ThemeColors.black40)),
-                                child: Text(
-                                  '${category.categoryName}',
-                                  maxLines: 1,
-                                  style: ThemeText.sfSemiBoldFootnote.copyWith(
-                                      color:
-                                          provider.isCategorySelected(category)
-                                              ? ThemeColors.black0
-                                              : ThemeColors.black80),
-                                ),
-                              ),
-                            );
-                          },
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Consumer<CategoryListProvider>(
+            builder: (context, provider, child) {
+              return ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(bottom: 20.0),
+                physics: ClampingScrollPhysics(),
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  if (provider.selectedCategory == null) {
+                    return InkWell(
+                      onTap: () async {
+                        FocusScope.of(context).unfocus();
+                        final result = await Navigator.of(context).pushNamed(
+                          CommunityCategorySearch.routeName,
                         );
+                        if (result != null && result is CommunityCategory) {
+                          final provider = Provider.of<CategoryListProvider>(
+                              context,
+                              listen: false);
+                          provider.selectCategory(result);
+                        }
                       },
+                      child: Text(
+                        'Add Category',
+                        style: ThemeText.sfMediumBody
+                            .copyWith(color: ThemeColors.primaryBlue),
+                      ),
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 12.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            border: Border.all(color: ThemeColors.black40),
+                          ),
+                          child: Text(
+                            '${provider.selectedCategory.categoryName}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: ThemeText.sfMediumBody,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            FocusScope.of(context).unfocus();
+                            final result =
+                                await Navigator.of(context).pushNamed(
+                              CommunityCategorySearch.routeName,
+                            );
+                            if (result != null && result is CommunityCategory) {
+                              final provider =
+                                  Provider.of<CategoryListProvider>(context,
+                                      listen: false);
+                              provider.selectCategory(result);
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                border: Border.all(color: ThemeColors.black20)),
+                            child: Text(
+                              'Edit',
+                              style: ThemeText.sfMediumFootnote
+                                  .copyWith(color: ThemeColors.primaryBlue),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   );
-                } else {
-                  return Container();
-                }
-              }
+                },
+              );
             },
           ),
         ),

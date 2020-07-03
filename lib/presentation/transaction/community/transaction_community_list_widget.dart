@@ -70,6 +70,9 @@ class _TransactionCommunityListWidgetState
                               TransactionCommunityDetailPage.transactionId:
                                   provider.listCommunityTransaction[index]
                                       .transactionId,
+                              TransactionCommunityDetailPage.communitySlug:
+                                  provider.listCommunityTransaction[index]
+                                      .serviceDetail.communitySlug,
                             });
                       },
                       child: BookingDetailWidget(

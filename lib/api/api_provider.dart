@@ -658,10 +658,11 @@ class ApiProvider {
   }
 
   Future<CommunityDetailBaseResponse> getOtherUserCommunityList(
-      String id) async {
+      String id, int page) async {
     try {
-      final response = await _dio.get('${ApiConstant.kUserCommunity}/$id',
-          options: Options(headers: {REQUIRED_TOKEN: true}));
+      final response = await _dio.get('${ApiConstant.kOtherUserCommunity}/$id',
+          options: Options(
+              headers: {REQUIRED_TOKEN: true, 'limit': 10, 'page': page}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -674,10 +675,17 @@ class ApiProvider {
   }
 
   Future<CommunityBaseResponseCategory> getCategoryListCommunity(
-      String search) async {
+      String search, int pageRequest, int byLocation) async {
     try {
+      Map<String, dynamic> map = Map();
+      if (search != null) {
+        map['keyword'] = search;
+      }
+      map['byLocation'] = byLocation ?? 0;
+      map['limit'] = 10;
+      map['page'] = pageRequest;
       final response = await _dio.get(ApiConstant.kSearchCategory,
-          queryParameters: {'keyword': search},
+          queryParameters: map,
           options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = CommunityBaseResponseCategory.fromJson(response.data);
       return model;
@@ -740,7 +748,7 @@ class ApiProvider {
           '${ApiConstant.kEditCommunity}$communityID',
           data: form,
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      return CommunityDetailBaseResponse.fromJson(response.data);
+      return CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityDetailBaseResponse.hasError(_handleError(error));
@@ -794,9 +802,9 @@ class ApiProvider {
         if (error.response.statusCode == 500) {
           return CommunityCommentBaseResponse.withError(
               'Server unknown error. Please try again later');
-        } else if (error.response.statusCode == 413) {
-          return CommunityCommentBaseResponse.withError(
-              'Image request too large');
+        } else if (error.response.statusCode > 400 ||
+            error.response.statusCode < 499) {
+          return CommunityCommentBaseResponse.withError('Image request failed');
         } else if (error.response.data['tag'] != null) {
           return CommunityCommentBaseResponse.withError(
               error.response.data['tag'][0]);

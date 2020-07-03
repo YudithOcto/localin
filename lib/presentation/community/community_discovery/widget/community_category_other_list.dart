@@ -29,51 +29,56 @@ class _CommunityCategoryOtherListState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: CommunityDiscoverSubtitleWidget(
-            svgAsset: 'images/star_orange.svg',
-            title: 'Others',
-          ),
-        ),
-        Consumer<CommunityCategoryProvider>(
-          builder: (context, provider, child) {
-            return StreamBuilder<othersCommunityState>(
-                stream: provider.streamOther,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting &&
-                      provider.page <= 1) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemCount: provider.otherCommunity.length + 1,
-                    itemBuilder: (context, index) {
-                      if (snapshot.data == othersCommunityState.empty) {
-                        return Container();
-                      } else if (index < provider.otherCommunity.length) {
-                        final item = provider.otherCommunity[index];
-                        return CommunityOtherRowWidget(
-                          detail: item,
-                        );
-                      } else if (provider.canLoadMore) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
+    return Consumer<CommunityCategoryProvider>(
+      builder: (context, provider, child) {
+        return StreamBuilder<othersCommunityState>(
+            stream: provider.streamOther,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting &&
+                  provider.page <= 1) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                if (provider.otherCommunity.isNotEmpty) {
+                  return Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: CommunityDiscoverSubtitleWidget(
+                          svgAsset: 'images/star_orange.svg',
+                          title: 'Others',
+                        ),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: provider.otherCommunity.length + 1,
+                        itemBuilder: (context, index) {
+                          if (snapshot.data == othersCommunityState.empty) {
+                            return Container();
+                          } else if (index < provider.otherCommunity.length) {
+                            final item = provider.otherCommunity[index];
+                            return CommunityOtherRowWidget(
+                              detail: item,
+                            );
+                          } else if (provider.canLoadMore) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      )
+                    ],
                   );
-                });
-          },
-        ),
-      ],
+                } else {
+                  return Container();
+                }
+              }
+            });
+      },
     );
   }
 }

@@ -6,7 +6,29 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-class CommunityDetailUpcomingEventsWidget extends StatelessWidget {
+class CommunityDetailUpcomingEventsWidget extends StatefulWidget {
+  final String communityId;
+  CommunityDetailUpcomingEventsWidget({this.communityId});
+
+  @override
+  _CommunityDetailUpcomingEventsWidgetState createState() =>
+      _CommunityDetailUpcomingEventsWidgetState();
+}
+
+class _CommunityDetailUpcomingEventsWidgetState
+    extends State<CommunityDetailUpcomingEventsWidget> {
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<CommunityDetailEventProvider>(context, listen: false)
+          .getUpcomingEvent(widget.communityId, isRefresh: true);
+      _isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CommunityDetailEventProvider>(
@@ -18,48 +40,52 @@ class CommunityDetailUpcomingEventsWidget extends StatelessWidget {
                   provider.upcomingPageRequest <= 1) {
                 return Container();
               } else {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0, left: 20.0),
-                      child: Text(
-                        'UPCOMING EVENTS',
-                        style: ThemeText.sfSemiBoldFootnote
-                            .copyWith(color: ThemeColors.black80),
+                if (snapshot.data == listEventState.empty) {
+                  return Container();
+                } else {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 24.0, left: 20.0),
+                        child: Text(
+                          'UPCOMING EVENTS',
+                          style: ThemeText.sfSemiBoldFootnote
+                              .copyWith(color: ThemeColors.black80),
+                        ),
                       ),
-                    ),
-                    Container(
-                      height: 250,
-                      width: 270,
-                      child: ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: provider.upcomingList.length,
-                        itemBuilder: (context, index) {
-                          if (snapshot.data == listEventState.empty) {
-                            return Container();
-                          } else if (index < provider.upcomingList.length) {
-                            return Container(
-                                width: 280,
-                                height: 250,
-                                child: SingleUpcomingWidget(
-                                  event: provider.upcomingList[index],
-                                  index: index,
-                                ));
-                          } else if (provider.isUpcomingEventCanLoadMore) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                );
+                      Container(
+                        height: 250,
+                        width: 270,
+                        child: ListView.builder(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: provider.upcomingList.length,
+                          itemBuilder: (context, index) {
+                            if (snapshot.data == listEventState.empty) {
+                              return Container();
+                            } else if (index < provider.upcomingList.length) {
+                              return Container(
+                                  width: 280,
+                                  height: 250,
+                                  child: SingleUpcomingWidget(
+                                    event: provider.upcomingList[index],
+                                    index: index,
+                                  ));
+                            } else if (provider.isUpcomingEventCanLoadMore) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  );
+                }
               }
             });
       },

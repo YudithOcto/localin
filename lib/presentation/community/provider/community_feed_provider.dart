@@ -11,29 +11,6 @@ class CommunityFeedProvider extends BaseModelProvider {
   List<CommunityDetail> _userCommunityList = [];
   List<CommunityDetail> get userCommunityList => _userCommunityList;
 
-  List<CommunityCategory> _communityCategoryList = [];
-  List<CommunityCategory> get communityCategoryList => _communityCategoryList;
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future getDataFromApi() async {
-    await Future.wait([
-      getCategoryList(),
-      getUserCommunityList(),
-    ]).then((value) => notifyListeners());
-  }
-
-  Future<List<CommunityCategory>> getCategoryList() async {
-    final response = await _repository.getCategoryListCommunity('');
-    if (response.error == null) {
-      _communityCategoryList.addAll(response.communityCategory);
-    }
-    return _communityCategoryList;
-  }
-
   Future<List<CommunityDetail>> getUserCommunityList(
       {bool isRefresh = true}) async {
     final response = await _repository.getUserCommunityList();

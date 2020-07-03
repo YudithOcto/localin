@@ -4,6 +4,7 @@ import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/presentation/community/provider/comment/community_publish_comment_provider.dart';
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -57,11 +58,20 @@ class _CommunityChildCommentWidgetState
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              CircleImage(
-                width: 40.0,
-                height: 40.0,
-                imageUrl: _communityComment[index]?.createdAvatar ?? '',
-                fit: BoxFit.cover,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                    RevampOthersProfilePage.userId:
+                        _communityComment[index].createdBy,
+                  });
+                },
+                child: CircleImage(
+                  width: 40.0,
+                  height: 40.0,
+                  imageUrl: _communityComment[index]?.createdAvatar ?? '',
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(
                 width: 11.0,

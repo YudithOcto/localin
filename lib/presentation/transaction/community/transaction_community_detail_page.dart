@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/filled_button_default.dart';
+import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
@@ -13,6 +14,7 @@ import 'package:localin/presentation/transaction/community/widget/row_price_widg
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/countdown.dart';
 import 'package:localin/utils/number_helper.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +46,6 @@ class _TransactionCommunityContentWidgetState
     extends State<TransactionCommunityContentWidget> {
   bool _isInit = true;
   Future getTransactionData;
-  Countdown _countdown;
   String _transactionId;
   bool _isNeedToBackHome = false;
   String _communitySlug;
@@ -140,11 +141,6 @@ class _TransactionCommunityContentWidgetState
     return widget;
   }
 
-  startCountDown(DateTime expiredTime) {
-    _countdown = Countdown(expiredTime: expiredTime);
-    _countdown.run();
-  }
-
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -152,12 +148,6 @@ class _TransactionCommunityContentWidgetState
       _isInit = false;
     }
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _countdown.cancel();
-    super.dispose();
   }
 
   onBackPressed() {
@@ -186,136 +176,141 @@ class _TransactionCommunityContentWidgetState
           pageTitle: 'Purchase Details',
           titleStyle: ThemeText.sfMediumHeadline,
         ),
-        bottomNavigationBar: Row(
-          children: <Widget>[
-            Expanded(
-              child: InkWell(
-                onTap: () => onBackPressed(),
-                child: Container(
-                  height: 48.0,
-                  alignment: FractionalOffset.center,
-                  decoration: BoxDecoration(
-                    color: ThemeColors.black60,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(4.0)),
+        bottomNavigationBar: Consumer<TransactionCommunityProvider>(
+          builder: (context, provider, child) {
+            return Visibility(
+              visible: provider.transactionDetail?.status ==
+                      kTransactionWaitingPayment ??
+                  false,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => onBackPressed(),
+                      child: Container(
+                        height: 48.0,
+                        alignment: FractionalOffset.center,
+                        decoration: BoxDecoration(
+                          color: ThemeColors.black60,
+                          borderRadius:
+                              BorderRadius.only(topLeft: Radius.circular(4.0)),
+                        ),
+                        child: Text(
+                          'Cancel',
+                          textAlign: TextAlign.center,
+                          style: ThemeText.rodinaTitle3
+                              .copyWith(color: ThemeColors.black0),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    'Cancel',
-                    textAlign: TextAlign.center,
-                    style: ThemeText.rodinaTitle3
-                        .copyWith(color: ThemeColors.black0),
+                  Expanded(
+                    child: InkWell(
+                      onTap: onPressedPayment,
+                      child: Container(
+                        height: 48.0,
+                        alignment: FractionalOffset.center,
+                        decoration: BoxDecoration(
+                          color: ThemeColors.primaryBlue,
+                          borderRadius:
+                              BorderRadius.only(topRight: Radius.circular(4.0)),
+                        ),
+                        child: Text(
+                          'Pay Now',
+                          textAlign: TextAlign.center,
+                          style: ThemeText.rodinaTitle3
+                              .copyWith(color: ThemeColors.black0),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: onPressedPayment,
-                child: Container(
-                  height: 48.0,
-                  alignment: FractionalOffset.center,
-                  decoration: BoxDecoration(
-                    color: ThemeColors.primaryBlue,
-                    borderRadius:
-                        BorderRadius.only(topRight: Radius.circular(4.0)),
-                  ),
-                  child: Text(
-                    'Pay Now',
-                    textAlign: TextAlign.center,
-                    style: ThemeText.rodinaTitle3
-                        .copyWith(color: ThemeColors.black0),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            );
+          },
         ),
-        body: FutureBuilder<TransactionCommunityResponseModel>(
-          future: getTransactionData,
+        body: StreamBuilder<transactionCommunityState>(
+          stream:
+              Provider.of<TransactionCommunityProvider>(context, listen: false)
+                  .transStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             } else {
-              startCountDown(DateTime.parse(snapshot.data.data.expiredAt));
-
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    TopBarTransactionStatusWidget(
-                      backgroundColor: ThemeColors.orange,
-                      childWidget: StreamBuilder<String>(
-                          stream: _countdown.differenceStream,
-                          builder: (context, snapshot) {
-                            return Text(
-                              'Waiting for payment \u2022 ${snapshot.data ?? '00:00'}',
-                              textAlign: TextAlign.center,
-                              style: ThemeText.sfMediumFootnote
-                                  .copyWith(color: ThemeColors.black0),
-                            );
-                          }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 24.0, bottom: 8.0, left: 20.0, right: 20.0),
-                      child: Subtitle(
-                        title: 'BOOKING DETAIL',
+              final provider =
+                  Provider.of<TransactionCommunityProvider>(context);
+              if (provider.transactionDetail != null) {
+                final item = provider.transactionDetail;
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TopBarTransactionStatusWidget(
+                        backgroundColor: ThemeColors.orange,
+                        status: item?.status,
+                        expiredAt: item?.expiredAt,
                       ),
-                    ),
-                    BookingDetailWidget(
-                      detail: snapshot?.data?.data,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 24.0, bottom: 8.0, left: 20.0, right: 20.0),
-                      child: Subtitle(
-                        title: 'PRICE DETAIL',
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 24.0, bottom: 8.0, left: 20.0, right: 20.0),
+                        child: Subtitle(
+                          title: 'BOOKING DETAIL',
+                        ),
                       ),
-                    ),
-                    Container(
-                      color: ThemeColors.black0,
-                      child: Column(
-                        children: <Widget>[
-                          RowPriceWidget(
-                            title: 'Komunitas Pro',
-                            valueStyle: ThemeText.sfMediumBody
-                                .copyWith(color: ThemeColors.orange),
-                            value: getFormattedCurrency(
-                                snapshot.data.data.basicPayment),
-                          ),
-                          DashedLine(
-                            color: ThemeColors.black20,
-                            height: 1.5,
-                          ),
-                          RowPriceWidget(
-                            title: 'Admin Fee',
-                            valueStyle: ThemeText.sfMediumBody.copyWith(
-                                color: snapshot.data.data.adminFee > 0
-                                    ? ThemeColors.orange
-                                    : ThemeColors.black60),
-                            value: getFormattedCurrency(
-                                snapshot.data.data.adminFee),
-                          ),
-                          DashedLine(
-                            color: ThemeColors.black20,
-                            height: 1.5,
-                          ),
-                          RowPriceWidget(
-                            title: 'Total',
-                            valueStyle: ThemeText.sfMediumBody
-                                .copyWith(color: ThemeColors.orange),
-                            value: getFormattedCurrency(
-                                snapshot.data.data.totalPayment),
-                          ),
-                        ],
+                      BookingDetailWidget(
+                        detail: item,
                       ),
-                    )
-                  ],
-                ),
-              );
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 24.0, bottom: 8.0, left: 20.0, right: 20.0),
+                        child: Subtitle(
+                          title: 'PRICE DETAIL',
+                        ),
+                      ),
+                      Container(
+                        color: ThemeColors.black0,
+                        child: Column(
+                          children: <Widget>[
+                            RowPriceWidget(
+                              title: 'Komunitas Pro',
+                              valueStyle: ThemeText.sfMediumBody
+                                  .copyWith(color: ThemeColors.orange),
+                              value: getFormattedCurrency(item?.basicPayment),
+                            ),
+                            DashedLine(
+                              color: ThemeColors.black20,
+                              height: 1.5,
+                            ),
+                            RowPriceWidget(
+                              title: 'Admin Fee',
+                              valueStyle: ThemeText.sfMediumBody.copyWith(
+                                  color: item.adminFee > 0
+                                      ? ThemeColors.orange
+                                      : ThemeColors.black60),
+                              value: getFormattedCurrency(item?.adminFee),
+                            ),
+                            DashedLine(
+                              color: ThemeColors.black20,
+                              height: 1.5,
+                            ),
+                            RowPriceWidget(
+                              title: 'Total',
+                              valueStyle: ThemeText.sfMediumBody
+                                  .copyWith(color: ThemeColors.orange),
+                              value: getFormattedCurrency(item?.totalPayment),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return Container();
+              }
             }
           },
         ),

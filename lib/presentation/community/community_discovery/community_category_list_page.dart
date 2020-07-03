@@ -49,8 +49,6 @@ class _CommunityByCategoryContentWidgetState
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       _catDetail = routeArgs[CommunityCategoryListPage.categoryDetail];
       _categoryName = _catDetail.categoryName;
-      Provider.of<CommunityCategoryProvider>(context, listen: false)
-          .getPopularCommunity(categoryId: _catDetail.id);
       _isInit = false;
     }
     super.didChangeDependencies();

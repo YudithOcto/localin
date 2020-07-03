@@ -26,7 +26,7 @@ class CommunityCommentBaseResponse {
 
   CommunityCommentBaseResponse.withError(String value)
       : error = value,
-        message = null,
+        message = value,
         data = [];
 
   CommunityCommentBaseResponse.addComment(Map<String, dynamic> body)

@@ -17,7 +17,7 @@ class CommunityAddTitleWidget extends StatelessWidget {
             title: 'COMMUNITY NAME',
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 36.0, right: 20.0),
+            padding: const EdgeInsets.only(right: 20.0),
             child: UnderlineTextFormField(
               maxInput: 200,
               controller:

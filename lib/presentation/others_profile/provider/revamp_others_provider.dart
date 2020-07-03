@@ -12,15 +12,16 @@ class RevampOthersProvider with ChangeNotifier {
   final Repository _repository = Repository();
   bool _canLoadMoreArticle = true;
   List<ArticleDetail> _articleList = [];
-  List<CommunityDetail> _communityList = [];
+
   int _articleTotal = 0, _pageRequest = 0, _pageLimit = 10;
   final StreamController<OthersProfileState> _stateController =
       StreamController<OthersProfileState>.broadcast();
 
   Stream<OthersProfileState> get articleStream => _stateController.stream;
+
   List<ArticleDetail> get articleList => _articleList;
+
   bool get canLoadMoreArticle => _canLoadMoreArticle;
-  List<CommunityDetail> get communityList => _communityList;
 
   Future<ArticleBaseResponse> getArticleList(
       {bool isRefresh = true, @required String id}) async {
@@ -46,15 +47,6 @@ class RevampOthersProvider with ChangeNotifier {
       _stateController.add(OthersProfileState.NoData);
     }
     notifyListeners();
-    return response;
-  }
-
-  Future<CommunityDetailBaseResponse> getOtherCommunityList(String id) async {
-    final response = await _repository.getOtherCommunityList(id);
-    if (response != null) {
-      _communityList.clear();
-      _communityList.addAll(response.communityDetailList);
-    }
     return response;
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/community/community_category_search_page.dart';
 import 'package:localin/presentation/community/community_create/widgets/community_payment_successful_page.dart';
 import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
 import 'package:localin/presentation/community/community_detail/create_post_page.dart';
@@ -14,6 +15,7 @@ import 'package:localin/presentation/community/community_event/community_event_t
 import 'package:localin/presentation/community/community_event/widgets/search_google_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
+import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
@@ -23,7 +25,6 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
-import 'package:localin/presentation/community/widget/community_category_search.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/news/pages/news_comment_page.dart';
@@ -58,7 +59,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     BookingDetailPage.routeName: (_) => BookingDetailPage(),
     BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
     HotelDetailPage.routeName: (_) => HotelDetailPage(),
-    CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
     GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
     WebViewPage.routeName: (_) => WebViewPage(),
     InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
@@ -98,5 +98,7 @@ Map<String, WidgetBuilder> get generalRoutes {
     SearchGooglePage.routeName: (_) => SearchGooglePage(),
     CommunityPaymentSuccessfulPage.routeName: (_) =>
         CommunityPaymentSuccessfulPage(),
+    ExploreMainPage.routeName: (_) => ExploreMainPage(),
+    CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
   };
 }

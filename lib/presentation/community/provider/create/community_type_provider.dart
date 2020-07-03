@@ -34,7 +34,7 @@ class CommunityTypeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<CommunityDetailBaseResponse> createCommunity(
+  Future<CommunityDetailBaseResponse> createEditCommunity(
       {CommunityCreateRequestModel model}) async {
     Map<String, dynamic> map = Map();
     map['nama'] = model.communityName;
@@ -44,8 +44,13 @@ class CommunityTypeProvider with ChangeNotifier {
     map['kategori'] = model.category.id;
     map['logo'] = MultipartFile.fromFileSync(model.imageFile.path,
         filename: model.imageFile.path);
+    CommunityDetailBaseResponse response;
     FormData _formApi = FormData.fromMap(map);
-    final response = await _repository.createCommunity(_formApi);
+    if (model.isEditMode) {
+      response = await _repository.editCommunity(_formApi, model.communityId);
+    } else {
+      response = await _repository.createCommunity(_formApi);
+    }
     return response;
   }
 

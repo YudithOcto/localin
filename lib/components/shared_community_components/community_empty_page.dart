@@ -43,7 +43,10 @@ class CommunityEmptyPage extends StatelessWidget {
             onPressed: () async {
               final auth = Provider.of<AuthProvider>(context, listen: false);
               if (auth.userModel.status == kUserStatusVerified) {
-                Navigator.of(context).pushNamed(CommunityCreatePage.routeName);
+                Navigator.of(context)
+                    .pushNamed(CommunityCreatePage.routeName, arguments: {
+                  CommunityCreatePage.previousCommunityData: null,
+                });
               } else {
                 CustomDialog.showCustomDialogWithMultipleButton(context,
                     title: 'Create Community',

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/home/widget/home_header_clipper.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/home/widget/home_single_services_wrapper_widget.dart';
@@ -116,7 +117,7 @@ class HomeHeaderWidget extends StatelessWidget {
                           serviceIcon: 'home_service_ticket_icon.svg',
                           serviceName: 'EVENT',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(ExploreMainPage.routeName),
                         ),
                       ],
                     ),

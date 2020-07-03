@@ -165,8 +165,9 @@ class Repository {
   }
 
   Future<CommunityBaseResponseCategory> getCategoryListCommunity(
-      String search) async {
-    return apiProvider.getCategoryListCommunity(search);
+      String search, int pageRequest, int byLocation) async {
+    return apiProvider.getCategoryListCommunity(
+        search, pageRequest, byLocation);
   }
 
   Future<CommunityDetailBaseResponse> getPopularCommunity(
@@ -215,8 +216,9 @@ class Repository {
     return apiProvider.getUserCommunityList();
   }
 
-  Future<CommunityDetailBaseResponse> getOtherCommunityList(String id) async {
-    return apiProvider.getOtherUserCommunityList(id);
+  Future<CommunityDetailBaseResponse> getOtherCommunityList(
+      {String userId, int pageRequest = 1}) async {
+    return apiProvider.getOtherUserCommunityList(userId, pageRequest);
   }
 
   Future<CommunityEventResponseModel> getEventDetail(String eventId) {

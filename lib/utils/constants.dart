@@ -63,6 +63,12 @@ const kSortMemberUnverified = 'unverified';
 const kJoinStatusWaiting = 'Waiting';
 const kJoinStatusView = 'View';
 const kJoinStatusNotJoin = 'Join';
+const kFreeCommunity = 'free';
+const kPaidCommunity = 'paid';
+
+const kTransactionWaitingPayment = 'Waiting for payment';
+const kTransactionFinished = 'Finished';
+const kTransactionCancelled = 'Canceled';
 
 class Constants {
   static const kAddress =

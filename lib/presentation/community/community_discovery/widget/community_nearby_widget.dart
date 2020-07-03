@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_other_row_widget.dart';
 import 'package:localin/presentation/community/provider/community_nearby_provider.dart';
-import 'package:localin/presentation/others_profile/widgets/empty_other_user_community_widget.dart';
-import 'package:localin/presentation/shared_widgets/empty_article_with_custom_message.dart';
 import 'package:localin/text_themes.dart';
-import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityNearbyWidget extends StatelessWidget {

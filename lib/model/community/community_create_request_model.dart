@@ -11,14 +11,19 @@ class CommunityCreateRequestModel extends Equatable {
   CommunityCategory category;
   String communityType;
   File imageFile;
+  bool isEditMode;
+  String communityId;
 
-  CommunityCreateRequestModel(
-      {this.locations,
-      this.communityName,
-      this.description,
-      this.category,
-      this.communityType,
-      this.imageFile});
+  CommunityCreateRequestModel({
+    this.locations,
+    this.communityName,
+    this.description,
+    this.category,
+    this.communityType,
+    this.imageFile,
+    this.isEditMode = false,
+    this.communityId,
+  });
 
   @override
   List<Object> get props => [
@@ -27,6 +32,8 @@ class CommunityCreateRequestModel extends Equatable {
         description,
         category,
         communityType,
-        imageFile
+        imageFile,
+        isEditMode,
+        communityId,
       ];
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/circle_image.dart';
-import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_detail/community_comment_page.dart';
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
-import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -39,10 +38,18 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              CircleImage(
-                imageUrl: commentData?.createdAvatar,
-                width: 36.0,
-                height: 36.0,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                    RevampOthersProfilePage.userId: communityDetail.createBy
+                  });
+                },
+                child: CircleImage(
+                  imageUrl: commentData?.createdAvatar,
+                  width: 36.0,
+                  height: 36.0,
+                ),
               ),
               SizedBox(
                 width: 12.0,

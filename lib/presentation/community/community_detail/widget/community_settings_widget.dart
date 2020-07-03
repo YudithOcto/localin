@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/community/community_event/community_event_tab_list_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
@@ -27,7 +28,16 @@ class CommunitySettingsWidget extends StatelessWidget {
         Visibility(
           visible: isAdmin,
           child: InkWell(
-            onTap: () {},
+            onTap: () async {
+              Navigator.of(context).pop();
+              final result = await Navigator.of(context)
+                  .pushNamed(CommunityCreatePage.routeName, arguments: {
+                CommunityCreatePage.previousCommunityData: communityDetail
+              });
+              if (result != null) {
+                provider.getCommunityDetail(communityDetail.slug);
+              }
+            },
             child: RowSettings(
               icon: 'images/community_settings.svg',
               title: 'Group Settings',

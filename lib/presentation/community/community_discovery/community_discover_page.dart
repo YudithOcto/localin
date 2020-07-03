@@ -11,6 +11,7 @@ import 'package:localin/presentation/community/provider/community_nearby_provide
 import 'package:localin/presentation/community/community_discovery/widget/community_discover_category_widget.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_my_group_widget.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_nearby_widget.dart';
+import 'package:localin/presentation/community/provider/create/category_list_provider.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -29,6 +30,9 @@ class CommunityDiscoverPage extends StatelessWidget {
         ),
         ChangeNotifierProvider<CommunityNearbyProvider>(
           create: (_) => CommunityNearbyProvider(),
+        ),
+        ChangeNotifierProvider<CategoryListProvider>(
+          create: (_) => CategoryListProvider(),
         )
       ],
       child: ScrollContent(),
@@ -50,21 +54,28 @@ class _ScrollContentState extends State<ScrollContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
-      Provider.of<CommunityNearbyProvider>(context)
-          .getNearbyCommunity(isRefresh: true);
+      loadNearbyCommunity();
+      loadJoinedCommunity();
       _scrollController..addListener(_listener);
-      getCommunityData =
-          Provider.of<CommunityFeedProvider>(context, listen: false)
-              .getDataFromApi();
       isInit = false;
     }
+  }
+
+  loadNearbyCommunity({bool isRefresh = true}) {
+    Provider.of<CommunityNearbyProvider>(context)
+        .getNearbyCommunity(isRefresh: true);
+  }
+
+  loadJoinedCommunity() {
+    getCommunityData =
+        Provider.of<CommunityFeedProvider>(context, listen: false)
+            .getUserCommunityList();
   }
 
   _listener() {
     if (_scrollController.offset >
         _scrollController.position.maxScrollExtent * 0.95) {
-      Provider.of<CommunityNearbyProvider>(context)
-          .getNearbyCommunity(isRefresh: false);
+      loadNearbyCommunity(isRefresh: false);
     }
   }
 
@@ -142,7 +153,6 @@ class _ScrollContentState extends State<ScrollContent> {
             FutureBuilder(
               future: getCommunityData,
               builder: (context, snapshot) {
-                print(snapshot);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -162,13 +172,7 @@ class _ScrollContentState extends State<ScrollContent> {
                                   padding: const EdgeInsets.only(bottom: 24.0),
                                   child: CommunityEmptyPage(),
                                 ),
-                          Visibility(
-                            visible: provider.communityCategoryList.isNotEmpty,
-                            child: CommunityDiscoverCategoryWidget(
-                              communityCategoryList:
-                                  provider.communityCategoryList,
-                            ),
-                          ),
+                          CommunityDiscoverCategoryWidget(),
                         ],
                       );
                     },
