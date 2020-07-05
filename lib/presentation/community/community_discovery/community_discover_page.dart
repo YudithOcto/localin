@@ -63,7 +63,7 @@ class _ScrollContentState extends State<ScrollContent> {
 
   loadNearbyCommunity({bool isRefresh = true}) {
     Provider.of<CommunityNearbyProvider>(context)
-        .getNearbyCommunity(isRefresh: true);
+        .getNearbyCommunity(isRefresh: isRefresh);
   }
 
   loadJoinedCommunity() {
@@ -73,8 +73,8 @@ class _ScrollContentState extends State<ScrollContent> {
   }
 
   _listener() {
-    if (_scrollController.offset >
-        _scrollController.position.maxScrollExtent * 0.95) {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
       loadNearbyCommunity(isRefresh: false);
     }
   }
@@ -98,6 +98,7 @@ class _ScrollContentState extends State<ScrollContent> {
         )),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -180,7 +181,9 @@ class _ScrollContentState extends State<ScrollContent> {
                 }
               },
             ),
-            CommunityNearbyWidget(),
+            CommunityNearbyWidget(
+              scrollController: _scrollController,
+            ),
           ],
         ),
       ),

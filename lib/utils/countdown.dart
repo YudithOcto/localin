@@ -21,6 +21,10 @@ class Countdown {
     _counterStream.close();
   }
 
+  isTimerActive() {
+    return _timer?.isActive ?? false;
+  }
+
   run() {
     if (_timer?.isActive ?? false) {
       _timer.cancel();

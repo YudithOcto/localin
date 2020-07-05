@@ -30,6 +30,15 @@ class TransactionCommunityProvider with ChangeNotifier {
     return await _repository.payTransaction(transactionId);
   }
 
+  set status(String value) {
+    transactionDetail.status = value;
+    notifyListeners();
+  }
+
+  Future<String> cancelTransaction(String transactionId) async {
+    return await _repository.cancelTransaction(transactionId);
+  }
+
   @override
   void dispose() {
     _streamController.close();

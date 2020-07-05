@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/explore/explore_filter_page.dart';
 import 'package:localin/presentation/explore/widgets/single_explore_card_widget.dart';
 import 'package:localin/presentation/explore/widgets/small_category_widget.dart';
 import 'package:localin/text_themes.dart';
@@ -58,9 +59,15 @@ class _ExploreMainPageContentWidgetState
               scrollDirection: Axis.horizontal,
               children: List.generate(
                   _category.length,
-                  (index) => SmallCategoryWidget(
-                        marginLeft: index == 0 ? 20.0 : 8.0,
-                        text: _category[index],
+                  (index) => InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(ExploreFilterPage.routeName);
+                        },
+                        child: SmallCategoryWidget(
+                          marginLeft: index == 0 ? 20.0 : 8.0,
+                          text: _category[index],
+                        ),
                       )),
             ),
           ),

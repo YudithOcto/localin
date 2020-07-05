@@ -106,7 +106,7 @@ class _CommunityCreateWrapperWidgetState
                     )),
                 CommunityAddCategoryWidget(
                     category: CommunityCategory(
-                        categoryName: widget.model.categoryName)),
+                        categoryName: widget.model?.categoryName)),
                 CommunityAddLocationWidget(),
               ],
             ));

@@ -117,7 +117,7 @@ class HomeHeaderWidget extends StatelessWidget {
                           serviceIcon: 'home_service_ticket_icon.svg',
                           serviceName: 'EVENT',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(ExploreMainPage.routeName),
+                              .pushNamed(EmptyPage.routeName),
                         ),
                       ],
                     ),

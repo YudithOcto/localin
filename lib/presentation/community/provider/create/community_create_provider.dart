@@ -18,8 +18,7 @@ class CommunityCreateProvider with ChangeNotifier {
   Stream<createState> get stream => _streamController.stream;
 
   bool _isEdit = false;
-  String _communityId = '';
-  String _previousType = '';
+  CommunityDetail _previousCommunityDetail;
 
   Future<Null> addPreviousData(CommunityDetail model) async {
     _streamController.add(createState.loading);
@@ -31,10 +30,9 @@ class CommunityCreateProvider with ChangeNotifier {
       _selectedCategory = CommunityCategory(
           categoryName: model.categoryName, id: model.category);
       _selectedImage = data;
-      _previousType = model.communityType;
       _streamController.add(createState.success);
       _isEdit = true;
-      _communityId = model.id;
+      _previousCommunityDetail = model;
     } else {
       _streamController.add(createState.noPreviousData);
     }
@@ -89,10 +87,10 @@ class CommunityCreateProvider with ChangeNotifier {
   CommunityCreateRequestModel get requestModel {
     return CommunityCreateRequestModel(
       locations: _selectedLocation,
-      communityId: _communityId,
+      communityId: _previousCommunityDetail?.id,
       category: _selectedCategory,
       communityName: communityName.text,
-      description: communityDescription.text,
+      description: communityDescription?.text,
       imageFile: _selectedImage,
       isEditMode: _isEdit,
     );
@@ -104,7 +102,7 @@ class CommunityCreateProvider with ChangeNotifier {
     map['nama'] = model.communityName;
     map['deskripsi'] = model.description;
     map['address'] = model.locations;
-    map['type'] = _previousType;
+    map['type'] = _previousCommunityDetail.communityType;
     map['kategori'] = model.category.id;
     map['logo'] = MultipartFile.fromFileSync(model.imageFile.path,
         filename: model.imageFile.path);

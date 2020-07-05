@@ -13,7 +13,7 @@ import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityDiscoverMyGroupPage extends StatelessWidget {
-  static const routeName = 'CommunityDiscvoerMyGroup';
+  static const routeName = 'CommunityDiscoverMyGroup';
 
   @override
   Widget build(BuildContext context) {

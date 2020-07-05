@@ -86,12 +86,7 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
                                 'Joined ${DateHelper.timeAgo(DateTime.parse(item.joinedDate))}',
                             onRefresh: () =>
                                 provider.getMembersCommunity(isRefresh: true),
-                            popupItem: [
-                              kPopupMakeAdmin,
-                              kPopupRemoveMember,
-                              kPopupBlock,
-                              kPopupViewProfile,
-                            ],
+                            popupItem: addPopupMenu(item.status),
                             isAdminUser: provider.isAdmin,
                           );
                         } else if (provider.canLoadMore) {
@@ -111,5 +106,17 @@ class _CommunityMembersTabWidgetState extends State<CommunityMembersTabWidget> {
         },
       ),
     );
+  }
+
+  List<String> addPopupMenu(String status) {
+    List<String> members = List();
+    print(status);
+    if (status != kAdminStatus) {
+      members.add(kPopupMakeAdmin);
+    }
+    members.add(kPopupRemoveMember);
+    members.add(kPopupBlock);
+    members.add(kPopupViewProfile);
+    return members;
   }
 }

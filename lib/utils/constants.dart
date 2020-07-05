@@ -68,7 +68,8 @@ const kPaidCommunity = 'paid';
 
 const kTransactionWaitingPayment = 'Waiting for payment';
 const kTransactionFinished = 'Finished';
-const kTransactionCancelled = 'Canceled';
+const kTransactionCancelled =
+    'Canceled! Payment period has passed the specified limit';
 
 class Constants {
   static const kAddress =

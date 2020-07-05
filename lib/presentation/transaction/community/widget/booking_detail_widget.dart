@@ -50,7 +50,6 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
               Expanded(
                 child: Text(
                   'BOOKING ID: ${widget.detail.transactionId}',
-                  overflow: TextOverflow.ellipsis,
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black80),
                 ),
@@ -98,34 +97,53 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
                         height: 1.5,
                       ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          'images/${widget.detail.status.svgIcon}.svg',
-                          width: 20.0,
-                          height: 20.0,
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        widget.detail.status == kTransactionWaitingPayment
-                            ? StreamBuilder<String>(
-                                stream: _countdown.differenceStream,
-                                builder: (context, snapshot) {
-                                  return Text(
-                                    '${widget.detail.status} \u2022 ${snapshot.data ?? '00:00'}',
-                                    style: ThemeText.sfMediumFootnote.copyWith(
-                                        color: widget.detail.status.rowColor),
-                                  );
-                                },
-                              )
-                            : Text(
+                    widget.detail.status == kTransactionWaitingPayment
+                        ? StreamBuilder<String>(
+                            stream: _countdown.differenceStream,
+                            builder: (context, snapshot) {
+                              return Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
+                                    width: 20.0,
+                                    height: 20.0,
+                                  ),
+                                  SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
+                                      style: ThemeText.sfMediumFootnote
+                                          .copyWith(
+                                              color: snapshot.data == null
+                                                  ? kTransactionCancelled
+                                                      .rowColor
+                                                  : widget
+                                                      .detail.status.rowColor),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          )
+                        : Row(
+                            children: <Widget>[
+                              SvgPicture.asset(
+                                'images/${widget.detail.status.svgIcon}.svg',
+                                width: 20.0,
+                                height: 20.0,
+                              ),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text(
                                 '${widget.detail.status}',
                                 style: ThemeText.sfMediumFootnote.copyWith(
                                     color: widget.detail.status.rowColor),
                               ),
-                      ],
-                    )
+                            ],
+                          )
                   ],
                 )
               : Container(),

@@ -7,7 +7,8 @@ import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityNearbyWidget extends StatelessWidget {
-  CommunityNearbyWidget({Key key}) : super(key: key);
+  final ScrollController scrollController;
+  CommunityNearbyWidget({Key key, this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +45,7 @@ class CommunityNearbyWidget extends StatelessWidget {
                     physics: ClampingScrollPhysics(),
                     itemCount: provider.communityNearbyList.length + 1,
                     itemBuilder: (context, index) {
-                      if (provider.communityNearbyList.isEmpty &&
-                          provider.offset <= 2) {
+                      if (snapshot.data == communityNearbyState.empty) {
                         return CommunityEmptyPage();
                       } else if (index < provider.communityNearbyList.length) {
                         return CommunityOtherRowWidget(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/community/community_create_request_model.dart';
+import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/presentation/community/community_create/widgets/community_confirmation_details_widget.dart';
 import 'package:localin/presentation/community/provider/create/community_type_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -84,7 +85,7 @@ class _CommunityTypeCreateContentState
                 ),
               );
             }),
-        body: FutureBuilder<String>(
+        body: FutureBuilder<CommunityPriceDetail>(
             future: Provider.of<CommunityTypeProvider>(context, listen: false)
                 .getCommunityPrice(),
             builder: (context, snapshot) {
@@ -202,7 +203,7 @@ class _CommunityTypeCreateContentState
                                         height: 4.0,
                                       ),
                                       Text(
-                                        '${getFormattedCurrency(int.parse(snapshot.data))}/year',
+                                        '${getFormattedCurrency(snapshot.data.totalFare)}/year',
                                         style: ThemeText.sfSemiBoldTitle3,
                                       )
                                     ],

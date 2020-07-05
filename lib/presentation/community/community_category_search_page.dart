@@ -108,6 +108,7 @@ class _CommunityCategoryListWidgetState
             return ListView.separated(
               separatorBuilder: (context, index) => Divider(),
               shrinkWrap: true,
+              controller: _scrollController,
               padding: const EdgeInsets.only(bottom: 20.0),
               physics: ClampingScrollPhysics(),
               itemCount: provider.categoryList.length + 1,

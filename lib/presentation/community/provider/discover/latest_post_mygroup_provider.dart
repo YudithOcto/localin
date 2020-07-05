@@ -49,7 +49,7 @@ class LatestPostMyGroupProvider with ChangeNotifier {
   }
 
   Future<List<CommunityDetail>> getOtherCommunity() async {
-    final response = await _repository.getCommunityList(page: 1, limit: 3);
+    final response = await _repository.getUserCommunityList();
     if (response.error == null) {
       _otherCommunity.addAll(response.communityDetailList);
     }

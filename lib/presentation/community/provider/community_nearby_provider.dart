@@ -22,25 +22,24 @@ class CommunityNearbyProvider with ChangeNotifier {
   List<CommunityDetail> get communityNearbyList => _communityNearbyList;
 
   Future<Null> getNearbyCommunity({bool isRefresh = true}) async {
-    setState(communityNearbyState.loading);
     if (isRefresh) {
       _offset = 1;
       _canLoadMore = true;
       _communityNearbyList.clear();
     }
-
-    final response = await _repository.getCommunityList();
-    if (response.error == null) {
-      setState(communityNearbyState.success);
+    setState(communityNearbyState.loading);
+    final response =
+        await _repository.getCommunityList(page: _offset, limit: 4);
+    if (response.error == null && response.total > 0) {
       _communityNearbyList.addAll(response.communityDetailList);
       _offset += 1;
       _canLoadMore = response.total > _communityNearbyList.length;
+      setState(communityNearbyState.success);
     } else {
       _canLoadMore = false;
-      setState(_communityNearbyList.isEmpty
-          ? communityNearbyState.empty
-          : communityNearbyState.success);
+      setState(communityNearbyState.empty);
     }
+    notifyListeners();
   }
 
   Future<CommunityJoinResponse> joinCommunity(String communityId) async {

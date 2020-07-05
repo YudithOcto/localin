@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
@@ -186,7 +187,18 @@ class _TransactionCommunityContentWidgetState
                 children: <Widget>[
                   Expanded(
                     child: InkWell(
-                      onTap: () => onBackPressed(),
+                      onTap: () async {
+                        CustomDialog.showLoadingDialog(context,
+                            message: 'Please wait');
+                        final result =
+                            await Provider.of<TransactionCommunityProvider>(
+                                    context,
+                                    listen: false)
+                                .cancelTransaction(_transactionId);
+                        CustomDialog.closeDialog(context);
+                        CustomToast.showCustomBookmarkToast(context, result);
+                        Navigator.of(context).pop();
+                      },
                       child: Container(
                         height: 48.0,
                         alignment: FractionalOffset.center,

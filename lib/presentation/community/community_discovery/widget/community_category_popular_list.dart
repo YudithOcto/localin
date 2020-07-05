@@ -54,7 +54,7 @@ class _CommunityCategoryPopularListState
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.35,
+                        height: 265.0,
                         child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
@@ -77,7 +77,11 @@ class _CommunityCategoryPopularListState
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0)),
                                 margin: EdgeInsets.only(
-                                    left: index == 0 ? 20.0 : 6.0),
+                                    left: index == 0 ? 20.0 : 6.0,
+                                    right: index ==
+                                            provider.popularCommunity.length - 1
+                                        ? 20.0
+                                        : 0.0),
                                 child: Container(
                                   width: 239,
                                   child: Column(

@@ -8,6 +8,8 @@ import 'package:localin/presentation/transaction/community/transaction_community
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/number_helper.dart';
 import 'package:provider/provider.dart';
 import 'community_payment_successful_page.dart';
 
@@ -138,15 +140,18 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
                 ),
                 SingleRowDetails(
                   title: 'Sub Total',
-                  value: '${provider.communityTypeRequestModel?.price}',
+                  value:
+                      '${provider.typeCommunity == kFreeCommunity ? 'IDR 0' : getFormattedCurrency(provider.priceModel?.basicFare)}',
                 ),
                 SingleRowDetails(
                   title: 'Admin Fee',
-                  value: 'IDR 0',
+                  value:
+                      '${provider.typeCommunity == kFreeCommunity ? 'IDR 0' : getFormattedCurrency(provider.priceModel?.adminFare)}',
                 ),
                 SingleRowDetails(
                   title: 'Total Amount',
-                  value: '${provider.communityTypeRequestModel?.price}',
+                  value:
+                      '${provider.typeCommunity == kFreeCommunity ? 'IDR 0' : getFormattedCurrency(provider.priceModel?.totalFare)}',
                   isTotalAmount: true,
                 ),
               ],

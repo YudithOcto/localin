@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/transaction/community/provider/transaction_community_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/countdown.dart';
+import 'package:provider/provider.dart';
 
 class TopBarTransactionStatusWidget extends StatefulWidget {
   final Color backgroundColor;
@@ -30,7 +33,7 @@ class _TopBarTransactionStatusWidgetState
 
   @override
   void initState() {
-    if (widget.status.contains('Waiting for payment')) {
+    if (widget.status.contains(kTransactionWaitingPayment)) {
       startCountDown(DateTime.parse(widget.expiredAt));
     }
     super.initState();
@@ -46,29 +49,49 @@ class _TopBarTransactionStatusWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: FractionalOffset.center,
-      width: double.maxFinite,
-      height: 36.0,
-      color: widget.status.rowColor,
-      child: widget.status.contains('Waiting for payment')
-          ? StreamBuilder<String>(
-              stream: _countdown.differenceStream,
-              builder: (context, snapshot) {
-                return Text(
-                  '${widget.status} \u2022 ${snapshot.data ?? '00:00'}',
+    return widget.status.contains(kTransactionWaitingPayment)
+        ? StreamBuilder<String>(
+            stream: _countdown.differenceStream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                if (!_countdown.isTimerActive()) {
+                  Future.delayed(Duration.zero, () {
+                    Provider.of<TransactionCommunityProvider>(context,
+                            listen: false)
+                        .status = kTransactionCancelled;
+                  });
+                } else {
+                  return Container();
+                }
+              }
+
+              return Container(
+                alignment: FractionalOffset.center,
+                width: double.maxFinite,
+                height: 36.0,
+                color: snapshot.data == null
+                    ? kTransactionCancelled.rowColor
+                    : widget.status.rowColor,
+                child: Text(
+                  '${snapshot.data == null ? kTransactionCancelled : '${widget.status} \u2022'} ${snapshot.data ?? ''}',
                   textAlign: TextAlign.center,
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black0),
-                );
-              })
-          : Text(
+                ),
+              );
+            })
+        : Container(
+            alignment: FractionalOffset.center,
+            width: double.maxFinite,
+            height: 36.0,
+            color: widget.status.rowColor,
+            child: Text(
               '${widget.status}',
               textAlign: TextAlign.center,
               style: ThemeText.sfMediumFootnote
                   .copyWith(color: ThemeColors.black0),
             ),
-    );
+          );
   }
 }
 

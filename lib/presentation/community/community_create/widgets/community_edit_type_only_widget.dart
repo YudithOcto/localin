@@ -20,7 +20,7 @@ class CommunityEditTypeOnlyWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 24.0),
       child: InkWell(
         onTap: () {
-          if (detail.status == kFreeCommunity) {
+          if (detail.communityType == kFreeCommunity) {
             final provider = Provider.of<CommunityCreateProvider>(context);
             Navigator.of(context)
                 .pushNamed(CommunityTypePage.routeName, arguments: {

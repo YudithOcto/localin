@@ -18,6 +18,7 @@ import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/community/community_my_group_response.dart';
+import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
@@ -929,16 +930,16 @@ class ApiProvider {
     }
   }
 
-  Future<String> getPaidCommunityPrice() async {
+  Future<CommunityPriceModel> getPaidCommunityPrice() async {
     try {
       final response = await _dio.get(ApiConstant.kCommunityPrice,
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      return response.data['data']['biaya'].toString();
+      return CommunityPriceModel.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return error.response.data.toString();
+        return CommunityPriceModel.withError(_handleError(error));
       } else {
-        return error.toString();
+        return CommunityPriceModel.withError(error.toString());
       }
     }
   }
@@ -1254,12 +1255,22 @@ class ApiProvider {
     }
   }
 
+  Future<String> cancelTransaction(String transactionId) async {
+    try {
+      final result = await _dio.post(
+          '${ApiConstant.kTransactionCancel}/$transactionId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return result.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
   /// DANA
   Future<DanaUserAccountResponse> getUserDanaStatus() async {
     try {
       final result = await _dio.get(ApiConstant.kDanaMe,
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      print(result);
       return DanaUserAccountResponse.fromJson(result.data);
     } catch (error) {
       return DanaUserAccountResponse.withError();

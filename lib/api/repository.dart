@@ -12,6 +12,7 @@ import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
 import 'package:localin/model/community/community_my_group_response.dart';
+import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
@@ -240,7 +241,7 @@ class Repository {
     return apiProvider.updateJoinEvent(eventId, status);
   }
 
-  Future<String> getCommunityPrice() async {
+  Future<CommunityPriceModel> getCommunityPrice() async {
     return apiProvider.getPaidCommunityPrice();
   }
 
@@ -381,5 +382,9 @@ class Repository {
 
   Future<BookingPaymentResponse> payTransaction(String transId) {
     return apiProvider.payTransaction(transId);
+  }
+
+  Future<String> cancelTransaction(String transactionId) {
+    return apiProvider.cancelTransaction(transactionId);
   }
 }

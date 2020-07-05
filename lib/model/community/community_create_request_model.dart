@@ -13,6 +13,7 @@ class CommunityCreateRequestModel extends Equatable {
   File imageFile;
   bool isEditMode;
   String communityId;
+  String adminFee;
 
   CommunityCreateRequestModel({
     this.locations,
@@ -23,6 +24,7 @@ class CommunityCreateRequestModel extends Equatable {
     this.imageFile,
     this.isEditMode = false,
     this.communityId,
+    this.adminFee,
   });
 
   @override
@@ -35,5 +37,6 @@ class CommunityCreateRequestModel extends Equatable {
         imageFile,
         isEditMode,
         communityId,
+        adminFee,
       ];
 }
