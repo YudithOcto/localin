@@ -29,9 +29,6 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        appBar: AppBar(),
-      ),
       body: AvailableHistoryContentWidget(),
     );
   }
@@ -93,9 +90,6 @@ class _AvailableHistoryContentWidgetState
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          CustomHeaderBelowAppBar(
-            title: 'Pemesanan',
-          ),
           Visibility(
             visible: false,
             child: Material(

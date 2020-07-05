@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/locator.dart';
-import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
-import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
-import 'package:localin/model/article/article_detail.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
+import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
+import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
+import 'package:localin/presentation/news/widgets/my_articles/draft_article_single_card.dart';
+import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class MyDraftArticle extends StatefulWidget {
@@ -14,7 +18,6 @@ class MyDraftArticle extends StatefulWidget {
 
 class _MyDraftArticleState extends State<MyDraftArticle>
     with AutomaticKeepAliveClientMixin {
-  Future getDraftArticle;
   bool _isInit = true;
   ScrollController _scrollController = ScrollController();
 
@@ -39,7 +42,7 @@ class _MyDraftArticleState extends State<MyDraftArticle>
   }
 
   loadArticle({bool isRefresh = true}) {
-    getDraftArticle = Provider.of<NewsMyArticleProvider>(context, listen: false)
+    Provider.of<NewsMyArticleProvider>(context, listen: false)
         .getUserDraftArticle(isRefresh: isRefresh);
   }
 
@@ -51,8 +54,8 @@ class _MyDraftArticleState extends State<MyDraftArticle>
       },
       child: Consumer<NewsMyArticleProvider>(
         builder: (context, provider, child) {
-          return FutureBuilder<List<ArticleDetail>>(
-            future: getDraftArticle,
+          return StreamBuilder<draftState>(
+            stream: provider.draftStream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting &&
                   provider.userArticleDraftOffset <= 1) {
@@ -70,15 +73,21 @@ class _MyDraftArticleState extends State<MyDraftArticle>
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(
                       top: 0.0, bottom: 20.0, left: 20.0, right: 20.0),
-                  itemCount: snapshot.data.isNotNullNorEmpty
-                      ? snapshot.data.length + 1
+                  itemCount: provider.userArticleDraftList.isNotNullNorEmpty
+                      ? provider.userArticleDraftList.length + 1
                       : 1,
                   itemBuilder: (context, index) {
-                    if (snapshot.data.length == 0 &&
-                        provider.userArticleDraftOffset <= 2) {
-                      return EmptyArticle();
-                    } else if (index < snapshot.data.length) {
-                      return ArticleSingleCard(snapshot.data[index]);
+                    if (snapshot.hasData && snapshot.data == draftState.empty) {
+                      return EmptyArticle(
+                        onPressed: () => loadCreateArticlePage(),
+                      );
+                    } else if (index < provider.userArticleDraftList.length) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: DraftArticleSingleCard(
+                          model: provider?.userArticleDraftList[index],
+                        ),
+                      );
                     } else if (provider.isCanLoadMoreDraftArticle) {
                       /// This load more should be load more to draft
                       return Container(
@@ -97,6 +106,30 @@ class _MyDraftArticleState extends State<MyDraftArticle>
         },
       ),
     );
+  }
+
+  loadCreateArticlePage() async {
+    if (Provider.of<AuthProvider>(context, listen: false).userModel.status ==
+        kUserStatusVerified) {
+      final result = await Navigator.of(context)
+          .pushNamed(NewsCreateArticlePage.routeName, arguments: {
+        NewsCreateArticlePage.previousDraft: null,
+      });
+      if (result != null) {
+        final provider =
+            Provider.of<NewsMyArticleProvider>(context, listen: false);
+        if (result == 'published') {
+          provider.getUserDraftArticle();
+          Provider.of<NewsPublishedArticleProvider>(context, listen: false)
+              .getUserArticle();
+        } else {
+          provider.getUserDraftArticle();
+        }
+      }
+    } else {
+      CustomToast.showCustomBookmarkToast(
+          context, 'Verify Your Account To Create a Article');
+    }
   }
 
   @override

@@ -58,6 +58,7 @@ class _RevampProfileContentWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0.0,
         backgroundColor: ThemeColors.black0,
         title: Padding(
@@ -112,25 +113,10 @@ class _RevampProfileContentWidgetState
                     children: <Widget>[
                       Consumer<AuthProvider>(
                           builder: (context, provider, child) {
-                        return Stack(
-                          overflow: Overflow.visible,
-                          children: <Widget>[
-                            UserProfileImageWidget(
-                              imageUrl: provider.userModel.imageProfile,
-                            ),
-                            Positioned(
-                              right: -4.0,
-                              bottom: -4.0,
-                              child: Visibility(
-                                visible: provider.userModel.status ==
-                                    kUserStatusVerified,
-                                child: SvgPicture.asset(
-                                  'images/verified_profile.svg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ],
+                        return UserProfileImageWidget(
+                          imageUrl: provider.userModel.imageProfile,
+                          isVerifyUser:
+                              provider.userModel?.status == kUserStatusVerified,
                         );
                       }),
                       SizedBox(

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
+import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
+import 'package:localin/provider/auth_provider.dart';
+import 'package:localin/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../text_themes.dart';
 import '../../themes.dart';
+import '../custom_dialog.dart';
 
 class CommunityEmptyPage extends StatelessWidget {
   @override
@@ -36,14 +41,26 @@ class CommunityEmptyPage extends StatelessWidget {
           ),
           OutlineButtonDefault(
             onPressed: () async {
-              Navigator.of(context).pushNamed(EmptyPage.routeName);
-//              final result = await Navigator.of(context)
-//                  .pushNamed(CommunityCreateEditPage.routeName, arguments: {
-//                CommunityCreateEditPage.isUpdatePage: false,
-//              });
-//              if (result != null) {
-//                /// refresh the page
-//              }
+              final auth = Provider.of<AuthProvider>(context, listen: false);
+              if (auth.userModel.status == kUserStatusVerified) {
+                Navigator.of(context)
+                    .pushNamed(CommunityCreatePage.routeName, arguments: {
+                  CommunityCreatePage.previousCommunityData: null,
+                });
+              } else {
+                CustomDialog.showCustomDialogWithMultipleButton(context,
+                    title: 'Create Community',
+                    message:
+                        'Your Account Has Not Been Verified, Please Verify Your Account',
+                    cancelText: 'Close',
+                    onCancel: () => Navigator.of(context).pop(),
+                    okText: 'Verified',
+                    okCallback: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context)
+                          .pushNamed(RevampUserVerificationPage.routeName);
+                    });
+              }
             },
             buttonText: 'Create my own community',
           )

@@ -11,7 +11,7 @@ import 'package:localin/presentation/profile/user_profile/provider/user_profile_
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
   List<CommunityDetail> communityDetail = List();
-  List<ArticleDetail> _articleDetailList = [];
+  List<ArticleDetail> _articleDetailList = List();
   bool isRoomPage = false;
   final int _limitPageRequest = 10;
   int _pageRequest = 1;
@@ -19,7 +19,7 @@ class HomeProvider with ChangeNotifier {
       StreamController<articleState>.broadcast();
 
   Future<CommunityDetailBaseResponse> getCommunityList(String search) async {
-    final response = await _repository.getCommunityList(search);
+    final response = await _repository.getCommunityList(keyword: search);
     if (response != null) {
       communityDetail.clear();
       communityDetail.addAll(response.communityDetailList);

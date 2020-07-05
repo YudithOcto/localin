@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
-import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
-import 'package:localin/presentation/community/pages/community_feed_page.dart';
+import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/components/shared_community_components/community_single_card.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
@@ -56,12 +54,11 @@ class _RowCommunityState extends State<RowCommunity> {
               ),
               InkWell(
                 onTap: () async {
-                  Navigator.of(context).pushNamed(EmptyPage.routeName);
-//                  final result = await Navigator.of(context)
-//                      .pushNamed(CommunityFeedPage.routeName);
-//                  if (result != null) {
-//                    /// refresh the page
-//                  }
+                  final result = await Navigator.of(context)
+                      .pushNamed(CommunityDiscoverPage.routeName);
+                  if (result != null) {
+                    /// refresh the page
+                  }
                 },
                 child: Text(
                   'Discover',

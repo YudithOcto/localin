@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/news/provider/comment_provider.dart';
-import 'package:localin/presentation/news/widgets/comments/single_comment_card.dart';
+import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:provider/provider.dart';
 
 class ArticleCommentList extends StatefulWidget {
@@ -15,12 +16,11 @@ class ArticleCommentList extends StatefulWidget {
 
 class _ArticleCommentListState extends State<ArticleCommentList> {
   bool _isInit = true;
-  Future getCommentList;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      getCommentList = Provider.of<CommentProvider>(context, listen: false)
+      Provider.of<CommentProvider>(context, listen: false)
           .getCommentList(widget.articleId);
       _isInit = false;
     }
@@ -29,30 +29,48 @@ class _ArticleCommentListState extends State<ArticleCommentList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ArticleCommentDetail>>(
-        future: getCommentList,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            itemCount: snapshot.hasData ? snapshot.data.length : 0,
-            controller: widget.controller,
-            itemBuilder: (context, index) {
-              return SingleCommentCard(
-                  index: index,
-                  onFunction: () {
-                    widget.controller.animateTo(
-                        index == 2
-                            ? (index * 197) - 99.toDouble()
-                            : index * 250.toDouble(),
-                        duration: Duration(milliseconds: 230),
-                        curve: Curves.easeIn);
-                  });
-            },
-          );
-        });
+    return Consumer<CommentProvider>(
+      builder: (context, provider, child) {
+        return StreamBuilder<commentState>(
+            stream: provider.state,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting &&
+                  provider.commentRequestOffset <= 1) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: provider.articleCommentList.length + 1,
+                itemBuilder: (context, index) {
+                  if (snapshot.hasData && snapshot.data == commentState.empty) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.1),
+                      child: EmptyArticle(
+                        title: 'No Comments yet in this post',
+                        message: 'Be the one to comment first!',
+                        isShowButton: false,
+                      ),
+                    );
+                  } else if (index < provider.articleCommentList.length) {
+                    return ParentCommentCard(
+                      commentDetail: provider.articleCommentList[index],
+                      index: index,
+                    );
+                  } else if (provider.isCanLoadMoreComment) {
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              );
+            });
+      },
+    );
   }
 }

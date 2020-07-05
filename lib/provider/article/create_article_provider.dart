@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/model.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
+import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/article_tag_response.dart';
-import 'package:localin/model/article/tag_model.dart';
+import 'package:localin/model/article/tag_model_model.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/utils/helper_permission.dart';
 
@@ -24,6 +25,8 @@ class CreateArticleProvider extends BaseModelProvider {
   TagModel userChosenTag;
   bool autoValidate = false;
   Address address;
+
+  CreateArticleProvider() {}
 
   @override
   void dispose() {

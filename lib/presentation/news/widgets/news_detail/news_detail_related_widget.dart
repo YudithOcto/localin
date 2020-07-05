@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/news/news_detail_page.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/news/provider/news_detail_provider.dart';
+import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -31,11 +33,6 @@ class _NewsDetailRelatedWidgetState extends State<NewsDetailRelatedWidget> {
               .getRelatedArticle(_articleDetail.id);
       _isInit = false;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -79,80 +76,123 @@ class _NewsDetailRelatedWidgetState extends State<NewsDetailRelatedWidget> {
                     physics: ClampingScrollPhysics(),
                     itemCount: snapshot?.data?.length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(NewsDetailPage.routeName, arguments: {
-                            NewsDetailPage.newsSlug: snapshot?.data[index]?.slug
-                          });
-                        },
-                        child: Row(
-                          children: <Widget>[
-                            CachedNetworkImage(
-                              imageUrl: snapshot?.data[index].image ?? '',
-                              imageBuilder: (context, image) {
-                                return Container(
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (snapshot?.data[index]?.type ==
+                                kArticleMediaType) {
+                              final result = await Navigator.of(context)
+                                  .pushNamed(ArticleWebView.routeName,
+                                      arguments: {
+                                    ArticleWebView.url: snapshot
+                                            .data[index].slug
+                                            .contains('https')
+                                        ? snapshot?.data[index].slug
+                                        : snapshot?.data[index].slug
+                                            .replaceRange(0, 4, 'https'),
+                                    ArticleWebView.articleModel:
+                                        snapshot?.data[index],
+                                  });
+                              if (result != null) {
+                                setState(() {
+                                  widget?.articleDetail?.isBookmark = result;
+                                });
+                              }
+                            } else {
+                              final result = await Navigator.of(context)
+                                  .pushNamed(NewsDetailPage.routeName,
+                                      arguments: {
+                                    NewsDetailPage.newsSlug:
+                                        snapshot?.data[index].slug,
+                                  });
+                              if (result != null && result is ArticleDetail) {
+                                widget.articleDetail.isLike = result.isLike;
+                                widget.articleDetail.totalLike =
+                                    result.totalLike;
+                                widget.articleDetail.isBookmark =
+                                    result.isBookmark;
+                                widget.articleDetail.totalComment =
+                                    result.totalComment;
+                                setState(() {});
+                              }
+                            }
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              CachedNetworkImage(
+                                imageUrl: snapshot?.data[index].image.isNotEmpty
+                                    ? snapshot?.data[index].image?.first
+                                            ?.attachment ??
+                                        ''
+                                    : '',
+                                imageBuilder: (context, image) {
+                                  return Container(
+                                    width: 86.0,
+                                    height: 86.0,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
+                                        image: DecorationImage(
+                                          image: image,
+                                          fit: BoxFit.cover,
+                                        )),
+                                  );
+                                },
+                                placeholder: (context, image) => Container(
                                   width: 86.0,
                                   height: 86.0,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6.0),
-                                      image: DecorationImage(
-                                        image: image,
-                                        fit: BoxFit.cover,
-                                      )),
-                                );
-                              },
-                              placeholder: (context, image) => Container(
-                                width: 86.0,
-                                height: 86.0,
-                                decoration: BoxDecoration(
-                                  color: ThemeColors.black80,
-                                  borderRadius: BorderRadius.circular(6.0),
+                                    color: ThemeColors.black80,
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                ),
+                                errorWidget: (context, image, child) =>
+                                    Container(
+                                  width: 86.0,
+                                  height: 86.0,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: ThemeColors.black80),
                                 ),
                               ),
-                              errorWidget: (context, image, child) => Container(
-                                width: 86.0,
-                                height: 86.0,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4.0),
-                                    color: ThemeColors.black80),
+                              SizedBox(
+                                width: 15.0,
                               ),
-                            ),
-                            SizedBox(
-                              width: 15.0,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    '${snapshot?.data[index]?.title ?? ''}',
-                                    style: ThemeText.rodinaTitle3,
-                                  ),
-                                  SizedBox(
-                                    height: 4.0,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                          text: 'by ',
-                                          style: ThemeText.sfMediumBody
-                                              .copyWith(
-                                                  color: ThemeColors.black80)),
-                                      TextSpan(
-                                          text:
-                                              '${snapshot?.data[index]?.author}',
-                                          style: ThemeText.sfMediumBody
-                                              .copyWith(
-                                                  color:
-                                                      ThemeColors.primaryBlue)),
-                                    ]),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '${snapshot?.data[index]?.title ?? ''}',
+                                      style: ThemeText.rodinaTitle3,
+                                    ),
+                                    SizedBox(
+                                      height: 4.0,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: 'by ',
+                                            style: ThemeText.sfMediumBody
+                                                .copyWith(
+                                                    color:
+                                                        ThemeColors.black80)),
+                                        TextSpan(
+                                            text:
+                                                '${snapshot?.data[index]?.author}',
+                                            style: ThemeText.sfMediumBody
+                                                .copyWith(
+                                                    color: ThemeColors
+                                                        .primaryBlue)),
+                                      ]),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },

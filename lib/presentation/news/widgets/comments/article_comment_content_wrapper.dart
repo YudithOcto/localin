@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/news/comment_page.dart';
+import 'package:localin/presentation/news/pages/news_comment_page.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_description.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_form.dart';
 import 'package:localin/presentation/news/widgets/comments/article_comment_list.dart';
@@ -22,7 +22,7 @@ class _ArticleCommentContentWrapperState
     if (isInit) {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      _articleDetail = routeArgs[CommentPage.articleDetail];
+      _articleDetail = routeArgs[NewsCommentPage.articleDetail];
       isInit = false;
     }
     super.didChangeDependencies();
@@ -51,7 +51,12 @@ class _ArticleCommentContentWrapperState
           ),
         ),
         Positioned(
-            left: 0.0, right: 0.0, bottom: 0.0, child: ArticleCommentForm()),
+            left: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            child: ArticleCommentForm(
+              controller: controller,
+            )),
       ],
     );
   }

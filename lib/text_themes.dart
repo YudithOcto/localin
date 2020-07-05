@@ -28,6 +28,7 @@ abstract class ThemeText {
       fontFamily: 'Rodina',
       fontStyle: FontStyle.normal,
       fontSize: 18.0,
+      color: ThemeColors.black100,
       letterSpacing: 0.02);
 
   static const TextStyle rodinaBody = const TextStyle(
@@ -88,35 +89,35 @@ abstract class ThemeText {
   static const TextStyle sfMediumTitle3 = const TextStyle(
       fontFamily: 'SfProText',
       fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       fontSize: 18.0,
       color: ThemeColors.black100);
 
   static const TextStyle sfMediumHeadline = const TextStyle(
       fontFamily: 'SfProText',
       fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       fontSize: 15.0,
       color: ThemeColors.black100);
 
   static const TextStyle sfMediumBody = const TextStyle(
       fontFamily: 'SfProText',
       fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       fontSize: 14.0,
       color: ThemeColors.black100);
 
   static const TextStyle sfMediumFootnote = const TextStyle(
       fontFamily: 'SfProText',
       fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       fontSize: 12.0,
       color: ThemeColors.black100);
 
   static const TextStyle sfMediumCaption = const TextStyle(
       fontFamily: 'SfProText',
       fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       fontSize: 11.0,
       color: ThemeColors.black100);
 

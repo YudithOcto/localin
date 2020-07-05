@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/notification/notification_model.dart';
-import 'package:localin/presentation/article/pages/article_detail_page.dart';
-import 'package:localin/presentation/community/pages/community_detail_page.dart';
+import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
+import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/provider/notification/notification_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/text_themes.dart';
@@ -26,16 +26,15 @@ class SingleCardNotification extends StatelessWidget {
             break;
           case 'artikel':
             Navigator.of(context)
-                .pushNamed(ArticleDetailPage.routeName, arguments: {
-              ArticleDetailPage.articleId: detailModel?.typeId,
-              ArticleDetailPage.commentPage: false
+                .pushNamed(NewsDetailPage.routeName, arguments: {
+              NewsDetailPage.newsSlug: detailModel?.typeId,
             });
             break;
           case 'komunitas':
-            Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-                arguments: {
-                  CommunityDetailPage.communitySlug: detailModel?.typeId
-                });
+            Navigator.of(context)
+                .pushNamed(CommunityDetailPage.routeName, arguments: {
+              CommunityDetailPage.communityData: detailModel,
+            });
             break;
         }
       },

@@ -63,25 +63,10 @@ class _RevampOthersProfileHeaderWidgetState
                 ),
                 Row(
                   children: <Widget>[
-                    Stack(
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        UserProfileImageWidget(
-                          imageUrl: widget.userModel?.imageProfile,
-                        ),
-                        Positioned(
-                          right: -4.0,
-                          bottom: -4.0,
-                          child: Visibility(
-                            visible:
-                                widget.userModel?.status == kUserStatusVerified,
-                            child: SvgPicture.asset(
-                              'images/verified_profile.svg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
+                    UserProfileImageWidget(
+                      imageUrl: widget.userModel?.imageProfile,
+                      isVerifyUser:
+                          widget.userModel?.status == kUserStatusVerified,
                     ),
                     SizedBox(
                       width: 16.0,
