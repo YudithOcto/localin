@@ -21,6 +21,7 @@ class CustomToast {
       {AlignmentGeometry alignment = Alignment.bottomCenter,
       VoidCallback undoCallback,
       double width,
+      int duration = 4,
       Color iconColor = ThemeColors.primaryBlue,
       String icon = 'bookmark_full'}) {
     okToast.showToastWidget(
@@ -81,7 +82,7 @@ class CustomToast {
       animationBuilder: okToast.Miui10AnimBuilder(),
       animationDuration: Duration(milliseconds: 100),
       textDirection: TextDirection.ltr,
-      duration: Duration(seconds: 4),
+      duration: Duration(seconds: duration),
       animationCurve: Curves.easeIn,
       context: context,
       position:

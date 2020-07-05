@@ -2,41 +2,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:localin/presentation/community/pages/community_discover_page.dart';
-import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
-import 'package:localin/presentation/hotel/booking_detail_page.dart';
-import 'package:localin/presentation/hotel/booking_history_page.dart';
-import 'package:localin/presentation/hotel/hotel_detail_page.dart';
-import 'package:localin/presentation/hotel/success_booking_page.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
-import 'package:localin/presentation/community/pages/community_create_edit_page.dart';
-import 'package:localin/presentation/community/pages/community_create_event_page.dart';
-import 'package:localin/presentation/community/pages/community_detail_page.dart';
-import 'package:localin/presentation/login/input_phone_number_page.dart';
-import 'package:localin/presentation/map/google_maps_full_screen.dart';
-import 'package:localin/presentation/community/widget/community_category_search.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
-import 'package:localin/presentation/login/login_page.dart';
-import 'package:localin/presentation/news/pages/news_comment_page.dart';
-import 'package:localin/presentation/news/pages/news_create_article_page.dart';
-import 'package:localin/presentation/news/pages/news_detail_page.dart';
-import 'package:localin/presentation/news/pages/news_main_page.dart';
-import 'package:localin/presentation/onboarding/onboarding_page.dart';
-import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
-import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_page.dart';
-import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
-import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
-import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
-import 'package:localin/presentation/search/search_article/search_article_page.dart';
-import 'package:localin/presentation/search/search_location/search_location_page.dart';
-import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
 import 'package:localin/provider/location/location_provider.dart';
-import 'package:localin/splash_screen.dart';
-import 'package:localin/presentation/inbox/notification_list_page.dart';
-import 'package:localin/presentation/webview/article_webview.dart';
-import 'package:localin/presentation/webview/revamp_webview.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/routes.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/hotel/booking_history_provider.dart';
@@ -92,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<LocationProvider>(
           create: (_) => LocationProvider(),
-        )
+        ),
       ],
       child: OKToast(
         child: MaterialApp(
@@ -109,44 +77,7 @@ class _MyAppState extends State<MyApp> {
           navigatorObservers: [
             locator<AnalyticsService>().getAnalyticsObserver(),
           ],
-          routes: {
-            'SplashScreenPage': (_) => SplashScreen(),
-            LoginPage.routeName: (_) => LoginPage(),
-            MainBottomNavigation.routeName: (_) => MainBottomNavigation(),
-            EmptyPage.routeName: (_) => EmptyPage(),
-            CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
-            CommunityCreateEditPage.routeName: (_) => CommunityCreateEditPage(),
-            CommunityCreateEventPage.routeName: (_) =>
-                CommunityCreateEventPage(),
-            NotificationListPage.routeName: (_) => NotificationListPage(),
-            SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
-            BookingDetailPage.routeName: (_) => BookingDetailPage(),
-            BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
-            HotelDetailPage.routeName: (_) => HotelDetailPage(),
-            CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
-            GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
-            WebViewPage.routeName: (_) => WebViewPage(),
-            InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),
-            CommunityDiscoverPage.routeName: (_) => CommunityDiscoverPage(),
-            OnBoardingPage.routeName: (_) => OnBoardingPage(),
-            RevampProfilePage.routeName: (_) => RevampProfilePage(),
-            RevampEditProfilePage.routeName: (_) => RevampEditProfilePage(),
-            RevampUserVerificationPage.routeName: (_) =>
-                RevampUserVerificationPage(),
-            RevampUserVerificationSuccessPage.routeName: (_) =>
-                RevampUserVerificationSuccessPage(),
-            RevampOthersProfilePage.routeName: (_) => RevampOthersProfilePage(),
-            RevampWebview.routeName: (_) => RevampWebview(),
-            ArticleWebView.routeName: (_) => ArticleWebView(),
-            NewsMainPage.routeName: (_) => NewsMainPage(),
-            SearchArticlePage.routeName: (_) => SearchArticlePage(),
-            TagsDetailListPage.routeName: (_) => TagsDetailListPage(),
-            NewsDetailPage.routeName: (_) => NewsDetailPage(),
-            NewsCommentPage.routeName: (_) => NewsCommentPage(),
-            NewsCreateArticlePage.routeName: (_) => NewsCreateArticlePage(),
-            MultiPickerGalleryPage.routeName: (_) => MultiPickerGalleryPage(),
-            SearchLocationPage.routeName: (_) => SearchLocationPage(),
-          },
+          routes: generalRoutes,
         ),
       ),
     );

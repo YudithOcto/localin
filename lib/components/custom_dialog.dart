@@ -68,11 +68,15 @@ class CustomDialog {
   }
 
   static Future<T> showCustomDialogWithMultipleButton<T>(BuildContext context,
-      {String title,
+      {@required String title,
       String message,
       @required String cancelText,
       @required String okText,
       bool isDismissible = true,
+      Color cancelBtnColor = ThemeColors.black0,
+      Color cancelTxtColor = ThemeColors.primaryBlue,
+      Color okBtnColor = ThemeColors.primaryBlue,
+      Color okTxtColor = ThemeColors.black0,
       VoidCallback onCancel,
       VoidCallback okCallback}) async {
     return showDialog(
@@ -101,19 +105,25 @@ class CustomDialog {
                     height: 20.0,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child: RaisedButton(
-                          elevation: 1.0,
-                          onPressed: onCancel,
-                          color: ThemeColors.black0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Text(
-                            '$cancelText',
-                            style: ThemeText.rodinaTitle3
-                                .copyWith(color: ThemeColors.primaryBlue),
+                        child: InkWell(
+                          onTap: onCancel,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: ThemeColors.black40),
+                                color: cancelBtnColor,
+                                borderRadius: BorderRadius.circular(4.0)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text(
+                                '$cancelText',
+                                textAlign: TextAlign.center,
+                                style: ThemeText.rodinaTitle3
+                                    .copyWith(color: cancelTxtColor),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -121,19 +131,21 @@ class CustomDialog {
                         width: 7.0,
                       ),
                       Expanded(
-                        child: RaisedButton(
-                          elevation: 1.0,
-                          color: ThemeColors.primaryBlue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              side: BorderSide(
-                                color: ThemeColors.primaryBlue,
-                              )),
-                          onPressed: okCallback,
-                          child: Text(
-                            '$okText',
-                            style: ThemeText.rodinaTitle3
-                                .copyWith(color: ThemeColors.black0),
+                        child: InkWell(
+                          onTap: okCallback,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                color: okBtnColor),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text(
+                                '$okText',
+                                textAlign: TextAlign.center,
+                                style: ThemeText.rodinaTitle3
+                                    .copyWith(color: okTxtColor),
+                              ),
+                            ),
                           ),
                         ),
                       )
@@ -146,10 +158,53 @@ class CustomDialog {
         });
   }
 
-  static Future<T> showCustomDialogWithButton<T>(
-      BuildContext context, String title, String message) async {
+  static Future<T> showCustomDialogVerticalMultipleButton<T>(
+      BuildContext context,
+      {List<Widget> dialogButtons,
+      String title,
+      String message}) async {
     return showDialog(
         context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  '$title',
+                  textAlign: TextAlign.center,
+                  style: ThemeText.sfMediumTitle3,
+                ),
+                SizedBox(
+                  height: 18.0,
+                ),
+                Text(
+                  '$message',
+                  textAlign: TextAlign.center,
+                  style: ThemeText.sfRegularBody
+                      .copyWith(color: ThemeColors.black80),
+                ),
+                SizedBox(
+                  height: 24.0,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: dialogButtons,
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  static Future<T> showCustomDialogWithButton<T>(
+      BuildContext context, String title, String message,
+      {String btnText = 'Yes', bool barrierDismissible = true}) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
@@ -163,6 +218,7 @@ class CustomDialog {
                 ),
                 SizedBox(height: 8.0),
                 Text('$message',
+                    textAlign: TextAlign.center,
                     style: ThemeText.sfMediumBody
                         .copyWith(color: ThemeColors.black80)),
                 SizedBox(
@@ -176,7 +232,7 @@ class CustomDialog {
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   child: Text(
-                    'Yes',
+                    '$btnText',
                     style: ThemeText.rodinaTitle3
                         .copyWith(color: ThemeColors.black0),
                   ),

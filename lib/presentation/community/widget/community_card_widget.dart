@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/community/pages/community_detail_page.dart';
+import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/community/widget/community_feed_bottom_row.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/utils/constants.dart';
@@ -46,8 +46,8 @@ class SingleCommunityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-            arguments: {CommunityDetailPage.communitySlug: detail.slug});
+//        Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
+//            arguments: {CommunityDetailPage.communitySlug: detail.slug});
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 15.0),
@@ -98,8 +98,8 @@ class UpperCommunityCardRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-            arguments: {CommunityDetailPage.communitySlug: detail.slug});
+//        Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
+//            arguments: {CommunityDetailPage.communitySlug: detail.slug});
       },
       child: Column(
         children: <Widget>[

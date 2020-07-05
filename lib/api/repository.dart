@@ -7,8 +7,12 @@ import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/model/community/community_event_member_response.dart';
+import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
+import 'package:localin/model/community/community_my_group_response.dart';
+import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
@@ -20,6 +24,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -161,21 +166,46 @@ class Repository {
   }
 
   Future<CommunityBaseResponseCategory> getCategoryListCommunity(
-      String search) async {
-    return apiProvider.getCategoryListCommunity(search);
+      String search, int pageRequest, int byLocation) async {
+    return apiProvider.getCategoryListCommunity(
+        search, pageRequest, byLocation);
+  }
+
+  Future<CommunityDetailBaseResponse> getPopularCommunity(
+      {int limit, int offset, String categoryId}) async {
+    return apiProvider.getPopularCommunity(
+        limit: limit, offset: offset, categoryId: categoryId);
   }
 
   Future<CommunityJoinResponse> joinCommunity(String id) async {
     return apiProvider.joinCommunity(id);
   }
 
-  Future<CommunityMemberResponse> getCommunityMember(String communityId) async {
-    return apiProvider.getMemberCommunity(communityId);
+  Future<CommunityCommentBaseResponse> createPostCommunity(
+      FormData form, String communityId) {
+    return apiProvider.createPostCommunity(form, communityId);
   }
 
-  Future<CommunityMemberResponse> approveMember(
-      String communityId, String memberId) async {
-    return apiProvider.approveMemberCommunity(communityId, memberId);
+  Future<CommunityDetailBaseResponse> leaveCommunity(String commId) {
+    return apiProvider.leaveCommunity(commId);
+  }
+
+  Future<CommunityMemberResponse> getCommunityMember(
+      String communityId, int page, int limit, String type,
+      {String search, String sort}) async {
+    return apiProvider.getMemberCommunity(communityId, page, limit, type,
+        search: search, sort: sort);
+  }
+
+  Future<CommunityMemberResponse> moderateMember(
+      String communityId, String status) async {
+    return apiProvider.moderateAllCommunityMember(communityId, status);
+  }
+
+  Future<CommunityMemberResponse> moderateSingleMember(
+      String communityId, String memberId, String status) async {
+    return apiProvider.moderateSingleCommunityMember(
+        communityId, memberId, status);
   }
 
   Future<CommunityDetailBaseResponse> getCommunityListByCategory(
@@ -187,18 +217,61 @@ class Repository {
     return apiProvider.getUserCommunityList();
   }
 
-  Future<CommunityDetailBaseResponse> getOtherCommunityList(String id) async {
-    return apiProvider.getOtherUserCommunityList(id);
+  Future<CommunityDetailBaseResponse> getOtherCommunityList(
+      {String userId, int pageRequest = 1}) async {
+    return apiProvider.getOtherUserCommunityList(userId, pageRequest);
+  }
+
+  Future<CommunityEventResponseModel> getEventDetail(String eventId) {
+    return apiProvider.getEventDetail(eventId);
+  }
+
+  Future<CommunityEventMemberResponse> getMemberEventByType(
+      String type, String eventId, int page, int limit) {
+    return apiProvider.getEventMemberByType(type, eventId, page, limit);
+  }
+
+  Future<CommunityEventResponseModel> adminUpdateEventData(
+      String eventId, String status) {
+    return apiProvider.adminUpdateEventStatus(status, eventId);
+  }
+
+  Future<CommunityEventResponseModel> updateJoinEvent(
+      String status, String eventId) {
+    return apiProvider.updateJoinEvent(eventId, status);
+  }
+
+  Future<CommunityPriceModel> getCommunityPrice() async {
+    return apiProvider.getPaidCommunityPrice();
   }
 
   Future<CommunityCommentBaseResponse> getCommunityCommentList(
-      String communityId) async {
-    return apiProvider.getCommentList(communityId);
+      String communityId, int page, int limit, String parentId) async {
+    return apiProvider.getCommentList(communityId, page, limit,
+        parentId: parentId);
   }
 
-  Future<void> createCommunityEvent(
-      String communityId, FormData formData) async {
+  Future<CommunityMyGroupResponse> getLatestPost(int limit, int offset) async {
+    return apiProvider.getLatestPost(offset, limit);
+  }
+
+  Future<String> likeUnlikeCommunity(String type, String postId) async {
+    return apiProvider.communityLikeUnlike(type, postId);
+  }
+
+  Future<CommunityEventResponseModel> createCommunityEvent(
+      String communityId, FormData formData) {
     return apiProvider.createEventCommunity(communityId, formData);
+  }
+
+  Future<CommunityEventResponseModel> getUpcomingEvent(
+      String communityId, int page, int limit) {
+    return apiProvider.getUpComingList(communityId, page, limit);
+  }
+
+  Future<CommunityEventResponseModel> getPastCommunityEvent(
+      String communityId, int page, int limit) {
+    return apiProvider.getPastCommunityEvent(communityId, page, limit);
   }
 
   Future<CommunityCommentBaseResponse> postComment(
@@ -294,5 +367,24 @@ class Repository {
   Future<SearchLocationResponse> searchLocation(
       {int offset, int limit, String search}) {
     return apiProvider.searchLocation(offset, limit, search);
+  }
+
+  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
+      String transId) {
+    return apiProvider.getCommunityTransactionDetail(transId);
+  }
+
+  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+      int page, int limit,
+      {String type}) {
+    return apiProvider.getCommunityTransactionList(page, limit, type);
+  }
+
+  Future<BookingPaymentResponse> payTransaction(String transId) {
+    return apiProvider.payTransaction(transId);
+  }
+
+  Future<String> cancelTransaction(String transactionId) {
+    return apiProvider.cancelTransaction(transactionId);
   }
 }

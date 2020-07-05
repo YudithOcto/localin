@@ -35,5 +35,6 @@ class CommunityDetailBaseResponse {
 
   CommunityDetailBaseResponse.hasError(String value)
       : communityDetailList = List(),
-        error = value;
+        error = value,
+        message = value;
 }

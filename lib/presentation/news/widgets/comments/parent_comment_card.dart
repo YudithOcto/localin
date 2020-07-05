@@ -3,6 +3,7 @@ import 'package:localin/components/circle_image.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/presentation/news/provider/comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/child_comment_card.dart';
+import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -34,11 +35,20 @@ class _ParentCommentCardState extends State<ParentCommentCard> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              CircleImage(
-                width: 40.0,
-                height: 40.0,
-                imageUrl: widget.commentDetail?.senderAvatar ?? '',
-                fit: BoxFit.cover,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                    RevampOthersProfilePage.userId:
+                        widget.commentDetail.createdBy,
+                  });
+                },
+                child: CircleImage(
+                  width: 40.0,
+                  height: 40.0,
+                  imageUrl: widget.commentDetail?.senderAvatar ?? '',
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(
                 width: 11.0,

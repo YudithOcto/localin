@@ -98,8 +98,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          Provider.of<HomeProvider>(context, listen: false)
-              .getArticleList(isRefresh: true);
+          final provider = Provider.of<HomeProvider>(context, listen: false);
+          provider.getCommunityList('');
+          provider.getArticleList(isRefresh: true);
         },
         child: SingleChildScrollView(
           controller: controller,

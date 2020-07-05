@@ -40,6 +40,7 @@ class ArticleCommentDetail {
   String articleId;
   String comment;
   String createdAt;
+  String createdBy;
   String sender;
   String senderAvatar;
   String parentId;
@@ -54,6 +55,7 @@ class ArticleCommentDetail {
     this.senderAvatar,
     this.parentId,
     this.replay,
+    this.createdBy,
   });
 
   factory ArticleCommentDetail.fromJson(Map<String, dynamic> body) {
@@ -69,6 +71,7 @@ class ArticleCommentDetail {
           ? []
           : List<ArticleCommentDetail>.from(
               body['replay'].map((v) => ArticleCommentDetail.fromJson(v))),
+      createdBy: body['created_by'],
     );
   }
 }

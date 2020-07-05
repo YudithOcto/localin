@@ -6,6 +6,9 @@ import 'package:localin/build_environment.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
+const String SUCCESS_VERIFICATION =
+    'Pembayaran sukses dan sedang di verifikasi';
+
 class WebViewPage extends StatefulWidget {
   static const routeName = 'DanaWebviewPage';
   static const urlName = 'webUrl';
@@ -110,8 +113,7 @@ class _WebViewPageState extends State<WebViewPage> {
                         name: 'Print',
                         onMessageReceived: (JavascriptMessage data) {
                           print(data);
-                          if (data.message.contains(
-                              'Pembayaran sukses dan sedang di verifikasi')) {
+                          if (data.message.contains(SUCCESS_VERIFICATION)) {
                             Future.delayed(Duration(milliseconds: 2000), () {
                               Navigator.of(context).pop('${data.message}');
                               flutterWebviewPlugin.close();

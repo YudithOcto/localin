@@ -13,8 +13,12 @@ import 'package:localin/model/article/base_response.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_base_response_category.dart';
+import 'package:localin/model/community/community_event_member_response.dart';
+import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
 import 'package:localin/model/community/community_member_response.dart';
+import 'package:localin/model/community/community_my_group_response.dart';
+import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
@@ -26,6 +30,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
@@ -34,6 +39,8 @@ import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+const String REQUIRED_TOKEN = 'required_token';
 
 class ApiProvider {
   Dio _dio;
@@ -110,7 +117,7 @@ class ApiProvider {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (RequestOptions options) async {
-          if (options.headers.containsKey("requiredToken")) {
+          if (options.headers.containsKey(REQUIRED_TOKEN)) {
             String token = await getToken();
             debugPrint('Token $token');
             options.headers.clear();
@@ -163,7 +170,7 @@ class ApiProvider {
   Future<UserVerificationCategoryModel> getUserVerificationCategory() async {
     try {
       final response = await _dio.get(ApiConstant.kUserVerificationCategory,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return UserVerificationCategoryModel.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -177,7 +184,7 @@ class ApiProvider {
   Future<String> userLogout() async {
     try {
       final response = await _dio.get(ApiConstant.kLogoutUrl,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       sharedPreferences.clear();
       return response.toString();
     } catch (error) {
@@ -197,7 +204,7 @@ class ApiProvider {
   Future<UserModel> getUserProfile() async {
     try {
       final response = await _dio.get(ApiConstant.kProfile,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = UserModel.fromJson(response.data['data']);
       return model;
     } catch (error) {
@@ -213,7 +220,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kOtherUserProfile}/$userProfileId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return UserModel.fromJson(response.data['data']);
     } catch (error) {
       if (error is DioError) {
@@ -227,7 +234,7 @@ class ApiProvider {
   Future<String> updateUserProfile(FormData formData) async {
     try {
       final response = await _dio.post('${ApiConstant.kUpdateProfile}',
-          data: formData, options: Options(headers: {'requiredToken': true}));
+          data: formData, options: Options(headers: {REQUIRED_TOKEN: true}));
       return response.data['message'];
     } catch (error) {
       return error.toString();
@@ -237,7 +244,7 @@ class ApiProvider {
   Future<UpdateProfileModel> verifyUserAccount(FormData form) async {
     try {
       final response = await _dio.post(ApiConstant.kVerifyAccount,
-          data: form, options: Options(headers: {'requiredToken': true}));
+          data: form, options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = UpdateProfileModel.fromJson(response.data);
       return model;
     } catch (error) {
@@ -256,7 +263,7 @@ class ApiProvider {
   Future<UserBaseModel> userPhoneRequestCode(String phone) async {
     try {
       final response = await _dio.post(ApiConstant.kVerifyPhoneNumberRequest,
-          options: Options(headers: {'requiredToken': true}),
+          options: Options(headers: {REQUIRED_TOKEN: true}),
           data: FormData.fromMap({'handphone': phone}));
       return UserBaseModel.requestSmsCodeFromJson(response.data);
     } catch (error) {
@@ -272,7 +279,7 @@ class ApiProvider {
     try {
       final response = await _dio.post(
           ApiConstant.kVerifyPhoneNumberInputCodeVerification,
-          options: Options(headers: {'requiredToken': true}),
+          options: Options(headers: {REQUIRED_TOKEN: true}),
           data: FormData.fromMap({'kode': smsCode}));
       return UserBaseModel.verificationPhoneFromJson(response.data);
     } catch (error) {
@@ -298,7 +305,7 @@ class ApiProvider {
         map['is_trash'] = isTrash;
       }
       final response = await _dio.get(ApiConstant.kUserArticle,
-          options: Options(headers: {'requiredToken': true}),
+          options: Options(headers: {REQUIRED_TOKEN: true}),
           queryParameters: map);
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
@@ -317,7 +324,7 @@ class ApiProvider {
       final response = await _dio.get(
           '${ApiConstant.kOtherUserArticle}/$userId',
           queryParameters: {'limit': limit, 'page': offset},
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -333,7 +340,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(ApiConstant.kArticleList,
           queryParameters: {'is_releated': articleId},
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -357,7 +364,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(ApiConstant.kArticleList,
           queryParameters: _articleRequest,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -372,7 +379,7 @@ class ApiProvider {
   Future<ArticleBaseResponse> getArticleDetail(String articleId) async {
     try {
       final response = await _dio.get('${ApiConstant.kArticleList}/$articleId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = ArticleBaseResponse.withJson(response.data);
       return model;
     } catch (error) {
@@ -387,7 +394,7 @@ class ApiProvider {
   Future<ArticleBaseResponse> unArchiveArticle(String slug) async {
     try {
       final response = await _dio.get('${ApiConstant.kArticleUnArchive}/$slug',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = ArticleBaseResponse.withJson(response.data);
       return model;
     } catch (error) {
@@ -402,8 +409,7 @@ class ApiProvider {
   Future<ArticleBaseResponse> createArticle(FormData form) async {
     try {
       final response = await _dio.post(ApiConstant.kCreateArticle,
-          options: Options(headers: {'requiredToken': true}), data: form);
-      print(jsonEncode(response.data));
+          options: Options(headers: {REQUIRED_TOKEN: true}), data: form);
       final model = ArticleBaseResponse.withJson(response.data);
       return model;
     } catch (error) {
@@ -447,7 +453,7 @@ class ApiProvider {
             'limit': limit,
             'search': '$search',
           },
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return SearchLocationResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -470,7 +476,7 @@ class ApiProvider {
       }
       final response = await _dio.get(ApiConstant.kArticleTags,
           queryParameters: query,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = ArticleTagResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -484,7 +490,7 @@ class ApiProvider {
     try {
       final response = await _dio.get('${ApiConstant.kArticleByTag}/$tagId',
           queryParameters: _articleRequest,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = ArticleBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -502,7 +508,7 @@ class ApiProvider {
       final response = await _dio.get(
           '${ApiConstant.kArticleComment}/$articleId',
           queryParameters: {'limit': limit, 'page': offset},
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return ArticleCommentBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -517,7 +523,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kArticleDelete}/$articleId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return BaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -535,7 +541,7 @@ class ApiProvider {
       final response = await _dio.post(
           '${ApiConstant.kArticleComment}/$articleId',
           data: _formData,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return ArticleCommentBaseResponse.publishResponse(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -553,7 +559,7 @@ class ApiProvider {
       final response = await _dio.post(
           '${ApiConstant.kArticleReplyComment}/$commentId',
           data: _formData,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return ArticleCommentBaseResponse.publishResponse(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -568,7 +574,7 @@ class ApiProvider {
   Future<ArticleBaseResponse> likeArticle(String articleId) async {
     try {
       final response = await _dio.get('${ApiConstant.kArticleLike}/$articleId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -583,7 +589,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kArticleBookmark}/$articleId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return ArticleBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -599,10 +605,17 @@ class ApiProvider {
   Future<CommunityDetailBaseResponse> getCommunityList(
       String search, int page, int limit) async {
     try {
+      Map<String, dynamic> map = Map();
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      map['page'] = page ?? 1;
+      map['limit'] = limit ?? 10;
       final response = await _dio.get(ApiConstant.kCommunity,
-          queryParameters: {'search': '$search', 'limit': limit, 'page': page},
-          options: Options(headers: {'requiredToken': true}));
+          queryParameters: map,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
+      print(model.communityDetailList.toString());
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -617,7 +630,7 @@ class ApiProvider {
       String communityId) async {
     try {
       final response = await _dio.get('${ApiConstant.kCommunity}/$communityId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final model =
           CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
       return model;
@@ -633,7 +646,7 @@ class ApiProvider {
   Future<CommunityDetailBaseResponse> getUserCommunityList() async {
     try {
       final response = await _dio.get(ApiConstant.kUserCommunity,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       var model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -646,10 +659,11 @@ class ApiProvider {
   }
 
   Future<CommunityDetailBaseResponse> getOtherUserCommunityList(
-      String id) async {
+      String id, int page) async {
     try {
-      final response = await _dio.get('${ApiConstant.kUserCommunity}/$id',
-          options: Options(headers: {'requiredToken': true}));
+      final response = await _dio.get('${ApiConstant.kOtherUserCommunity}/$id',
+          options: Options(
+              headers: {REQUIRED_TOKEN: true, 'limit': 10, 'page': page}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
       return model;
     } catch (error) {
@@ -662,12 +676,19 @@ class ApiProvider {
   }
 
   Future<CommunityBaseResponseCategory> getCategoryListCommunity(
-      String search) async {
+      String search, int pageRequest, int byLocation) async {
     try {
+      Map<String, dynamic> map = Map();
+      if (search != null) {
+        map['keyword'] = search;
+      }
+      map['byLocation'] = byLocation ?? 0;
+      map['limit'] = 10;
+      map['page'] = pageRequest;
       final response = await _dio.get(ApiConstant.kSearchCategory,
-          queryParameters: {'keyword': search},
-          options: Options(headers: {'requiredToken': true}));
-      var model = CommunityBaseResponseCategory.fromJson(response.data);
+          queryParameters: map,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      final model = CommunityBaseResponseCategory.fromJson(response.data);
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -678,15 +699,43 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityDetailBaseResponse> createCommunity(FormData form) async {
+  Future<CommunityDetailBaseResponse> getPopularCommunity(
+      {int offset, int limit, String categoryId}) async {
     try {
-      final response = await _dio.post(ApiConstant.kCreateCommunity,
-          data: form, options: Options(headers: {'requiredToken': true}));
-      return CommunityDetailBaseResponse.uploadSuccess(
-          response.data['message']);
+      final response = await _dio.get(ApiConstant.kPopularCommunity,
+          queryParameters: {
+            'limit': limit,
+            'page': offset,
+            'kategori_id': categoryId,
+          },
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      final model = CommunityDetailBaseResponse.fromJson(response.data);
+      return model;
     } catch (error) {
       if (error is DioError) {
         return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityDetailBaseResponse> createCommunity(FormData form) async {
+    try {
+      final response = await _dio.post(ApiConstant.kCreateCommunity,
+          data: form, options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response.statusCode == 500) {
+          return CommunityDetailBaseResponse.hasError(
+              'Server unknown error. Please try again later');
+        } else if (error.response.statusCode == 422) {
+          return CommunityDetailBaseResponse.hasError(
+              error.response.data['logo'][0]);
+        } else {
+          return CommunityDetailBaseResponse.hasError(_handleError(error));
+        }
       } else {
         return CommunityDetailBaseResponse.hasError(error.toString());
       }
@@ -699,8 +748,8 @@ class ApiProvider {
       final response = await _dio.post(
           '${ApiConstant.kEditCommunity}$communityID',
           data: form,
-          options: Options(headers: {'requiredToken': true}));
-      return CommunityDetailBaseResponse.fromJson(response.data);
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityDetailBaseResponse.mapJsonCommunityDetail(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityDetailBaseResponse.hasError(_handleError(error));
@@ -714,7 +763,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kJoinCommunity}$communityId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return CommunityJoinResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -725,12 +774,104 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityMemberResponse> getMemberCommunity(String communityId) async {
+  Future<CommunityDetailBaseResponse> leaveCommunity(String communityId) async {
     try {
       final response = await _dio.get(
-          '${ApiConstant.kMemberCommunity}$communityId',
-          options: Options(headers: {'requiredToken': true}));
+          '${ApiConstant.kLeaveCommunity}/$communityId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityDetailBaseResponse.uploadSuccess(
+          response.data['message']);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityDetailBaseResponse.hasError(_handleError(error));
+      } else {
+        return CommunityDetailBaseResponse.hasError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityCommentBaseResponse> createPostCommunity(
+      FormData form, String communityId) async {
+    try {
+      final response = await _dio.post(
+          '${ApiConstant.kCreatePostCommunity}/$communityId',
+          options: Options(headers: {REQUIRED_TOKEN: true}),
+          data: form);
+      return CommunityCommentBaseResponse.addComment(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response.statusCode == 500) {
+          return CommunityCommentBaseResponse.withError(
+              'Server unknown error. Please try again later');
+        } else if (error.response.statusCode > 400 ||
+            error.response.statusCode < 499) {
+          return CommunityCommentBaseResponse.withError('Image request failed');
+        } else if (error.response.data['tag'] != null) {
+          return CommunityCommentBaseResponse.withError(
+              error.response.data['tag'][0]);
+        } else {
+          return CommunityCommentBaseResponse.withError(error.toString());
+        }
+      } else {
+        return CommunityCommentBaseResponse.withError(
+            error.response.data.toString());
+      }
+    }
+  }
+
+  Future<CommunityMemberResponse> getMemberCommunity(
+      String communityId, page, limit, String type,
+      {String search, String sort}) async {
+    try {
+      Map<String, dynamic> map = Map();
+      map['page'] = page;
+      map['limit'] = limit;
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      if (sort != null) {
+        map['sort'] = sort;
+      }
+      final response = await _dio.get(
+          '${ApiConstant.kMemberCommunity}$communityId/$type',
+          queryParameters: map,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return CommunityMemberResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response.statusCode == 500) {
+          return CommunityMemberResponse.withError('Server Failure');
+        }
+        return CommunityMemberResponse.withError(_handleError(error));
+      } else {
+        return CommunityMemberResponse.withError(error);
+      }
+    }
+  }
+
+  Future<CommunityMyGroupResponse> getLatestPost(int offset, int limit) async {
+    try {
+      final response = await _dio.get(ApiConstant.kLatestPostCommunity,
+          queryParameters: {'limit': limit, 'page': offset},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityMyGroupResponse.withJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityMyGroupResponse.withError(_handleError(error));
+      } else {
+        return CommunityMyGroupResponse.withError(error);
+      }
+    }
+  }
+
+  /// status == approve || decline. this api to bulk insert/delete
+  Future<CommunityMemberResponse> moderateAllCommunityMember(
+      String communityId, String status) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kModerateMemberCommunity}/$communityId/$status',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityMemberResponse.moderateResponse(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityMemberResponse.withError(_handleError(error));
@@ -740,18 +881,18 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityMemberResponse> approveMemberCommunity(
-      String communityId, String memberId) async {
+  Future<CommunityMemberResponse> moderateSingleCommunityMember(
+      String communityId, String memberId, String status) async {
     try {
       final response = await _dio.get(
-          '${ApiConstant.kMemberCommunity}$communityId/$memberId/approve',
-          options: Options(headers: {'requiredToken': true}));
-      return CommunityMemberResponse.fromJson(response.data);
+          '${ApiConstant.kMemberCommunity}$communityId/$memberId/$status',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityMemberResponse.moderateResponse(response.data);
     } catch (error) {
       if (error is DioError) {
         return CommunityMemberResponse.withError(_handleError(error));
       } else {
-        return CommunityMemberResponse.withError(error);
+        return CommunityMemberResponse.withError(error.toString());
       }
     }
   }
@@ -761,7 +902,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kSearchCategory}/$categoryId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return CommunityDetailBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -778,7 +919,7 @@ class ApiProvider {
       final response = await _dio.post(
           '${ApiConstant.kCommentCommunity}$communityId',
           data: data,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return CommunityCommentBaseResponse.addComment(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -789,12 +930,34 @@ class ApiProvider {
     }
   }
 
-  Future<CommunityCommentBaseResponse> getCommentList(
-      String communityId) async {
+  Future<CommunityPriceModel> getPaidCommunityPrice() async {
     try {
+      final response = await _dio.get(ApiConstant.kCommunityPrice,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityPriceModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityPriceModel.withError(_handleError(error));
+      } else {
+        return CommunityPriceModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityCommentBaseResponse> getCommentList(
+      String communityId, int page, int limit,
+      {String parentId}) async {
+    try {
+      Map<String, dynamic> map = Map();
+      map['limit'] = limit;
+      map['page'] = page;
+      if (parentId != null && parentId.isNotEmpty) {
+        map['parent'] = parentId;
+      }
       final response = await _dio.get(
           '${ApiConstant.kCommentCommunity}$communityId',
-          options: Options(headers: {'requiredToken': true}));
+          queryParameters: map,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return CommunityCommentBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -805,17 +968,134 @@ class ApiProvider {
     }
   }
 
-  Future<void> createEventCommunity(
+  Future<CommunityEventMemberResponse> getEventMemberByType(
+      String type, String eventId, int page, int limit) async {
+    //e: hadir / waiting / tentative
+    try {
+      //attendees/hadir
+      final response = await _dio.get(
+          '${ApiConstant.kEventCommunity}$eventId/attendees/$type',
+          options: Options(headers: {REQUIRED_TOKEN: true}),
+          queryParameters: {
+            'page': page,
+            'limit': limit,
+          });
+      return CommunityEventMemberResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventMemberResponse.withError(_handleError(error));
+      } else {
+        return CommunityEventMemberResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityEventResponseModel> adminUpdateEventStatus(
+      String status, String eventId) async {
+    // status = hapus dan batal
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kEventCommunity}$eventId/$status',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityEventResponseModel.fromMap(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityEventResponseModel> updateJoinEvent(
+      String eventId, String status) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kJoinEvent}/$eventId/$status',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityEventResponseModel.fromMap(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityEventResponseModel> getEventDetail(String eventId) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kEventCommunity}/$eventId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityEventResponseModel.fromMap(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityEventResponseModel> createEventCommunity(
       String communityId, FormData formData) async {
     try {
       final response = await _dio.post(
-          '${ApiConstant.kCreateEventCommunity}/$communityId',
+          '${ApiConstant.kEventCommunity}/$communityId',
           data: formData,
-          options: Options(headers: {'requiredToken': true}));
-      return response;
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityEventResponseModel.fromMap(response.data);
     } catch (error) {
-      print(error);
-      return error;
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<String> communityLikeUnlike(String type, postId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kCommunity}/konten-$type/$postId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return response.data['message'] ?? '';
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
+  Future<CommunityEventResponseModel> getUpComingList(
+      String communityId, int page, int limit) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kUpcomingCommunityEvent}$communityId',
+          queryParameters: {'page': page, 'limit': limit},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityEventResponseModel.fromMapList(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<CommunityEventResponseModel> getPastCommunityEvent(
+      String communityId, int page, int limit) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kPastCommunityEvent}$communityId',
+          queryParameters: {'page': page, 'limit': limit},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return CommunityEventResponseModel.fromMapList(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return CommunityEventResponseModel.withError(_handleError(error));
+      } else {
+        return CommunityEventResponseModel.withError(error.toString());
+      }
     }
   }
 
@@ -841,7 +1121,7 @@ class ApiProvider {
             'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
             'room': total,
           },
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return HotelListBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -863,7 +1143,7 @@ class ApiProvider {
           'timezone': await getFlutterTimezone(),
           'room': roomTotal,
         },
-        options: Options(headers: {'requiredToken': true}),
+        options: Options(headers: {REQUIRED_TOKEN: true}),
       );
       return HotelListBaseResponse.withJson(result.data);
     } catch (error) {
@@ -886,7 +1166,7 @@ class ApiProvider {
                 'timezone': await getFlutterTimezone(),
                 'room': room,
               },
-              options: Options(headers: {'requiredToken': true}));
+              options: Options(headers: {REQUIRED_TOKEN: true}));
       return RoomBaseResponse.fromJson(result.data);
     } catch (error) {
       if (error is DioError) {
@@ -902,7 +1182,7 @@ class ApiProvider {
     try {
       final result = await _dio.get('${ApiConstant.kHotelHistory}',
           queryParameters: {'page': offset, 'limit': limit},
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return BookingHistoryBaseResponse.fromJson(result.data);
     } catch (error) {
       if (error is DioError) {
@@ -916,7 +1196,7 @@ class ApiProvider {
   Future<BookingDetailResponse> getHotelBookingDetail(String bookingId) async {
     try {
       final response = await _dio.get('${ApiConstant.kHotelBooking}/$bookingId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return BookingDetailResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -949,7 +1229,7 @@ class ApiProvider {
     });
     try {
       final result = await _dio.post('${ApiConstant.kHotelBooking}',
-          data: _formData, options: Options(headers: {'requiredToken': true}));
+          data: _formData, options: Options(headers: {REQUIRED_TOKEN: true}));
       return BookHotelResponse.fromJson(result.data);
     } catch (error) {
       if (error is DioError) {
@@ -964,7 +1244,7 @@ class ApiProvider {
     try {
       final result = await _dio.get(
           '${ApiConstant.kHotelBooking}/$bookingId/cancel',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return BookingCancelResponse.fromJson(result.data);
     } catch (error) {
       if (error is DioError) {
@@ -975,12 +1255,22 @@ class ApiProvider {
     }
   }
 
+  Future<String> cancelTransaction(String transactionId) async {
+    try {
+      final result = await _dio.post(
+          '${ApiConstant.kTransactionCancel}/$transactionId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return result.data['message'];
+    } catch (error) {
+      return error.toString();
+    }
+  }
+
   /// DANA
   Future<DanaUserAccountResponse> getUserDanaStatus() async {
     try {
       final result = await _dio.get(ApiConstant.kDanaMe,
-          options: Options(headers: {'requiredToken': true}));
-      print(result);
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return DanaUserAccountResponse.fromJson(result.data);
     } catch (error) {
       return DanaUserAccountResponse.withError();
@@ -991,7 +1281,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(ApiConstant.kDanaPhoneActivate,
           options: Options(
-              extra: {'handphone': phone}, headers: {'requiredToken': true}));
+              extra: {'handphone': phone}, headers: {REQUIRED_TOKEN: true}));
       return DanaActivateBaseResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -1005,7 +1295,7 @@ class ApiProvider {
   Future<BookingPaymentResponse> bookingPayment(String bookingId) async {
     try {
       final response = await _dio.get('${ApiConstant.kDanaPayment}/$bookingId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return BookingPaymentResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -1021,7 +1311,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(ApiConstant.kNotificationList,
           queryParameters: {'page': offset, 'limit': limit},
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return NotificationModelResponse.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {
@@ -1036,7 +1326,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kNotificationList}/$notificationId',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return response.data['status'];
     } catch (error) {
       return false;
@@ -1046,7 +1336,7 @@ class ApiProvider {
   Future<String> deleteAllNotification() async {
     try {
       final response = await _dio.get(ApiConstant.kNotificationDeleteAll,
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return response.data['message'];
     } catch (error) {
       return error.toString();
@@ -1057,7 +1347,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kNotificationDeleteById}/$id',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return response.data['message'];
     } catch (error) {
       return error.toString();
@@ -1068,7 +1358,7 @@ class ApiProvider {
     try {
       final response = await _dio.get(
           '${ApiConstant.kNotificationUnDeleteById}/$id',
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       return response.data['message'];
     } catch (error) {
       return error.toString();
@@ -1084,7 +1374,7 @@ class ApiProvider {
             'long': longitude,
             'address': address,
           },
-          options: Options(headers: {'requiredToken': true}));
+          options: Options(headers: {REQUIRED_TOKEN: true}));
       final result = UserBaseModel.fromJson(response.data);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString(kUserCache, jsonEncode(result.userModel.toJson()));
@@ -1094,6 +1384,57 @@ class ApiProvider {
         return UserBaseModel.withError(_handleError(error));
       } else {
         return UserBaseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+      int page, int limit, String transactionType) async {
+    try {
+      final response = await _dio.get(ApiConstant.kTransaction,
+          queryParameters: {
+            'limit': limit,
+            'page': page,
+            'type': transactionType
+          },
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return TransactionCommunityResponseModel.getListJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return TransactionCommunityResponseModel.withError(_handleError(error));
+      } else {
+        return TransactionCommunityResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
+      String transId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kTransactionDetail}/$transId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return TransactionCommunityResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return TransactionCommunityResponseModel.withError(_handleError(error));
+      } else {
+        return TransactionCommunityResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BookingPaymentResponse> payTransaction(String transId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kTransactionPayment}/$transId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return BookingPaymentResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BookingPaymentResponse.withError(_handleError(error));
+      } else {
+        return BookingPaymentResponse.withError(error.toString());
       }
     }
   }

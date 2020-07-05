@@ -5,7 +5,7 @@ import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../themes.dart';
-import '../pages/community_detail_page.dart';
+import '../community_detail/community_detail_page.dart';
 
 class CommunityFeedBottomRow extends StatelessWidget {
   final CommunityDetail detail;
@@ -35,10 +35,10 @@ class CommunityFeedBottomRow extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(CommunityDetailPage.routeName,
-                      arguments: {
-                        CommunityDetailPage.communitySlug: detail.slug
-                      });
+                  Navigator.of(context)
+                      .pushNamed(CommunityDetailPage.routeName, arguments: {
+                    //   CommunityDetailPage.communitySlug: detail.slug
+                  });
                 },
                 child: Container(
                   decoration: BoxDecoration(

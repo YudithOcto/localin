@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -78,11 +79,7 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 "Image ${currentIndex + 1}",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.0,
-                  decoration: null,
-                ),
+                style: ThemeText.rodinaHeadline,
               ),
             )
           ],

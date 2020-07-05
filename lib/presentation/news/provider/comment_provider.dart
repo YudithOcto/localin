@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
@@ -8,7 +7,7 @@ import 'package:localin/model/user/user_model.dart';
 
 class CommentProvider with ChangeNotifier {
   final Repository _repository = Repository();
-  final TextEditingController commentController = TextEditingController();
+  final commentController = TextEditingController();
 
   bool _isTextEmpty = false;
   bool get isTextEmpty => _isTextEmpty;

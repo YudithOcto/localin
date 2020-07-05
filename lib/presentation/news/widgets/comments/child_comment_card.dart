@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/circle_image.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
@@ -27,11 +26,20 @@ class ChildCommentCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              CircleImage(
-                width: 40.0,
-                height: 40.0,
-                imageUrl: replayComment[index]?.senderAvatar ?? '',
-                fit: BoxFit.cover,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(RevampOthersProfilePage.routeName, arguments: {
+                    RevampOthersProfilePage.userId:
+                        replayComment[index].createdBy,
+                  });
+                },
+                child: CircleImage(
+                  width: 40.0,
+                  height: 40.0,
+                  imageUrl: replayComment[index]?.senderAvatar ?? '',
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(
                 width: 11.0,

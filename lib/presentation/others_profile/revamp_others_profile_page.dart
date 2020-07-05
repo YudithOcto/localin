@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/presentation/others_profile/provider/others_profile_community_provider.dart';
 import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_article_section_widget.dart';
 import 'package:localin/presentation/others_profile/widgets/others_profile_community_section_widget.dart';
@@ -15,8 +16,15 @@ class RevampOthersProfilePage extends StatelessWidget {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String userId = routeArgs[RevampOthersProfilePage.userId];
-    return ChangeNotifierProvider<RevampOthersProvider>(
-      create: (_) => RevampOthersProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<RevampOthersProvider>(
+          create: (_) => RevampOthersProvider(),
+        ),
+        ChangeNotifierProvider<OthersProfileCommunityProvider>(
+          create: (_) => OthersProfileCommunityProvider(),
+        )
+      ],
       child: RevampOthersProfileContent(
         userId: userId,
       ),
