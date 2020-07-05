@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/article/shared_article_components/article_single_card.dart';
 import 'package:localin/presentation/article/shared_article_components/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:provider/provider.dart';
 
-class MyTrashArticle extends StatefulWidget {
+class MyArchiveArticle extends StatefulWidget {
   @override
-  _MyTrashArticleState createState() => _MyTrashArticleState();
+  _MyArchiveArticleState createState() => _MyArchiveArticleState();
 }
 
-class _MyTrashArticleState extends State<MyTrashArticle>
+class _MyArchiveArticleState extends State<MyArchiveArticle>
     with AutomaticKeepAliveClientMixin {
   Future getTrashedArticle;
   bool _isInit = true;
@@ -20,6 +22,7 @@ class _MyTrashArticleState extends State<MyTrashArticle>
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
+      locator<AnalyticsService>().setScreenName(name: 'ArticleTrashTab');
       loadArticle();
       _scrollController = ScrollController()..addListener(_listener);
       _isInit = false;
@@ -30,7 +33,7 @@ class _MyTrashArticleState extends State<MyTrashArticle>
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         Provider.of<NewsMyArticleProvider>(context, listen: false)
-            .canLoadMoreTrashArticleList) {
+            .canLoadMoreArchiveArticleList) {
       loadArticle(isRefresh: false);
     }
   }
@@ -52,7 +55,7 @@ class _MyTrashArticleState extends State<MyTrashArticle>
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
               Provider.of<NewsMyArticleProvider>(context, listen: false)
-                      .userArticleTrashOffset <=
+                      .userArticleArchiveOffset <=
                   1) {
             return Container(
               alignment: FractionalOffset.center,
@@ -71,7 +74,7 @@ class _MyTrashArticleState extends State<MyTrashArticle>
               itemCount: snapshot.data.length + 1 ?? 1,
               itemBuilder: (context, index) {
                 if (Provider.of<NewsMyArticleProvider>(context, listen: false)
-                            .userArticleTrashOffset <=
+                            .userArticleArchiveOffset <=
                         2 &&
                     snapshot?.data?.length == 0) {
                   return EmptyArticle();
@@ -79,7 +82,7 @@ class _MyTrashArticleState extends State<MyTrashArticle>
                   return ArticleSingleCard(snapshot.data[index]);
                 } else if (Provider.of<NewsMyArticleProvider>(context,
                         listen: false)
-                    .canLoadMoreTrashArticleList) {
+                    .canLoadMoreArchiveArticleList) {
                   /// This load more should be load more to trashed article
                   return Container(
                     child: Center(

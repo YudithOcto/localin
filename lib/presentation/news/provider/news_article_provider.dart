@@ -57,6 +57,11 @@ class NewsArticleProvider with ChangeNotifier {
     return _articleList;
   }
 
+  void reAddBookmark(ArticleDetail articleDetail, int index) {
+    _articleList.insert(index, articleDetail);
+    notifyListeners();
+  }
+
   /// GET BOOKMARK ARTICLE
   List<ArticleDetail> get bookmarkArticleList {
     if (_articleList != null && _articleList.isNotEmpty) {

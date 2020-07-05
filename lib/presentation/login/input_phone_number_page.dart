@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/login/providers/input_phone_number_provider.dart';
 import 'package:localin/presentation/login/revamp_phone_verification_code_page.dart';
 import 'package:localin/provider/auth_provider.dart';
@@ -10,13 +12,19 @@ import 'package:provider/provider.dart';
 import '../../text_themes.dart';
 
 class InputPhoneNumberPage extends StatefulWidget {
-  static const routeName = '/phoneVerify';
+  static const routeName = 'VerifyPhoneNumberPage';
   static const userPhoneVerificationCode = 'userPhoneVerificationCode';
   @override
   _InputPhoneNumberPageState createState() => _InputPhoneNumberPageState();
 }
 
 class _InputPhoneNumberPageState extends State<InputPhoneNumberPage> {
+  @override
+  void initState() {
+    locator<AnalyticsService>().setScreenName(name: 'InputPhoneNumberPage');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
@@ -138,6 +146,9 @@ class _ColumnContentState extends State<ColumnContent> {
                           : ThemeColors.black0),
                   child: TextFormField(
                     enabled: !provider.isLoading,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
                     validator: (value) =>
                         value.isEmpty ? 'Phone number is required' : null,
                     controller: provider.phoneNumberController,
@@ -191,24 +202,37 @@ class _ColumnContentState extends State<ColumnContent> {
                     height: 48.0,
                     child: RaisedButton(
                       onPressed: () async {
-                        final isSuccess = await provider.validateInput();
-                        if (isSuccess) {
-                          final result = await provider.userPhoneRequest();
-                          if (result.isNotEmpty) {
-                            provider.setLoading();
-                            showToast(result,
-                                context: context,
-                                position: StyledToastPosition(
-                                    offset: 70.0,
-                                    align: Alignment.bottomCenter),
-                                textStyle: ThemeText.sfMediumFootnote
-                                    .copyWith(color: ThemeColors.red80),
-                                backgroundColor: ThemeColors.red10);
-                          } else {
-                            openVerificationCodePage(context,
-                                phoneNumber:
-                                    provider?.phoneNumberController?.text);
-                            provider.setLoading();
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        String validateRegex =
+                            validateMobile(provider.phoneNumberController.text);
+                        if (validateRegex != null) {
+                          showToast(validateRegex,
+                              context: context,
+                              position: StyledToastPosition(
+                                  offset: 70.0, align: Alignment.bottomCenter),
+                              textStyle: ThemeText.sfMediumFootnote
+                                  .copyWith(color: ThemeColors.red80),
+                              backgroundColor: ThemeColors.red10);
+                        } else {
+                          final isSuccess = await provider.validateInput();
+                          if (isSuccess) {
+                            final result = await provider.userPhoneRequest();
+                            if (result.isNotEmpty) {
+                              provider.setLoading();
+                              showToast(result,
+                                  context: context,
+                                  position: StyledToastPosition(
+                                      offset: 70.0,
+                                      align: Alignment.bottomCenter),
+                                  textStyle: ThemeText.sfMediumFootnote
+                                      .copyWith(color: ThemeColors.red80),
+                                  backgroundColor: ThemeColors.red10);
+                            } else {
+                              openVerificationCodePage(context,
+                                  phoneNumber:
+                                      provider?.phoneNumberController?.text);
+                              provider.setLoading();
+                            }
                           }
                         }
                       },
@@ -263,6 +287,17 @@ class _ColumnContentState extends State<ColumnContent> {
                     )),
               ));
     });
+  }
+
+  String validateMobile(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter mobile number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    }
+    return null;
   }
 }
 

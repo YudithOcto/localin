@@ -40,8 +40,9 @@ class HomeHeaderWidget extends StatelessWidget {
                       Image.asset(
                         'images/localin_logo.png',
                         fit: BoxFit.cover,
-                        height: 32.99,
                         width: 119.72,
+                        height: 32.99,
+                        filterQuality: FilterQuality.high,
                       ),
                       CachedNetworkImage(
                         imageUrl:

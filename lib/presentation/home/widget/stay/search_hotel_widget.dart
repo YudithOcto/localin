@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:localin/analytics/analytic_service.dart';
+import 'package:localin/locator.dart';
 import 'package:localin/presentation/home/widget/home_content_search_hotel.dart';
 import 'package:localin/presentation/home/widget/stay/empty_hotel_widget.dart';
 import 'package:localin/presentation/home/widget/stay/search_form_widget.dart';
@@ -25,6 +27,7 @@ class _SearchHotelWidgetState extends State<SearchHotelWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
+      locator<AnalyticsService>().setScreenName(name: 'SearchHotelPage');
       final searchHotelProvider =
           Provider.of<SearchHotelProvider>(context, listen: false);
       searchHotelProvider.setUserLocation(

@@ -6,7 +6,7 @@ import 'package:localin/presentation/search/tag_page/tag_detail_list_content_wid
 import 'package:provider/provider.dart';
 
 class TagsDetailListPage extends StatefulWidget {
-  static const routeName = '/tagsDetailListPage';
+  static const routeName = 'TagDetailPage';
   static const tagsModel = 'tagsModel';
   @override
   _TagsDetailListPageState createState() => _TagsDetailListPageState();

@@ -18,7 +18,7 @@ class CommunityEmptyPage extends StatelessWidget {
             'images/empty_community.svg',
           ),
           Text(
-            'Can\'t find community around you',
+            'Can\'t find community around me',
             textAlign: TextAlign.center,
             style: ThemeText.sfSemiBoldHeadline
                 .copyWith(color: ThemeColors.black80),

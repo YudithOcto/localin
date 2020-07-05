@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/components/base_appbar.dart';
 import 'package:localin/components/custom_header_below_base_appbar.dart';
 import 'package:localin/presentation/hotel/widgets/header_empty_booking.dart';
@@ -7,16 +8,24 @@ import 'package:localin/provider/hotel/booking_history_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
+import '../../locator.dart';
 import '../../themes.dart';
 
 class BookingHistoryPage extends StatefulWidget {
-  static const routeName = '/bookingHistoryPage';
+  static const routeName = 'BookingHistoryPage';
 
   @override
   _BookingHistoryPageState createState() => _BookingHistoryPageState();
 }
 
 class _BookingHistoryPageState extends State<BookingHistoryPage> {
+  @override
+  void initState() {
+    locator<AnalyticsService>().setScreenName(name: 'BookingHistoryPage');
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

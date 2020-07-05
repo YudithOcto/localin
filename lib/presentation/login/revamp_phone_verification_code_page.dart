@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/components/custom_verification_code.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
@@ -9,6 +10,7 @@ import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../locator.dart';
 import '../../text_themes.dart';
 import '../../themes.dart';
 
@@ -23,6 +25,12 @@ class RevampPhoneVerificationCodePage extends StatefulWidget {
 
 class _RevampPhoneVerificationCodePageState
     extends State<RevampPhoneVerificationCodePage> {
+  @override
+  void initState() {
+    locator<AnalyticsService>().setScreenName(name: 'VerifyPhoneCodePage');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<VerifyCodeProvider>(
@@ -93,8 +101,26 @@ class VerifyContentFormWidget extends StatelessWidget {
                 ),
                 VerificationCode(
                   keyboardType: TextInputType.number,
-                  onCompleted: (v) {
+                  onCompleted: (v) async {
                     provider.setFieldVerifyCode(v);
+                    if (provider.isFormDisabled) {
+                      customShowToast(context, 'You need to Request new code');
+                    } else if (provider.isAllFieldsFilled) {
+                      final response = await provider.verifySmsCode();
+                      if (response.error != null) {
+                        customShowToast(context, '${response.error}');
+                        if (response.error.contains('ganti')) {
+                          provider.disabledForm();
+                        }
+                      } else {
+                        pushDataToLocalCache(context, provider);
+                        Navigator.of(context).pushReplacementNamed(
+                            MainBottomNavigation.routeName);
+                      }
+                    } else {
+                      customShowToast(
+                          context, 'You are required to fill in all fields');
+                    }
                   },
                   onEditing: (isStillEditing) {
                     provider.setAllFieldsFilled(!isStillEditing);

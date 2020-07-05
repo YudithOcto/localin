@@ -12,7 +12,8 @@ import '../../text_themes.dart';
 import 'floating_action_bottom_app_bar.dart';
 
 class MainBottomNavigation extends StatefulWidget {
-  static const routeName = '/mainBottomNavigation';
+  static const routeName = 'BottomNavigationPage';
+
   @override
   _MainBottomNavigationState createState() => _MainBottomNavigationState();
 }
