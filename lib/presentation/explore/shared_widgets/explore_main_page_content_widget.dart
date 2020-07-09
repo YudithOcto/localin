@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/explore/explore_filter_page.dart';
-import 'package:localin/presentation/explore/widgets/single_explore_card_widget.dart';
-import 'package:localin/presentation/explore/widgets/small_category_widget.dart';
+import 'package:localin/presentation/explore/shared_widgets/single_explore_card_widget.dart';
+import 'package:localin/presentation/explore/shared_widgets/custom_category_radius.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
@@ -64,7 +64,7 @@ class _ExploreMainPageContentWidgetState
                           Navigator.of(context)
                               .pushNamed(ExploreFilterPage.routeName);
                         },
-                        child: SmallCategoryWidget(
+                        child: CustomCategoryRadius(
                           marginLeft: index == 0 ? 20.0 : 8.0,
                           text: _category[index],
                         ),

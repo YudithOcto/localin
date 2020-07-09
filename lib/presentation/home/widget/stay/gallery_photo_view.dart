@@ -51,39 +51,43 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ThemeColors.black100,
-        elevation: 0.0,
-      ),
-      body: Container(
-        decoration: widget.backgroundDecoration,
-        constraints: BoxConstraints.expand(
-          height: MediaQuery.of(context).size.height,
-        ),
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: <Widget>[
-            PhotoViewGallery.builder(
-              scrollPhysics: const BouncingScrollPhysics(),
-              builder: _buildItem,
-              itemCount: widget.galleryItems != null
-                  ? widget.galleryItems.length
-                  : widget.memoryGalleryItems.length,
-              loadingChild: widget.loadingChild,
-              backgroundDecoration: widget.backgroundDecoration,
-              pageController: widget.pageController,
-              onPageChanged: onPageChanged,
-              scrollDirection: widget.scrollDirection,
+      body: Stack(
+        alignment: Alignment.bottomRight,
+        children: <Widget>[
+          PhotoViewGallery.builder(
+            backgroundDecoration: BoxDecoration(
+              color: Colors.black,
             ),
-            Container(
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: _buildItem,
+            itemCount: widget.galleryItems != null
+                ? widget.galleryItems.length
+                : widget.memoryGalleryItems.length,
+            loadingChild: widget.loadingChild,
+            pageController: widget.pageController,
+            onPageChanged: onPageChanged,
+            scrollDirection: widget.scrollDirection,
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.25,
+            child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Text(
-                "Image ${currentIndex + 1}",
-                style: ThemeText.rodinaHeadline,
+                "${currentIndex + 1} of ${widget.galleryItems.length} photos",
+                style: ThemeText.rodinaHeadline
+                    .copyWith(color: ThemeColors.black0),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+          Positioned(
+            top: 50.0,
+            right: 28.0,
+            child: InkWell(
+              onTap: () => Navigator.of(context).pop(),
+              child: Icon(Icons.close, color: ThemeColors.black0),
+            ),
+          )
+        ],
       ),
     );
   }

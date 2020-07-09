@@ -15,6 +15,9 @@ import 'package:localin/presentation/community/community_event/community_event_t
 import 'package:localin/presentation/community/community_event/widgets/search_google_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
+import 'package:localin/presentation/explore/calendar_page/calendar_page.dart';
+import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
+import 'package:localin/presentation/explore/detail_page/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
@@ -102,5 +105,8 @@ Map<String, WidgetBuilder> get generalRoutes {
     ExploreMainPage.routeName: (_) => ExploreMainPage(),
     CommunityCategorySearch.routeName: (_) => CommunityCategorySearch(),
     ExploreFilterPage.routeName: (_) => ExploreFilterPage(),
+    ExploreDetailPage.routeName: (_) => ExploreDetailPage(),
+    ExploreOperationalHoursPage.routeName: (_) => ExploreOperationalHoursPage(),
+    CalendarPage.routeName: (_) => CalendarPage(),
   };
 }
