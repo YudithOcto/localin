@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/explore/calendar_page/calendar_page.dart';
+import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_big_images_widget.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_description_widget.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_event_hours_widget.dart';
