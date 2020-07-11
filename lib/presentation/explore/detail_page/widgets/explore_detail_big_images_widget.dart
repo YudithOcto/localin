@@ -1,14 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_image_radius.dart';
+import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class ExploreDetailBigImagesWidget extends StatefulWidget {
-  final String imageUrl;
-  ExploreDetailBigImagesWidget({this.imageUrl});
-
   @override
   _ExploreDetailBigImagesWidgetState createState() =>
       _ExploreDetailBigImagesWidgetState();
@@ -19,6 +18,7 @@ class _ExploreDetailBigImagesWidgetState
   int _current = 0;
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ExploreEventDetailProvider>(context);
     return Stack(
       children: <Widget>[
         Container(
@@ -37,11 +37,11 @@ class _ExploreDetailBigImagesWidgetState
                     _current = index;
                   });
                 }),
-            items: List.generate(5, (index) {
+            items: List.generate(1, (index) {
               return InkWell(
                 onTap: () {
                   List<String> list = [
-                    'https://image.shutterstock.com/image-photo/white-transparent-leaf-on-mirror-260nw-577160911.jpg'
+                    provider.eventDetail.eventBanner,
                   ];
                   Navigator.push(
                     context,
@@ -54,15 +54,11 @@ class _ExploreDetailBigImagesWidgetState
                     ),
                   );
                 },
-                child: Image.asset('images/create_article_image.png',
-                    fit: BoxFit.cover, width: double.maxFinite, height: 260.0),
-//                child: CustomImageRadius(
-//                  imageUrl: '',
-//                  width: double.maxFinite,
-//                  height: 260.0,
-//                  radius: 0.0,
-//                  fit: BoxFit.cover,
-//                ),
+                child: CustomImageRadius(
+                  height: 260.0,
+                  width: double.maxFinite,
+                  imageUrl: provider.eventDetail.eventBanner,
+                ),
               );
             }),
           ),
@@ -74,7 +70,7 @@ class _ExploreDetailBigImagesWidgetState
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                  5,
+                  1,
                   (carouselIndex) => Container(
                         width: 8.0,
                         height: 8.0,

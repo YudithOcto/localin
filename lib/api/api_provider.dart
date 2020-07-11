@@ -21,6 +21,10 @@ import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/model/explore/explore_event_response_model.dart';
+import 'package:localin/model/explore/explore_filter_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -1435,6 +1439,72 @@ class ApiProvider {
         return BookingPaymentResponse.withError(_handleError(error));
       } else {
         return BookingPaymentResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreEventResponseModel> getEventData(
+      int pageRequest, String search, String sort) async {
+    try {
+      Map<String, dynamic> map = Map();
+      map['page'] = pageRequest;
+      map['limit'] = 10;
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      final response = await _dio.get(ApiConstant.kExploreEvent,
+          options: Options(headers: {REQUIRED_TOKEN: true}),
+          queryParameters: map);
+      return ExploreEventResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreEventResponseModel.withError(_handleError(error));
+      } else {
+        return ExploreEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreFilterResponseModel> getCategoryFilterEvent() async {
+    try {
+      final response = await _dio.get(ApiConstant.kCategoryFilterEvent,
+          options: Options(headers: {REQUIRED_TOKEN: true}),
+          queryParameters: {'limit': 20, 'page': 1});
+      return ExploreFilterResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreFilterResponseModel.withError(_handleError(error));
+      } else {
+        return ExploreFilterResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreEventDetailModel> getExploreEventDetail(int eventID) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kExploreEvent}/$eventID',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreEventDetailModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreEventDetailModel.withError(_handleError(error));
+      } else {
+        return ExploreEventDetailModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreAvailableEventDatesModel> getExploreAvailableDates() async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kExploreEventAvailableDate}/692',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreAvailableEventDatesModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreAvailableEventDatesModel.withError(_handleError(error));
+      } else {
+        return ExploreAvailableEventDatesModel.withError(error.toString());
       }
     }
   }

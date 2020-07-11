@@ -77,4 +77,9 @@ class ApiConstant {
   static const String kTransactionPayment = 'v1/transaksi/pay';
   static const String kTransaction = 'v1/transaksi';
   static const String kTransactionCancel = 'v1/transaksi/cancel';
+
+  static const String kExploreEvent = 'v1/explore/event';
+  static const String kCategoryFilterEvent = 'v1/explore/kategori';
+  static const String kExploreEventAvailableDate =
+      'v1/explore/ticket-available';
 }

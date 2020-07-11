@@ -19,7 +19,7 @@ import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
 import 'package:localin/presentation/explore/detail_page/explore_operational_hours_page.dart';
-import 'package:localin/presentation/explore/explore_filter_page.dart';
+import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/explore/shared_widgets/row_ticket_selection_quantity_widget.dart';
 import 'package:localin/presentation/explore/submit_form/submit_form_page.dart';
@@ -44,6 +44,7 @@ import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_pa
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
+import 'package:localin/presentation/search/generic_search/search_explore_event_page.dart';
 import 'package:localin/presentation/search/search_article/search_article_page.dart';
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
@@ -117,5 +118,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     SubmitFormPage.routeName: (_) => SubmitFormPage(),
     ConfirmationTicketDetailsPage.routeName: (_) =>
         ConfirmationTicketDetailsPage(),
+    SearchExploreEventPage.routeName: (_) => SearchExploreEventPage(),
   };
 }

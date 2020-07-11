@@ -13,7 +13,7 @@ class GenericProvider with ChangeNotifier {
   int _offset = 1;
   int get offset => _offset;
 
-  int _limit = 20;
+  int _limit = 10;
   bool _canLoadMore = true;
   bool get canLoadMore => _canLoadMore;
 
@@ -26,7 +26,6 @@ class GenericProvider with ChangeNotifier {
 
   Future<Null> loadSearchData(
       {String search, bool isRefresh = true, @required String type}) async {
-    _streamController.add(searchState.loading);
     if (isRefresh) {
       _offset = 1;
       _searchList.clear();
@@ -35,8 +34,8 @@ class GenericProvider with ChangeNotifier {
     if (!_canLoadMore) {
       return;
     }
-
-    final result = await loadDataBaseOnType(type: type);
+    _streamController.add(searchState.loading);
+    final result = await loadDataBaseOnType(type: type, search: search);
     if (result != null && result.total > 0) {
       _searchList.addAll(result.detail);
       _offset += 1;
@@ -56,8 +55,7 @@ class GenericProvider with ChangeNotifier {
             offset: _offset, limit: _limit, search: search);
         break;
       case TYPE_EVENT:
-        return _repository.searchLocation(
-            offset: _offset, limit: _limit, search: search);
+        return _repository.getEventList(pageRequest: _offset, search: search);
         break;
     }
   }

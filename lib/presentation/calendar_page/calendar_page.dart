@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/calendar_page/calendar_provider.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
-import 'package:localin/presentation/explore/shared_widgets/row_ticket_selection_quantity_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/subtotal_ticket_bottom_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalendarPage extends StatefulWidget {
+class CalendarPage extends StatelessWidget {
   static const routeName = 'CalendarPage';
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<CalendarProvider>(
+      create: (_) => CalendarProvider(),
+      child: CalendarContent(),
+    );
+  }
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class CalendarContent extends StatefulWidget {
+  @override
+  _CalendarContentState createState() => _CalendarContentState();
+}
+
+class _CalendarContentState extends State<CalendarContent> {
   final _calendarController = CalendarController();
 
   @override
@@ -54,6 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
               margin: EdgeInsets.only(top: 12.0),
               color: ThemeColors.black0,
               child: TableCalendar(
+                onDaySelected: (date, events) {},
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 calendarController: _calendarController,
                 daysOfWeekStyle: DaysOfWeekStyle(
@@ -82,7 +94,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
             ),
-            RowTicketSelectionQuantityWidget(),
+            // RowTicketSelectionQuantityWidget(),
           ],
         ),
       ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_image_radius.dart';
+import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/text_themes.dart';
+import 'package:provider/provider.dart';
 
 class ExploreDetailLocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ExploreEventDetailProvider>(context);
     return Container(
       margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 24.0),
       child: Column(
@@ -22,7 +25,7 @@ class ExploreDetailLocationWidget extends StatelessWidget {
           ),
           SizedBox(height: 12.0),
           Text(
-            'Pondok Indah Mall, Jalan Metro Pondok Indah, Kebayoran Lama, Jakarta Selatan, DKI Jakarta 12310, Indonesia',
+            '${provider.eventDetail.schedules[0]?.location?.address}',
             style: ThemeText.sfRegularBody,
           )
         ],

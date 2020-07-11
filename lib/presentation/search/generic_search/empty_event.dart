@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
-class EmptyEvent extends StatelessWidget {
+class EmptyExploreEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,7 +17,8 @@ class EmptyEvent extends StatelessWidget {
                 .copyWith(color: ThemeColors.black80)),
         SizedBox(height: 4.0),
         Text(
-          'Discover community from other location, or create your own community',
+          'Discover event from other location',
+          textAlign: TextAlign.center,
           style: ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
         )
       ],

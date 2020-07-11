@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/explore/explore_filter_page.dart';
+import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
+import 'package:localin/presentation/explore/providers/explore_main_provider.dart';
+import 'package:localin/presentation/explore/shared_widgets/main_event_list.dart';
 import 'package:localin/presentation/explore/shared_widgets/single_explore_card_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/custom_category_radius.dart';
+import 'package:localin/presentation/search/generic_search/search_explore_event_page.dart';
+import 'package:localin/presentation/search/provider/generic_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class ExploreMainPageContentWidget extends StatefulWidget {
   @override
@@ -34,72 +39,56 @@ class _ExploreMainPageContentWidgetState
             color: ThemeColors.black80,
           ),
         ),
-        title: Container(
-          alignment: FractionalOffset.centerLeft,
-          margin: const EdgeInsets.only(right: 20.0),
-          padding: const EdgeInsets.symmetric(vertical: 9.0, horizontal: 16.0),
-          decoration: BoxDecoration(
-            color: ThemeColors.black10,
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          child: Text(
-            'Search event, or attraction',
-            style: ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
+        title: InkWell(
+          onTap: () {
+            Navigator.of(context).pushNamed(SearchExploreEventPage.routeName,
+                arguments: {SearchExploreEventPage.typePage: TYPE_EVENT});
+          },
+          child: Container(
+            alignment: FractionalOffset.centerLeft,
+            margin: const EdgeInsets.only(right: 20.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 9.0, horizontal: 16.0),
+            decoration: BoxDecoration(
+              color: ThemeColors.black10,
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: Text(
+              'Search event, or attraction',
+              style:
+                  ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
+            ),
           ),
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            height: 32.0,
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
-            child: ListView(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              children: List.generate(
-                  _category.length,
-                  (index) => InkWell(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(ExploreFilterPage.routeName);
-                        },
-                        child: CustomCategoryRadius(
-                          marginLeft: index == 0 ? 20.0 : 8.0,
-                          text: _category[index],
-                        ),
-                      )),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(20.0),
-              color: ThemeColors.black0,
-              child: ListView.builder(
+      body: ChangeNotifierProvider<ExploreMainProvider>(
+        create: (_) => ExploreMainProvider(),
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 32.0,
+              margin: const EdgeInsets.symmetric(vertical: 10.0),
+              child: ListView(
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
-                itemCount: 4 + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('Event and Attraction',
-                            style: ThemeText.rodinaTitle2),
-                        Text(
-                          'Pakualam, Serpong Utara',
-                          style: ThemeText.sfMediumBody
-                              .copyWith(color: ThemeColors.black80),
-                        ),
-                      ],
-                    );
-                  }
-                  return SingleExploreCardWidget();
-                },
+                scrollDirection: Axis.horizontal,
+                children: List.generate(
+                    _category.length,
+                    (index) => InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(ExploreFilterPage.routeName);
+                          },
+                          child: CustomCategoryRadius(
+                            marginLeft: index == 0 ? 20.0 : 8.0,
+                            text: _category[index],
+                          ),
+                        )),
               ),
             ),
-          ),
-        ],
+            MainEventList(),
+          ],
+        ),
       ),
     );
   }

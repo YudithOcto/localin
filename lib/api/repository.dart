@@ -15,6 +15,10 @@ import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/model/explore/explore_event_response_model.dart';
+import 'package:localin/model/explore/explore_filter_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -386,5 +390,22 @@ class Repository {
 
   Future<String> cancelTransaction(String transactionId) {
     return apiProvider.cancelTransaction(transactionId);
+  }
+
+  Future<ExploreEventResponseModel> getEventList(
+      {String search, int pageRequest, String sort}) {
+    return apiProvider.getEventData(pageRequest, search, sort);
+  }
+
+  Future<ExploreFilterResponseModel> getCategoryFilterEvent() {
+    return apiProvider.getCategoryFilterEvent();
+  }
+
+  Future<ExploreEventDetailModel> getExploreEventDetail(int eventId) {
+    return apiProvider.getExploreEventDetail(eventId);
+  }
+
+  Future<ExploreAvailableEventDatesModel> getAvailableDates() {
+    return apiProvider.getExploreAvailableDates();
   }
 }
