@@ -9,11 +9,14 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatelessWidget {
   static const routeName = 'CalendarPage';
+  static const eventId = 'eventId';
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return ChangeNotifierProvider<CalendarProvider>(
-      create: (_) => CalendarProvider(),
+      create: (_) => CalendarProvider(routeArgs[eventId]),
       child: CalendarContent(),
     );
   }

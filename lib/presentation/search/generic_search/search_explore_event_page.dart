@@ -3,6 +3,7 @@ import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -151,30 +152,38 @@ class _SearchExploreContentWidgetState
     } else if (data is ExploreEventDetail) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-        child: Row(
-          children: <Widget>[
-            CustomImageRadius(
-              radius: 8.0,
-              imageUrl: data.eventBanner,
-              width: 48.0,
-              height: 48.0,
-            ),
-            SizedBox(width: 12.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(data?.eventName, style: ThemeText.rodinaHeadline),
-                  Text(
-                    data?.schedule[0]?.address,
-                    maxLines: 2,
-                    style: ThemeText.sfMediumFootnote
-                        .copyWith(color: ThemeColors.black80),
-                  )
-                ],
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(ExploreDetailPage.routeName, arguments: {
+              ExploreDetailPage.exploreId: data.idEvent,
+            });
+          },
+          child: Row(
+            children: <Widget>[
+              CustomImageRadius(
+                radius: 8.0,
+                imageUrl: data.eventBanner,
+                width: 48.0,
+                height: 48.0,
               ),
-            )
-          ],
+              SizedBox(width: 12.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(data?.eventName, style: ThemeText.rodinaHeadline),
+                    Text(
+                      data?.schedule[0]?.address,
+                      maxLines: 2,
+                      style: ThemeText.sfMediumFootnote
+                          .copyWith(color: ThemeColors.black80),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     } else {

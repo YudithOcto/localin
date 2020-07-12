@@ -393,8 +393,13 @@ class Repository {
   }
 
   Future<ExploreEventResponseModel> getEventList(
-      {String search, int pageRequest, String sort}) {
-    return apiProvider.getEventData(pageRequest, search, sort);
+      {String search,
+      int pageRequest,
+      String sort,
+      List<int> categoryId,
+      String date}) {
+    return apiProvider.getEventData(
+        pageRequest, search, sort, categoryId, date);
   }
 
   Future<ExploreFilterResponseModel> getCategoryFilterEvent() {
@@ -405,7 +410,8 @@ class Repository {
     return apiProvider.getExploreEventDetail(eventId);
   }
 
-  Future<ExploreAvailableEventDatesModel> getAvailableDates() {
-    return apiProvider.getExploreAvailableDates();
+  Future<ExploreAvailableEventDatesModel> getAvailableDates(
+      String eventId, int pageRequest, String date) {
+    return apiProvider.getExploreAvailableDates(eventId, pageRequest, date);
   }
 }

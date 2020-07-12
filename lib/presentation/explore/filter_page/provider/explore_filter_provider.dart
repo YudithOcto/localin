@@ -2,22 +2,24 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:localin/api/repository.dart';
+import 'package:localin/model/explore/explore_filter_model_request.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
 
 class ExploreFilterProvider with ChangeNotifier {
-  List<String> monthList = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
+  ExploreFilterProvider(ExploreFilterModelRequest previousModel) {
+    if (previousModel != null) {
+      addPreviousFilter(previousModel);
+    }
+  }
+
+  addPreviousFilter(ExploreFilterModelRequest previousModel) {
+    _selectedMonth = previousModel.month;
+    _selectedSort = previousModel.sort;
+    if (previousModel.category != null) {
+      _selectedCategory.addAll(previousModel.category);
+    }
+  }
+
   int _selectedMonth;
   int get selectedMonth => _selectedMonth;
   set selectMonth(int index) {
@@ -25,12 +27,6 @@ class ExploreFilterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> sortList = [
-    'Closest date',
-    'Furthest Date',
-    'Lowest Price',
-    'Expensive Price'
-  ];
   int _selectedSort;
   int get selectedSort => _selectedSort;
   set selectSort(int index) {
@@ -73,6 +69,14 @@ class ExploreFilterProvider with ChangeNotifier {
       _streamController.add(filterState.empty);
     }
     notifyListeners();
+  }
+
+  get eventRequestModel {
+    return ExploreFilterModelRequest(
+      month: _selectedMonth,
+      sort: _selectedSort,
+      category: _selectedCategory,
+    );
   }
 
   @override

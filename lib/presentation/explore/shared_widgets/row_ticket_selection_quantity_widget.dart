@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/number_helper.dart';
 
 class RowTicketSelectionQuantityWidget extends StatelessWidget {
+  final int price;
+  final String ticketType;
+  final VoidCallback onAddPressed;
+  final VoidCallback onSubtractPressed;
+  final int quantityIndicator;
+
+  RowTicketSelectionQuantityWidget(
+      {this.price,
+      this.ticketType,
+      this.onAddPressed,
+      this.onSubtractPressed,
+      this.quantityIndicator});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 72.0,
       color: ThemeColors.black0,
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.symmetric(vertical: 12.0),
@@ -17,7 +30,10 @@ class RowTicketSelectionQuantityWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('IDR 89.000', style: ThemeText.sfSemiBoldHeadline),
+              Text('$ticketType', style: ThemeText.sfSemiBoldFootnote),
+              SizedBox(height: 6.0),
+              Text('${getFormattedCurrency(price)}',
+                  style: ThemeText.sfSemiBoldHeadline),
               SizedBox(height: 4.0),
               Text(
                 '/ticket',
@@ -28,15 +44,18 @@ class RowTicketSelectionQuantityWidget extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              Container(
-                height: 40.0,
-                width: 40.0,
-                decoration: BoxDecoration(
-                    color: ThemeColors.black10,
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: Icon(
-                  Icons.remove,
-                  color: ThemeColors.black100,
+              InkWell(
+                onTap: onSubtractPressed,
+                child: Container(
+                  height: 40.0,
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                      color: ThemeColors.black10,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: Icon(
+                    Icons.remove,
+                    color: ThemeColors.black100,
+                  ),
                 ),
               ),
               Container(
@@ -48,20 +67,23 @@ class RowTicketSelectionQuantityWidget extends StatelessWidget {
                     border: Border.all(color: ThemeColors.black20),
                     borderRadius: BorderRadius.circular(8.0)),
                 child: Text(
-                  '3',
+                  '$quantityIndicator',
                   textAlign: TextAlign.center,
                   style: ThemeText.sfSemiBoldFootnote,
                 ),
               ),
-              Container(
-                height: 40.0,
-                width: 40.0,
-                decoration: BoxDecoration(
-                    color: ThemeColors.black10,
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: Icon(
-                  Icons.add,
-                  color: ThemeColors.black100,
+              InkWell(
+                onTap: onAddPressed,
+                child: Container(
+                  height: 40.0,
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                      color: ThemeColors.black10,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: Icon(
+                    Icons.add,
+                    color: ThemeColors.black100,
+                  ),
                 ),
               )
             ],

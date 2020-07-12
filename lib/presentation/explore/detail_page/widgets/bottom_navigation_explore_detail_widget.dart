@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/calendar_page/calendar_page.dart';
+import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -10,8 +11,7 @@ class BottomNavigationExploreDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventDetail =
-        Provider.of<ExploreEventDetailProvider>(context, listen: false)
-            .eventDetail;
+        Provider.of<ExploreEventDetailProvider>(context).eventDetail;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Row(
@@ -20,15 +20,20 @@ class BottomNavigationExploreDetailWidget extends StatelessWidget {
           RichText(
             text: TextSpan(children: <TextSpan>[
               TextSpan(
-                  text: '${getFormattedCurrency(eventDetail?.endPrice) ?? ''}',
+                  text: 'Starting from\n', style: ThemeText.sfMediumCaption),
+              TextSpan(
+                  text:
+                      '${getFormattedCurrency(eventDetail?.startPrice) ?? ''}',
                   style: ThemeText.rodinaTitle2
                       .copyWith(color: ThemeColors.orange)),
               TextSpan(text: '\t/ticket', style: ThemeText.sfMediumCaption),
             ]),
           ),
           InkWell(
-            onTap: () =>
-                Navigator.of(context).pushNamed(CalendarPage.routeName),
+            onTap: () => Navigator.of(context)
+                .pushNamed(BookTicketListSelectionPage.routeName, arguments: {
+              BookTicketListSelectionPage.previousTicketList: eventDetail
+            }),
             child: Container(
               decoration: BoxDecoration(
                   color: ThemeColors.primaryBlue,

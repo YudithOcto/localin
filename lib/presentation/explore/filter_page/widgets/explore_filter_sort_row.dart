@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/explore/filter_page/provider/explore_filter_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/explore_single_filter_row_widget.dart';
+import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,9 @@ class ExploreFilterSortRow extends StatelessWidget {
           builder: (context, provider, _) {
             return Column(
                 children: List.generate(
-                    provider.sortList.length,
+                    sortList.length,
                     (index) => ExploreSingleFilterRowWidget(
-                          title: provider.sortList[index],
+                          title: sortList[index],
                           isSelected: provider.selectedSort == null
                               ? false
                               : provider.selectedSort == index,

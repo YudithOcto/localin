@@ -20,7 +20,11 @@ class ExploreMainProvider with ChangeNotifier {
   Stream<exploreState> get stream => _streamController.stream;
 
   Future<Null> getEventList(
-      {bool isRefresh = true, String search = 'gatot'}) async {
+      {bool isRefresh = true,
+      String search,
+      List<int> categoryId,
+      String sort,
+      String date}) async {
     if (isRefresh) {
       _eventList.clear();
       _canLoadMore = true;
@@ -28,7 +32,11 @@ class ExploreMainProvider with ChangeNotifier {
     }
     _streamController.add(exploreState.loading);
     final result = await _repository.getEventList(
-        pageRequest: _pageOffset, search: search);
+        pageRequest: _pageOffset,
+        search: search,
+        categoryId: categoryId,
+        sort: sort,
+        date: date);
     if (result != null && result.total > 0) {
       _eventList.addAll(result.detail);
       _canLoadMore = result.total > _eventList.length;

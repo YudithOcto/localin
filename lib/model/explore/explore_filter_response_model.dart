@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:localin/model/explore/explore_base_model.dart';
 
 class ExploreFilterResponseModel implements ExploreBaseModel {
@@ -34,7 +35,7 @@ class ExploreFilterResponseModel implements ExploreBaseModel {
         error = true;
 }
 
-class CategoryExploreDetail {
+class CategoryExploreDetail with EquatableMixin {
   String id;
   int categoryId;
   String category;
@@ -48,4 +49,7 @@ class CategoryExploreDetail {
       category: json['kategori'],
     );
   }
+
+  @override
+  List<Object> get props => [id, category, categoryId];
 }

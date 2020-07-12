@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/number_helper.dart';
+import 'package:provider/provider.dart';
 
 class SubtotalTicketButtonWidget extends StatelessWidget {
   final VoidCallback onPressed;
@@ -8,6 +11,7 @@ class SubtotalTicketButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<BookTicketListSelectionProvider>(context);
     return Container(
       height: 72.0,
       color: ThemeColors.black0,
@@ -21,13 +25,13 @@ class SubtotalTicketButtonWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'IDR 267.000',
+                  '${getFormattedCurrency(provider.getTotalPriceTicket())}',
                   style: ThemeText.sfSemiBoldHeadline
                       .copyWith(color: ThemeColors.orange),
                 ),
                 SizedBox(height: 4.0),
                 Text(
-                  '2 tickets',
+                  '${provider.getTotalSelectedTicket()} tickets',
                   style: ThemeText.sfSemiBoldFootnote
                       .copyWith(color: ThemeColors.black60),
                 )

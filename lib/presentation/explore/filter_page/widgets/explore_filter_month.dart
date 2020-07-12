@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/explore/filter_page/provider/explore_filter_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/custom_category_radius.dart';
+import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ class ExploreFilterMonth extends StatelessWidget {
     return Consumer<ExploreFilterProvider>(
       builder: (context, provider, _) {
         return ListView.builder(
-          itemCount: provider.monthList.length,
+          itemCount: monthList.length,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           physics: ClampingScrollPhysics(),
@@ -22,7 +23,7 @@ class ExploreFilterMonth extends StatelessWidget {
               },
               child: CustomCategoryRadius(
                 marginRight: index == 11 ? 20.0 : 0.0,
-                text: provider.monthList[index],
+                text: monthList[index],
                 radius: 100.0,
                 marginBottom: 12.0,
                 marginTop: 12.0,

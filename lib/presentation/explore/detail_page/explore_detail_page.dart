@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/bottom_navigation_explore_detail_widget.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_big_images_widget.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_description_widget.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_event_hours_widget.dart';
 import 'package:localin/presentation/explore/detail_page/widgets/explore_detail_location_widget.dart';
-import 'package:localin/text_themes.dart';
-import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class ExploreDetailPage extends StatelessWidget {

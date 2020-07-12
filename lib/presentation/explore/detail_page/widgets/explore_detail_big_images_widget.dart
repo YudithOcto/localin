@@ -93,9 +93,21 @@ class _ExploreDetailBigImagesWidgetState
               children: <Widget>[
                 InkWell(
                   onTap: () => Navigator.of(context).pop(),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: ThemeColors.black0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: ThemeColors.black80,
+                          offset: Offset(0, 0),
+                          blurRadius: 15,
+                          spreadRadius: 0.2,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: ThemeColors.black0,
+                    ),
                   ),
                 ),
                 SizedBox(width: 16.0),
@@ -107,7 +119,7 @@ class _ExploreDetailBigImagesWidgetState
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

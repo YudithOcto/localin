@@ -11,10 +11,13 @@ import 'package:provider/provider.dart';
 
 class ExploreFilterPage extends StatelessWidget {
   static const routeName = 'ExplorePage';
+  static const previousFilterModel = 'PreviousFilterModel';
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return ChangeNotifierProvider<ExploreFilterProvider>(
-      create: (_) => ExploreFilterProvider(),
+      create: (_) => ExploreFilterProvider(routeArgs[previousFilterModel]),
       child: ExploreFilterWrapper(),
     );
   }
@@ -57,14 +60,21 @@ class _ExploreFilterWrapperState extends State<ExploreFilterWrapper> {
           RowResetFilter(),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 48.0,
-        alignment: FractionalOffset.center,
-        color: ThemeColors.primaryBlue,
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-        child: Text(
-          'Apply Filter',
-          style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
+      bottomNavigationBar: InkWell(
+        onTap: () {
+          final model =
+              Provider.of<ExploreFilterProvider>(context).eventRequestModel;
+          Navigator.of(context).pop(model);
+        },
+        child: Container(
+          height: 48.0,
+          alignment: FractionalOffset.center,
+          color: ThemeColors.primaryBlue,
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+          child: Text(
+            'Apply Filter',
+            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
+          ),
         ),
       ),
       body: StreamBuilder<filterState>(

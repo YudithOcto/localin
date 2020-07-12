@@ -39,7 +39,7 @@ class ExploreDetailDescriptionWidget extends StatelessWidget {
               SizedBox(width: 7.33),
               Expanded(
                 child: Text(
-                  '${provider.eventDetail?.schedules[0]?.location?.address}',
+                  '${provider.eventLocation}',
                   style: ThemeText.sfRegularBody
                       .copyWith(color: ThemeColors.black80),
                 ),

@@ -1,5 +1,7 @@
 import 'package:localin/model/explore/explore_base_model.dart';
 
+import 'explore_available_event_dates_model.dart';
+
 class ExploreEventDetailModel implements ExploreBaseModel {
   @override
   var detail;
@@ -48,6 +50,7 @@ class ExploreEventDetail {
     this.statusEvent,
     this.statusEventName,
     this.schedules,
+    this.available,
   });
 
   int idEvent;
@@ -65,6 +68,7 @@ class ExploreEventDetail {
   int statusEvent;
   String statusEventName;
   List<Schedule> schedules;
+  List<ExploreAvailableEventDatesDetail> available;
 
   factory ExploreEventDetail.fromJson(Map<String, dynamic> json) =>
       ExploreEventDetail(
@@ -84,6 +88,8 @@ class ExploreEventDetail {
         statusEventName: json["status_event_name"],
         schedules: List<Schedule>.from(
             json["schedules"].map((x) => Schedule.fromJson(x))),
+        available: List<ExploreAvailableEventDatesDetail>.from(json['available']
+            .map((e) => ExploreAvailableEventDatesDetail.fromJson(e))),
       );
 
   Map<String, dynamic> toJson() => {

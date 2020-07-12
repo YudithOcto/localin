@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/components/custom_image_radius.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
@@ -18,14 +18,32 @@ class ExploreDetailLocationWidget extends StatelessWidget {
             style: ThemeText.sfSemiBoldHeadline,
           ),
           SizedBox(height: 8.0),
-          CustomImageRadius(
-            width: double.maxFinite,
+          Container(
             height: 179.0,
-            radius: 8.0,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: GoogleMap(
+              markers: [
+                Marker(
+                  position: LatLng(
+                      provider.locationLatitude, provider.locationLongitude),
+                  markerId: MarkerId(provider?.eventDetail?.eventName),
+                )
+              ].toSet(),
+              onMapCreated: (v) {},
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                    provider.locationLatitude, provider.locationLongitude),
+                zoom: 15.0,
+              ),
+              myLocationButtonEnabled: false,
+            ),
           ),
           SizedBox(height: 12.0),
           Text(
-            '${provider.eventDetail.schedules[0]?.location?.address}',
+            '${provider.eventLocation}',
             style: ThemeText.sfRegularBody,
           )
         ],

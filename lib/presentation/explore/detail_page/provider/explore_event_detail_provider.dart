@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/utils/date_helper.dart';
 
 class ExploreEventDetailProvider with ChangeNotifier {
   final _repository = Repository();
@@ -22,6 +23,41 @@ class ExploreEventDetailProvider with ChangeNotifier {
       _streamController.add(eventDetailState.empty);
     }
     notifyListeners();
+  }
+
+  getFormattedStartDateTime() {
+    if (_eventDetail.startDate == null) return '';
+    String date = DateHelper.formatDate(
+        date: _eventDetail.startDate, format: "EEEE, dd MMMM yyyy 'at' hh:mm");
+    return date;
+  }
+
+  getFormattedEndDateTime() {
+    if (_eventDetail.endDate == null) return '';
+    String date = DateHelper.formatDate(
+        date: _eventDetail.endDate, format: "EEEE, dd MMMM yyyy 'at' HH:mm");
+    return date;
+  }
+
+  get locationLatitude {
+    if (eventDetail != null && eventDetail.schedules != null) {
+      return eventDetail?.schedules[0]?.location?.latitude;
+    }
+    return 0.0;
+  }
+
+  get locationLongitude {
+    if (eventDetail != null && eventDetail.schedules != null) {
+      return eventDetail?.schedules[0]?.location?.longitude;
+    }
+    return 0.0;
+  }
+
+  get eventLocation {
+    if (eventDetail != null && eventDetail.schedules != null) {
+      return eventDetail?.schedules[0]?.location?.address;
+    }
+    return '';
   }
 
   @override

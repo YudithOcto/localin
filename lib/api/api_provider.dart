@@ -39,6 +39,7 @@ import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
 import 'package:localin/model/user/user_verification_category_model.dart';
+import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -1443,14 +1444,23 @@ class ApiProvider {
     }
   }
 
-  Future<ExploreEventResponseModel> getEventData(
-      int pageRequest, String search, String sort) async {
+  Future<ExploreEventResponseModel> getEventData(int pageRequest, String search,
+      String sort, List<int> categoryId, String date) async {
     try {
       Map<String, dynamic> map = Map();
       map['page'] = pageRequest;
       map['limit'] = 10;
       if (search != null && search.isNotEmpty) {
         map['search'] = search;
+      }
+      if (categoryId.isNotEmpty) {
+        map['kategori_id'] = categoryId.map((e) => e).toList();
+      }
+      if (sort != null) {
+        map['sort[]'] = getSorting(sort);
+      }
+      if (date != null) {
+        map['date'] = date;
       }
       final response = await _dio.get(ApiConstant.kExploreEvent,
           options: Options(headers: {REQUIRED_TOKEN: true}),
@@ -1494,11 +1504,18 @@ class ApiProvider {
     }
   }
 
-  Future<ExploreAvailableEventDatesModel> getExploreAvailableDates() async {
+  Future<ExploreAvailableEventDatesModel> getExploreAvailableDates(
+      String eventID, int pageRequest, String date) async {
+    //date format yyyy-mm-dd
     try {
-      final response = await _dio.get(
-          '${ApiConstant.kExploreEventAvailableDate}/692',
-          options: Options(headers: {REQUIRED_TOKEN: true}));
+      final response =
+          await _dio.get('${ApiConstant.kExploreEventAvailableDate}/$eventID',
+              queryParameters: ({
+                'limit': 10,
+                'page': pageRequest,
+                'date': date,
+              }),
+              options: Options(headers: {REQUIRED_TOKEN: true}));
       return ExploreAvailableEventDatesModel.fromJson(response.data);
     } catch (error) {
       if (error is DioError) {

@@ -1,14 +1,16 @@
 class ExploreAvailableEventDatesModel {
   String message;
+  int total;
   List<ExploreAvailableEventDatesDetail> detail;
 
-  ExploreAvailableEventDatesModel({this.detail, this.message});
+  ExploreAvailableEventDatesModel({this.detail, this.message, this.total});
 
-  factory ExploreAvailableEventDatesModel.fromJson(List data) {
+  factory ExploreAvailableEventDatesModel.fromJson(Map<String, dynamic> body) {
     return ExploreAvailableEventDatesModel(
         message: '',
-        detail: List<ExploreAvailableEventDatesDetail>.from(
-            data.map((e) => ExploreAvailableEventDatesDetail.fromJson(e))));
+        total: body['pagination']['total'] ?? 0,
+        detail: List<ExploreAvailableEventDatesDetail>.from(body['data']
+            .map((e) => ExploreAvailableEventDatesDetail.fromJson(e))));
   }
 
   ExploreAvailableEventDatesModel.withError(String value) : message = value;
