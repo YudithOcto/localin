@@ -23,6 +23,7 @@ import 'package:localin/presentation/explore/filter_page/explore_filter_page.dar
 import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/explore/shared_widgets/row_ticket_selection_quantity_widget.dart';
 import 'package:localin/presentation/explore/submit_form/submit_form_page.dart';
+import 'package:localin/presentation/explore/submit_form/widgets/order_successful_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
 import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/hotel/booking_history_page.dart';
@@ -119,5 +120,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     ConfirmationTicketDetailsPage.routeName: (_) =>
         ConfirmationTicketDetailsPage(),
     SearchExploreEventPage.routeName: (_) => SearchExploreEventPage(),
+    OrderSuccessfulPage.routeName: (_) => OrderSuccessfulPage(),
   };
 }

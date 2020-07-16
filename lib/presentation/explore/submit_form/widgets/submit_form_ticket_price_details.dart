@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/explore/submit_form/submit_form_provider.dart';
+import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';

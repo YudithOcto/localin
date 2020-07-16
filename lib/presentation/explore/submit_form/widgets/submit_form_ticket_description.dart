@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/event_date_widget.dart';
-import 'package:localin/presentation/explore/submit_form/submit_form_provider.dart';
+import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

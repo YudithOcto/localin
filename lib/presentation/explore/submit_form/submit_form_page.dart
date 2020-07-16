@@ -4,7 +4,7 @@ import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/event_date_widget.dart';
 import 'package:localin/presentation/explore/submit_form/confirmation_ticket_details_page.dart';
-import 'package:localin/presentation/explore/submit_form/submit_form_provider.dart';
+import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_description.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_price_details.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_visitor.dart';
@@ -55,7 +55,16 @@ class SubmitFormContent extends StatelessWidget {
                     duration: 2);
                 return;
               }
-              final result = await provider.orderTicket();
+              Navigator.of(context).pushNamed(
+                  ConfirmationTicketDetailsPage.routeName,
+                  arguments: {
+                    ConfirmationTicketDetailsPage.basicOrderInfo:
+                        provider.eventSubmissionDetails,
+                    ConfirmationTicketDetailsPage.eventPersonFormDetail:
+                        provider?.eventFormRequestModel,
+                    ConfirmationTicketDetailsPage.eventApiRequestForm:
+                        provider?.eventFormPersonNam,
+                  });
             },
             child: Container(
               height: 48.0,

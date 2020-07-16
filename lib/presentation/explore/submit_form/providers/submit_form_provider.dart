@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:localin/api/repository.dart';
-import 'package:localin/model/explore/explore_available_event_dates_model.dart';
 import 'package:localin/model/explore/explore_event_submission_details.dart';
-import 'package:localin/model/explore/explore_response_model.dart';
+import 'package:localin/model/explore/single_person_form_model.dart';
 import 'package:localin/model/explore/submit_form_request_model.dart';
 import 'package:localin/utils/number_helper.dart';
 
@@ -32,6 +28,19 @@ class SubmitFormProvider with ChangeNotifier {
 
   get isButtonNotActive {
     return visitorController.any((element) => element.text.isEmpty);
+  }
+
+  get eventFormPersonNam {
+    List<SinglePersonFormModel> person = [];
+    _eventSubmissionDetails.previousTicketTypeWithTotal
+        .asMap()
+        .forEach((index, value) {
+      person.add(SinglePersonFormModel(
+        ticketType: value.ticketType,
+        name: visitorController[index].text,
+      ));
+    });
+    return person;
   }
 
   SubmitFormRequestModel get eventFormRequestModel {
@@ -82,13 +91,6 @@ class SubmitFormProvider with ChangeNotifier {
   getTicketTitle(int index) {
     return _eventSubmissionDetails
         .previousTicketTypeWithTotal[index].ticketType;
-  }
-
-  final _repository = Repository();
-  Future<ExploreOrderResponseModel> orderTicket() async {
-    final result = await _repository
-        .orderTicket(jsonEncode(eventFormRequestModel.toJson()));
-    return result;
   }
 
   @override
