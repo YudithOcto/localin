@@ -25,6 +25,7 @@ import 'package:localin/model/explore/explore_available_event_dates_model.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -1453,13 +1454,13 @@ class ApiProvider {
       if (search != null && search.isNotEmpty) {
         map['search'] = search;
       }
-      if (categoryId.isNotEmpty) {
+      if (categoryId != null && categoryId.isNotEmpty) {
         map['kategori_id'] = categoryId.map((e) => e).toList();
       }
-      if (sort != null) {
+      if (sort != null && sort.isNotEmpty) {
         map['sort[]'] = getSorting(sort);
       }
-      if (date != null) {
+      if (date != null && date.isNotEmpty) {
         map['date'] = date;
       }
       final response = await _dio.get(ApiConstant.kExploreEvent,
@@ -1505,15 +1506,13 @@ class ApiProvider {
   }
 
   Future<ExploreAvailableEventDatesModel> getExploreAvailableDates(
-      String eventID, int pageRequest, String date) async {
-    //date format yyyy-mm-dd
+      int eventID, int pageRequest) async {
     try {
       final response =
           await _dio.get('${ApiConstant.kExploreEventAvailableDate}/$eventID',
               queryParameters: ({
                 'limit': 10,
                 'page': pageRequest,
-                'date': date,
               }),
               options: Options(headers: {REQUIRED_TOKEN: true}));
       return ExploreAvailableEventDatesModel.fromJson(response.data);
@@ -1522,6 +1521,22 @@ class ApiProvider {
         return ExploreAvailableEventDatesModel.withError(_handleError(error));
       } else {
         return ExploreAvailableEventDatesModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreOrderResponseModel> orderTicket(
+      String ticketRequestJson) async {
+    try {
+      final response = await _dio.post(ApiConstant.kExploreOrder,
+          data: ticketRequestJson,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreOrderResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreOrderResponseModel.withError(_handleError(error));
+      } else {
+        return ExploreOrderResponseModel.withError(error.toString());
       }
     }
   }

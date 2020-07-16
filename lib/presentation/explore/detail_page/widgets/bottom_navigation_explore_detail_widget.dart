@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -30,10 +29,12 @@ class BottomNavigationExploreDetailWidget extends StatelessWidget {
             ]),
           ),
           InkWell(
-            onTap: () => Navigator.of(context)
-                .pushNamed(BookTicketListSelectionPage.routeName, arguments: {
-              BookTicketListSelectionPage.previousTicketList: eventDetail
-            }),
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(BookTicketListSelectionPage.routeName, arguments: {
+                BookTicketListSelectionPage.eventDetail: eventDetail,
+              });
+            },
             child: Container(
               decoration: BoxDecoration(
                   color: ThemeColors.primaryBlue,

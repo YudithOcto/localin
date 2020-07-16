@@ -46,7 +46,6 @@ class ExploreEventDetail {
     this.statusEventName,
     this.category,
     this.tags,
-    this.schedule,
   });
 
   final int idEvent;
@@ -65,7 +64,6 @@ class ExploreEventDetail {
   final String statusEventName;
   final List<Category> category;
   final List<TagModel> tags;
-  final List<Schedule> schedule;
 
   factory ExploreEventDetail.fromMap(Map<String, dynamic> json) =>
       ExploreEventDetail(
@@ -87,8 +85,6 @@ class ExploreEventDetail {
             json["category"].map((x) => Category.fromMap(x))),
         tags:
             List<TagModel>.from(json["tags"].map((x) => TagModel.fromJson(x))),
-        schedule: List<Schedule>.from(
-            json["schedule"].map((x) => Schedule.fromJson(x))),
       );
 }
 

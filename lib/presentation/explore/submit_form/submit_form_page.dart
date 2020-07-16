@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/event_date_widget.dart';
 import 'package:localin/presentation/explore/submit_form/confirmation_ticket_details_page.dart';
@@ -44,20 +45,32 @@ class SubmitFormContent extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () => Navigator.of(context)
-            .pushNamed(ConfirmationTicketDetailsPage.routeName),
-        child: Container(
-          height: 48.0,
-          alignment: FractionalOffset.center,
-          decoration: BoxDecoration(
-            color: ThemeColors.primaryBlue,
-          ),
-          child: Text(
-            'Continue',
-            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
-          ),
-        ),
+      bottomNavigationBar: Consumer<SubmitFormProvider>(
+        builder: (context, provider, _) {
+          return InkWell(
+            onTap: () async {
+              if (provider.isButtonNotActive) {
+                CustomToast.showCustomBookmarkToast(
+                    context, 'fill in user details',
+                    duration: 2);
+                return;
+              }
+              final result = await provider.orderTicket();
+            },
+            child: Container(
+              height: 48.0,
+              alignment: FractionalOffset.center,
+              decoration: BoxDecoration(
+                color: ThemeColors.primaryBlue,
+              ),
+              child: Text(
+                'Continue',
+                style:
+                    ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
+              ),
+            ),
+          );
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

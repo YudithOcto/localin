@@ -79,7 +79,7 @@ class SingleExploreCardWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                '${detail?.schedule[0]?.address ?? ''}',
+                '',
                 style: ThemeText.sfMediumFootnote
                     .copyWith(color: ThemeColors.black80),
               ),

@@ -26,7 +26,7 @@ class ExploreDetailEventHoursWidget extends StatelessWidget {
           ),
           SizedBox(height: 12.0),
           Visibility(
-            visible: true,
+            visible: false,
             child: InkWell(
               onTap: () {
                 Navigator.of(context).pushNamed(

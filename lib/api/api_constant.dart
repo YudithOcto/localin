@@ -81,5 +81,6 @@ class ApiConstant {
   static const String kExploreEvent = 'v1/explore/event';
   static const String kCategoryFilterEvent = 'v1/explore/kategori';
   static const String kExploreEventAvailableDate =
-      'v1/explore/ticket-available';
+      'v1/explore/schedule-available';
+  static const String kExploreOrder = 'v1/explore/order';
 }

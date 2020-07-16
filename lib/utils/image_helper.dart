@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
 import 'package:network_image_to_byte/network_image_to_byte.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,5 +21,15 @@ class ImageHelper {
     Uint8List byteImage = await networkImageToByte(imageUrl);
     await file.writeAsBytes(byteImage);
     return file;
+  }
+
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
   }
 }

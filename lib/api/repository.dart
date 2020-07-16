@@ -19,6 +19,7 @@ import 'package:localin/model/explore/explore_available_event_dates_model.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -411,7 +412,11 @@ class Repository {
   }
 
   Future<ExploreAvailableEventDatesModel> getAvailableDates(
-      String eventId, int pageRequest, String date) {
-    return apiProvider.getExploreAvailableDates(eventId, pageRequest, date);
+      int eventId, int pageRequest) {
+    return apiProvider.getExploreAvailableDates(eventId, pageRequest);
+  }
+
+  Future<ExploreOrderResponseModel> orderTicket(String jsonRequest) {
+    return apiProvider.orderTicket(jsonRequest);
   }
 }

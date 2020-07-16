@@ -1,6 +1,7 @@
 import 'package:localin/model/explore/explore_base_model.dart';
 
 import 'explore_available_event_dates_model.dart';
+import 'explore_event_detail.dart';
 
 class ExploreEventDetailModel implements ExploreBaseModel {
   @override
@@ -31,136 +32,6 @@ class ExploreEventDetailModel implements ExploreBaseModel {
       message: json['message'],
     );
   }
-}
-
-class ExploreEventDetail {
-  ExploreEventDetail({
-    this.idEvent,
-    this.eventName,
-    this.description,
-    this.eventCapacity,
-    this.startDate,
-    this.endDate,
-    this.startPrice,
-    this.endPrice,
-    this.eventBanner,
-    this.idOrganization,
-    this.organizationName,
-    this.organizationAvatar,
-    this.statusEvent,
-    this.statusEventName,
-    this.schedules,
-    this.available,
-  });
-
-  int idEvent;
-  String eventName;
-  String description;
-  int eventCapacity;
-  DateTime startDate;
-  DateTime endDate;
-  int startPrice;
-  int endPrice;
-  String eventBanner;
-  int idOrganization;
-  String organizationName;
-  String organizationAvatar;
-  int statusEvent;
-  String statusEventName;
-  List<Schedule> schedules;
-  List<ExploreAvailableEventDatesDetail> available;
-
-  factory ExploreEventDetail.fromJson(Map<String, dynamic> json) =>
-      ExploreEventDetail(
-        idEvent: json["id_event"],
-        eventName: json["event_name"],
-        description: json["description"],
-        eventCapacity: json["event_capacity"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
-        startPrice: json["start_price"],
-        endPrice: json["end_price"],
-        eventBanner: json["event_banner"],
-        idOrganization: json["id_organization"],
-        organizationName: json["organization_name"],
-        organizationAvatar: json["organization_avatar"],
-        statusEvent: json["status_event"],
-        statusEventName: json["status_event_name"],
-        schedules: List<Schedule>.from(
-            json["schedules"].map((x) => Schedule.fromJson(x))),
-        available: List<ExploreAvailableEventDatesDetail>.from(json['available']
-            .map((e) => ExploreAvailableEventDatesDetail.fromJson(e))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id_event": idEvent,
-        "event_name": eventName,
-        "description": description,
-        "event_capacity": eventCapacity,
-        "start_date": startDate.toIso8601String(),
-        "end_date": endDate.toIso8601String(),
-        "start_price": startPrice,
-        "end_price": endPrice,
-        "event_banner": eventBanner,
-        "id_organization": idOrganization,
-        "organization_name": organizationName,
-        "organization_avatar": organizationAvatar,
-        "status_event": statusEvent,
-        "status_event_name": statusEventName,
-        "schedules": List<dynamic>.from(schedules.map((x) => x.toJson())),
-      };
-}
-
-class Schedule {
-  Schedule({
-    this.idSchedule,
-    this.startDate,
-    this.endDate,
-    this.useSeatingChart,
-    this.tax,
-    this.formOption,
-    this.statusSchedule,
-    this.statusScheduleName,
-    this.refundStatus,
-    this.location,
-  });
-
-  int idSchedule;
-  DateTime startDate;
-  DateTime endDate;
-  bool useSeatingChart;
-  int tax;
-  List<String> formOption;
-  int statusSchedule;
-  String statusScheduleName;
-  int refundStatus;
-  Location location;
-
-  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
-        idSchedule: json["id_schedule"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
-        useSeatingChart: json["use_seating_chart"],
-        tax: json["tax"],
-        formOption: List<String>.from(json["form_option"].map((x) => x)),
-        statusSchedule: json["status_schedule"],
-        statusScheduleName: json["status_schedule_name"],
-        refundStatus: json["refund_status"],
-        location: Location.fromJson(json["location"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id_schedule": idSchedule,
-        "start_date": startDate.toIso8601String(),
-        "end_date": endDate.toIso8601String(),
-        "use_seating_chart": useSeatingChart,
-        "tax": tax,
-        "form_option": List<dynamic>.from(formOption.map((x) => x)),
-        "status_schedule": statusSchedule,
-        "status_schedule_name": statusScheduleName,
-        "refund_status": refundStatus,
-        "location": location.toJson(),
-      };
 }
 
 class Location {

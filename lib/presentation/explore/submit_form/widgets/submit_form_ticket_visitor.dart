@@ -25,73 +25,26 @@ class SubmitFormTicketVisitor extends StatelessWidget {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: List.generate(
-                      provider.getTicketBySection,
+                      provider.totalSelectedTicket,
                       (index) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'Ticket (${provider.getTicketBySectionTitle(index)})',
-                                style: ThemeText.sfSemiBoldHeadline,
+                                'Ticket ${index + 1} (${provider.getTicketTitle(index)})',
+                                style: ThemeText.sfSemiBoldCaption
+                                    .copyWith(color: ThemeColors.black80),
                               ),
                               SizedBox(height: 10.0),
-                              Column(
-                                  children: List.generate(
-                                      provider.getTicketTotalPerSection(provider
-                                          .getTicketBySectionTitle(index)),
-                                      (index) => Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'TICKET ${index + 1}',
-                                                style: ThemeText
-                                                    .sfSemiBoldCaption
-                                                    .copyWith(
-                                                        color: ThemeColors
-                                                            .black80),
-                                              ),
-                                              SizedBox(height: 2.0),
-                                              TextFormField(
-                                                decoration: InputDecoration(
-                                                  hintText: 'Enter Name',
-                                                  hintStyle: ThemeText
-                                                      .sfMediumHeadline
-                                                      .copyWith(
-                                                          color: ThemeColors
-                                                              .black80),
-                                                  border: InputBorder.none,
-                                                ),
-                                              ),
-                                            ],
-                                          ))),
-                              SizedBox(height: 20.0),
+                              TextFormField(
+                                controller: provider.visitorController[index],
+                                decoration: InputDecoration(
+                                    hintText: 'Enter Name',
+                                    hintStyle: ThemeText.sfMediumHeadline
+                                        .copyWith(color: ThemeColors.black80)),
+                              ),
+                              SizedBox(height: 12.0),
                             ],
                           )));
-//              return Column(
-//                crossAxisAlignment: CrossAxisAlignment.stretch,
-//                children: List.generate(
-//                    provider.eventSubmissionDetails.totalTicket,
-//                    (index) => Column(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: <Widget>[
-//                            SizedBox(height: 12.0),
-//                            Text(
-//                              'TICKET ${index + 1} (${provider.generateTicketType})',
-//                              style: ThemeText.sfSemiBoldCaption
-//                                  .copyWith(color: ThemeColors.black80),
-//                            ),
-//                            SizedBox(height: 6.0),
-//                            TextFormField(
-//                              decoration: InputDecoration(
-//                                hintText: 'Enter Name',
-//                                hintStyle: ThemeText.sfMediumHeadline
-//                                    .copyWith(color: ThemeColors.black80),
-//                                border: InputBorder.none,
-//                              ),
-//                            )
-//                          ],
-//                        )),
-//              );
             },
           ),
         )

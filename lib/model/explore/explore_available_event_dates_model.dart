@@ -1,22 +1,35 @@
+import 'package:equatable/equatable.dart';
+
+import 'explore_schedule_model.dart';
+
 class ExploreAvailableEventDatesModel {
   String message;
   int total;
-  List<ExploreAvailableEventDatesDetail> detail;
+  bool error;
+  int maxBuyQty;
+  List<ExploreScheduleModel> detail;
 
-  ExploreAvailableEventDatesModel({this.detail, this.message, this.total});
+  ExploreAvailableEventDatesModel(
+      {this.detail, this.message, this.total, this.maxBuyQty});
 
   factory ExploreAvailableEventDatesModel.fromJson(Map<String, dynamic> body) {
     return ExploreAvailableEventDatesModel(
-        message: '',
-        total: body['pagination']['total'] ?? 0,
-        detail: List<ExploreAvailableEventDatesDetail>.from(body['data']
-            .map((e) => ExploreAvailableEventDatesDetail.fromJson(e))));
+      message: '',
+      total: body['data']['pagination']['total'] ?? 0,
+      detail: body['data']['data'] == null
+          ? []
+          : List<ExploreScheduleModel>.from(body['data']['data']
+              .map((e) => ExploreScheduleModel.fromJson(e))),
+      maxBuyQty: body['data']['max_buy_qty'],
+    );
   }
 
-  ExploreAvailableEventDatesModel.withError(String value) : message = value;
+  ExploreAvailableEventDatesModel.withError(String value)
+      : message = value,
+        error = true;
 }
 
-class ExploreAvailableEventDatesDetail {
+class ExploreAvailableEventDatesDetail with EquatableMixin {
   ExploreAvailableEventDatesDetail({
     this.idTicket,
     this.idTicketType,
@@ -79,4 +92,26 @@ class ExploreAvailableEventDatesDetail {
         tags: List<dynamic>.from(json["tags"].map((x) => x)),
         maxBuyQty: json["max_buy_qty"],
       );
+
+  @override
+  List<Object> get props => [
+        idTicket,
+        idTicketType,
+        ticketType,
+        description,
+        startSale,
+        endSale,
+        price,
+        quantity,
+        available,
+        availableQty,
+        ticketSeatingChart,
+        ticketColor,
+        holdEndDate,
+        holdMessage,
+        statusTicket,
+        statusTicketName,
+        tags,
+        maxBuyQty
+      ];
 }

@@ -108,16 +108,16 @@ class HomeHeaderWidget extends StatelessWidget {
                               .pushNamed(EmptyPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
-                          serviceIcon: 'home_service_attraction_icon.svg',
-                          serviceName: 'ATTRACT',
+                          serviceIcon: 'explore.svg',
+                          serviceName: 'EXPLORE',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(ExploreMainPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_ticket_icon.svg',
-                          serviceName: 'EVENT',
+                          serviceName: 'MOVIE',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(ExploreMainPage.routeName),
+                              .pushNamed(EmptyPage.routeName),
                         ),
                       ],
                     ),

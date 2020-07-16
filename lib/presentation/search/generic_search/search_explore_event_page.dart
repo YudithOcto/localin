@@ -79,6 +79,7 @@ class _SearchExploreContentWidgetState
           child: TextFormField(
             controller: Provider.of<GenericProvider>(context, listen: false)
                 .searchController,
+            autofocus: true,
             onChanged: (v) {
               _debounce.run(() => Provider.of<GenericProvider>(context,
                       listen: false)
@@ -174,7 +175,7 @@ class _SearchExploreContentWidgetState
                   children: <Widget>[
                     Text(data?.eventName, style: ThemeText.rodinaHeadline),
                     Text(
-                      data?.schedule[0]?.address,
+                      'data?.schedule[0]?.address',
                       maxLines: 2,
                       style: ThemeText.sfMediumFootnote
                           .copyWith(color: ThemeColors.black80),

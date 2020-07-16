@@ -1,3 +1,6 @@
+import 'event_request_model.dart';
+import 'explore_available_event_dates_model.dart';
+
 class ExploreEventSubmissionDetails {
   String eventImage;
   String eventName;
@@ -5,7 +8,7 @@ class ExploreEventSubmissionDetails {
   int totalPrice;
   int ticketPrice;
   int totalTicket;
-  Map<String, int> previousTicketTypeWithTotal;
+  List<ExploreAvailableEventDatesDetail> previousTicketTypeWithTotal;
 
   ExploreEventSubmissionDetails({
     this.eventName,
