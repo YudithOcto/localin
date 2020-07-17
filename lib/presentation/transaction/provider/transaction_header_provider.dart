@@ -10,12 +10,13 @@ class TransactionHeaderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> _newsTab = ['Stay', 'Community'];
+  List<String> _newsTab = ['Stay', 'Community', 'explore'];
   List<String> get newsTabTitle => _newsTab;
 
   List<String> _iconsTab = [
     'images/transaction_stay_tab_icon.svg',
     'images/transaction_community_tab_icon.svg',
+    'images/transaction_explore_tab.svg',
   ];
   List<String> get iconTab => _iconsTab;
 

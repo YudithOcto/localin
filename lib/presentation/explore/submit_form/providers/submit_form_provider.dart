@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_event_submission_details.dart';
+import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/explore/single_person_form_model.dart';
 import 'package:localin/model/explore/submit_form_request_model.dart';
 import 'package:localin/utils/number_helper.dart';
@@ -9,10 +13,14 @@ class SubmitFormProvider with ChangeNotifier {
   ExploreEventSubmissionDetails get eventSubmissionDetails =>
       _eventSubmissionDetails;
 
-  SubmitFormProvider(ExploreEventSubmissionDetails details) {
+  SubmitFormProvider(
+      ExploreEventSubmissionDetails details, String currentUserName) {
     _eventSubmissionDetails = details;
-    _eventSubmissionDetails.previousTicketTypeWithTotal.forEach((element) {
-      visitorController.add(TextEditingController());
+    _eventSubmissionDetails.previousTicketTypeWithTotal
+        .asMap()
+        .forEach((index, value) {
+      visitorController
+          .add(TextEditingController(text: index == 0 ? currentUserName : ''));
     });
   }
 
@@ -26,8 +34,14 @@ class SubmitFormProvider with ChangeNotifier {
     return _eventSubmissionDetails.previousTicketTypeWithTotal.length;
   }
 
-  get isButtonNotActive {
-    return visitorController.any((element) => element.text.isEmpty);
+  bool get isButtonNotActive {
+    if (formKey.currentState.validate()) {
+      return false;
+    } else {
+      autoValidate = true;
+      notifyListeners();
+      return true;
+    }
   }
 
   get eventFormPersonNam {
@@ -45,43 +59,26 @@ class SubmitFormProvider with ChangeNotifier {
 
   SubmitFormRequestModel get eventFormRequestModel {
     List<SubmitProfileTicketModel> profileModel = [];
-    int currentId;
-    List<String> names = [];
+    Map<int, List<String>> _items = Map();
 
-    for (int i = 0;
-        i < _eventSubmissionDetails.previousTicketTypeWithTotal.length;
-        i++) {
-      final ticket = _eventSubmissionDetails.previousTicketTypeWithTotal[i];
-      if (currentId == null) {
-        names.add(visitorController[i].text);
-        if (_eventSubmissionDetails.previousTicketTypeWithTotal.length == 1) {
-          profileModel.add(SubmitProfileTicketModel(
-            idTicket: ticket.idTicket,
-            visitorNames: names,
-          ));
-        }
-        currentId = ticket.idTicket;
+    _eventSubmissionDetails.previousTicketTypeWithTotal
+        .asMap()
+        .forEach((index, ticket) {
+      if (_items.containsKey(ticket.idTicket)) {
+        final item = _items[ticket.idTicket];
+        item.add(visitorController[index].text);
       } else {
-        if (currentId == ticket.idTicket) {
-          names.add(visitorController[i].text);
-          if (i ==
-              _eventSubmissionDetails.previousTicketTypeWithTotal.length - 1) {
-            profileModel.add(SubmitProfileTicketModel(
-              idTicket: ticket.idTicket,
-              visitorNames: names,
-            ));
-          }
-        } else {
-          profileModel.add(SubmitProfileTicketModel(
-            idTicket: currentId,
-            visitorNames: names,
-          ));
-          names = List();
-          names.add(visitorController[i].text);
-          currentId = ticket.idTicket;
-        }
+        List<String> names = [visitorController[index].text];
+        _items.putIfAbsent(ticket.idTicket, () => names);
       }
-    }
+    });
+
+    _items.forEach((key, value) {
+      profileModel.add(SubmitProfileTicketModel(
+        idTicket: key,
+        visitorNames: value,
+      ));
+    });
 
     return SubmitFormRequestModel(
         eventName: _eventSubmissionDetails.eventName,
@@ -91,6 +88,16 @@ class SubmitFormProvider with ChangeNotifier {
   getTicketTitle(int index) {
     return _eventSubmissionDetails
         .previousTicketTypeWithTotal[index].ticketType;
+  }
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool autoValidate = false;
+
+  final _repository = Repository();
+  Future<ExploreOrderResponseModel> orderTicket() async {
+    final result = await _repository
+        .orderTicket(jsonEncode(eventFormRequestModel.toJson()));
+    return result;
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../text_themes.dart';
 import '../themes.dart';
+import 'filled_button_default.dart';
 
 class CustomDialog {
   static Future<void> showLoadingDialog(BuildContext context,
@@ -149,6 +150,76 @@ class CustomDialog {
                           ),
                         ),
                       )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  static Future<T> showCustomDialogStaticVerticalButton<T>(BuildContext context,
+      {@required String title,
+      String message,
+      @required String cancelText,
+      @required String okText,
+      bool isDismissible = true,
+      TextStyle okThemeText = ThemeText.rodinaTitle3,
+      TextStyle cancelThemeText = ThemeText.rodinaTitle3,
+      Color okTextColor = ThemeColors.black0,
+      Color cancelTextColor = ThemeColors.black80,
+      Color okBackgroundColor = ThemeColors.primaryBlue,
+      Color cancelBackgroundColor = ThemeColors.black0,
+      VoidCallback onCancel,
+      VoidCallback okCallback}) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: isDismissible,
+        builder: (BuildContext context) {
+          return WillPopScope(
+            onWillPop: () async => isDismissible,
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    '$title',
+                    style: ThemeText.sfMediumTitle3,
+                  ),
+                  SizedBox(height: 8.0),
+                  Text('$message',
+                      textAlign: TextAlign.center,
+                      style: ThemeText.sfRegularBody.copyWith(
+                          color: ThemeColors.black80,
+                          fontWeight: FontWeight.w500)),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      FilledButtonDefault(
+                        buttonText: '$okText',
+                        textTheme: okThemeText.copyWith(color: okTextColor),
+                        onPressed: okCallback,
+                        backgroundColor: okBackgroundColor,
+                      ),
+                      InkWell(
+                        onTap: onCancel,
+                        child: Container(
+                          color: cancelBackgroundColor,
+                          alignment: FractionalOffset.center,
+                          margin: EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            '$cancelText',
+                            style: cancelThemeText.copyWith(
+                                color: cancelTextColor),
+                          ),
+                        ),
+                      ),
                     ],
                   )
                 ],

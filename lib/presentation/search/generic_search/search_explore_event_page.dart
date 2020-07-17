@@ -175,7 +175,7 @@ class _SearchExploreContentWidgetState
                   children: <Widget>[
                     Text(data?.eventName, style: ThemeText.rodinaHeadline),
                     Text(
-                      'data?.schedule[0]?.address',
+                      '${data?.location?.address}',
                       maxLines: 2,
                       style: ThemeText.sfMediumFootnote
                           .copyWith(color: ThemeColors.black80),

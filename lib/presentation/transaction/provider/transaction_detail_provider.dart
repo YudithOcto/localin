@@ -3,20 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
-import 'package:localin/model/transaction/transaction_response_model.dart';
 
-class TransactionCommunityProvider with ChangeNotifier {
+class TransactionDetailProvider with ChangeNotifier {
   final _repository = Repository();
 
   final _streamController =
       StreamController<transactionCommunityState>.broadcast();
   Stream<transactionCommunityState> get transStream => _streamController.stream;
 
-  TransactionCommunityDetail transactionDetail;
-  Future<Null> getCommunityTransactionDetail(String transactionId) async {
+  var transactionDetail;
+  Future<Null> getCommunityTransactionDetail(
+      String transactionId, String type) async {
     _streamController.add(transactionCommunityState.loading);
-    final result =
-        await _repository.getCommunityTransactionDetail(transactionId);
+    final result = await _repository.getTransactionDetails(transactionId, type);
     if (!result.error) {
       transactionDetail = result.data;
       _streamController.add(transactionCommunityState.success);

@@ -30,14 +30,20 @@ class ExploreOrderDetail {
   ExploreOrderDetail({
     this.transactionId,
     this.urlRedirect,
+    this.invoicePaymentTotal,
+    this.adminFee,
   });
 
   String transactionId;
   String urlRedirect;
+  int invoicePaymentTotal;
+  int adminFee;
 
   factory ExploreOrderDetail.fromJson(Map<String, dynamic> json) =>
       ExploreOrderDetail(
         transactionId: json["transaksi_id"],
         urlRedirect: json['url_redirect'],
+        invoicePaymentTotal: json['invoice_payment_total'],
+        adminFee: json['admin_fee'],
       );
 }

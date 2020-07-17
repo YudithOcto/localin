@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/explore/event_request_model.dart';
 import 'package:localin/model/explore/explore_available_event_dates_model.dart';
 import 'package:localin/model/explore/explore_event_detail.dart';
 import 'package:localin/model/explore/explore_event_submission_details.dart';
@@ -53,14 +52,19 @@ class BookTicketListSelectionProvider with ChangeNotifier {
     return total;
   }
 
-  addQuantity(int idTicket, int singleTicketMaxBuy) {
+  String addQuantity(int idTicket, int singleTicketMaxBuy) {
     if (_totalSelectedSingleTicket.containsKey(idTicket)) {
       if (_totalSelectedSingleTicket[idTicket] < singleTicketMaxBuy &&
           totalSelectedTicket < _globalMaxQuantity) {
         _totalSelectedSingleTicket[idTicket] += 1;
+        notifyListeners();
+        return '';
+      } else {
+        return 'Maximum ticket book limit reached. You cannot add more ticket.';
       }
+    } else {
+      return '';
     }
-    notifyListeners();
   }
 
   subtractQuantity(int idTicket) {

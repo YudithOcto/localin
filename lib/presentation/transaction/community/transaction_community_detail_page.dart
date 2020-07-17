@@ -3,20 +3,18 @@ import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/filled_button_default.dart';
-import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
-import 'package:localin/presentation/transaction/community/provider/transaction_community_provider.dart';
+import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/presentation/transaction/community/widget/row_price_widget.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/constants.dart';
-import 'package:localin/utils/countdown.dart';
 import 'package:localin/utils/number_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +29,7 @@ class TransactionCommunityDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => TransactionCommunityProvider(),
+      create: (_) => TransactionDetailProvider(),
       child: TransactionCommunityContentWidget(),
     );
   }
@@ -59,8 +57,9 @@ class _TransactionCommunityContentWidgetState
     _isNeedToBackHome =
         routeArgs[TransactionCommunityDetailPage.onBackPressedHome] ?? false;
     getTransactionData =
-        Provider.of<TransactionCommunityProvider>(context, listen: false)
-            .getCommunityTransactionDetail(_transactionId);
+        Provider.of<TransactionDetailProvider>(context, listen: false)
+            .getCommunityTransactionDetail(
+                _transactionId, kTransactionTypeCommunity);
   }
 
   onPressedPayment() async {
@@ -108,9 +107,9 @@ class _TransactionCommunityContentWidgetState
       onPressed: () async {
         Navigator.of(context).pop();
         CustomDialog.showLoadingDialog(context, message: 'Please wait');
-        final result = await Provider.of<TransactionCommunityProvider>(context,
-                listen: false)
-            .payTransaction(_transactionId);
+        final result =
+            await Provider.of<TransactionDetailProvider>(context, listen: false)
+                .payTransaction(_transactionId);
         CustomDialog.closeDialog(context);
         final response = await Navigator.of(context)
             .pushNamed(WebViewPage.routeName, arguments: {
@@ -177,7 +176,7 @@ class _TransactionCommunityContentWidgetState
           pageTitle: 'Purchase Details',
           titleStyle: ThemeText.sfMediumHeadline,
         ),
-        bottomNavigationBar: Consumer<TransactionCommunityProvider>(
+        bottomNavigationBar: Consumer<TransactionDetailProvider>(
           builder: (context, provider, child) {
             return Visibility(
               visible: provider.transactionDetail?.status ==
@@ -191,7 +190,7 @@ class _TransactionCommunityContentWidgetState
                         CustomDialog.showLoadingDialog(context,
                             message: 'Please wait');
                         final result =
-                            await Provider.of<TransactionCommunityProvider>(
+                            await Provider.of<TransactionDetailProvider>(
                                     context,
                                     listen: false)
                                 .cancelTransaction(_transactionId);
@@ -242,19 +241,17 @@ class _TransactionCommunityContentWidgetState
           },
         ),
         body: StreamBuilder<transactionCommunityState>(
-          stream:
-              Provider.of<TransactionCommunityProvider>(context, listen: false)
-                  .transStream,
+          stream: Provider.of<TransactionDetailProvider>(context, listen: false)
+              .transStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             } else {
-              final provider =
-                  Provider.of<TransactionCommunityProvider>(context);
+              final provider = Provider.of<TransactionDetailProvider>(context);
               if (provider.transactionDetail != null) {
-                final item = provider.transactionDetail;
+                TransactionCommunityDetail item = provider.transactionDetail;
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

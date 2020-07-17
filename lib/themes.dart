@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 abstract class ThemeColors {
-  static const primaryBlue = Color(0xFF1F75E1);
+  static const primaryBlue = Color(0xFF338F6C);
   static const darkBlue = Color(0xFF0E4284);
   static const orange = Color(0xFFFC8338);
   static const red = Color(0xFFE52A34);

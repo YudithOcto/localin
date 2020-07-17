@@ -374,9 +374,8 @@ class Repository {
     return apiProvider.searchLocation(offset, limit, search);
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
-      String transId) {
-    return apiProvider.getCommunityTransactionDetail(transId);
+  Future<dynamic> getTransactionDetails(String transId, String type) {
+    return apiProvider.getTransactionDetail(transId, type);
   }
 
   Future<TransactionCommunityResponseModel> getCommunityTransactionList(

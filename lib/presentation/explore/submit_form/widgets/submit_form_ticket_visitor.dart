@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
@@ -22,29 +23,41 @@ class SubmitFormTicketVisitor extends StatelessWidget {
           color: ThemeColors.black0,
           child: Consumer<SubmitFormProvider>(
             builder: (context, provider, _) {
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: List.generate(
-                      provider.totalSelectedTicket,
-                      (index) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Ticket ${index + 1} (${provider.getTicketTitle(index)})',
-                                style: ThemeText.sfSemiBoldCaption
-                                    .copyWith(color: ThemeColors.black80),
-                              ),
-                              SizedBox(height: 10.0),
-                              TextFormField(
-                                controller: provider.visitorController[index],
-                                decoration: InputDecoration(
-                                    hintText: 'Enter Name',
-                                    hintStyle: ThemeText.sfMediumHeadline
-                                        .copyWith(color: ThemeColors.black80)),
-                              ),
-                              SizedBox(height: 12.0),
-                            ],
-                          )));
+              return Form(
+                key: provider.formKey,
+                autovalidate: provider.autoValidate,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: List.generate(
+                        provider.totalSelectedTicket,
+                        (index) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Ticket ${index + 1} (${provider.getTicketTitle(index)})',
+                                  style: ThemeText.sfSemiBoldCaption
+                                      .copyWith(color: ThemeColors.black80),
+                                ),
+                                SizedBox(height: 10.0),
+                                TextFormField(
+                                  validator: (value) => value.isEmpty ||
+                                          value.length < 2
+                                      ? 'Value should be more than 1 letter'
+                                      : (nameRegExp.hasMatch(value))
+                                          ? null
+                                          : 'value should not contain special character or numbers',
+                                  controller: provider.visitorController[index],
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      hintText: 'Enter Name',
+                                      hintStyle: ThemeText.sfMediumHeadline
+                                          .copyWith(
+                                              color: ThemeColors.black80)),
+                                ),
+                                SizedBox(height: 12.0),
+                              ],
+                            ))),
+              );
             },
           ),
         )
@@ -52,3 +65,5 @@ class SubmitFormTicketVisitor extends StatelessWidget {
     );
   }
 }
+
+final RegExp nameRegExp = RegExp("^[A-Za-z ]+\$");

@@ -22,15 +22,16 @@ class TransactionListProvider with ChangeNotifier {
   final _streamController = StreamController<transactionState>.broadcast();
   Stream<transactionState> get apiStream => _streamController.stream;
 
-  Future<Null> getCommunityTransaction({bool isRefresh = true}) async {
+  Future<Null> getTransactionList(
+      {bool isRefresh = true, @required String type}) async {
     if (isRefresh) {
       _page = 1;
       _canLoadMore = true;
       _listCommunityTransaction.clear();
     }
 
-    final result = await _repository.getCommunityTransactionList(page, 10,
-        type: 'community');
+    final result =
+        await _repository.getCommunityTransactionList(page, 10, type: type);
     if (!result.error) {
       _listCommunityTransaction.addAll(result.transactionList);
       _canLoadMore = result.total > _listCommunityTransaction.length;

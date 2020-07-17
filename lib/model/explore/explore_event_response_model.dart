@@ -29,24 +29,24 @@ class ExploreEventResponseModel {
 }
 
 class ExploreEventDetail {
-  ExploreEventDetail({
-    this.idEvent,
-    this.eventName,
-    this.description,
-    this.eventCapacity,
-    this.startDate,
-    this.endDate,
-    this.startPrice,
-    this.endPrice,
-    this.eventBanner,
-    this.idOrganization,
-    this.organizationName,
-    this.organizationAvatar,
-    this.statusEvent,
-    this.statusEventName,
-    this.category,
-    this.tags,
-  });
+  ExploreEventDetail(
+      {this.idEvent,
+      this.eventName,
+      this.description,
+      this.eventCapacity,
+      this.startDate,
+      this.endDate,
+      this.startPrice,
+      this.endPrice,
+      this.eventBanner,
+      this.idOrganization,
+      this.organizationName,
+      this.organizationAvatar,
+      this.statusEvent,
+      this.statusEventName,
+      this.category,
+      this.tags,
+      this.location});
 
   final int idEvent;
   final String eventName;
@@ -64,28 +64,33 @@ class ExploreEventDetail {
   final String statusEventName;
   final List<Category> category;
   final List<TagModel> tags;
+  final ExploreEventLocation location;
 
   factory ExploreEventDetail.fromMap(Map<String, dynamic> json) =>
       ExploreEventDetail(
-        idEvent: json["id_event"],
-        eventName: json["event_name"],
-        description: json["description"],
-        eventCapacity: json["event_capacity"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
-        startPrice: json["start_price"],
-        endPrice: json["end_price"],
-        eventBanner: json["event_banner"],
-        idOrganization: json["id_organization"],
-        organizationName: json["organization_name"],
-        organizationAvatar: json["organization_avatar"],
-        statusEvent: json["status_event"],
-        statusEventName: json["status_event_name"],
-        category: List<Category>.from(
-            json["category"].map((x) => Category.fromMap(x))),
-        tags:
-            List<TagModel>.from(json["tags"].map((x) => TagModel.fromJson(x))),
-      );
+          idEvent: json["id_event"],
+          eventName: json["event_name"],
+          description: json["description"],
+          eventCapacity: json["event_capacity"],
+          startDate: DateTime.parse(json["start_date"]),
+          endDate: DateTime.parse(json["end_date"]),
+          startPrice: json["start_price"],
+          endPrice: json["end_price"],
+          eventBanner: json["event_banner"],
+          idOrganization: json["id_organization"],
+          organizationName: json["organization_name"],
+          organizationAvatar: json["organization_avatar"],
+          statusEvent: json["status_event"],
+          statusEventName: json["status_event_name"],
+          category: List<Category>.from(
+              json["category"].map((x) => Category.fromMap(x))),
+          tags: List<TagModel>.from(
+              json["tags"].map((x) => TagModel.fromJson(x))),
+          location: json['location'] == null
+              ? null
+              : ExploreEventLocation.fromJson(
+                  json['location'],
+                ));
 }
 
 class Category {
@@ -151,5 +156,23 @@ class Schedule {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         deletedAt: json["deleted_at"],
+      );
+}
+
+class ExploreEventLocation {
+  String address;
+  String districtName;
+  String latitude;
+  String longitude;
+
+  ExploreEventLocation(
+      {this.address, this.districtName, this.latitude, this.longitude});
+
+  factory ExploreEventLocation.fromJson(Map<String, dynamic> json) =>
+      ExploreEventLocation(
+        address: json['address'],
+        districtName: json['district_name'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
       );
 }

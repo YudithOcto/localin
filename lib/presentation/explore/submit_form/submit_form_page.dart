@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
-import 'package:localin/components/user_profile_box_widget.dart';
-import 'package:localin/presentation/explore/shared_widgets/event_date_widget.dart';
 import 'package:localin/presentation/explore/submit_form/confirmation_ticket_details_page.dart';
 import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_description.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_price_details.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_visitor.dart';
-import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
-import 'package:localin/presentation/shared_widgets/subtitle.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +19,10 @@ class SubmitFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final model = Provider.of<AuthProvider>(context);
     return ChangeNotifierProvider<SubmitFormProvider>(
-      create: (_) => SubmitFormProvider(routeArgs[eventSubmissionDetail]),
+      create: (_) => SubmitFormProvider(
+          routeArgs[eventSubmissionDetail], model.userModel.username),
       child: SubmitFormContent(),
     );
   }
@@ -50,21 +50,40 @@ class SubmitFormContent extends StatelessWidget {
           return InkWell(
             onTap: () async {
               if (provider.isButtonNotActive) {
-                CustomToast.showCustomBookmarkToast(
-                    context, 'fill in user details',
-                    duration: 2);
                 return;
               }
-              Navigator.of(context).pushNamed(
-                  ConfirmationTicketDetailsPage.routeName,
-                  arguments: {
-                    ConfirmationTicketDetailsPage.basicOrderInfo:
-                        provider.eventSubmissionDetails,
-                    ConfirmationTicketDetailsPage.eventPersonFormDetail:
-                        provider?.eventFormRequestModel,
-                    ConfirmationTicketDetailsPage.eventApiRequestForm:
-                        provider?.eventFormPersonNam,
-                  });
+              final navigate =
+                  await CustomDialog.showCustomDialogStaticVerticalButton(
+                context,
+                title: 'Confirm Order',
+                okText: 'Order',
+                message: 'Do you want to order this ticket ?',
+                cancelText: 'Cancel',
+                onCancel: () => Navigator.of(context).pop(),
+                okCallback: () async {
+                  Navigator.of(context).pop('ok');
+                },
+              );
+
+              if (navigate != null && navigate == 'ok') {
+                CustomDialog.showLoadingDialog(context,
+                    message: 'Creating order  ...');
+                final result = await provider.orderTicket();
+                CustomDialog.closeDialog(context);
+                CustomToast.showCustomBookmarkToast(context, result?.message);
+                if (!result.error) {
+                  Navigator.of(context).pushNamed(
+                      ConfirmationTicketDetailsPage.routeName,
+                      arguments: {
+                        ConfirmationTicketDetailsPage.basicOrderInfo:
+                            provider.eventSubmissionDetails,
+                        ConfirmationTicketDetailsPage.orderVisitorsName:
+                            provider.eventFormPersonNam,
+                        ConfirmationTicketDetailsPage.orderApiReturned:
+                            result.data,
+                      });
+                }
+              }
             },
             child: Container(
               height: 48.0,
@@ -73,7 +92,7 @@ class SubmitFormContent extends StatelessWidget {
                 color: ThemeColors.primaryBlue,
               ),
               child: Text(
-                'Continue',
+                'Confirm Booking',
                 style:
                     ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
               ),

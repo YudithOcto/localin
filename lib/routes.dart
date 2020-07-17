@@ -50,6 +50,7 @@ import 'package:localin/presentation/search/search_article/search_article_page.d
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
+import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
@@ -121,5 +122,7 @@ Map<String, WidgetBuilder> get generalRoutes {
         ConfirmationTicketDetailsPage(),
     SearchExploreEventPage.routeName: (_) => SearchExploreEventPage(),
     OrderSuccessfulPage.routeName: (_) => OrderSuccessfulPage(),
+    TransactionExploreDetailPage.routeName: (_) =>
+        TransactionExploreDetailPage(),
   };
 }

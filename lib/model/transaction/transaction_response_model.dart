@@ -36,6 +36,7 @@ class TransactionCommunityResponseModel {
 class TransactionCommunityDetail {
   String transactionId;
   String description;
+  String transactionType;
   int adminFee;
   int discount;
   int totalPayment;
@@ -49,6 +50,7 @@ class TransactionCommunityDetail {
   TransactionCommunityDetail(
       {this.transactionId,
       this.description,
+      this.transactionType,
       this.adminFee,
       this.discount,
       this.totalPayment,
@@ -71,6 +73,7 @@ class TransactionCommunityDetail {
       expiredAt: body['expired_at'],
       basicPayment: body['dasar_bayar'],
       transactionTypeId: body['modul_id'],
+      transactionType: body['modul'],
       serviceDetail: body['service_detail'] == null
           ? null
           : ServiceDetail.fromJson(body['service_detail']),
@@ -97,12 +100,12 @@ class ServiceDetail {
 
   factory ServiceDetail.fromJson(Map<String, dynamic> body) {
     return ServiceDetail(
-      invoiceId: body['invoice_id'],
+      invoiceId: body['invoice_id'].toString(),
       bookingCode: body['booking_kode'],
       title: body['keterangan'],
-      duration: body['quantity'],
+      duration: body['quantity'].toString(),
       totalPayment: body['invoice_payment_total'],
-      communitySlug: body['community_slug'],
+      communitySlug: body['community_slug'] ?? '',
     );
   }
 }

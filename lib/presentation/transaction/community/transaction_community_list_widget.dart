@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:localin/presentation/transaction/community/provider/transaction_list_provider.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
+import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:provider/provider.dart';
 
 class TransactionCommunityListWidget extends StatefulWidget {
+  final String type;
+  TransactionCommunityListWidget({this.type});
+
   @override
   _TransactionCommunityListWidgetState createState() =>
       _TransactionCommunityListWidgetState();
@@ -34,7 +38,7 @@ class _TransactionCommunityListWidgetState
 
   loadData({bool isRefresh = true}) async {
     Provider.of<TransactionListProvider>(context, listen: false)
-        .getCommunityTransaction(isRefresh: isRefresh);
+        .getTransactionList(isRefresh: isRefresh, type: widget.type);
   }
 
   @override
@@ -62,18 +66,31 @@ class _TransactionCommunityListWidgetState
                   } else if (index < provider.listCommunityTransaction.length) {
                     return InkWell(
                       onTap: () {
-                        Navigator.of(context).pushNamed(
-                            TransactionCommunityDetailPage.routeName,
+                        if (provider.listCommunityTransaction[index]
+                                .transactionType ==
+                            'Komunitas') {
+                          Navigator.of(context).pushNamed(
+                              TransactionCommunityDetailPage.routeName,
+                              arguments: {
+                                TransactionCommunityDetailPage
+                                    .onBackPressedHome: false,
+                                TransactionCommunityDetailPage.transactionId:
+                                    provider.listCommunityTransaction[index]
+                                        .transactionId,
+                                TransactionCommunityDetailPage.communitySlug:
+                                    provider.listCommunityTransaction[index]
+                                        .serviceDetail.communitySlug,
+                              });
+                        } else {
+                          Navigator.of(context).pushNamed(
+                            TransactionExploreDetailPage.routeName,
                             arguments: {
-                              TransactionCommunityDetailPage.onBackPressedHome:
-                                  false,
-                              TransactionCommunityDetailPage.transactionId:
+                              TransactionExploreDetailPage.transactionId:
                                   provider.listCommunityTransaction[index]
-                                      .transactionId,
-                              TransactionCommunityDetailPage.communitySlug:
-                                  provider.listCommunityTransaction[index]
-                                      .serviceDetail.communitySlug,
-                            });
+                                      .transactionId
+                            },
+                          );
+                        }
                       },
                       child: BookingDetailWidget(
                         detail: provider.listCommunityTransaction[index],

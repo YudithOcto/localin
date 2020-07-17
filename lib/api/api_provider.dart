@@ -35,6 +35,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -1414,18 +1415,51 @@ class ApiProvider {
     }
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
-      String transId) async {
+  getTransactionResponseModel(String type) {
+    var model;
+    switch (type) {
+      case kTransactionTypeCommunity:
+        model = TransactionCommunityResponseModel;
+        break;
+      case kTransactionTypeExplore:
+        model = TransactionExploreDetailResponse;
+        break;
+    }
+    return model;
+  }
+
+  Future<dynamic> getTransactionDetail(String transId, String type) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kTransactionDetail}/$transId',
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      return TransactionCommunityResponseModel.fromJson(response.data);
+      switch (type) {
+        case kTransactionTypeCommunity:
+          return TransactionCommunityResponseModel.fromJson(response.data);
+          break;
+        case kTransactionTypeExplore:
+          return TransactionExploreDetailResponse.fromJson(response.data);
+          break;
+      }
     } catch (error) {
-      if (error is DioError) {
-        return TransactionCommunityResponseModel.withError(_handleError(error));
-      } else {
-        return TransactionCommunityResponseModel.withError(error.toString());
+      switch (type) {
+        case kTransactionTypeCommunity:
+          if (error is DioError) {
+            return TransactionCommunityResponseModel.withError(
+                _handleError(error));
+          } else {
+            return TransactionCommunityResponseModel.withError(
+                error.toString());
+          }
+          break;
+        case kTransactionTypeExplore:
+          if (error is DioError) {
+            return TransactionExploreDetailResponse.withError(
+                _handleError(error));
+          } else {
+            return TransactionExploreDetailResponse.withError(error.toString());
+          }
+          break;
       }
     }
   }

@@ -17,9 +17,6 @@ class TransactionListPage extends StatelessWidget {
         ChangeNotifierProvider<TransactionHeaderProvider>(
           create: (_) => TransactionHeaderProvider(),
         ),
-        ChangeNotifierProvider<TransactionListProvider>(
-          create: (_) => TransactionListProvider(),
-        )
       ],
       child: TransactionListPageWrapperWidget(),
     );
@@ -44,7 +41,18 @@ class TransactionListPageWrapperWidget extends StatelessWidget {
               },
               children: <Widget>[
                 BookingHistoryPage(),
-                TransactionCommunityListWidget()
+                ChangeNotifierProvider<TransactionListProvider>(
+                  create: (_) => TransactionListProvider(),
+                  child: TransactionCommunityListWidget(
+                    type: 'community',
+                  ),
+                ),
+                ChangeNotifierProvider<TransactionListProvider>(
+                  create: (_) => TransactionListProvider(),
+                  child: TransactionCommunityListWidget(
+                    type: 'explore',
+                  ),
+                ),
               ],
             ),
           )
