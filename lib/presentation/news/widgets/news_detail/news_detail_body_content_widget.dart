@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/presentation/news/shared_widget/mini_user_public_profile.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/image_redirect.dart';
 import 'news_body_tag_widget.dart';
 import 'news_detail_related_widget.dart';
 
@@ -37,19 +37,7 @@ class _NewsDetailBodyContentWidgetState
                 onTap: () {
                   List<String> images =
                       _articleDetail.image.map((v) => v.attachment).toList();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GalleryPhotoView(
-                        galleryItems: images,
-                        backgroundDecoration: const BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        initialIndex: _articleDetail.image.indexOf(item),
-                        scrollDirection: Axis.horizontal,
-                      ),
-                    ),
-                  );
+                  redirectImage(context, images);
                 },
                 child: CachedNetworkImage(
                   imageUrl: item.attachment ?? '',

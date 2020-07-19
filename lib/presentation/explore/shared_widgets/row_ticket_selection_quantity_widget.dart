@@ -32,7 +32,7 @@ class RowTicketSelectionQuantityWidget extends StatelessWidget {
             children: <Widget>[
               Text('$ticketType', style: ThemeText.sfSemiBoldFootnote),
               SizedBox(height: 6.0),
-              Text('${getFormattedCurrency(price)}',
+              Text('${price == 0 ? 'Free' : getFormattedCurrency(price)}',
                   style: ThemeText.sfSemiBoldHeadline),
               SizedBox(height: 4.0),
               Text(

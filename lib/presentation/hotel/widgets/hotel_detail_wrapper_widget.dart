@@ -6,6 +6,7 @@ import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
+import 'package:localin/utils/image_redirect.dart';
 import 'package:provider/provider.dart';
 import 'package:localin/presentation/hotel/widgets/room_description.dart';
 import 'package:localin/presentation/hotel/widgets/room_general_facilities.dart';
@@ -30,19 +31,7 @@ class HotelDetailWrapperWidget extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GalleryPhotoView(
-                        galleryItems: provider.hotelDetailEntity.images,
-                        backgroundDecoration: const BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        initialIndex: 0,
-                        scrollDirection: Axis.horizontal,
-                      ),
-                    ),
-                  );
+                  redirectImage(context, provider.hotelDetailEntity.images);
                 },
                 child: Stack(
                   children: <Widget>[

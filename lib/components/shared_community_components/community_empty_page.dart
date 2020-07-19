@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
@@ -13,6 +12,16 @@ import '../../themes.dart';
 import '../custom_dialog.dart';
 
 class CommunityEmptyPage extends StatelessWidget {
+  final String title;
+  final String content;
+  final String btnTxt;
+  CommunityEmptyPage({
+    this.title = 'Can\'t find community around me',
+    this.content =
+        'Dicover community from other location, or create your own community',
+    this.btnTxt = 'Create my own community',
+  });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +32,7 @@ class CommunityEmptyPage extends StatelessWidget {
             'images/empty_community.svg',
           ),
           Text(
-            'Can\'t find community around me',
+            '$title',
             textAlign: TextAlign.center,
             style: ThemeText.sfSemiBoldHeadline
                 .copyWith(color: ThemeColors.black80),
@@ -32,7 +41,7 @@ class CommunityEmptyPage extends StatelessWidget {
             height: 4.0,
           ),
           Text(
-            'Dicover community from other location, or create your own community',
+            '$content',
             textAlign: TextAlign.center,
             style: ThemeText.sfRegularBody.copyWith(color: ThemeColors.black80),
           ),
@@ -62,7 +71,7 @@ class CommunityEmptyPage extends StatelessWidget {
                     });
               }
             },
-            buttonText: 'Create my own community',
+            buttonText: '$btnTxt',
           )
         ],
       ),

@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:localin/presentation/transaction/community/provider/transaction_list_provider.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
+import 'package:localin/presentation/transaction/community/widget/transaction_empty_community_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
+import 'package:localin/presentation/transaction/explore/widgets/transaction_empty_explore_page.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-class TransactionCommunityListWidget extends StatefulWidget {
+class TransactionListWidget extends StatefulWidget {
   final String type;
-  TransactionCommunityListWidget({this.type});
+  TransactionListWidget({this.type});
 
   @override
-  _TransactionCommunityListWidgetState createState() =>
-      _TransactionCommunityListWidgetState();
+  _TransactionListWidgetState createState() => _TransactionListWidgetState();
 }
 
-class _TransactionCommunityListWidgetState
-    extends State<TransactionCommunityListWidget> {
+class _TransactionListWidgetState extends State<TransactionListWidget> {
   final _scrollController = ScrollController();
   bool _isInit = true;
 
@@ -62,36 +63,15 @@ class _TransactionCommunityListWidgetState
                 itemCount: provider.listCommunityTransaction.length + 1,
                 itemBuilder: (context, index) {
                   if (snapshot.data == transactionState.empty) {
-                    return Container();
+                    if (widget.type == 'explore') {
+                      return TransactionEmptyExplorePage();
+                    } else {
+                      return TransactionEmptyCommunityPage();
+                    }
                   } else if (index < provider.listCommunityTransaction.length) {
                     return InkWell(
-                      onTap: () {
-                        if (provider.listCommunityTransaction[index]
-                                .transactionType ==
-                            'Komunitas') {
-                          Navigator.of(context).pushNamed(
-                              TransactionCommunityDetailPage.routeName,
-                              arguments: {
-                                TransactionCommunityDetailPage
-                                    .onBackPressedHome: false,
-                                TransactionCommunityDetailPage.transactionId:
-                                    provider.listCommunityTransaction[index]
-                                        .transactionId,
-                                TransactionCommunityDetailPage.communitySlug:
-                                    provider.listCommunityTransaction[index]
-                                        .serviceDetail.communitySlug,
-                              });
-                        } else {
-                          Navigator.of(context).pushNamed(
-                            TransactionExploreDetailPage.routeName,
-                            arguments: {
-                              TransactionExploreDetailPage.transactionId:
-                                  provider.listCommunityTransaction[index]
-                                      .transactionId
-                            },
-                          );
-                        }
-                      },
+                      onTap: () => navigateToDetailPage(
+                          provider.listCommunityTransaction[index]),
                       child: BookingDetailWidget(
                         detail: provider.listCommunityTransaction[index],
                         showPaymentRow: true,
@@ -111,5 +91,30 @@ class _TransactionCommunityListWidgetState
         );
       },
     );
+  }
+
+  navigateToDetailPage(final item) async {
+    if (item.transactionType == 'komunitas') {
+      final result = await Navigator.of(context)
+          .pushNamed(TransactionCommunityDetailPage.routeName, arguments: {
+        TransactionCommunityDetailPage.onBackPressedHome: false,
+        TransactionCommunityDetailPage.transactionId: item.transactionId,
+        TransactionCommunityDetailPage.communitySlug:
+            item.serviceDetail.communitySlug,
+      });
+      if (result != null && result == kRefresh) {
+        loadData(isRefresh: true);
+      }
+    } else {
+      final result = await Navigator.of(context).pushNamed(
+        TransactionExploreDetailPage.routeName,
+        arguments: {
+          TransactionExploreDetailPage.transactionId: item.transactionId
+        },
+      );
+      if (result != null && result == kRefresh) {
+        loadData(isRefresh: true);
+      }
+    }
   }
 }

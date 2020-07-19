@@ -11,6 +11,8 @@ class ExploreVisitorDetailWidget extends StatelessWidget {
   ExploreVisitorDetailWidget({@required this.exploreDetail});
   @override
   Widget build(BuildContext context) {
+    if (exploreDetail == null && exploreDetail.attendees == null)
+      return Container();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

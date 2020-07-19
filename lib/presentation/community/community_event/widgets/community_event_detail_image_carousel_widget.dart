@@ -5,6 +5,7 @@ import 'package:localin/presentation/community/community_event/provider/communit
 import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/image_redirect.dart';
 import 'package:provider/provider.dart';
 
 class CommunityEventDetailImageCarouselWidget extends StatelessWidget {
@@ -31,19 +32,7 @@ class CommunityEventDetailImageCarouselWidget extends StatelessWidget {
                 provider.eventResponse.attachment
                     .map((e) => list.add(e.attachment))
                     .toList();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GalleryPhotoView(
-                      galleryItems: list,
-                      backgroundDecoration: const BoxDecoration(
-                        color: Colors.black,
-                      ),
-                      initialIndex: index,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                  ),
-                );
+                redirectImage(context, list);
               },
               child: Stack(
                 fit: StackFit.expand,

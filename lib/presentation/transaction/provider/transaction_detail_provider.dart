@@ -3,26 +3,40 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
+import 'package:localin/model/transaction/transaction_response_model.dart';
+import 'package:localin/utils/constants.dart';
 
 class TransactionDetailProvider with ChangeNotifier {
   final _repository = Repository();
 
   final _streamController =
-      StreamController<transactionCommunityState>.broadcast();
-  Stream<transactionCommunityState> get transStream => _streamController.stream;
+      StreamController<transactionDetailState>.broadcast();
+  Stream<transactionDetailState> get transStream => _streamController.stream;
 
   var transactionDetail;
-  Future<Null> getCommunityTransactionDetail(
-      String transactionId, String type) async {
-    _streamController.add(transactionCommunityState.loading);
+  Future<Null> getTransactionDetail(String transactionId, String type) async {
+    _streamController.add(transactionDetailState.loading);
     final result = await _repository.getTransactionDetails(transactionId, type);
     if (!result.error) {
       transactionDetail = result.data;
-      _streamController.add(transactionCommunityState.success);
+      _streamController.add(transactionDetailState.success);
     } else {
-      _streamController.add(transactionCommunityState.empty);
+      _streamController.add(transactionDetailState.empty);
     }
     notifyListeners();
+  }
+
+  updateTransactionDetail(String type) {
+    if (type == kTransactionTypeExplore) {
+      final tempData = transactionDetail as Data;
+      tempData.status = 'Finished';
+      transactionDetail = tempData;
+    } else if (type == kTransactionTypeCommunity) {
+      final tempData = transactionDetail as TransactionCommunityDetail;
+      tempData.status = 'Finished';
+    }
+    navigateRefresh = true;
   }
 
   Future<BookingPaymentResponse> payTransaction(String transactionId) async {
@@ -38,6 +52,13 @@ class TransactionDetailProvider with ChangeNotifier {
     return await _repository.cancelTransaction(transactionId);
   }
 
+  bool _isNavigateBackNeedRefresh = false;
+  bool get isNavigateBackNeedRefresh => _isNavigateBackNeedRefresh;
+  set navigateRefresh(bool value) {
+    _isNavigateBackNeedRefresh = value;
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _streamController.close();
@@ -45,4 +66,4 @@ class TransactionDetailProvider with ChangeNotifier {
   }
 }
 
-enum transactionCommunityState { loading, success, empty }
+enum transactionDetailState { loading, success, empty }

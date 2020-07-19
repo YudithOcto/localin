@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
+import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class BottomButtonPaymentWidget extends StatelessWidget {
   final bool isVisible;
-  final VoidCallback onCancelPressed;
-  final VoidCallback onPaymentPressed;
+  final String transactionId;
+  final String type;
   BottomButtonPaymentWidget(
-      {@required this.onCancelPressed,
-      @required this.onPaymentPressed,
-      this.isVisible});
+      {@required this.transactionId, this.isVisible, @required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class BottomButtonPaymentWidget extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: InkWell(
-              onTap: onCancelPressed,
+              onTap: () => _cancelPayment(context),
               child: Container(
                 height: 48.0,
                 alignment: FractionalOffset.center,
@@ -39,7 +42,7 @@ class BottomButtonPaymentWidget extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: onPaymentPressed,
+              onTap: () => _payNowDialog(context),
               child: Container(
                 height: 48.0,
                 alignment: FractionalOffset.center,
@@ -60,5 +63,56 @@ class BottomButtonPaymentWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _cancelPayment(BuildContext context) async {
+    final result = await startDialog(context);
+    if (result != null && result == 'Pay') {
+      CustomDialog.showLoadingDialog(context, message: 'Please wait');
+      final result =
+          await Provider.of<TransactionDetailProvider>(context, listen: false)
+              .cancelTransaction(transactionId);
+      CustomDialog.closeDialog(context);
+      CustomToast.showCustomBookmarkToast(context, result);
+      Navigator.of(context).pop();
+    }
+  }
+
+  _payNowDialog(BuildContext context) async {
+    final result = await startDialog(context);
+    if (result != null && result == 'Pay') {
+      CustomDialog.showLoadingDialog(context, message: 'Please wait');
+      final result =
+          await Provider.of<TransactionDetailProvider>(context, listen: false)
+              .payTransaction(transactionId);
+      CustomDialog.closeDialog(context);
+      if (result.error) {
+        CustomToast.showCustomBookmarkToast(context, result?.message);
+        return;
+      }
+      final response = await Navigator.of(context)
+          .pushNamed(WebViewPage.routeName, arguments: {
+        WebViewPage.urlName: result?.urlRedirect,
+        WebViewPage.title: 'Transaction',
+      });
+      if (response != null && response == SUCCESS_VERIFICATION) {
+        final provider =
+            Provider.of<TransactionDetailProvider>(context, listen: false);
+        provider.navigateRefresh = true;
+        provider.updateTransactionDetail(type);
+      }
+    }
+  }
+
+  startDialog(BuildContext context) {
+    return CustomDialog.showCustomDialogStaticVerticalButton(context,
+        title: 'Pay Now',
+        message: 'Purchase this order now?',
+        okText: 'Pay',
+        cancelText: 'Cancel',
+        onCancel: () => Navigator.of(context).pop(),
+        okCallback: () {
+          Navigator.of(context).pop('Pay');
+        });
   }
 }

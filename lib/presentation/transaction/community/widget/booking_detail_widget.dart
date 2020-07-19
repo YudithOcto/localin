@@ -6,6 +6,7 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/countdown.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class BookingDetailWidget extends StatefulWidget {
@@ -78,11 +79,14 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
             ),
             child: Row(
               children: <Widget>[
-                SvgPicture.asset('images/community_pro_icon.svg'),
+                SvgPicture.asset(
+                    'images/${widget.detail.modul == 'komunitas' ? 'community_pro_icon' : 'calendar'}.svg'),
                 SizedBox(width: 12.0),
-                Text(
-                  'Komunitas Pro (Bulanan)',
-                  style: ThemeText.sfMediumFootnote,
+                Expanded(
+                  child: Text(
+                    '$contentMessage',
+                    style: ThemeText.sfMediumFootnote,
+                  ),
                 )
               ],
             ),
@@ -101,29 +105,32 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
                         ? StreamBuilder<String>(
                             stream: _countdown.differenceStream,
                             builder: (context, snapshot) {
-                              return Row(
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
-                                    width: 20.0,
-                                    height: 20.0,
-                                  ),
-                                  SizedBox(
-                                    width: 5.0,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
-                                      style: ThemeText.sfMediumFootnote
-                                          .copyWith(
-                                              color: snapshot.data == null
-                                                  ? kTransactionCancelled
-                                                      .rowColor
-                                                  : widget
-                                                      .detail.status.rowColor),
+                              return Visibility(
+                                visible: snapshot.hasData,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
+                                      width: 20.0,
+                                      height: 20.0,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
+                                        style: ThemeText.sfMediumFootnote
+                                            .copyWith(
+                                                color: snapshot.data == null
+                                                    ? kTransactionCancelled
+                                                        .rowColor
+                                                    : widget.detail.status
+                                                        .rowColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                           )
@@ -150,6 +157,19 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
         ],
       ),
     );
+  }
+
+  String get contentMessage {
+    if (widget.detail.modul == 'komunitas') {
+      return 'Komunitas Pro (Bulanan)';
+    } else {
+      return '${formatTime(widget?.detail?.serviceDetail?.startDate)} - '
+          '${formatTime(widget?.detail?.serviceDetail?.endDate)} \u2022 ${widget?.detail?.serviceDetail?.quantity} visitor(s)';
+    }
+  }
+
+  String formatTime(DateTime datetime) {
+    return DateHelper.formatDate(date: datetime, format: 'EEE, dd MMMM yyyy');
   }
 }
 

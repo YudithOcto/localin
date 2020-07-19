@@ -1,6 +1,3 @@
-import 'dart:typed_data';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -14,8 +11,7 @@ class GalleryPhotoView extends StatefulWidget {
     this.minScale,
     this.maxScale,
     this.initialIndex,
-    this.memoryGalleryItems,
-    this.galleryItems,
+    this.imageProviderItems,
     this.scrollDirection = Axis.horizontal,
   }) : pageController = PageController(initialPage: initialIndex);
 
@@ -25,8 +21,7 @@ class GalleryPhotoView extends StatefulWidget {
   final dynamic maxScale;
   final int initialIndex;
   final PageController pageController;
-  final List<String> galleryItems;
-  final List<Uint8List> memoryGalleryItems;
+  final List<ImageProvider> imageProviderItems;
   final Axis scrollDirection;
 
   @override
@@ -60,9 +55,9 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
             ),
             scrollPhysics: const BouncingScrollPhysics(),
             builder: _buildItem,
-            itemCount: widget.galleryItems != null
-                ? widget.galleryItems.length
-                : widget.memoryGalleryItems.length,
+            itemCount: widget.imageProviderItems != null
+                ? widget.imageProviderItems.length
+                : 0,
             loadingChild: widget.loadingChild,
             pageController: widget.pageController,
             onPageChanged: onPageChanged,
@@ -73,7 +68,7 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
             child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Text(
-                "${currentIndex + 1} of ${widget.galleryItems.length} photos",
+                "${currentIndex + 1} of ${widget?.imageProviderItems?.length ?? 1} photos",
                 style: ThemeText.rodinaHeadline
                     .copyWith(color: ThemeColors.black0),
               ),
@@ -93,14 +88,9 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
-    final item = widget.memoryGalleryItems != null
-        ? widget.memoryGalleryItems[index]
-        : widget.galleryItems[index];
+    final item = widget.imageProviderItems[index];
     return PhotoViewGalleryPageOptions(
-      imageProvider: widget.memoryGalleryItems != null
-          ? MemoryImage(item)
-          : CachedNetworkImageProvider('$item',
-              errorListener: () => Icon(Icons.error)),
+      imageProvider: item,
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 1.1,

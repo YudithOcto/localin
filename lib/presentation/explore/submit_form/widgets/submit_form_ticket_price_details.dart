@@ -33,7 +33,7 @@ class SubmitFormTicketPriceDetails extends StatelessWidget {
                     style: ThemeText.sfSemiBoldHeadline,
                   ),
                   Text(
-                    '${getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
+                    '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
                     style: ThemeText.sfSemiBoldHeadline,
                   )
                 ],
@@ -54,7 +54,7 @@ class SubmitFormTicketPriceDetails extends StatelessWidget {
                         .copyWith(color: ThemeColors.black80),
                   ),
                   Text(
-                    '${getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
+                    '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
                     style: ThemeText.sfMediumBody
                         .copyWith(color: ThemeColors.black80),
                   )

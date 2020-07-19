@@ -38,11 +38,14 @@ class HorizontalGalleryListSelectedWidget extends StatelessWidget {
             } else {
               return InkWell(
                 onTap: () {
+                  final image = provider.selectedImage
+                      .map((e) => MemoryImage(e))
+                      .toList();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => GalleryPhotoView(
-                        memoryGalleryItems: provider.selectedImage,
+                        imageProviderItems: image,
                         backgroundDecoration: const BoxDecoration(
                           color: ThemeColors.black100,
                         ),

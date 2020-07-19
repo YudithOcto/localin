@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/image_redirect.dart';
+import 'package:network_image_to_byte/network_image_to_byte.dart';
 import 'package:provider/provider.dart';
 
 class ExploreDetailBigImagesWidget extends StatefulWidget {
@@ -39,20 +42,9 @@ class _ExploreDetailBigImagesWidgetState
                 }),
             items: List.generate(1, (index) {
               return InkWell(
-                onTap: () {
-                  List<String> list = [
-                    provider.eventDetail.eventBanner,
-                  ];
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GalleryPhotoView(
-                        galleryItems: list,
-                        initialIndex: 0,
-                        scrollDirection: Axis.horizontal,
-                      ),
-                    ),
-                  );
+                onTap: () async {
+                  List<String> items = [provider.eventDetail.eventBanner];
+                  redirectImage(context, items);
                 },
                 child: CustomImageRadius(
                   height: 260.0,
