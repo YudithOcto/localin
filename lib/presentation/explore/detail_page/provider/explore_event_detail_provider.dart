@@ -58,7 +58,7 @@ class ExploreEventDetailProvider with ChangeNotifier {
     return 0.0;
   }
 
-  get eventLocation {
+  String get eventLocation {
     if (eventDetail != null && eventDetail.schedules.isNotNullNorEmpty) {
       return eventDetail?.schedules[0]?.location?.address;
     }

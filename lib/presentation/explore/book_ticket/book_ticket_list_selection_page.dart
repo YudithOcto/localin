@@ -74,7 +74,9 @@ class BookTicketListSelectionContent extends StatelessWidget {
         builder: (context, provider, _) {
           return SubtotalTicketButtonWidget(
             totalSelectedTicket: provider.totalSelectedTicket,
-            totalTicketPrice: getFormattedCurrency(provider.totalPriceTicket),
+            totalTicketPrice: provider.totalPriceTicket == 0
+                ? 'Free'
+                : getFormattedCurrency(provider.totalPriceTicket),
             onPressed: () {
               if (provider.totalSelectedTicket > 0) {
                 final data = provider.eventSubmissionDetail;

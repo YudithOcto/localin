@@ -14,6 +14,7 @@ import 'floating_action_bottom_app_bar.dart';
 
 class MainBottomNavigation extends StatefulWidget {
   static const routeName = 'BottomNavigationPage';
+  static const overrideSelectedIndex = 'SelectedIndex';
 
   @override
   _MainBottomNavigationState createState() => _MainBottomNavigationState();
@@ -28,10 +29,15 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      currentSelected = routeArgs != null && routeArgs.isNotEmpty
+          ? routeArgs[MainBottomNavigation.overrideSelectedIndex]
+          : 0;
       pages = [
         HomePage(valueChanged: _selectedTab),
         NewsMainPage(),
-        TransactionListPage(),
+        TransactionListPage(selectedHeaderIndex: currentSelected),
         NotificationListPage(valueChanged: _selectedTab),
         RevampProfilePage()
       ];

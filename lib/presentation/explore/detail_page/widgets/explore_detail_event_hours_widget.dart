@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/explore/detail_page/explore_operational_hours_page.dart';
+import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/event_date_widget.dart';
 import 'package:localin/text_themes.dart';

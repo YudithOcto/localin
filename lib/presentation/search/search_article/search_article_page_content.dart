@@ -5,6 +5,7 @@ import 'package:localin/presentation/search/search_article//search_article_resul
 import 'package:localin/presentation/search/search_article//search_tag_result_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/debounce.dart';
 import 'package:provider/provider.dart';
 
 class SearchArticlePageContent extends StatefulWidget {
@@ -26,6 +27,7 @@ class _SearchArticlePageContentState extends State<SearchArticlePageContent>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ThemeColors.black0,
@@ -43,7 +45,9 @@ class _SearchArticlePageContentState extends State<SearchArticlePageContent>
           child: Consumer<SearchArticleProvider>(
             builder: (context, provider, child) {
               return TextFormField(
-                controller: provider.searchController,
+                onChanged: (v) {
+                  provider.onSearchChanged(v);
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: ThemeColors.black10,

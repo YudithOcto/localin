@@ -46,43 +46,43 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.bottomRight,
-        children: <Widget>[
-          PhotoViewGallery.builder(
-            backgroundDecoration: BoxDecoration(
-              color: Colors.black,
-            ),
-            scrollPhysics: const BouncingScrollPhysics(),
-            builder: _buildItem,
-            itemCount: widget.imageProviderItems != null
-                ? widget.imageProviderItems.length
-                : 0,
-            loadingChild: widget.loadingChild,
-            pageController: widget.pageController,
-            onPageChanged: onPageChanged,
-            scrollDirection: widget.scrollDirection,
-          ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.25,
-            child: Container(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                "${currentIndex + 1} of ${widget?.imageProviderItems?.length ?? 1} photos",
-                style: ThemeText.rodinaHeadline
-                    .copyWith(color: ThemeColors.black0),
+      body: Container(
+        decoration: widget.backgroundDecoration,
+        constraints: BoxConstraints.expand(
+          height: MediaQuery.of(context).size.height,
+        ),
+        child: Stack(
+          alignment: FractionalOffset.bottomRight,
+          children: <Widget>[
+            PhotoViewGallery.builder(
+              backgroundDecoration: BoxDecoration(
+                color: ThemeColors.black100,
               ),
+              scrollPhysics: const BouncingScrollPhysics(),
+              builder: _buildItem,
+              itemCount: widget.imageProviderItems != null
+                  ? widget.imageProviderItems.length
+                  : 0,
+              loadingChild: widget.loadingChild,
+              pageController: widget.pageController,
+              onPageChanged: onPageChanged,
+              scrollDirection: widget.scrollDirection,
             ),
-          ),
-          Positioned(
-            top: 50.0,
-            right: 28.0,
-            child: InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              child: Icon(Icons.close, color: ThemeColors.black0),
+            Text(
+              "${currentIndex + 1} of ${widget?.imageProviderItems?.length ?? 1} photos",
+              style:
+                  ThemeText.rodinaHeadline.copyWith(color: ThemeColors.black0),
             ),
-          )
-        ],
+            Positioned(
+              top: 50.0,
+              right: 28.0,
+              child: InkWell(
+                onTap: () => Navigator.of(context).pop(),
+                child: Icon(Icons.close, color: ThemeColors.black0),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

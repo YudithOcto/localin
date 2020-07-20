@@ -56,7 +56,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
                 ),
               ),
               Text(
-                '${getFormattedCurrency(widget.detail.totalPayment)}',
+                '${widget.detail.totalPayment?.transformTicketPrice}',
                 style: ThemeText.sfSemiBoldFootnote
                     .copyWith(color: ThemeColors.green),
               )
@@ -196,5 +196,12 @@ extension on String {
     } else {
       return 'circle_checked_blue';
     }
+  }
+}
+
+extension on int {
+  String get transformTicketPrice {
+    if (this == null || this == 0) return 'Free';
+    return getFormattedCurrency(this);
   }
 }

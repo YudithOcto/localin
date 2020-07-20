@@ -30,13 +30,13 @@ class ExplorePriceDetailWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _singleRowPriceWidget('${exploreDetail?.event?.eventName}',
-                  '${getFormattedCurrency(exploreDetail?.invoiceTotal)}'),
+                  '${exploreDetail?.invoiceTotal?.transformTicketPrice}'),
               _divider(),
               _singleRowPriceWidget('Admin Fee',
-                  '${getFormattedCurrency(exploreDetail?.adminFee)}'),
+                  '${exploreDetail?.adminFee?.transformTicketPrice}'),
               _divider(),
               _singleRowPriceWidget('Total',
-                  '${getFormattedCurrency(exploreDetail?.totalPayment)}')
+                  '${exploreDetail?.totalPayment?.transformTicketPrice}')
             ],
           ),
         ),
@@ -68,5 +68,12 @@ class ExplorePriceDetailWidget extends StatelessWidget {
             style: ThemeText.sfMediumBody.copyWith(color: ThemeColors.orange))
       ],
     );
+  }
+}
+
+extension on int {
+  String get transformTicketPrice {
+    if (this == null || this == 0) return 'Free';
+    return getFormattedCurrency(this);
   }
 }

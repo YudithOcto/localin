@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/explore/submit_form/confirmation_ticket_details_page.dart';
 import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_description.dart';

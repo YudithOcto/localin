@@ -10,12 +10,15 @@ import 'package:provider/provider.dart';
 
 class TransactionListPage extends StatelessWidget {
   static const routeName = 'transactionListPage';
+  final int selectedHeaderIndex;
+  TransactionListPage({this.selectedHeaderIndex});
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<TransactionHeaderProvider>(
-          create: (_) => TransactionHeaderProvider(),
+          create: (_) =>
+              TransactionHeaderProvider(index: selectedHeaderIndex ?? 0),
         ),
       ],
       child: TransactionListPageWrapperWidget(),

@@ -6,6 +6,7 @@ import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/explore/single_person_form_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/order_successful_page.dart';
+import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/utils/number_helper.dart';
@@ -29,7 +30,12 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushNamedAndRemoveUntil(
-            MainBottomNavigation.routeName, (route) => false);
+            TransactionExploreDetailPage.routeName, (route) => false,
+            arguments: {
+              TransactionExploreDetailPage.transactionId:
+                  _orderDetail.transactionId,
+              TransactionExploreDetailPage.fromOutSideTransaction: true,
+            });
         return false;
       },
       child: ChangeNotifierProvider<TransactionDetailProvider>(
@@ -44,45 +50,52 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                 pageTitle: 'Confirmation Details',
                 leadingIcon: InkWell(
                   onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                      MainBottomNavigation.routeName, (route) => false),
+                      TransactionExploreDetailPage.routeName, (route) => false,
+                      arguments: {
+                        TransactionExploreDetailPage.transactionId:
+                            _orderDetail.transactionId
+                      }),
                   child: Icon(
                     Icons.arrow_back,
                     color: ThemeColors.black100,
                   ),
                 ),
               ),
-              bottomNavigationBar: InkWell(
-                onTap: () async {
-                  CustomDialog.showLoadingDialog(context,
-                      message: 'Please wait ..');
-                  final getUrl = await Provider.of<TransactionDetailProvider>(
-                          context,
-                          listen: false)
-                      .payTransaction(_orderDetail?.transactionId);
-                  CustomDialog.closeDialog(context);
-                  final payment = await Navigator.of(context)
-                      .pushNamed(WebViewPage.routeName, arguments: {
-                    WebViewPage.urlName: getUrl?.urlRedirect,
-                    WebViewPage.title: 'Explore Transaction',
-                  });
-                  if (payment != null && payment == SUCCESS_VERIFICATION) {
-                    Navigator.of(context)
-                        .pushNamed(OrderSuccessfulPage.routeName);
-                  } else {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        MainBottomNavigation.routeName, (route) => false);
-                  }
-                },
-                child: Container(
-                  height: 48.0,
-                  alignment: FractionalOffset.center,
-                  decoration: BoxDecoration(
-                    color: ThemeColors.primaryBlue,
-                  ),
-                  child: Text(
-                    'Pay Now',
-                    style: ThemeText.rodinaTitle3
-                        .copyWith(color: ThemeColors.black0),
+              bottomNavigationBar: Visibility(
+                visible: detail.totalPrice > 0,
+                child: InkWell(
+                  onTap: () async {
+                    CustomDialog.showLoadingDialog(context,
+                        message: 'Please wait ..');
+                    final getUrl = await Provider.of<TransactionDetailProvider>(
+                            context,
+                            listen: false)
+                        .payTransaction(_orderDetail?.transactionId);
+                    CustomDialog.closeDialog(context);
+                    final payment = await Navigator.of(context)
+                        .pushNamed(WebViewPage.routeName, arguments: {
+                      WebViewPage.urlName: getUrl?.urlRedirect,
+                      WebViewPage.title: 'Explore Transaction',
+                    });
+                    if (payment != null && payment == SUCCESS_VERIFICATION) {
+                      Navigator.of(context)
+                          .pushNamed(OrderSuccessfulPage.routeName);
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          MainBottomNavigation.routeName, (route) => false);
+                    }
+                  },
+                  child: Container(
+                    height: 48.0,
+                    alignment: FractionalOffset.center,
+                    decoration: BoxDecoration(
+                      color: ThemeColors.primaryBlue,
+                    ),
+                    child: Text(
+                      'Pay Now',
+                      style: ThemeText.rodinaTitle3
+                          .copyWith(color: ThemeColors.black0),
+                    ),
                   ),
                 ),
               ),
@@ -107,11 +120,11 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                       color: ThemeColors.black20,
                     ),
                     singleConfirmationRow('Ticket (${detail?.totalTicket})',
-                        '${getFormattedCurrency(_orderDetail?.invoicePaymentTotal)}'),
+                        '${_orderDetail?.invoicePaymentTotal?.transformTicketPrice}'),
                     singleConfirmationRow('Admin Fee',
-                        '${getFormattedCurrency(_orderDetail?.adminFee)}'),
+                        '${_orderDetail?.adminFee?.transformTicketPrice}'),
                     singleConfirmationRow('Total Amount',
-                        '${getFormattedCurrency(_orderDetail.invoicePaymentTotal + _orderDetail?.adminFee)}'),
+                        '${(_orderDetail.invoicePaymentTotal + _orderDetail?.adminFee).transformTicketPrice}'),
                   ],
                 ),
               ),
@@ -142,5 +155,12 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+extension on int {
+  String get transformTicketPrice {
+    if (this == null || this == 0) return 'Free';
+    return getFormattedCurrency(this);
   }
 }

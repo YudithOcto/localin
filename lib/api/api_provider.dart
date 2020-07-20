@@ -438,10 +438,8 @@ class ApiProvider {
           return ArticleBaseResponse.withError(error.response.data['tag'][0]);
         } else {
           for (int i = 0; i < form.files.length; i++) {
-            if (error.response.data['gambar.$i'][0] != null) {
-              return ArticleBaseResponse.withError(
-                  error.response.data['gambar.$i'][0]);
-            }
+            return ArticleBaseResponse.withError(
+                error.response.data['gambar'][i]);
           }
           return ArticleBaseResponse.withError(error.response.data.toString());
         }

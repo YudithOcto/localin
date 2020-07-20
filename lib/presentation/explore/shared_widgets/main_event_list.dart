@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/community/community_event/widgets/empty_event.dart';
 import 'package:localin/presentation/explore/providers/explore_main_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/single_explore_card_widget.dart';
 import 'package:localin/presentation/search/generic_search/empty_event.dart';
+import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -53,16 +53,24 @@ class _MainEventListState extends State<MainEventList> {
                           children: <Widget>[
                             Text('Event and Attraction',
                                 style: ThemeText.rodinaTitle2),
-                            Text(
-                              'Pakualam, Serpong Utara',
-                              style: ThemeText.sfMediumBody
-                                  .copyWith(color: ThemeColors.black80),
+                            Consumer<LocationProvider>(
+                              builder: (_, provider, __) {
+                                return Text(
+                                  '${provider.address}',
+                                  style: ThemeText.sfMediumBody
+                                      .copyWith(color: ThemeColors.black80),
+                                );
+                              },
                             ),
                           ],
                         );
                       } else {
                         if (snapshot.data == exploreState.empty) {
-                          return EmptyExploreEvent();
+                          return Container(
+                              margin: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.15),
+                              child: EmptyExploreEvent());
                         } else if (index - 1 < provider.eventList.length) {
                           return SingleExploreCardWidget(
                             detail: provider.eventList[index - 1],

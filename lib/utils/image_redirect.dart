@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_dialog.dart';
-import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
+import 'package:localin/presentation/shared_widgets/gallery_photo_view.dart';
 import 'package:network_image_to_byte/network_image_to_byte.dart';
 
 void redirectImage(BuildContext context, List<String> images) async {

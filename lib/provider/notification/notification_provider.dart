@@ -7,6 +7,7 @@ class NotificationProvider extends BaseModelProvider {
   Repository _repository = Repository();
   bool _isCanLoadMore = true;
   int _totalPageRequest = 10, _offsetPageRequest = 1;
+  int get offsetPageRequest => _offsetPageRequest;
   int totalInbox = 0;
   List<NotificationDetailModel> _notificationListData = [];
   StreamController<NotificationState> _notificationState =
@@ -27,16 +28,12 @@ class NotificationProvider extends BaseModelProvider {
 
     final response = await _repository.getNotificationList(
         _offsetPageRequest, _totalPageRequest);
-    if (response != null && !response.error) {
-      if (response.model.data.isEmpty) {
-        _notificationState.add(NotificationState.NoData);
-      } else {
-        _notificationState.add(NotificationState.Success);
-      }
+    if (response.total > 0) {
       _notificationListData.addAll(response.model.data);
-      totalInbox = response.model.total;
-      _isCanLoadMore = totalInbox > _notificationListData.length;
+      _isCanLoadMore = response.total > _notificationListData.length;
+      totalInbox = response.total;
       _offsetPageRequest += 1;
+      _notificationState.add(NotificationState.Success);
     } else {
       _isCanLoadMore = false;
       _notificationState.add(NotificationState.NoData);

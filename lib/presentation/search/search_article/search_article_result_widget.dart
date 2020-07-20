@@ -20,6 +20,10 @@ class _SearchArticleResultWidgetState extends State<SearchArticleResultWidget> {
     super.initState();
     locator<AnalyticsService>().setScreenName(name: 'SearchArticleTab');
     _searchArticleScrollController..addListener(_listen);
+    Future.delayed(Duration.zero, () {
+      Provider.of<SearchArticleProvider>(context, listen: false)
+          .getArticle(isRefresh: true);
+    });
   }
 
   _listen() {
@@ -42,27 +46,21 @@ class _SearchArticleResultWidgetState extends State<SearchArticleResultWidget> {
           child: StreamBuilder<SearchArticleState>(
               stream: provider.searchArticleStream,
               builder: (context, snapshot) {
-                if (snapshot.data == SearchArticleState.isEmpty) {
-                  return EmptyArticle();
+                if (snapshot.data == SearchArticleState.isLoading &&
+                    provider.offsetPage <= 1) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
                 } else {
-                  if (snapshot.data == SearchArticleState.isLoading &&
-                      provider.offsetPage <= 1) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
                   return ListView.builder(
                     shrinkWrap: true,
                     controller: _searchArticleScrollController,
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     physics: ClampingScrollPhysics(),
-                    itemCount: provider.articleList != null &&
-                            provider.articleList.isNotEmpty
-                        ? provider.articleList.length + 1
-                        : 1,
+                    itemCount: provider.articleList.length + 1,
                     itemBuilder: (context, index) {
-                      if (provider.articleList.length == 0) {
-                        return Container();
+                      if (snapshot.data == SearchArticleState.isEmpty) {
+                        return EmptyArticle();
                       } else if (index < provider.articleList.length) {
                         return ArticleSingleCard(provider.articleList[index]);
                       } else if (provider.isCanLoadMoreArticle) {

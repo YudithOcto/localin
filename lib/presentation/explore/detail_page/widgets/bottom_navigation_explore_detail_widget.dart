@@ -22,7 +22,7 @@ class BottomNavigationExploreDetailWidget extends StatelessWidget {
                   text: 'Starting from\n', style: ThemeText.sfMediumCaption),
               TextSpan(
                   text:
-                      '${getFormattedCurrency(eventDetail?.startPrice) ?? ''}',
+                      '${eventDetail?.startPrice == 0 ? 'Free' : getFormattedCurrency(eventDetail?.startPrice) ?? ''}',
                   style: ThemeText.rodinaTitle2
                       .copyWith(color: ThemeColors.orange)),
               TextSpan(text: '\t/ticket', style: ThemeText.sfMediumCaption),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
+import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/shared_widgets/empty_community_with_custom_message.dart';
 import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
 import 'package:localin/presentation/transaction/explore/widgets/explore_booking_detail_widget.dart';
 import 'package:localin/presentation/transaction/explore/widgets/explore_location_detail_widget.dart';
@@ -15,6 +17,7 @@ import 'package:provider/provider.dart';
 class TransactionExploreDetailPage extends StatelessWidget {
   static const routeName = 'TransactionExploreDetailPage';
   static const transactionId = 'TransactionId';
+  static const fromOutSideTransaction = 'FromOutsideTransaction';
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +36,16 @@ class TransactionExploreContentWidget extends StatefulWidget {
 
 class _TransactionExploreContentWidgetState
     extends State<TransactionExploreContentWidget> {
-  bool _isInit = true;
+  bool _isInit = true, _isFromOutSideTransaction = false;
   String _transactionId;
   @override
   void didChangeDependencies() {
     if (_isInit) {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      _isFromOutSideTransaction =
+          routeArgs[TransactionExploreDetailPage.fromOutSideTransaction] ??
+              false;
       _transactionId = routeArgs[TransactionExploreDetailPage.transactionId];
       Provider.of<TransactionDetailProvider>(context, listen: false)
           .getTransactionDetail(_transactionId, kTransactionTypeExplore);
@@ -50,7 +56,13 @@ class _TransactionExploreContentWidgetState
 
   onBackPressed() {
     final provider = Provider.of<TransactionDetailProvider>(context);
-    if (provider.isNavigateBackNeedRefresh) {
+    if (_isFromOutSideTransaction) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          MainBottomNavigation.routeName, (route) => false,
+          arguments: {
+            MainBottomNavigation.overrideSelectedIndex: 2,
+          });
+    } else if (provider.isNavigateBackNeedRefresh) {
       Navigator.of(context).pop(kRefresh);
     } else {
       Navigator.of(context).pop();
@@ -128,7 +140,11 @@ class _TransactionExploreContentWidgetState
                     ),
                   );
                 } else {
-                  return Container();
+                  return EmptyCommunityWithCustomMessage(
+                    title: 'couldnt find your transaction',
+                    message:
+                        'we have trouble finding your transaction. Please try again',
+                  );
                 }
               }
             }),

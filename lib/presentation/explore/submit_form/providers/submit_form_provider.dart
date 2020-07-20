@@ -25,7 +25,7 @@ class SubmitFormProvider with ChangeNotifier {
   }
 
   get singlePaxPrice {
-    return 'Pax (${_eventSubmissionDetails.totalTicket}) @${getFormattedCurrency(_eventSubmissionDetails.totalPrice)}';
+    return 'Pax (${_eventSubmissionDetails.totalTicket}) @${_eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(_eventSubmissionDetails.totalPrice)}';
   }
 
   List<TextEditingController> visitorController = [];

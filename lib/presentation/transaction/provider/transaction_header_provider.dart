@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TransactionHeaderProvider with ChangeNotifier {
+  TransactionHeaderProvider({int index}) {
+    _headerCurrentSelected = index;
+    Future.delayed(Duration.zero, () => _pageController.jumpToPage(index));
+  }
+
   int _headerCurrentSelected = 0;
   int get currentHeaderSelected => _headerCurrentSelected;
 

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_create_post_provider.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
-import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
+import 'package:localin/presentation/shared_widgets/gallery_photo_view.dart';
 import 'package:localin/presentation/shared_widgets/add_image_gallery_widget.dart';
 import 'package:localin/presentation/shared_widgets/single_image_gallery_widget.dart';
 import 'package:localin/themes.dart';

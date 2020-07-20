@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
-import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
+import 'package:localin/presentation/shared_widgets/gallery_photo_view.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/image_redirect.dart';

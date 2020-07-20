@@ -18,7 +18,7 @@ import 'package:localin/presentation/community/community_search/search_community
 import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
-import 'package:localin/presentation/explore/detail_page/explore_operational_hours_page.dart';
+import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/explore/shared_widgets/row_ticket_selection_quantity_widget.dart';
