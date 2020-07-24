@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
 class OrderSuccessfulPage extends StatelessWidget {
   static const routeName = 'OrderSuccessfulPage';
+  static const transactionId = 'TransactionId';
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -70,8 +72,17 @@ class OrderSuccessfulPage extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
+                      final routes = ModalRoute.of(context).settings.arguments
+                          as Map<String, dynamic>;
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          MainBottomNavigation.routeName, (route) => false);
+                          TransactionExploreDetailPage.routeName,
+                          (route) => false,
+                          arguments: {
+                            TransactionExploreDetailPage.transactionId:
+                                routes[transactionId],
+                            TransactionExploreDetailPage.fromOutSideTransaction:
+                                true,
+                          });
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -82,7 +93,7 @@ class OrderSuccessfulPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 12.0),
                         child: Text(
-                          'Back To Home',
+                          'See Detail',
                           style: ThemeText.rodinaTitle3
                               .copyWith(color: ThemeColors.primaryBlue),
                         ),

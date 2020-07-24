@@ -27,14 +27,14 @@ class TransactionDetailProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  updateTransactionDetail(String type) {
+  updateTransactionDetail(String type, String status) {
     if (type == kTransactionTypeExplore) {
       final tempData = transactionDetail as Data;
-      tempData.status = 'Finished';
+      tempData.status = status;
       transactionDetail = tempData;
     } else if (type == kTransactionTypeCommunity) {
       final tempData = transactionDetail as TransactionCommunityDetail;
-      tempData.status = 'Finished';
+      tempData.status = status;
     }
     navigateRefresh = true;
   }

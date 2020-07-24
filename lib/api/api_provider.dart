@@ -1262,12 +1262,16 @@ class ApiProvider {
 
   Future<String> cancelTransaction(String transactionId) async {
     try {
-      final result = await _dio.post(
+      final result = await _dio.get(
           '${ApiConstant.kTransactionCancel}/$transactionId',
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return result.data['message'];
     } catch (error) {
-      return error.toString();
+      if (error is DioError) {
+        return _handleError(error);
+      } else {
+        return error.toString();
+      }
     }
   }
 

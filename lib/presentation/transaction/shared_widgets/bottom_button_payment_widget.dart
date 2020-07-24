@@ -5,6 +5,7 @@ import 'package:localin/presentation/transaction/provider/transaction_detail_pro
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class BottomButtonPaymentWidget extends StatelessWidget {
@@ -66,20 +67,25 @@ class BottomButtonPaymentWidget extends StatelessWidget {
   }
 
   _cancelPayment(BuildContext context) async {
-    final result = await startDialog(context);
+    final result = await startDialog(context, 'Cancel Order',
+        'You want to cancel order?', 'Cancel Order', 'Close');
     if (result != null && result == 'Pay') {
+      final provider =
+          Provider.of<TransactionDetailProvider>(context, listen: false);
       CustomDialog.showLoadingDialog(context, message: 'Please wait');
-      final result =
-          await Provider.of<TransactionDetailProvider>(context, listen: false)
-              .cancelTransaction(transactionId);
+      final result = await provider.cancelTransaction(transactionId);
       CustomDialog.closeDialog(context);
       CustomToast.showCustomBookmarkToast(context, result);
-      Navigator.of(context).pop();
+      if (!result.contains('cannot')) {
+        provider.navigateRefresh = true;
+        provider.updateTransactionDetail(type, kTransactionCancelled);
+      }
     }
   }
 
   _payNowDialog(BuildContext context) async {
-    final result = await startDialog(context);
+    final result = await startDialog(
+        context, 'Pay Now', 'Purchase this order now?', 'Pay', 'Cancel');
     if (result != null && result == 'Pay') {
       CustomDialog.showLoadingDialog(context, message: 'Please wait');
       final result =
@@ -99,17 +105,18 @@ class BottomButtonPaymentWidget extends StatelessWidget {
         final provider =
             Provider.of<TransactionDetailProvider>(context, listen: false);
         provider.navigateRefresh = true;
-        provider.updateTransactionDetail(type);
+        provider.updateTransactionDetail(type, 'Finished');
       }
     }
   }
 
-  startDialog(BuildContext context) {
+  startDialog(BuildContext context, String title, String message, String okText,
+      String cancelText) {
     return CustomDialog.showCustomDialogStaticVerticalButton(context,
-        title: 'Pay Now',
-        message: 'Purchase this order now?',
-        okText: 'Pay',
-        cancelText: 'Cancel',
+        title: '$title',
+        message: '$message',
+        okText: '$okText',
+        cancelText: '$cancelText',
         onCancel: () => Navigator.of(context).pop(),
         okCallback: () {
           Navigator.of(context).pop('Pay');

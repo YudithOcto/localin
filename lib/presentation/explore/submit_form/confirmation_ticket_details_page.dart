@@ -4,7 +4,6 @@ import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/explore/explore_event_submission_details.dart';
 import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/explore/single_person_form_model.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/order_successful_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
@@ -53,7 +52,9 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                       TransactionExploreDetailPage.routeName, (route) => false,
                       arguments: {
                         TransactionExploreDetailPage.transactionId:
-                            _orderDetail.transactionId
+                            _orderDetail.transactionId,
+                        TransactionExploreDetailPage.fromOutSideTransaction:
+                            true,
                       }),
                   child: Icon(
                     Icons.arrow_back,
@@ -61,10 +62,15 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              bottomNavigationBar: Visibility(
-                visible: detail.totalPrice > 0,
-                child: InkWell(
-                  onTap: () async {
+              bottomNavigationBar: InkWell(
+                onTap: () async {
+                  if (detail.totalPrice <= 0) {
+                    Navigator.of(context)
+                        .pushNamed(OrderSuccessfulPage.routeName, arguments: {
+                      OrderSuccessfulPage.transactionId:
+                          _orderDetail.transactionId
+                    });
+                  } else {
                     CustomDialog.showLoadingDialog(context,
                         message: 'Please wait ..');
                     final getUrl = await Provider.of<TransactionDetailProvider>(
@@ -79,23 +85,33 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                     });
                     if (payment != null && payment == SUCCESS_VERIFICATION) {
                       Navigator.of(context)
-                          .pushNamed(OrderSuccessfulPage.routeName);
+                          .pushNamed(OrderSuccessfulPage.routeName, arguments: {
+                        OrderSuccessfulPage.transactionId:
+                            _orderDetail.transactionId
+                      });
                     } else {
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          MainBottomNavigation.routeName, (route) => false);
+                          TransactionExploreDetailPage.routeName,
+                          (route) => false,
+                          arguments: {
+                            TransactionExploreDetailPage.transactionId:
+                                _orderDetail.transactionId,
+                            TransactionExploreDetailPage.fromOutSideTransaction:
+                                true,
+                          });
                     }
-                  },
-                  child: Container(
-                    height: 48.0,
-                    alignment: FractionalOffset.center,
-                    decoration: BoxDecoration(
-                      color: ThemeColors.primaryBlue,
-                    ),
-                    child: Text(
-                      'Pay Now',
-                      style: ThemeText.rodinaTitle3
-                          .copyWith(color: ThemeColors.black0),
-                    ),
+                  }
+                },
+                child: Container(
+                  height: 48.0,
+                  alignment: FractionalOffset.center,
+                  decoration: BoxDecoration(
+                    color: ThemeColors.primaryBlue,
+                  ),
+                  child: Text(
+                    'Pay Now',
+                    style: ThemeText.rodinaTitle3
+                        .copyWith(color: ThemeColors.black0),
                   ),
                 ),
               ),
