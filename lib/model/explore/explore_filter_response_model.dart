@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:localin/model/explore/explore_base_model.dart';
 
-class ExploreFilterResponseModel implements ExploreBaseModel {
+class ExploreFilterResponseModel implements BaseModel {
   @override
   var detail;
 

@@ -22,6 +22,7 @@ import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_base_model.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
@@ -35,6 +36,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
@@ -1573,6 +1575,80 @@ class ApiProvider {
         return ExploreOrderResponseModel.withError(_handleError(error));
       } else {
         return ExploreOrderResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  /// RESTAURANT
+
+  Future<RestaurantResponseModel> getRestaurantList(int page, String search,
+      {int limit = 10, String sort, String order = 'asc'}) async {
+    try {
+      Map<String, dynamic> map = Map();
+      if (sort != null && sort.isNotEmpty) {
+        map['sort'] = sort;
+      }
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      map['limit'] = limit;
+      map['page'] = page;
+      map['order'] = order;
+      final response = await _dio.get(ApiConstant.kSearchRestaurant,
+          queryParameters: map,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return RestaurantResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RestaurantResponseModel.withError(_handleError(error));
+      } else {
+        return RestaurantResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<RestaurantResponseModel> getRestaurantDetail(
+      String restaurantId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kSearchRestaurant}/$restaurantId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return RestaurantResponseModel.fromSingleJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RestaurantResponseModel.withError(_handleError(error));
+      } else {
+        return RestaurantResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<RestaurantResponseModel> getBookmarkedRestaurants(int page) async {
+    try {
+      final response = await _dio.get(ApiConstant.kBookmarkedRestaurant,
+          queryParameters: {'limit': 10, 'page': page},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return RestaurantResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RestaurantResponseModel.withError(_handleError(error));
+      } else {
+        return RestaurantResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<String> bookmarkRestaurant(int restaurantId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kBookmarkedRestaurant}/$restaurantId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return response.data['message'];
+    } catch (error) {
+      if (error is DioError) {
+        return _handleError(error);
+      } else {
+        return error.toString();
       }
     }
   }

@@ -1,35 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/model/service/user_location.dart';
-import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/presentation/map/google_maps_full_screen.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/location_helper.dart';
 
-class ExploreLocationDetailWidget extends StatefulWidget {
-  final Data exploreDetail;
-  ExploreLocationDetailWidget({@required this.exploreDetail});
-
-  @override
-  _ExploreLocationDetailWidgetState createState() =>
-      _ExploreLocationDetailWidgetState();
-}
-
-class _ExploreLocationDetailWidgetState
-    extends State<ExploreLocationDetailWidget> {
-  List<Marker> _marker = [];
-  @override
-  void initState() {
-    final marker = Marker(
-      position: LatLng(widget.exploreDetail?.schedule?.latitude?.parseLatLong,
-          widget.exploreDetail?.schedule?.longitude?.parseLatLong),
-      markerId: MarkerId(widget?.exploreDetail?.event?.eventName),
-    );
-    _marker.add(marker);
-    super.initState();
-  }
+class RowLocationWidget extends StatelessWidget {
+  final String latitude;
+  final String longitude;
+  final String eventName;
+  final String eventAddress;
+  RowLocationWidget(
+      {this.latitude, this.longitude, this.eventName, this.eventAddress});
 
   @override
   Widget build(BuildContext context) {
@@ -55,41 +40,27 @@ class _ExploreLocationDetailWidgetState
                   style: ThemeText.sfMediumBody
                       .copyWith(color: ThemeColors.black80)),
               SizedBox(height: 4.0),
-              Text('${widget.exploreDetail?.schedule?.address}',
-                  style: ThemeText.sfRegularBody),
+              Text('$eventAddress', style: ThemeText.sfRegularBody),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: DashedLine(
                   color: ThemeColors.black20,
                 ),
               ),
-              Container(
+              CustomImageRadius(
                 height: 179.0,
                 width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: GoogleMap(
-                  markers: _marker.toSet(),
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                        widget.exploreDetail?.schedule?.latitude?.parseLatLong,
-                        widget
-                            .exploreDetail?.schedule?.longitude?.parseLatLong),
-                    zoom: 15.0,
-                  ),
-                  myLocationButtonEnabled: false,
-                ),
+                radius: 8.0,
+                imageUrl: LocationHelper.generateLocationPreviewImage(
+                    latitude.parseLatLong, longitude.parseLatLong),
               ),
+              SizedBox(height: 10.0),
               InkWell(
                 onTap: () => Navigator.of(context)
                     .pushNamed(GoogleMapFullScreen.routeName, arguments: {
                   GoogleMapFullScreen.targetLocation: UserLocation(
-                    latitude:
-                        widget.exploreDetail?.schedule?.latitude?.parseLatLong,
-                    longitude:
-                        widget.exploreDetail?.schedule?.longitude?.parseLatLong,
+                    latitude: latitude.parseLatLong,
+                    longitude: longitude.parseLatLong,
                   )
                 }),
                 child: Container(

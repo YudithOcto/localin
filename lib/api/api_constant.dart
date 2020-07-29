@@ -83,4 +83,8 @@ class ApiConstant {
   static const String kExploreEventAvailableDate =
       'v1/explore/schedule-available';
   static const String kExploreOrder = 'v1/explore/order';
+
+  /// RESTAURANT
+  static const String kSearchRestaurant = 'v1/restoran';
+  static const String kBookmarkedRestaurant = 'v1/restoran/bookmark';
 }

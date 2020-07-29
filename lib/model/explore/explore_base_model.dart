@@ -1,4 +1,4 @@
-class ExploreBaseModel {
+class BaseModel {
   bool error;
   String message;
   int total;

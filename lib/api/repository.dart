@@ -29,6 +29,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -417,5 +418,23 @@ class Repository {
 
   Future<ExploreOrderResponseModel> orderTicket(String jsonRequest) {
     return apiProvider.orderTicket(jsonRequest);
+  }
+
+  Future<RestaurantResponseModel> getRestaurantList(int page, String search,
+      {int limit = 10, String sort, String order = 'asc'}) {
+    return apiProvider.getRestaurantList(page, search,
+        limit: limit, sort: sort, order: order);
+  }
+
+  Future<RestaurantResponseModel> getRestaurantDetail(String restaurantId) {
+    return apiProvider.getRestaurantDetail(restaurantId);
+  }
+
+  Future<RestaurantResponseModel> getBookmarkedRestaurants(int page) {
+    return apiProvider.getBookmarkedRestaurants(page);
+  }
+
+  Future<String> bookmarkRestaurant(int restaurantId) {
+    return apiProvider.bookmarkRestaurant(restaurantId);
   }
 }

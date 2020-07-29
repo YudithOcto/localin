@@ -18,10 +18,13 @@ import 'package:localin/presentation/community/community_search/search_community
 import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
+import 'package:localin/presentation/restaurant/restaurant_bookmark_list_page.dart';
+import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
+import 'package:localin/presentation/restaurant/restaurant_page.dart';
+import 'package:localin/presentation/restaurant/search_restaurant_page.dart';
 import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
-import 'package:localin/presentation/explore/shared_widgets/row_ticket_selection_quantity_widget.dart';
 import 'package:localin/presentation/explore/submit_form/submit_form_page.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/order_successful_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
@@ -124,5 +127,9 @@ Map<String, WidgetBuilder> get generalRoutes {
     OrderSuccessfulPage.routeName: (_) => OrderSuccessfulPage(),
     TransactionExploreDetailPage.routeName: (_) =>
         TransactionExploreDetailPage(),
+    RestaurantPage.routeName: (_) => RestaurantPage(),
+    RestaurantDetailPage.routeName: (_) => RestaurantDetailPage(),
+    SearchRestaurantPage.routeName: (_) => SearchRestaurantPage(),
+    RestaurantBookmarkListPage.routeName: (_) => RestaurantBookmarkListPage(),
   };
 }
