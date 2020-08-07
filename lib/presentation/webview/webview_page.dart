@@ -36,23 +36,12 @@ class _WebViewPageState extends State<WebViewPage> {
     super.initState();
 
     flutterWebviewPlugin.close();
-//
-//    // Add a listener to on destroy WebView, so you can make came actions.
-//    _onDestroy = flutterWebviewPlugin.onDestroy.listen((_) {
-//      print("destroy");
-//    });
-//
-//    _onStateChanged =
-//        flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
-//      print("onStateChanged: ${state.type} ${state.url}");
-//    });
-//
-//    // Add a listener to on url changed
     _onUrlChanged = flutterWebviewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
         setState(() {
           print("URL changed: $url");
-          if (url.startsWith('${buildEnvironment.baseUrl}payment/dana/auth')) {
+          if (url
+              .startsWith('${buildEnvironment.baseApiUrl}payment/dana/auth')) {
             Navigator.of(context).pop('success');
             flutterWebviewPlugin.close();
           }
@@ -112,7 +101,6 @@ class _WebViewPageState extends State<WebViewPage> {
                     JavascriptChannel(
                         name: 'Print',
                         onMessageReceived: (JavascriptMessage data) {
-                          print(data);
                           if (data.message.contains(SUCCESS_VERIFICATION)) {
                             Future.delayed(Duration(milliseconds: 2000), () {
                               Navigator.of(context).pop('${data.message}');

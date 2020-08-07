@@ -5,6 +5,7 @@ import 'package:localin/presentation/home/widget/home_header_clipper.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/home/widget/home_single_services_wrapper_widget.dart';
 import 'package:localin/presentation/home/widget/row_dana_widget.dart';
+import 'package:localin/presentation/restaurant/restaurant_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';
@@ -105,17 +106,17 @@ class HomeHeaderWidget extends StatelessWidget {
                           serviceIcon: 'home_service_eat_icon.svg',
                           serviceName: 'EAT',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(RestaurantPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
-                          serviceIcon: 'home_service_attraction_icon.svg',
-                          serviceName: 'ATTRACT',
+                          serviceIcon: 'explore.svg',
+                          serviceName: 'EXPLORE',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(ExploreMainPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_ticket_icon.svg',
-                          serviceName: 'EVENT',
+                          serviceName: 'MOVIE',
                           onPressed: () => Navigator.of(context)
                               .pushNamed(EmptyPage.routeName),
                         ),

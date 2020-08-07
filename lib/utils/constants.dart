@@ -71,6 +71,13 @@ const kTransactionFinished = 'Finished';
 const kTransactionCancelled =
     'Canceled! Payment period has passed the specified limit';
 
+const kTransactionTypeCommunity = 'CommunityType';
+const kTransactionTypeExplore = 'ExploreType';
+
+const kRefresh = 'refreshPage';
+
+const kNearby = 'Nearby';
+
 class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'

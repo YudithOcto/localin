@@ -51,7 +51,7 @@ class _SearchTagResultWidgetState extends State<SearchTagResultWidget> {
                 controller: _searchTagController,
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 children: List.generate(provider.tagsList.length + 1, (index) {
-                  if (provider.tagsList.length == 0) {
+                  if (snapshot.data == TagState.isEmpty) {
                     return Container();
                   } else if (index < provider.tagsList.length) {
                     return Column(
@@ -84,7 +84,8 @@ class _SearchTagResultWidgetState extends State<SearchTagResultWidget> {
                         ),
                       ],
                     );
-                  } else if (provider.isCanLoadMoreTags) {
+                  } else if (provider.isCanLoadMoreTags &&
+                      provider.tagsList.length != 5) {
                     return Container(
                       child: Center(
                         child: CircularProgressIndicator(),

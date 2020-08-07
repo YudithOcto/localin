@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/widgets/row_profile_settings_widget.dart';
@@ -48,7 +49,7 @@ class ProfileSettingsWidgets extends StatelessWidget {
             onPressed: () {
               Navigator.of(context)
                   .pushNamed(RevampWebview.routeName, arguments: {
-                RevampWebview.url: 'https://localin.id/#point',
+                RevampWebview.url: '${buildEnvironment.baseUrl}#point',
                 RevampWebview.isFromProfile: true,
                 RevampWebview.title: 'Point',
               });
@@ -65,7 +66,7 @@ class ProfileSettingsWidgets extends StatelessWidget {
             onPressed: () {
               Navigator.of(context)
                   .pushNamed(RevampWebview.routeName, arguments: {
-                RevampWebview.url: 'https://localin.id',
+                RevampWebview.url: '${buildEnvironment.baseUrl}',
                 RevampWebview.isFromProfile: true,
                 RevampWebview.title: 'About',
               });
@@ -82,7 +83,8 @@ class ProfileSettingsWidgets extends StatelessWidget {
             onPressed: () {
               Navigator.of(context)
                   .pushNamed(RevampWebview.routeName, arguments: {
-                RevampWebview.url: 'https://localin.id/privacy-policy.html',
+                RevampWebview.url:
+                    '${buildEnvironment.baseUrl}privacy-policy.html',
                 RevampWebview.isFromProfile: true,
                 RevampWebview.title: 'Privacy Policy',
               });

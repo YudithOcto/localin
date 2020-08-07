@@ -4,11 +4,9 @@ import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/tag_model_model.dart';
+import 'package:localin/utils/debounce.dart';
 
 class SearchArticleProvider with ChangeNotifier {
-  final TextEditingController _searchController = TextEditingController();
-  TextEditingController get searchController => _searchController;
-
   AnalyticsService _analyticsService;
   bool _isClearButtonVisible = false;
   bool get isClearButtonVisible => _isClearButtonVisible;
@@ -25,7 +23,6 @@ class SearchArticleProvider with ChangeNotifier {
   List<ArticleDetail> get articleList => _articleList;
 
   SearchArticleProvider({AnalyticsService analyticsService}) {
-    _searchController..addListener(_onSearchChanged);
     _analyticsService = analyticsService;
   }
 
@@ -34,9 +31,7 @@ class SearchArticleProvider with ChangeNotifier {
   Stream<SearchArticleState> get searchArticleStream =>
       _articleStreamController.stream;
 
-  Future<List<ArticleDetail>> getArticle(
-      {bool isRefresh = true, String keyword = ''}) async {
-    _articleStreamController.add(SearchArticleState.isLoading);
+  Future<Null> getArticle({bool isRefresh = true, String keyword = ''}) async {
     if (isRefresh) {
       _offsetPage = 1;
       _articleList.clear();
@@ -45,12 +40,10 @@ class SearchArticleProvider with ChangeNotifier {
     if (!_isCanLoadMoreArticle) {
       return null;
     }
-
+    _articleStreamController.add(SearchArticleState.isLoading);
     final response = await _repository
         .getArticleList(_offsetPage, _totalPageRequested, keyword: keyword);
-    if (response != null &&
-        response.data != null &&
-        (_articleList.isNotEmpty || response.data.isNotEmpty)) {
+    if (response.total > 0) {
       _articleList.addAll(response.data);
       _offsetPage += 1;
       _isCanLoadMoreArticle = response.total > _articleList.length;
@@ -58,7 +51,7 @@ class SearchArticleProvider with ChangeNotifier {
     } else {
       _articleStreamController.add(SearchArticleState.isEmpty);
     }
-    return response.data;
+    notifyListeners();
   }
 
   ///
@@ -78,8 +71,7 @@ class SearchArticleProvider with ChangeNotifier {
       StreamController<TagState>.broadcast();
   Stream<TagState> get tagStream => _tagStreamController.stream;
 
-  Future<List<TagModel>> getTags(
-      {bool isRefresh = true, String keyword = ''}) async {
+  Future<Null> getTags({bool isRefresh = true, String keyword = ''}) async {
     _tagStreamController.add(TagState.isLoading);
     if (isRefresh) {
       _offsetTags = 1;
@@ -91,17 +83,15 @@ class SearchArticleProvider with ChangeNotifier {
     }
     final response = await _repository.getArticleTags(
         keyword, _offsetTags, _totalPageRequested);
-    if (response != null &&
-        response.tags != null &&
-        (_tagsList.isNotEmpty || response.tags.isNotEmpty)) {
+    if (response.total > 0) {
       _tagsList.addAll(response.tags);
       _offsetTags += 1;
-      _isCanLoadMoreTags = response.tags.length >= _totalPageRequested;
+      _isCanLoadMoreTags = response.total > _tagsList.length;
       _tagStreamController.add(TagState.isSuccess);
     } else {
       _tagStreamController.add(TagState.isEmpty);
     }
-    return response.tags;
+    notifyListeners();
   }
 
   @override
@@ -111,20 +101,12 @@ class SearchArticleProvider with ChangeNotifier {
     super.dispose();
   }
 
-  Timer t;
+  final _debounce = Debounce(milliseconds: 300);
 
-  _onSearchChanged() async {
-    if (t != null && t.isActive) {
-      t.cancel();
-    }
-    t = Timer(Duration(milliseconds: 400), () {
-      _analyticsService.setCustomSearchEvent(keyword: _searchController.text);
-      Future.wait([
-        getArticle(keyword: _searchController.text),
-        getTags(keyword: _searchController.text)
-      ]).then((value) {
-        notifyListeners();
-      });
+  onSearchChanged(String v) async {
+    _debounce.run(() {
+      _analyticsService.setCustomSearchEvent(keyword: v);
+      Future.wait([getArticle(keyword: v), getTags(keyword: v)]);
     });
   }
 }

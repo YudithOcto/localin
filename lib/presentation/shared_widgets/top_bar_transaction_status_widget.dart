@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/transaction/community/provider/transaction_community_provider.dart';
+import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
@@ -56,7 +56,7 @@ class _TopBarTransactionStatusWidgetState
               if (snapshot.connectionState == ConnectionState.waiting) {
                 if (!_countdown.isTimerActive()) {
                   Future.delayed(Duration.zero, () {
-                    Provider.of<TransactionCommunityProvider>(context,
+                    Provider.of<TransactionDetailProvider>(context,
                             listen: false)
                         .status = kTransactionCancelled;
                   });
@@ -97,11 +97,11 @@ class _TopBarTransactionStatusWidgetState
 
 extension on String {
   Color get rowColor {
-    if (this.contains('Waiting for payment')) {
+    if (this.toLowerCase().contains('Waiting for payment'.toLowerCase())) {
       return ThemeColors.orange;
-    } else if (this.contains('Canceled')) {
+    } else if (this.toLowerCase().contains('Canceled'.toLowerCase())) {
       return ThemeColors.red;
-    } else if (this.contains('Finished')) {
+    } else if (this.toLowerCase().contains('Finished'.toLowerCase())) {
       return ThemeColors.green;
     } else {
       return ThemeColors.primaryBlue;

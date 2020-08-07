@@ -1,5 +1,4 @@
 class ApiConstant {
-  static const String kBaseUrl = 'https://api.localin.xyz/';
   static const String kLoginUrl = 'v1/login';
   static const String kLogoutUrl = 'v1/logout';
   static const String kUpdateProfile = 'v1/member/update';
@@ -77,4 +76,14 @@ class ApiConstant {
   static const String kTransactionPayment = 'v1/transaksi/pay';
   static const String kTransaction = 'v1/transaksi';
   static const String kTransactionCancel = 'v1/transaksi/cancel';
+
+  static const String kExploreEvent = 'v1/explore/event';
+  static const String kCategoryFilterEvent = 'v1/explore/kategori';
+  static const String kExploreEventAvailableDate =
+      'v1/explore/schedule-available';
+  static const String kExploreOrder = 'v1/explore/order';
+
+  /// RESTAURANT
+  static const String kSearchRestaurant = 'v1/restoran';
+  static const String kBookmarkedRestaurant = 'v1/restoran/bookmark';
 }

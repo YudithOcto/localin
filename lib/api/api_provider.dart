@@ -21,6 +21,11 @@ import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/model/explore/explore_event_response_model.dart';
+import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -30,11 +35,14 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/restaurant/restaurant_response_model.dart';
+import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
 import 'package:localin/model/user/user_verification_category_model.dart';
+import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
@@ -55,7 +63,7 @@ class ApiProvider {
 
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
-        baseUrl: buildEnvironment.baseUrl,
+        baseUrl: buildEnvironment.baseApiUrl,
         receiveTimeout: 20000,
         maxRedirects: 3,
         connectTimeout: 20000);
@@ -431,10 +439,8 @@ class ApiProvider {
           return ArticleBaseResponse.withError(error.response.data['tag'][0]);
         } else {
           for (int i = 0; i < form.files.length; i++) {
-            if (error.response.data['gambar.$i'][0] != null) {
-              return ArticleBaseResponse.withError(
-                  error.response.data['gambar.$i'][0]);
-            }
+            return ArticleBaseResponse.withError(
+                error.response.data['gambar'][i]);
           }
           return ArticleBaseResponse.withError(error.response.data.toString());
         }
@@ -1257,12 +1263,16 @@ class ApiProvider {
 
   Future<String> cancelTransaction(String transactionId) async {
     try {
-      final result = await _dio.post(
+      final result = await _dio.get(
           '${ApiConstant.kTransactionCancel}/$transactionId',
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return result.data['message'];
     } catch (error) {
-      return error.toString();
+      if (error is DioError) {
+        return _handleError(error);
+      } else {
+        return error.toString();
+      }
     }
   }
 
@@ -1408,18 +1418,51 @@ class ApiProvider {
     }
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
-      String transId) async {
+  getTransactionResponseModel(String type) {
+    var model;
+    switch (type) {
+      case kTransactionTypeCommunity:
+        model = TransactionCommunityResponseModel;
+        break;
+      case kTransactionTypeExplore:
+        model = TransactionExploreDetailResponse;
+        break;
+    }
+    return model;
+  }
+
+  Future<dynamic> getTransactionDetail(String transId, String type) async {
     try {
       final response = await _dio.get(
           '${ApiConstant.kTransactionDetail}/$transId',
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      return TransactionCommunityResponseModel.fromJson(response.data);
+      switch (type) {
+        case kTransactionTypeCommunity:
+          return TransactionCommunityResponseModel.fromJson(response.data);
+          break;
+        case kTransactionTypeExplore:
+          return TransactionExploreDetailResponse.fromJson(response.data);
+          break;
+      }
     } catch (error) {
-      if (error is DioError) {
-        return TransactionCommunityResponseModel.withError(_handleError(error));
-      } else {
-        return TransactionCommunityResponseModel.withError(error.toString());
+      switch (type) {
+        case kTransactionTypeCommunity:
+          if (error is DioError) {
+            return TransactionCommunityResponseModel.withError(
+                _handleError(error));
+          } else {
+            return TransactionCommunityResponseModel.withError(
+                error.toString());
+          }
+          break;
+        case kTransactionTypeExplore:
+          if (error is DioError) {
+            return TransactionExploreDetailResponse.withError(
+                _handleError(error));
+          } else {
+            return TransactionExploreDetailResponse.withError(error.toString());
+          }
+          break;
       }
     }
   }
@@ -1435,6 +1478,182 @@ class ApiProvider {
         return BookingPaymentResponse.withError(_handleError(error));
       } else {
         return BookingPaymentResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreEventResponseModel> getEventData(int pageRequest, String search,
+      String sort, List<int> categoryId, String date) async {
+    try {
+      Map<String, dynamic> map = Map();
+      map['page'] = pageRequest;
+      map['limit'] = 10;
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      if (categoryId != null && categoryId.isNotEmpty) {
+        map['kategori_id'] = categoryId.map((e) => e).toList();
+      }
+      if (sort != null && sort.isNotEmpty) {
+        map['sort[]'] = getSorting(sort);
+      }
+      if (date != null && date.isNotEmpty) {
+        map['date'] = date;
+      }
+      final response = await _dio.get(ApiConstant.kExploreEvent,
+          options: Options(headers: {REQUIRED_TOKEN: true}),
+          queryParameters: map);
+      return ExploreEventResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreEventResponseModel.withError(_handleError(error));
+      } else {
+        return ExploreEventResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreFilterResponseModel> getCategoryFilterEvent() async {
+    try {
+      final response = await _dio.get(ApiConstant.kCategoryFilterEvent,
+          options: Options(headers: {REQUIRED_TOKEN: true}),
+          queryParameters: {'limit': 20, 'page': 1});
+      return ExploreFilterResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreFilterResponseModel.withError(_handleError(error));
+      } else {
+        return ExploreFilterResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreEventDetailModel> getExploreEventDetail(int eventID) async {
+    try {
+      final response = await _dio.get('${ApiConstant.kExploreEvent}/$eventID',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreEventDetailModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreEventDetailModel.withError(_handleError(error));
+      } else {
+        return ExploreEventDetailModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreAvailableEventDatesModel> getExploreAvailableDates(
+      int eventID, int pageRequest) async {
+    try {
+      final response =
+          await _dio.get('${ApiConstant.kExploreEventAvailableDate}/$eventID',
+              queryParameters: ({
+                'limit': 10,
+                'page': pageRequest,
+              }),
+              options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreAvailableEventDatesModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreAvailableEventDatesModel.withError(_handleError(error));
+      } else {
+        return ExploreAvailableEventDatesModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<ExploreOrderResponseModel> orderTicket(
+      String ticketRequestJson) async {
+    try {
+      final response = await _dio.post(ApiConstant.kExploreOrder,
+          data: ticketRequestJson,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreOrderResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreOrderResponseModel.withError(_handleError(error));
+      } else {
+        return ExploreOrderResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  /// RESTAURANT
+
+  Future<RestaurantResponseModel> getRestaurantList(int page, String search,
+      {int limit = 10, String sort, String order, int isLocation}) async {
+    try {
+      Map<String, dynamic> map = Map();
+      if (sort != null && sort.isNotEmpty) {
+        map['sort'] = sort;
+      }
+      if (search != null && search.isNotEmpty) {
+        map['search'] = search;
+      }
+      map['limit'] = limit;
+      map['page'] = page;
+      if (order != null) {
+        map['order'] = order;
+      }
+      if (isLocation != null) {
+        map['is_location'] = isLocation;
+      }
+      final response = await _dio.get(ApiConstant.kSearchRestaurant,
+          queryParameters: map,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return RestaurantResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RestaurantResponseModel.withError(_handleError(error));
+      } else {
+        return RestaurantResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<RestaurantResponseModel> getRestaurantDetail(
+      String restaurantId) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kSearchRestaurant}/$restaurantId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return RestaurantResponseModel.fromSingleJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RestaurantResponseModel.withError(_handleError(error));
+      } else {
+        return RestaurantResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<RestaurantResponseModel> getBookmarkedRestaurants(int page) async {
+    try {
+      final response = await _dio.get(ApiConstant.kBookmarkedRestaurant,
+          queryParameters: {'limit': 10, 'page': page},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return RestaurantResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return RestaurantResponseModel.withError(_handleError(error));
+      } else {
+        return RestaurantResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<String> bookmarkRestaurant(int restaurantId,
+      {bool isDelete = false}) async {
+    try {
+      final response = await _dio.get(
+          '${ApiConstant.kBookmarkedRestaurant}/$restaurantId${isDelete ? '/delete' : ''}',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return response.data['message'];
+    } catch (error) {
+      if (error is DioError) {
+        return _handleError(error);
+      } else {
+        return error.toString();
       }
     }
   }

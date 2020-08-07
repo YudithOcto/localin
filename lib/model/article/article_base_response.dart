@@ -17,7 +17,7 @@ class ArticleBaseResponse {
       error: null,
       total: pagination != null && pagination['total'] != null
           ? pagination['total']
-          : null,
+          : 0,
       data: article.map((value) => ArticleDetail.fromJson(value)).toList(),
     );
   }

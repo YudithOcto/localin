@@ -15,6 +15,11 @@ import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/model/explore/explore_event_response_model.dart';
+import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -24,6 +29,7 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -369,9 +375,8 @@ class Repository {
     return apiProvider.searchLocation(offset, limit, search);
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
-      String transId) {
-    return apiProvider.getCommunityTransactionDetail(transId);
+  Future<dynamic> getTransactionDetails(String transId, String type) {
+    return apiProvider.getTransactionDetail(transId, type);
   }
 
   Future<TransactionCommunityResponseModel> getCommunityTransactionList(
@@ -386,5 +391,50 @@ class Repository {
 
   Future<String> cancelTransaction(String transactionId) {
     return apiProvider.cancelTransaction(transactionId);
+  }
+
+  Future<ExploreEventResponseModel> getEventList(
+      {String search,
+      int pageRequest,
+      String sort,
+      List<int> categoryId,
+      String date}) {
+    return apiProvider.getEventData(
+        pageRequest, search, sort, categoryId, date);
+  }
+
+  Future<ExploreFilterResponseModel> getCategoryFilterEvent() {
+    return apiProvider.getCategoryFilterEvent();
+  }
+
+  Future<ExploreEventDetailModel> getExploreEventDetail(int eventId) {
+    return apiProvider.getExploreEventDetail(eventId);
+  }
+
+  Future<ExploreAvailableEventDatesModel> getAvailableDates(
+      int eventId, int pageRequest) {
+    return apiProvider.getExploreAvailableDates(eventId, pageRequest);
+  }
+
+  Future<ExploreOrderResponseModel> orderTicket(String jsonRequest) {
+    return apiProvider.orderTicket(jsonRequest);
+  }
+
+  Future<RestaurantResponseModel> getRestaurantList(int page, String search,
+      {int limit = 10, String sort, String order, int isLocation}) {
+    return apiProvider.getRestaurantList(page, search,
+        limit: limit, sort: sort, order: order, isLocation: isLocation);
+  }
+
+  Future<RestaurantResponseModel> getRestaurantDetail(String restaurantId) {
+    return apiProvider.getRestaurantDetail(restaurantId);
+  }
+
+  Future<RestaurantResponseModel> getBookmarkedRestaurants(int page) {
+    return apiProvider.getBookmarkedRestaurants(page);
+  }
+
+  Future<String> bookmarkRestaurant(int restaurantId, {bool isDelete = false}) {
+    return apiProvider.bookmarkRestaurant(restaurantId, isDelete: isDelete);
   }
 }
