@@ -88,7 +88,7 @@ class _RestaurantDetailBuilderWidgetState
                             radius: 0.0,
                             height: 260.0,
                             width: double.maxFinite,
-                            imageUrl: restaurantDetail.photosUrl ?? '',
+                            imageUrl: restaurantDetail?.photosUrl ?? '',
                             placeHolderColor: ThemeColors.black80,
                           ),
                           Container(

@@ -47,6 +47,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
               actions: <Widget>[
                 Consumer<RestaurantProvider>(
                   builder: (_, provider, __) {
+                    print(provider.isShowSearchAppBar);
                     return Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: provider.isShowSearchAppBar
@@ -72,7 +73,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 if (result != null) {
                                   provider.searchController.text = result;
                                   provider.scrollController.jumpTo(0.0);
-                                  provider.showSearchAppBar = true;
+                                  provider.showSearchAppBar = false;
                                   if (result == kNearby) {
                                     provider.getRestaurantList(
                                         isRefresh: true,
@@ -108,6 +109,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                           } else {
                             return ListView.builder(
                               shrinkWrap: true,
+                              key: ObjectKey(provider.restaurantList.hashCode),
                               controller: provider.scrollController,
                               padding: const EdgeInsets.only(bottom: 80.0),
                               physics: ClampingScrollPhysics(),
@@ -162,7 +164,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
           if (result != null) {
             provider.searchController.text = result;
             provider.scrollController.jumpTo(0.0);
-            provider.showSearchAppBar = true;
+            provider.showSearchAppBar = false;
             if (result == kNearby) {
               provider.getRestaurantList(
                   isRefresh: true, sort: 'jarak', order: 'asc');
@@ -199,6 +201,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
           },
           onValueChanged: (value) {
             if (value != null) {
+              provider.scrollController.jumpTo(0.0);
+              provider.showSearchAppBar = true;
               provider.getRestaurantList();
             }
           },
@@ -215,7 +219,23 @@ class _RestaurantPageState extends State<RestaurantPage> {
         child: Text('Restaurants not found', style: ThemeText.rodinaHeadline),
       );
     } else if (index == 2) {
-      return EmptyRestaurantWidget();
+      return EmptyRestaurantWidget(
+        onPressed: () async {
+          final result = await Navigator.of(context)
+              .pushNamed(SearchRestaurantPage.routeName);
+          if (result != null) {
+            provider.searchController.text = result;
+            provider.scrollController.jumpTo(0.0);
+            provider.showSearchAppBar = false;
+            if (result == kNearby) {
+              provider.getRestaurantList(
+                  isRefresh: true, sort: 'jarak', order: 'asc');
+            } else {
+              provider.getRestaurantList(isRefresh: true, search: result);
+            }
+          }
+        },
+      );
     } else if (index == 0) {
       return InkWell(
         onTap: () async {

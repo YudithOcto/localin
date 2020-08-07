@@ -94,10 +94,8 @@ class SearchRestaurantProvider with ChangeNotifier {
       searchResult.add(RestaurantSearchTitle(title: 'Popular Restaurant'));
       final data = response.detail as List<RestaurantDetail>;
       searchResult.addAll(data);
-      _streamController.add(searchRestaurantEvent.success);
-    } else {
-      _streamController.add(searchRestaurantEvent.empty);
     }
+    _streamController.add(searchRestaurantEvent.success);
   }
 
   Future<List<RestaurantLocalModal>> getLastSearchFromLocal() async {

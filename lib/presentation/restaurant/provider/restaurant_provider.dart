@@ -8,7 +8,7 @@ import 'package:localin/presentation/search/provider/generic_provider.dart';
 import 'package:localin/utils/constants.dart';
 
 class RestaurantProvider with ChangeNotifier {
-  final _scrollController = ScrollController();
+  final _scrollController = ScrollController(keepScrollOffset: false);
   ScrollController get scrollController => _scrollController;
 
   final searchController = TextEditingController(text: kNearby);
