@@ -33,7 +33,7 @@ class NewsMyArticleProvider with ChangeNotifier {
 
     final response = await _repository.getUserArticle(
         offset: _userArticleArchiveOffset, isTrash: 1);
-    if (response != null && response.error == null) {
+    if (response != null && response.total > 0) {
       _userArticleArchiveList.addAll(response.data);
       _userArticleArchiveOffset += 1;
       _canLoadMoreArticleArchiveList =

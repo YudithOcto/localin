@@ -5,19 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/utils/constants.dart';
 
 class RestaurantProvider with ChangeNotifier {
   final _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
 
-  final searchController = TextEditingController();
+  final searchController = TextEditingController(text: kNearby);
 
   bool _isShowSearchAppBar = true;
   bool get isShowSearchAppBar => _isShowSearchAppBar;
 
   RestaurantProvider() {
     _scrollController..addListener(_scrollListener);
-    getRestaurantList();
+    getRestaurantList(sort: 'jarak');
   }
 
   _scrollListener() {
@@ -35,6 +36,10 @@ class RestaurantProvider with ChangeNotifier {
       getRestaurantList(isRefresh: false);
     }
     notifyListeners();
+  }
+
+  set showSearchAppBar(bool value) {
+    _isShowSearchAppBar = value;
   }
 
   final _repository = Repository();
@@ -65,7 +70,8 @@ class RestaurantProvider with ChangeNotifier {
       _pageRequest = 1;
     }
     _streamController.add(searchState.loading);
-    final response = await _repository.getRestaurantList(_pageRequest, search,
+    final response = await _repository.getRestaurantList(
+        _pageRequest, search.isEmpty || search == kNearby ? '' : search,
         sort: sort, order: order);
     if (response != null && response.total > 0) {
       _restaurantList.addAll(response.detail);
@@ -80,7 +86,7 @@ class RestaurantProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  int currentSelectedIndex = 0;
+  int currentSelectedIndex = 1;
 
   getRestaurantListWithSorting(int index) {
     currentSelectedIndex = index;
@@ -89,24 +95,41 @@ class RestaurantProvider with ChangeNotifier {
       getRestaurantList(
           isRefresh: true, search: searchController.text, sort: 'rating');
     } else if (index == 1) {
+      // Nearby
       getRestaurantList(
           isRefresh: true, search: searchController.text, sort: 'jarak');
     } else if (index == 2) {
+      // Most Far
       getRestaurantList(
           isRefresh: true,
           search: searchController.text,
           sort: 'jarak',
           order: 'desc');
     } else if (index == 3) {
+      // Lowest Price
       getRestaurantList(
           isRefresh: true, search: searchController.text, sort: 'harga');
     } else {
+      // Highest Price
       getRestaurantList(
           isRefresh: true,
           search: searchController.text,
           sort: 'harga',
           order: 'desc');
     }
+  }
+
+  Future<String> updateBookmarkRestaurant(int index) async {
+    final response = await _repository.bookmarkRestaurant(
+        _restaurantList[index].id,
+        isDelete: _restaurantList[index].isBookMark);
+    if (response == 'Restaurant has bookmarks' ||
+        response == 'Restaurant has un-bookmarks') {
+      bool temp = _restaurantList[index].isBookMark;
+      _restaurantList[index].isBookMark = !temp;
+      notifyListeners();
+    }
+    return response;
   }
 
   @override

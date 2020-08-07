@@ -55,6 +55,11 @@ class _ExploreDetailBigImagesWidgetState
             }),
           ),
         ),
+        Container(
+          height: 260.0,
+          width: double.maxFinite,
+          color: ThemeColors.black100.withOpacity(0.5),
+        ),
         Positioned(
           bottom: 12.0,
           left: 0.0,

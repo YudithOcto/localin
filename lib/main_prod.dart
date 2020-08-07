@@ -8,7 +8,9 @@ import 'build_environment.dart';
 
 Future<void> main() async {
   BuildEnvironment.init(
-      flavor: BuildFlavor.development, baseUrl: 'https://api.localin.id/');
+      flavor: BuildFlavor.development,
+      baseApiUrl: 'https://api.localin.id/',
+      baseUrl: 'https://localin.id/');
   assert(buildEnvironment != null);
   Crashlytics.instance.enableInDevMode = true;
 

@@ -40,7 +40,8 @@ class _WebViewPageState extends State<WebViewPage> {
       if (mounted) {
         setState(() {
           print("URL changed: $url");
-          if (url.startsWith('${buildEnvironment.baseUrl}payment/dana/auth')) {
+          if (url
+              .startsWith('${buildEnvironment.baseApiUrl}payment/dana/auth')) {
             Navigator.of(context).pop('success');
             flutterWebviewPlugin.close();
           }

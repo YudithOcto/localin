@@ -8,6 +8,10 @@ class RestaurantResponseModel with EquatableMixin implements BaseModel {
     message = json['message'];
     if (json['data'] != null) {
       total = json['data']['paging']['total'] ?? 0;
+      restaurantLocation = json['data']['location'] == null
+          ? []
+          : List<RestaurantLocation>.from(json['data']['location']
+              .map((e) => RestaurantLocation.fromJson(e)));
       detail = json['data']['data'] == null
           ? []
           : List<RestaurantDetail>.from(
@@ -44,8 +48,24 @@ class RestaurantResponseModel with EquatableMixin implements BaseModel {
   @override
   int total;
 
+  dynamic restaurantLocation;
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [detail, error, message, total];
+}
+
+class RestaurantLocation extends RestaurantSearchBaseModel {
+  String localityVerbose;
+  int totalRestaurant;
+
+  RestaurantLocation({this.localityVerbose, this.totalRestaurant});
+
+  factory RestaurantLocation.fromJson(Map<String, dynamic> map) {
+    return RestaurantLocation(
+      localityVerbose: map['locality_verbose'],
+      totalRestaurant: map['total'] == null ? 0 : map['total'],
+    );
+  }
 }
 
 class RestaurantDetail extends RestaurantSearchBaseModel {
@@ -80,39 +100,42 @@ class RestaurantDetail extends RestaurantSearchBaseModel {
   String radius;
   String categoryName;
   List<RestaurantHighlight> higlights;
+  bool isBookMark;
 
-  RestaurantDetail(
-      {this.id,
-      this.name,
-      this.address,
-      this.locality,
-      this.localityVerbose,
-      this.city,
-      this.cityId,
-      this.countryId,
-      this.latitude,
-      this.longitude,
-      this.zipCode,
-      this.phoneNumbers,
-      this.averageCostForTwo,
-      this.priceRange,
-      this.currency,
-      this.cuisines,
-      this.timings,
-      this.mezzoProvider,
-      this.userRating,
-      this.userRatingVotes,
-      this.hasOnlineDelivery,
-      this.isDeliveringNow,
-      this.delivery,
-      this.takeaway,
-      this.photosUrl,
-      this.photosCount,
-      this.createdAt,
-      this.updatedAt,
-      this.radius,
-      this.categoryName,
-      this.higlights});
+  RestaurantDetail({
+    this.id,
+    this.name,
+    this.address,
+    this.locality,
+    this.localityVerbose,
+    this.city,
+    this.cityId,
+    this.countryId,
+    this.latitude,
+    this.longitude,
+    this.zipCode,
+    this.phoneNumbers,
+    this.averageCostForTwo,
+    this.priceRange,
+    this.currency,
+    this.cuisines,
+    this.timings,
+    this.mezzoProvider,
+    this.userRating,
+    this.userRatingVotes,
+    this.hasOnlineDelivery,
+    this.isDeliveringNow,
+    this.delivery,
+    this.takeaway,
+    this.photosUrl,
+    this.photosCount,
+    this.createdAt,
+    this.updatedAt,
+    this.radius,
+    this.categoryName,
+    this.higlights,
+    this.isBookMark,
+  });
 
   RestaurantDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -145,6 +168,9 @@ class RestaurantDetail extends RestaurantSearchBaseModel {
     updatedAt = json['updated_at'];
     radius = json['radius'];
     categoryName = json['establis_name'];
+    isBookMark = json['is_bookmark'] == null
+        ? false
+        : json['is_bookmark'] == 1 ? true : false;
     if (json['higlights'] != null) {
       higlights = new List<RestaurantHighlight>();
       json['higlights'].forEach((v) {

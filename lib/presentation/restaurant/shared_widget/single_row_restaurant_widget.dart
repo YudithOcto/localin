@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_image_only_radius.dart';
+import 'package:localin/model/restaurant/restaurant_local_model.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
 import 'package:localin/presentation/restaurant/shared_widget/restaurant_basic_detail_widget.dart';
@@ -10,16 +11,30 @@ import 'package:localin/themes.dart';
 
 class SingleRowRestaurantWidget extends StatelessWidget {
   final RestaurantDetail restaurantDetail;
-  SingleRowRestaurantWidget({@required this.restaurantDetail});
+  final VoidCallback onTap;
+  final ValueChanged<bool> onValueChanged;
+  SingleRowRestaurantWidget(
+      {@required this.restaurantDetail, this.onTap, this.onValueChanged});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       highlightColor: ThemeColors.primaryBlue,
-      onTap: () => Navigator.of(context)
-          .pushNamed(RestaurantDetailPage.routeName, arguments: {
-        RestaurantDetailPage.restaurantId: restaurantDetail.id.toString()
-      }),
+      onTap: () async {
+        final result = await Navigator.of(context)
+            .pushNamed(RestaurantDetailPage.routeName, arguments: {
+          RestaurantDetailPage.restaurantId: restaurantDetail.id.toString(),
+          RestaurantDetailPage.restaurantLocalModel: RestaurantLocalModal(
+              title: restaurantDetail.name,
+              subtitle: restaurantDetail.locality,
+              category: restaurantDetail.categoryName,
+              dateTime: DateTime.now().millisecondsSinceEpoch,
+              restaurantId: restaurantDetail.id),
+        });
+        if (result != null) {
+          onValueChanged(true);
+        }
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 11.0),
         decoration: BoxDecoration(
@@ -39,13 +54,22 @@ class SingleRowRestaurantWidget extends StatelessWidget {
                   topLeft: 8.0,
                   topRight: 8.0,
                 ),
+                Container(
+                  width: double.maxFinite,
+                  height: 188.0,
+                  color: ThemeColors.black100.withOpacity(0.4),
+                ),
                 Positioned(
                   top: 12.0,
                   right: 12.0,
-                  child: SvgPicture.asset(
-                      'images/restaurant_bookmark_not_active.svg',
-                      width: 34.0,
-                      height: 34.0),
+                  child: InkWell(
+                    highlightColor: ThemeColors.primaryBlue,
+                    onTap: onTap,
+                    child: SvgPicture.asset(
+                        'images/${restaurantDetail.isBookMark ? 'restaurant_bookmark_active' : 'restaurant_bookmark_not_active'}.svg',
+                        width: 34.0,
+                        height: 34.0),
+                  ),
                 ),
                 Positioned(
                   top: 12.0,

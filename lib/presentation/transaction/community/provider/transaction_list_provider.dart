@@ -32,7 +32,7 @@ class TransactionListProvider with ChangeNotifier {
 
     final result =
         await _repository.getCommunityTransactionList(page, 10, type: type);
-    if (!result.error) {
+    if (result != null && result.total > 0) {
       _listCommunityTransaction.addAll(result.transactionList);
       _canLoadMore = result.total > _listCommunityTransaction.length;
       _page += 1;

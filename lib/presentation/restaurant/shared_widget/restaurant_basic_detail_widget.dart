@@ -14,7 +14,7 @@ class RestaurantBasicDetailWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          '${restaurantDetail.higlights.take(4).map((e) => e.text).join(', ')}',
+          '${restaurantDetail.higlights.joinString}',
           style:
               ThemeText.sfMediumFootnote.copyWith(color: ThemeColors.black80),
         ),
@@ -48,5 +48,12 @@ extension on String {
   String get parseRadius {
     if (this == null || this.isEmpty) return '';
     return '• ${double.parse(this).toStringAsFixed(2)}km from your location';
+  }
+}
+
+extension on List {
+  String get joinString {
+    if (this == null && this.isEmpty) return '';
+    return this.take(4).map((e) => e.text).join(', ');
   }
 }

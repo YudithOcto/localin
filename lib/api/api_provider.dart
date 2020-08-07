@@ -22,7 +22,6 @@ import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/explore/explore_available_event_dates_model.dart';
-import 'package:localin/model/explore/explore_base_model.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
@@ -64,7 +63,7 @@ class ApiProvider {
 
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
-        baseUrl: buildEnvironment.baseUrl,
+        baseUrl: buildEnvironment.baseApiUrl,
         receiveTimeout: 20000,
         maxRedirects: 3,
         connectTimeout: 20000);
@@ -1582,7 +1581,7 @@ class ApiProvider {
   /// RESTAURANT
 
   Future<RestaurantResponseModel> getRestaurantList(int page, String search,
-      {int limit = 10, String sort, String order = 'asc'}) async {
+      {int limit = 10, String sort, String order, int isLocation}) async {
     try {
       Map<String, dynamic> map = Map();
       if (sort != null && sort.isNotEmpty) {
@@ -1593,7 +1592,12 @@ class ApiProvider {
       }
       map['limit'] = limit;
       map['page'] = page;
-      map['order'] = order;
+      if (order != null) {
+        map['order'] = order;
+      }
+      if (isLocation != null) {
+        map['is_location'] = isLocation;
+      }
       final response = await _dio.get(ApiConstant.kSearchRestaurant,
           queryParameters: map,
           options: Options(headers: {REQUIRED_TOKEN: true}));
@@ -1638,10 +1642,11 @@ class ApiProvider {
     }
   }
 
-  Future<String> bookmarkRestaurant(int restaurantId) async {
+  Future<String> bookmarkRestaurant(int restaurantId,
+      {bool isDelete = false}) async {
     try {
       final response = await _dio.get(
-          '${ApiConstant.kBookmarkedRestaurant}/$restaurantId',
+          '${ApiConstant.kBookmarkedRestaurant}/$restaurantId${isDelete ? '/delete' : ''}',
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return response.data['message'];
     } catch (error) {

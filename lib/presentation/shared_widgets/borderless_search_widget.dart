@@ -11,6 +11,7 @@ class BorderlessSearchWidget extends StatelessWidget {
   final TextEditingController controller;
   final bool isShowPrefixIcon;
   final bool isAutoFocus;
+  final bool isEnabled;
   BorderlessSearchWidget({
     this.onChanged,
     this.title,
@@ -18,6 +19,7 @@ class BorderlessSearchWidget extends StatelessWidget {
     this.controller,
     this.backgroundColor = ThemeColors.black10,
     this.isShowPrefixIcon = false,
+    this.isEnabled = true,
   });
 
   @override
@@ -26,6 +28,7 @@ class BorderlessSearchWidget extends StatelessWidget {
       controller: controller,
       autofocus: isAutoFocus,
       onChanged: onChanged,
+      enabled: isEnabled,
       decoration: InputDecoration(
         prefixIconConstraints: BoxConstraints.loose(Size(60.0, 60.0)),
         prefixIcon: Visibility(

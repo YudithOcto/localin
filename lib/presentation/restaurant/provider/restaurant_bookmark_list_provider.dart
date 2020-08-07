@@ -7,6 +7,13 @@ import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';
 
 class RestaurantBookmarkListProvider with ChangeNotifier {
+  final _scrollController = ScrollController();
+  ScrollController get scrollController => _scrollController;
+
+  RestaurantBookmarkListProvider() {
+    _scrollController..addListener(_scrollListener);
+  }
+
   final _repository = Repository();
   int _pageRequest = 1;
   int get pageRequest => _pageRequest;
@@ -19,9 +26,6 @@ class RestaurantBookmarkListProvider with ChangeNotifier {
 
   List<RestaurantDetail> _restaurantList = [];
   List<RestaurantDetail> get restaurantList => _restaurantList;
-
-  final _scrollController = ScrollController();
-  ScrollController get scrollController => _scrollController;
 
   _scrollListener() {
     if (_scrollController.offset >=
@@ -42,6 +46,7 @@ class RestaurantBookmarkListProvider with ChangeNotifier {
     final response = await _repository.getBookmarkedRestaurants(_pageRequest);
     if (response != null && response.total > 0) {
       _restaurantList.addAll(response.detail);
+      _restaurantList.map((e) => e.isBookMark = true).toList();
       _pageRequest += 1;
       _canLoadMore = response.total > _restaurantList.length;
       _streamController.add(searchState.success);
@@ -52,6 +57,23 @@ class RestaurantBookmarkListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> unBookMarkRestaurant(int index) async {
+    final response = await _repository.bookmarkRestaurant(
+        _restaurantList[index].id,
+        isDelete: _restaurantList[index].isBookMark);
+    if (response == 'Restaurant has un-bookmarks') {
+      _trackChangedVariable = true;
+      _restaurantList.removeAt(index);
+      if (_restaurantList.isEmpty) {
+        _streamController.add(searchState.empty);
+      }
+      notifyListeners();
+    }
+    return response;
+  }
+
+  bool _trackChangedVariable = false;
+  bool get trackChangedVariable => _trackChangedVariable;
   @override
   void dispose() {
     _streamController.close();

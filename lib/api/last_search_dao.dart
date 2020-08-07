@@ -58,9 +58,8 @@ class LastSearchDao {
     return -1;
   }
 
-  Future<int> delete(RestaurantLocalModal model) async {
-    final finder = Finder(filter: Filter.byKey(model.id));
-    final result = await _draftStore.delete(await _db, finder: finder);
+  Future<int> delete() async {
+    final result = await _draftStore.delete(await _db);
     return result;
   }
 

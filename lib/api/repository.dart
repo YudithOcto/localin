@@ -421,9 +421,9 @@ class Repository {
   }
 
   Future<RestaurantResponseModel> getRestaurantList(int page, String search,
-      {int limit = 10, String sort, String order = 'asc'}) {
+      {int limit = 10, String sort, String order, int isLocation}) {
     return apiProvider.getRestaurantList(page, search,
-        limit: limit, sort: sort, order: order);
+        limit: limit, sort: sort, order: order, isLocation: isLocation);
   }
 
   Future<RestaurantResponseModel> getRestaurantDetail(String restaurantId) {
@@ -434,7 +434,7 @@ class Repository {
     return apiProvider.getBookmarkedRestaurants(page);
   }
 
-  Future<String> bookmarkRestaurant(int restaurantId) {
-    return apiProvider.bookmarkRestaurant(restaurantId);
+  Future<String> bookmarkRestaurant(int restaurantId, {bool isDelete = false}) {
+    return apiProvider.bookmarkRestaurant(restaurantId, isDelete: isDelete);
   }
 }

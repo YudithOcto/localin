@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_image_radius.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_provider.dart';
 import 'package:localin/presentation/restaurant/provider/restaurant_detail_provider.dart';
@@ -12,12 +14,15 @@ import 'package:provider/provider.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   static const routeName = 'RestaurantDetailPage';
+  static const restaurantLocalModel = 'RestaurantLocalModel';
   static const restaurantId = 'RestaurantID';
 
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return ChangeNotifierProvider<RestaurantDetailProvider>(
-      create: (_) => RestaurantDetailProvider(),
+      create: (_) => RestaurantDetailProvider(routes[restaurantLocalModel]),
       child: RestaurantDetailBuilderWidget(),
     );
   }
@@ -67,84 +72,107 @@ class _RestaurantDetailBuilderWidgetState
               final restaurantDetail =
                   Provider.of<RestaurantDetailProvider>(context)
                       .restaurantDetail as RestaurantDetail;
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        CustomImageRadius(
-                          radius: 0.0,
-                          height: 260.0,
-                          width: double.maxFinite,
-                          imageUrl: restaurantDetail.photosUrl ?? '',
-                          placeHolderColor: ThemeColors.black80,
-                        ),
-                        Positioned(
-                          left: 20.0,
-                          top: 20.0,
-                          child: SafeArea(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Icon(Icons.arrow_back,
-                                  color: ThemeColors.black0),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 20.0,
-                          top: 20.0,
-                          child: SafeArea(
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Icon(Icons.bookmark_border,
-                                  color: ThemeColors.black0),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      color: ThemeColors.black0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              return WillPopScope(
+                onWillPop: () async {
+                  Navigator.of(context).pop(true);
+                  return false;
+                },
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Stack(
                         children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 20.0),
-                            child: Row(
-                              children: <Widget>[
-                                RestaurantCategoryWidget(
-                                  title: restaurantDetail?.name,
-                                ),
-                                SizedBox(width: 12.0),
-                                RestaurantRatingWidget(
-                                  restaurantDetail: restaurantDetail,
-                                ),
-                              ],
-                            ),
+                          CustomImageRadius(
+                            radius: 0.0,
+                            height: 260.0,
+                            width: double.maxFinite,
+                            imageUrl: restaurantDetail.photosUrl ?? '',
+                            placeHolderColor: ThemeColors.black80,
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 13.0),
-                            child: RestaurantBasicDetailWidget(
-                              restaurantDetail: restaurantDetail,
+                            height: 260.0,
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              color: ThemeColors.black100.withOpacity(0.5),
                             ),
                           ),
+                          Positioned(
+                            left: 20.0,
+                            top: 20.0,
+                            child: SafeArea(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                                child: Icon(Icons.arrow_back,
+                                    color: ThemeColors.black0),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 20.0,
+                            top: 20.0,
+                            child: SafeArea(
+                              child: GestureDetector(
+                                onTap: () async {
+                                  final result = await Provider.of<
+                                              RestaurantDetailProvider>(context,
+                                          listen: false)
+                                      .updateBookmarkRestaurant();
+                                  CustomToast.showCustomBookmarkToast(
+                                      context, result,
+                                      duration: 1);
+                                },
+                                child: SvgPicture.asset(
+                                    'images/${restaurantDetail.isBookMark ? 'restaurant_bookmark_active' : 'restaurant_bookmark_not_active'}.svg',
+                                    width: 34.0,
+                                    height: 34.0),
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                    RowLocationWidget(
-                      eventName: restaurantDetail.name,
-                      eventAddress: restaurantDetail.address,
-                      latitude: restaurantDetail.latitude,
-                      longitude: restaurantDetail.longitude,
-                    )
-                    // RowLocationWidget(),
-                  ],
+                      Container(
+                        color: ThemeColors.black0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 20.0, horizontal: 20.0),
+                              child: Row(
+                                children: <Widget>[
+                                  RestaurantCategoryWidget(
+                                    title: restaurantDetail?.categoryName,
+                                  ),
+                                  SizedBox(width: 12.0),
+                                  RestaurantRatingWidget(
+                                    restaurantDetail: restaurantDetail,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 13.0),
+                              child: RestaurantBasicDetailWidget(
+                                restaurantDetail: restaurantDetail,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RowLocationWidget(
+                        eventName: restaurantDetail.name,
+                        eventAddress: restaurantDetail.address,
+                        latitude: restaurantDetail.latitude,
+                        longitude: restaurantDetail.longitude,
+                      )
+                      // RowLocationWidget(),
+                    ],
+                  ),
                 ),
               );
             }
