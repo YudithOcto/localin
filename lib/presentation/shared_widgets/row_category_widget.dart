@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
-class RestaurantCategoryWidget extends StatelessWidget {
+class RowCategoryWidget extends StatelessWidget {
   final String title;
-  RestaurantCategoryWidget({@required this.title});
+  RowCategoryWidget({@required this.title});
 
   @override
   Widget build(BuildContext context) {

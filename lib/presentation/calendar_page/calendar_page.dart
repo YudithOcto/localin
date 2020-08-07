@@ -11,7 +11,6 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatelessWidget {
   static const routeName = 'CalendarPage';
-  static const eventId = 'eventId';
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +18,6 @@ class CalendarPage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<TicketAvailabilityProvider>(
-          create: (_) => TicketAvailabilityProvider(routeArgs[eventId]),
-          child: CalendarContent(),
-        ),
         ChangeNotifierProvider<CalendarTicketProvider>(
           create: (_) => CalendarTicketProvider(),
         )
@@ -48,45 +43,25 @@ class _CalendarContentState extends State<CalendarContent> {
         elevation: 0.0,
         backgroundColor: ThemeColors.black0,
         leading: Icon(
-          Icons.arrow_back,
+          Icons.close,
           color: ThemeColors.black80,
         ),
         titleSpacing: 0.0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Book Ticket',
-              style: ThemeText.sfMediumHeadline,
-            ),
-            Text(
-              'Select date and total of visitors',
-              style: ThemeText.sfMediumFootnote
-                  .copyWith(color: ThemeColors.black80),
-            )
-          ],
+        title: Text(
+          'Check In Date',
+          style: ThemeText.sfMediumHeadline,
         ),
-      ),
-      bottomNavigationBar: SubtotalTicketButtonWidget(
-        onPressed: () => Navigator.of(context)
-            .pushNamed(BookTicketListSelectionPage.routeName),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(top: 12.0),
+              margin: EdgeInsets.only(top: 18.0),
               color: ThemeColors.black0,
               child: TableCalendar(
+                startDay: DateTime.now(),
                 onDaySelected: (date, events) async {
-//                  final result = await Provider.of<TicketAvailabilityProvider>(
-//                          context,
-//                          listen: false)
-//                      .getAvailableSchedules(date, true);
-//                  if (result.isNotEmpty) {
-//                    Provider.of<CalendarTicketProvider>(context, listen: false)
-//                        .addSelectedDateAndTicket(date, result);
-//                  }
+                  Navigator.of(context).pop(date);
                 },
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 calendarController: _calendarController,
@@ -97,6 +72,8 @@ class _CalendarContentState extends State<CalendarContent> {
                         .copyWith(color: ThemeColors.black80)),
                 calendarStyle: CalendarStyle(
                     highlightToday: false,
+                    unavailableStyle: ThemeText.sfSemiBoldHeadline
+                        .copyWith(color: ThemeColors.black60),
                     selectedColor: ThemeColors.primaryBlue,
                     selectedStyle: ThemeText.sfSemiBoldHeadline
                         .copyWith(color: ThemeColors.black0),
@@ -107,8 +84,7 @@ class _CalendarContentState extends State<CalendarContent> {
                     outsideWeekendStyle: ThemeText.sfSemiBoldHeadline
                         .copyWith(color: ThemeColors.black60),
                     weekdayStyle: ThemeText.sfSemiBoldHeadline,
-                    weekendStyle: ThemeText.sfSemiBoldHeadline
-                        .copyWith(color: ThemeColors.black60)),
+                    weekendStyle: ThemeText.sfSemiBoldHeadline),
                 headerStyle: HeaderStyle(
                   titleTextStyle: ThemeText.sfMediumHeadline,
                   formatButtonVisible: false,

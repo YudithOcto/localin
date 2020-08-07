@@ -5,8 +5,8 @@ import 'package:localin/model/restaurant/restaurant_local_model.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
 import 'package:localin/presentation/restaurant/shared_widget/restaurant_basic_detail_widget.dart';
-import 'package:localin/presentation/restaurant/shared_widget/restaurant_category_widget.dart';
-import 'package:localin/presentation/restaurant/shared_widget/restaurant_rating_widget.dart';
+import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
+import 'package:localin/presentation/shared_widgets/custom_rating_widget.dart';
 import 'package:localin/themes.dart';
 
 class SingleRowRestaurantWidget extends StatelessWidget {
@@ -74,15 +74,16 @@ class SingleRowRestaurantWidget extends StatelessWidget {
                 Positioned(
                   top: 12.0,
                   left: 12.0,
-                  child: RestaurantCategoryWidget(
+                  child: RowCategoryWidget(
                     title: restaurantDetail.categoryName,
                   ),
                 ),
                 Positioned(
                   bottom: 15.0,
                   left: 15.0,
-                  child: RestaurantRatingWidget(
-                    restaurantDetail: restaurantDetail,
+                  child: CustomRatingWidget(
+                    starRating: restaurantDetail?.userRating,
+                    totalRating: restaurantDetail?.userRatingVotes,
                   ),
                 ),
               ],

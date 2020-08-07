@@ -63,6 +63,7 @@ dependencies:
   google_place: ^0.3.1
   sliding_up_panel: ^1.0.2
   table_calendar: ^2.2.3
+  snaplist: ^0.1.8
 
 dev_dependencies:
   flutter_test:

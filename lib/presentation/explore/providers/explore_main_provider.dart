@@ -19,6 +19,8 @@ class ExploreMainProvider with ChangeNotifier {
   final _streamController = StreamController<exploreState>.broadcast();
   Stream<exploreState> get stream => _streamController.stream;
 
+  bool isMount = true;
+
   Future<Null> getEventList(
       {bool isRefresh = true,
       String search,
@@ -30,7 +32,7 @@ class ExploreMainProvider with ChangeNotifier {
       _canLoadMore = true;
       _pageOffset = 1;
     }
-    _streamController.add(exploreState.loading);
+    setState(exploreState.loading);
     final result = await _repository.getEventList(
         pageRequest: _pageOffset,
         search: search,
@@ -41,16 +43,27 @@ class ExploreMainProvider with ChangeNotifier {
       _eventList.addAll(result.detail);
       _canLoadMore = result.total > _eventList.length;
       _pageOffset += 1;
-      _streamController.add(exploreState.success);
+      setState(exploreState.success);
     } else {
-      _streamController.add(exploreState.empty);
+      setState(exploreState.empty);
       _canLoadMore = false;
     }
-    notifyListeners();
+    if (isMount) {
+      notifyListeners();
+    }
+  }
+
+  setState(exploreState state) {
+    if (isMount) {
+      _streamController.add(state);
+    } else {
+      return;
+    }
   }
 
   @override
   void dispose() {
+    isMount = false;
     _streamController.close();
     super.dispose();
   }
