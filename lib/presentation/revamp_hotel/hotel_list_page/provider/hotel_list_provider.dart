@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HotelListProvider with ChangeNotifier {
   bool get showSearchAppBar => _showSearchAppBar;
@@ -10,6 +11,8 @@ class HotelListProvider with ChangeNotifier {
 
   final _scrollController = ScrollController();
   get scrollController => _scrollController;
+
+  final panelController = PanelController();
 
   HotelListProvider() {
     _scrollController..addListener(_scrollListener);

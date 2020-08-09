@@ -5,6 +5,7 @@ import 'package:localin/utils/date_helper.dart';
 class HotelListSearchProvider with ChangeNotifier {
   String _currentCheckInDate = DateTime.now().parseDate;
   String get currentCheckInDate => _currentCheckInDate;
+
   set checkInDate(DateTime now) {
     _currentCheckInDate = now.parseDate;
     notifyListeners();
@@ -18,6 +19,14 @@ class HotelListSearchProvider with ChangeNotifier {
       result.add('Check-out ${dateTime.add(Duration(days: i + 1)).parseDate}');
     }
     return result;
+  }
+
+  String _currentCheckOutDate =
+      'CHECK OUT:  ${DateTime.now().add(Duration(days: 1)).parseDate.toUpperCase()}';
+  String get currentCheckOutDate => _currentCheckOutDate;
+  set checkOutDate(String date) {
+    _currentCheckOutDate = date.toUpperCase();
+    notifyListeners();
   }
 }
 

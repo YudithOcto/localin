@@ -4,12 +4,13 @@ import 'package:localin/themes.dart';
 
 class Subtitle extends StatelessWidget {
   final String title;
-  Subtitle({this.title});
+  final bool isNeedUpperCase;
+  Subtitle({this.title, this.isNeedUpperCase = true});
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${title.toUpperCase()}',
+      '${isNeedUpperCase ? title.toUpperCase() : title}',
       style: ThemeText.sfSemiBoldFootnote.copyWith(color: ThemeColors.black80),
     );
   }

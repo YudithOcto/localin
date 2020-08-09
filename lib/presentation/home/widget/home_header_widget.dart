@@ -8,7 +8,6 @@ import 'package:localin/presentation/home/widget/row_dana_widget.dart';
 import 'package:localin/presentation/restaurant/restaurant_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 

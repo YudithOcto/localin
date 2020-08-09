@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/explore/filter_page/provider/explore_filter_provider.dart';
-import 'package:localin/presentation/explore/shared_widgets/custom_category_radius.dart';
+import 'package:localin/presentation/shared_widgets/custom_category_radius.dart';
 import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

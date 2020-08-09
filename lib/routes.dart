@@ -22,6 +22,7 @@ import 'package:localin/presentation/restaurant/restaurant_bookmark_list_page.da
 import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
 import 'package:localin/presentation/restaurant/restaurant_page.dart';
 import 'package:localin/presentation/restaurant/search_restaurant_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_filter_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
 import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
@@ -133,5 +134,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     SearchRestaurantPage.routeName: (_) => SearchRestaurantPage(),
     RestaurantBookmarkListPage.routeName: (_) => RestaurantBookmarkListPage(),
     HotelListPage.routeName: (_) => HotelListPage(),
+    HotelListFilterPage.routeName: (_) => HotelListFilterPage(),
   };
 }

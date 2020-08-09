@@ -3,7 +3,7 @@ import 'package:localin/presentation/explore/filter_page/explore_filter_page.dar
 import 'package:localin/presentation/explore/providers/explore_main_filter_provider.dart';
 import 'package:localin/presentation/explore/providers/explore_main_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/main_event_list.dart';
-import 'package:localin/presentation/explore/shared_widgets/custom_category_radius.dart';
+import 'package:localin/presentation/shared_widgets/custom_category_radius.dart';
 import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/presentation/search/generic_search/search_explore_event_page.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';

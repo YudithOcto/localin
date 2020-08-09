@@ -6,7 +6,7 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
-import 'hotel_bottom_sheet_sort_widget.dart';
+import 'hotel_bottom_sheet_builder.dart';
 
 class QuickSearchRowWidget extends StatelessWidget {
   @override
@@ -20,7 +20,7 @@ class QuickSearchRowWidget extends StatelessWidget {
           topRight: Radius.circular(12.0),
         )),
         builder: (BuildContext ctx) {
-          return HotelBottomSheetSortWidget();
+          return HotelBottomSheetBuilder();
         },
       );
     }

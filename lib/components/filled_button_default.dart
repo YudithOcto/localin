@@ -7,6 +7,7 @@ class FilledButtonDefault extends StatelessWidget {
   final TextStyle textTheme;
   final Color backgroundColor;
   final Function onPressed;
+  final double radius;
 
   FilledButtonDefault({
     this.isLoading = false,
@@ -14,6 +15,7 @@ class FilledButtonDefault extends StatelessWidget {
     this.textTheme,
     this.backgroundColor = ThemeColors.primaryBlue,
     @required this.onPressed,
+    this.radius = 4.0,
   });
 
   @override
@@ -21,7 +23,8 @@ class FilledButtonDefault extends StatelessWidget {
     return Container(
       height: 48.0,
       child: RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
         onPressed: onPressed,
         color: backgroundColor,
         child: !isLoading

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
-import 'package:localin/presentation/explore/shared_widgets/custom_category_radius.dart';
+import 'package:localin/presentation/shared_widgets/custom_category_radius.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/number_helper.dart';
