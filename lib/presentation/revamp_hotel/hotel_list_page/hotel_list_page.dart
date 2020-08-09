@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_filter_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/appbar_detail_content_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_filter_builder.dart';
@@ -21,6 +22,9 @@ class HotelListPage extends StatelessWidget {
         ChangeNotifierProvider<HotelListProvider>(
           create: (_) => HotelListProvider(),
         ),
+        ChangeNotifierProvider<HotelListFilterProvider>(
+          create: (_) => HotelListFilterProvider(),
+        )
       ],
       child: HotelListBuilder(),
     );

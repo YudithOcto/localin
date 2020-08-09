@@ -5,7 +5,8 @@ import 'package:localin/themes.dart';
 
 class HotelListFilterPriceIndicatorColumn extends StatelessWidget {
   final String title;
-  HotelListFilterPriceIndicatorColumn({this.title});
+  final double value;
+  HotelListFilterPriceIndicatorColumn({this.title, this.value});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -15,7 +16,7 @@ class HotelListFilterPriceIndicatorColumn extends StatelessWidget {
           title: 'highest',
         ),
         SizedBox(height: 12.0),
-        Text('Rp 400.000', style: ThemeText.sfRegularHeadline),
+        Text('$value', style: ThemeText.sfRegularHeadline),
         SizedBox(height: 8.0),
         Container(
           color: ThemeColors.black20,
