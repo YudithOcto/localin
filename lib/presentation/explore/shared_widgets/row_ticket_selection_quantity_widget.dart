@@ -26,21 +26,23 @@ class RowTicketSelectionQuantityWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('$ticketType', style: ThemeText.sfSemiBoldFootnote),
-              SizedBox(height: 6.0),
-              Text('${price == 0 ? 'Free' : getFormattedCurrency(price)}',
-                  style: ThemeText.sfSemiBoldHeadline),
-              SizedBox(height: 4.0),
-              Text(
-                '/ticket',
-                style: ThemeText.sfSemiBoldFootnote
-                    .copyWith(color: ThemeColors.black60),
-              )
-            ],
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('$ticketType', style: ThemeText.sfSemiBoldFootnote),
+                SizedBox(height: 6.0),
+                Text('${price == 0 ? 'Free' : getFormattedCurrency(price)}',
+                    style: ThemeText.sfSemiBoldHeadline),
+                SizedBox(height: 4.0),
+                Text(
+                  '/ticket',
+                  style: ThemeText.sfSemiBoldFootnote
+                      .copyWith(color: ThemeColors.black60),
+                )
+              ],
+            ),
           ),
           Row(
             children: <Widget>[

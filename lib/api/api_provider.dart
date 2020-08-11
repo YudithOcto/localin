@@ -476,7 +476,6 @@ class ApiProvider {
       Map<String, dynamic> query = Map();
       query['page'] = offset;
       query['limit'] = limit;
-      print(keyword);
       if (keyword != null && keyword.isNotEmpty) {
         query['keyword'] = keyword;
       }
@@ -621,7 +620,6 @@ class ApiProvider {
           queryParameters: map,
           options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
-      print(model.communityDetailList.toString());
       return model;
     } catch (error) {
       if (error is DioError) {
