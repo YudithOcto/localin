@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HotelListProvider with ChangeNotifier {
@@ -9,30 +10,11 @@ class HotelListProvider with ChangeNotifier {
     _showSearchAppBar = value;
   }
 
-  final _scrollController = ScrollController();
-  get scrollController => _scrollController;
+  final _scrollController = ItemScrollController();
+  ItemScrollController get scrollController => _scrollController;
+
+  final _itemPositionedListener = ItemPositionsListener.create();
+  ItemPositionsListener get itemPositionedListener => _itemPositionedListener;
 
   final panelController = PanelController();
-
-  HotelListProvider() {
-    _scrollController..addListener(_scrollListener);
-  }
-
-  _scrollListener() {
-    if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent * 0.03 &&
-        !_showSearchAppBar) {
-      _showSearchAppBar = true;
-    } else if (_scrollController.offset <
-            _scrollController.position.maxScrollExtent * 0.03 &&
-        _showSearchAppBar) {
-      _showSearchAppBar = false;
-    }
-//    else if (_scrollController.offset >=
-//        _scrollController.position.maxScrollExtent &&
-//        _canLoadMore) {
-//      getRestaurantList(isRefresh: false);
-//    }
-    notifyListeners();
-  }
 }

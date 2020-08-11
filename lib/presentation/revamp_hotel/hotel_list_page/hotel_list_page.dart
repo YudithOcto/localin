@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_filter_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/appbar_detail_content_widget.dart';
@@ -9,6 +10,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/quick_search_row_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../themes.dart';
@@ -69,17 +71,34 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
               builder: (_, provider, __) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 20.0),
-                  child: provider.showSearchAppBar
-                      ? InkResponse(
-                          highlightColor: ThemeColors.primaryBlue,
-                          onTap: () async {},
-                          child: SvgPicture.asset('images/search_grey.svg'))
-                      : InkResponse(
-                          highlightColor: ThemeColors.primaryBlue,
-                          onTap: () async {},
-                          child: SvgPicture.asset('images/bookmark_full.svg',
-                              color: ThemeColors.primaryBlue),
-                        ),
+                  child: ValueListenableBuilder<Iterable<ItemPosition>>(
+                      valueListenable:
+                          provider.itemPositionedListener.itemPositions,
+                      builder: (context, positioned, _) {
+                        bool isShowAppBar = false;
+                        if (positioned.isNotEmpty) {
+                          isShowAppBar = positioned.first.index > 0;
+                        }
+                        if (isShowAppBar) {
+                          return InkResponse(
+                              highlightColor: ThemeColors.primaryBlue,
+                              onTap: () async {},
+                              child:
+                                  SvgPicture.asset('images/search_grey.svg'));
+                        } else {
+                          return InkResponse(
+                            highlightColor: ThemeColors.primaryBlue,
+                            onTap: () async {
+                              provider.scrollController.scrollTo(
+                                  index: 3,
+                                  duration: Duration(milliseconds: 400),
+                                  curve: Curves.easeIn);
+                            },
+                            child: SvgPicture.asset('images/bookmark_full.svg',
+                                color: ThemeColors.primaryBlue),
+                          );
+                        }
+                      }),
                 );
               },
             )
@@ -89,15 +108,19 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
         floatingActionButton: HotelListFloatingBottomWidget(),
         body: Consumer<HotelListProvider>(
           builder: (_, provider, __) {
-            return ListView.builder(
+            return ScrollablePositionedList.builder(
               itemCount: 4,
-              controller: provider.scrollController,
+              itemScrollController: provider.scrollController,
+              itemPositionsListener: provider.itemPositionedListener,
               padding: const EdgeInsets.only(bottom: 80.0),
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return QuickSearchRowWidget();
                 } else {
-                  return HotelSingleRowWidget();
+                  return InkResponse(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(HotelRevampDetailPage.routeName),
+                      child: HotelSingleRowWidget());
                 }
               },
             );
