@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_filter_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_filter_category.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_filter_slider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_filter_subtitle.dart';
 import 'package:localin/text_themes.dart';
@@ -79,8 +78,6 @@ class HotelListFilterBuilder extends StatelessWidget {
             children: <Widget>[
               HotelListFilterSubtitle(title: 'Price Range'),
               HotelLIstFilterSlider(),
-              HotelListFilterSubtitle(title: 'Ratings'),
-              HotelListFilterCategory(),
               HotelListFilterSubtitle(title: 'Facilities'),
               HotelListFilterFacilities(),
             ],

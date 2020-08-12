@@ -7,7 +7,7 @@ import 'hotel_bottom_sheet_choose_checkout_widget.dart';
 
 GlobalKey<ScrollSnapListState> sslKey = GlobalKey();
 
-class HotelBottomSheetDurationStayWidget extends StatelessWidget {
+class HotelBottomSheetDurationStayBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<HotelListSearchProvider>(

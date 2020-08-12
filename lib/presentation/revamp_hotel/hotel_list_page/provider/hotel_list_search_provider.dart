@@ -1,13 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/utils/date_helper.dart';
 
 class HotelListSearchProvider with ChangeNotifier {
+  HotelListSearchProvider({RevampHotelListRequest request}) {
+    _currentCheckInDate = request.checkIn.parseDate;
+    _currentCheckOutDate = request.checkout.parseDate;
+    _totalRoomsRequested = request.totalRooms;
+  }
+
   String _currentCheckInDate = DateTime.now().parseDate;
   String get currentCheckInDate => _currentCheckInDate;
 
   set checkInDate(DateTime now) {
     _currentCheckInDate = now.parseDate;
+    _checkInDate = now;
     notifyListeners();
   }
 
@@ -28,6 +36,12 @@ class HotelListSearchProvider with ChangeNotifier {
     _currentCheckOutDate = date.toUpperCase();
     notifyListeners();
   }
+
+  int _totalRoomsRequested = 1;
+  int get totalRoomsRequested => _totalRoomsRequested;
+
+  DateTime _checkInDate;
+  DateTime _checkOutDate;
 }
 
 extension on DateTime {

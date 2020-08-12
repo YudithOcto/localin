@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 
 class AppBarDetailContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<HotelListProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -15,7 +19,8 @@ class AppBarDetailContentWidget extends StatelessWidget {
         Row(
           children: <Widget>[
             Text(
-              '23 May - 24 May, 1 Night',
+              '${provider.revampHotelListRequest.checkIn.formattedDate} - '
+              '${provider.revampHotelListRequest.checkout.formattedDate}, ${provider.revampHotelListRequest.checkout.difference(provider.revampHotelListRequest.checkIn).inDays} Night',
               style: ThemeText.sfMediumCaption,
             ),
             Padding(
@@ -28,7 +33,7 @@ class AppBarDetailContentWidget extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                ' 1 Room, 1 Guest',
+                ' ${provider.revampHotelListRequest.totalRooms} Room',
                 style: ThemeText.sfMediumCaption,
               ),
             )
@@ -36,5 +41,12 @@ class AppBarDetailContentWidget extends StatelessWidget {
         )
       ],
     );
+  }
+}
+
+extension on DateTime {
+  String get formattedDate {
+    if (this == null) return '';
+    return DateHelper.formatDate(date: this, format: 'd MMM');
   }
 }

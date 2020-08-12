@@ -5,7 +5,7 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
-import 'hotel_bottom_sheet_duration_stay_widget.dart';
+import 'hotel_bottom_sheet_duration_stay_builder.dart';
 
 class HotelBottomSheetChooseCheckoutWidget extends StatefulWidget {
   final List<String> text;
@@ -55,7 +55,7 @@ class _HotelBottomSheetChooseCheckoutWidgetState
               itemBuilder: (context, index) {
                 return InkResponse(
                   onTap: () {
-                    Navigator.of(context).pop(widget.text[index]);
+                    Navigator.of(context).pop(index + 1);
                   },
                   highlightColor: ThemeColors.primaryBlue,
                   child: Container(

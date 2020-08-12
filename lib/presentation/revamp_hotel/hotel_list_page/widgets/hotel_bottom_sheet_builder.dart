@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_search_provider.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_duration_stay_widget.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_duration_stay_builder.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_room_guest_builder.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/single_column_bottom_sheet_search_widget.dart';
 import 'package:localin/text_themes.dart';
@@ -10,10 +11,15 @@ import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class HotelBottomSheetBuilder extends StatelessWidget {
+  final RevampHotelListRequest previousRequest;
+  HotelBottomSheetBuilder({this.previousRequest});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HotelListSearchProvider>(
-      create: (_) => HotelListSearchProvider(),
+      create: (_) => HotelListSearchProvider(
+        request: previousRequest,
+      ),
       child: LayoutBuilder(
         builder: (context, boxConstraint) {
           return Container(
@@ -80,7 +86,7 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 25.0),
-                    HotelBottomSheetDurationStayWidget(),
+                    HotelBottomSheetDurationStayBuilder(),
                   ],
                 ),
                 SizedBox(height: 13.0),
@@ -115,8 +121,9 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                               });
                         },
                         child: SingleColumnBottomSheetSearchWidget(
-                          title: 'TOTAL ROOM(S) & GUEST(S)',
-                          value: '1 Room, 1 Guest',
+                          title: 'TOTAL ROOM(S)',
+                          value:
+                              '${Provider.of<HotelListSearchProvider>(context).totalRoomsRequested} Room',
                         ),
                       ),
                     ),
