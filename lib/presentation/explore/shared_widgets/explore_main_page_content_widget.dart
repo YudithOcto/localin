@@ -90,12 +90,13 @@ class ExploreFilterListRow extends StatelessWidget {
                   });
                   if (filterResult != null) {
                     provider.addFilter(filterResult);
+                    List<int> categoryId = provider.selectedCategoryFilter
+                        .map((e) => e.categoryId)
+                        .toList();
                     Provider.of<ExploreMainProvider>(context, listen: false)
                         .getEventList(
                       isRefresh: true,
-                      categoryId: provider.selectedCategoryFilter
-                          .map((e) => e.categoryId)
-                          .toList(),
+                      categoryId: categoryId,
                       sort: provider.selectedFilter[2],
                       date:
                           '${DateTime.now().year}-${monthList.indexOf(provider.selectedFilter[1]) + 1}',

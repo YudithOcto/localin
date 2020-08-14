@@ -14,12 +14,21 @@ class MainEventList extends StatefulWidget {
 
 class _MainEventListState extends State<MainEventList> {
   bool _isInit = true;
+  final _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
       Provider.of<ExploreMainProvider>(context, listen: false)
           .getEventList(isRefresh: true);
+      _scrollController
+        ..addListener(() {
+          if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent) {
+            Provider.of<ExploreMainProvider>(context, listen: false)
+                .getEventList(isRefresh: false);
+          }
+        });
       _isInit = false;
     }
     super.didChangeDependencies();
@@ -44,6 +53,7 @@ class _MainEventListState extends State<MainEventList> {
                   }
                   return ListView.builder(
                     shrinkWrap: true,
+                    controller: _scrollController,
                     physics: ClampingScrollPhysics(),
                     itemCount: provider.eventList.length + 2,
                     itemBuilder: (context, index) {

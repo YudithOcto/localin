@@ -25,11 +25,11 @@ class ExploreMainFilterProvider with ChangeNotifier {
         notifyListeners();
       } else {
         if (modelRequest != null) {
-          if (modelRequest.month != null) {
+          if (modelRequest.month != null && modelRequest.month != -1) {
             _selectedFilter.replaceRange(1, 2, [monthList[modelRequest.month]]);
           }
 
-          if (modelRequest.sort != null) {
+          if (modelRequest.sort != null && modelRequest.sort != -1) {
             _selectedFilter.replaceRange(2, 3, [sortList[modelRequest.sort]]);
           }
 
@@ -39,13 +39,12 @@ class ExploreMainFilterProvider with ChangeNotifier {
             _selectedCategoryFilter.clear();
             _selectedCategoryFilter.addAll(modelRequest.category);
           }
+          notifyListeners();
         }
       }
     } catch (error) {
       print(error);
     }
-
-    notifyListeners();
   }
 
   List<CategoryExploreDetail> _selectedCategoryFilter = [];
