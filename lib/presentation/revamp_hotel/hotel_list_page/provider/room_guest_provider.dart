@@ -3,16 +3,22 @@ import 'package:localin/components/custom_toast.dart';
 import 'package:localin/main.dart';
 
 class RoomGuestProvider with ChangeNotifier {
+  RoomGuestProvider({int totalRoomSelected}) {
+    print(totalRoomSelected);
+
+    _roomSelected = totalRoomSelected;
+  }
+
   int _roomSelected = 1;
   int get roomSelected => _roomSelected;
   set changeRoomValue(bool isAdding) {
     if (isAdding) {
-      int currentRoomForChecking = _roomSelected + 1;
-      if (currentRoomForChecking > _adultSelected) {
-        CustomToast.showCustomBookmarkToast(navigator.currentContext,
-            'Number of Rooms Can\'t Be More Than Adults');
-        return;
-      }
+//      int currentRoomForChecking = _roomSelected + 1;
+//      if (currentRoomForChecking > _adultSelected) {
+//        CustomToast.showCustomBookmarkToast(navigator.currentContext,
+//            'Number of Rooms Can\'t Be More Than Adults');
+//        return;
+//      }
       _roomSelected++;
     } else {
       if (_roomSelected <= 1) {

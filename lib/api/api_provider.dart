@@ -1213,6 +1213,22 @@ class ApiProvider {
     }
   }
 
+  Future<BaseResponse> changeBookmarkStatusHotel(
+      String query, int hotelId) async {
+    try {
+      final result = await _dio.get(
+          '${ApiConstant.kBookmarkHotel}/$query/$hotelId',
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return BaseResponse.fromJson(result.data);
+    } catch (e) {
+      if (e is DioError) {
+        return BaseResponse.withError(_handleError(e));
+      } else {
+        return BaseResponse.withError(e.toString());
+      }
+    }
+  }
+
   Future<BookHotelResponse> bookHotel(
       int hotelId,
       int roomCategoryId,

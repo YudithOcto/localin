@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 
 const DEFAULT_PRICE_HIGHEST = 2000000.0;
 const DEFAULT_PRICE_LOWEST = 0.0;
@@ -19,13 +20,6 @@ class HotelListFilterProvider with ChangeNotifier {
   double get currentLowest => _currentLowest;
   set changeLowest(double value) {
     _currentLowest = value;
-    notifyListeners();
-  }
-
-  int _currentRating = 0;
-  int get currentRating => _currentRating;
-  set changeRating(int value) {
-    _currentRating = value;
     notifyListeners();
   }
 
@@ -66,7 +60,13 @@ class HotelListFilterProvider with ChangeNotifier {
     _selectedFacilities.add(0);
     _currentHighest = DEFAULT_PRICE_HIGHEST;
     _currentLowest = DEFAULT_PRICE_LOWEST;
-    _currentRating = 0;
     notifyListeners();
+  }
+
+  RevampHotelListRequest get request {
+    return RevampHotelListRequest(
+      minPrice: _currentLowest,
+      maxPrice: _currentHighest,
+    );
   }
 }

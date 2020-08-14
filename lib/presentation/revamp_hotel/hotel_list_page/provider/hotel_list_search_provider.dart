@@ -1,47 +1,99 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
+import 'package:localin/api/repository.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
+import 'package:localin/model/hotel/room_availability.dart';
+import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:localin/utils/date_helper.dart';
 
 class HotelListSearchProvider with ChangeNotifier {
-  HotelListSearchProvider({RevampHotelListRequest request}) {
-    _currentCheckInDate = request.checkIn.parseDate;
-    _currentCheckOutDate = request.checkout.parseDate;
-    _totalRoomsRequested = request.totalRooms;
+  HotelListSearchProvider(
+      {RevampHotelListRequest request, HotelDetailEntity detail}) {
+    _requestModel = request;
+    _hotelDetailEntity = detail;
+    getRoomAvailability();
   }
 
-  String _currentCheckInDate = DateTime.now().parseDate;
-  String get currentCheckInDate => _currentCheckInDate;
-
   set checkInDate(DateTime now) {
-    _currentCheckInDate = now.parseDate;
-    _checkInDate = now;
+    _requestModel.checkIn = now;
+    _requestModel.checkout = now.add(Duration(days: 1));
     notifyListeners();
   }
 
   List<String> getListCheckOutDate() {
-    DateTime dateTime =
-        DateFormat('EEE, dd MMM yyyy').parse(_currentCheckInDate);
     List<String> result = [];
     for (int i = 0; i <= 20; i++) {
-      result.add('Check-out ${dateTime.add(Duration(days: i + 1)).parseDate}');
+      result.add(
+          'Check-out ${_requestModel.checkIn.add(Duration(days: i + 1)).parseDate}');
     }
     return result;
   }
 
-  String _currentCheckOutDate =
-      'CHECK OUT:  ${DateTime.now().add(Duration(days: 1)).parseDate.toUpperCase()}';
-  String get currentCheckOutDate => _currentCheckOutDate;
-  set checkOutDate(String date) {
-    _currentCheckOutDate = date.toUpperCase();
+  set checkOutDate(int index) {
+    _requestModel.checkout = _requestModel.checkIn.add(Duration(days: index));
     notifyListeners();
   }
 
-  int _totalRoomsRequested = 1;
-  int get totalRoomsRequested => _totalRoomsRequested;
+  HotelDetailEntity _hotelDetailEntity;
+  HotelDetailEntity get hotelDetail => _hotelDetailEntity;
 
-  DateTime _checkInDate;
-  DateTime _checkOutDate;
+  RevampHotelListRequest _requestModel = RevampHotelListRequest();
+  RevampHotelListRequest get requestModel => _requestModel;
+
+  DateTime get checkIn => _requestModel.checkIn;
+  DateTime get checkOut => _requestModel.checkout;
+  int get totalRoomSelected => _requestModel.totalRooms;
+
+  int get totalNightSelected {
+    return _requestModel.checkout.difference(_requestModel.checkIn).inDays;
+  }
+
+  set totalRoomRequested(int total) {
+    _requestModel.totalRooms = total;
+    notifyListeners();
+  }
+
+  String get currentCheckoutDate {
+    return _requestModel.checkout.parseDate;
+  }
+
+  String get currentCheckInDate {
+    return _requestModel.checkIn.parseDate;
+  }
+
+  final _roomState = StreamController<RoomState>.broadcast();
+  Stream<RoomState> get stream => _roomState.stream;
+
+  final _repository = Repository();
+  List<RoomAvailability> _roomAvailability = List();
+  List<RoomAvailability> get roomAvailability => _roomAvailability;
+
+  int discount = 0;
+
+  Future<Null> getRoomAvailability() async {
+    _roomState.add(RoomState.loading);
+    _roomAvailability.clear();
+    final result = await _repository.getRoomAvailability(
+        _hotelDetailEntity.hotelId,
+        _requestModel.checkIn,
+        _requestModel.checkout,
+        _requestModel.totalRooms);
+    if (result != null && result.error == null) {
+      _roomState.add(RoomState.success);
+      discount = result.discount;
+      _roomAvailability.addAll(result.roomAvailability);
+    } else {
+      _roomState.add(RoomState.empty);
+    }
+  }
+
+  @override
+  void dispose() {
+    _roomState.close();
+    super.dispose();
+  }
 }
 
 extension on DateTime {

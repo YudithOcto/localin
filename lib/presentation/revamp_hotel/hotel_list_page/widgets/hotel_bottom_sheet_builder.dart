@@ -69,7 +69,11 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                                   highlightColor: ThemeColors.primaryBlue,
                                   onTap: () async {
                                     final result = await Navigator.of(context)
-                                        .pushNamed(CalendarPage.routeName);
+                                        .pushNamed(CalendarPage.routeName,
+                                            arguments: {
+                                          CalendarPage.defaultDate:
+                                              provider.checkIn,
+                                        });
                                     if (result != null && result is DateTime) {
                                       provider.checkInDate = result;
                                     }
@@ -95,7 +99,7 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(left: 41.0),
                       child: Text(
-                        provider.currentCheckOutDate,
+                        provider.currentCheckoutDate,
                         style: ThemeText.sfSemiBoldFootnote
                             .copyWith(color: ThemeColors.black80),
                       ),
@@ -117,13 +121,23 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                           final result = await showModalBottomSheet(
                               context: context,
                               builder: (_) {
-                                return HotelBottomSheetRoomGuestBuilder();
+                                return HotelBottomSheetRoomGuestBuilder(
+                                  totalPreviousRequest:
+                                      Provider.of<HotelListSearchProvider>(
+                                              context)
+                                          .totalRoomSelected,
+                                );
                               });
+                          if (result != null) {
+                            Provider.of<HotelListSearchProvider>(context,
+                                    listen: false)
+                                .totalRoomRequested = result;
+                          }
                         },
                         child: SingleColumnBottomSheetSearchWidget(
                           title: 'TOTAL ROOM(S)',
                           value:
-                              '${Provider.of<HotelListSearchProvider>(context).totalRoomsRequested} Room',
+                              '${Provider.of<HotelListSearchProvider>(context).totalRoomSelected} Room',
                         ),
                       ),
                     ),

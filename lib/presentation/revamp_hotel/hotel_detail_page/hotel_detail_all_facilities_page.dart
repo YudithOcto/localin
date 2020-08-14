@@ -6,28 +6,20 @@ import 'package:localin/themes.dart';
 
 class HotelDetailAllFacilitiesPage extends StatelessWidget {
   static const routeName = 'HotelDetailAllFacilitiesPage';
-  final List<String> data = [
-    'Room Service',
-    'Parking',
-    'Swimming Pool',
-    'Kitchen',
-    'Refrigerator',
-    'Seating Area',
-    'AC',
-    'WashRoom',
-    '24/7 Check In',
-    'Free Wifi',
-    'Garden',
-    'TV'
-  ];
+  static const facilities = 'Facilities';
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    List<String> data = routes[facilities];
     return Scaffold(
       backgroundColor: ThemeColors.black10,
       appBar: AppBar(
         backgroundColor: ThemeColors.black0,
         elevation: 0.0,
-        leading: Icon(Icons.close, color: ThemeColors.black80),
+        leading: InkResponse(
+            onTap: () => Navigator.of(context).pop(),
+            child: Icon(Icons.close, color: ThemeColors.black80)),
         titleSpacing: 0.0,
         title: Text(
           'All Facilities in this Hotel',

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_bookmark_page/hotel_bookmark_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_pick_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/appbar_detail_content_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_filter_builder.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_floating_bottom_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/quick_search_row_widget.dart';
+import 'package:localin/presentation/revamp_hotel/shared_widgets/hotel_empty_widget.dart';
 import 'package:localin/presentation/revamp_hotel/shared_widgets/hotel_single_row_widget.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HotelListBuilder extends StatefulWidget {
@@ -31,6 +34,27 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
       _isInit = false;
     }
     super.didChangeDependencies();
+  }
+
+  goToHotelDetailPage(int index, HotelListProvider provider) {
+    Navigator.of(context)
+        .pushNamed(HotelRevampDetailPage.routeName, arguments: {
+      HotelRevampDetailPage.hotelId: provider.hotelList[index].hotelId,
+      HotelRevampDetailPage.previousSort: provider.revampHotelListRequest,
+      HotelRevampDetailPage.roomSelected:
+          provider.hotelList[index].roomAvailability.isNotEmpty
+              ? provider.hotelList[index].roomAvailability.first
+              : null,
+    });
+  }
+
+  goToRoomTypeDetailPage(
+      HotelDetailEntity hotelDetail, RevampHotelListRequest request) {
+    Navigator.of(context)
+        .pushNamed(HotelDetailRoomTypePickPage.routeName, arguments: {
+      HotelDetailRoomTypePickPage.hotelDetail: hotelDetail,
+      HotelDetailRoomTypePickPage.sortingRequest: request,
+    });
   }
 
   @override
@@ -98,7 +122,7 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                       stream: provider.stream,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
-                                ConnectionState.waiting ||
+                                ConnectionState.waiting &&
                             provider.pageRequested <= 1) {
                           return Center(child: CircularProgressIndicator());
                         } else {
@@ -108,18 +132,22 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                             padding: const EdgeInsets.only(bottom: 80.0),
                             itemBuilder: (context, index) {
                               if (snapshot.data == searchState.empty) {
-                                return Container();
+                                return HotelEmptyWidget();
                               } else if (index < provider.hotelList.length) {
                                 if (index == 0) {
                                   return QuickSearchRowWidget();
                                 } else {
                                   return InkResponse(
-                                      onTap: () => Navigator.of(context)
-                                          .pushNamed(
-                                              HotelRevampDetailPage.routeName),
-                                      child: HotelSingleRowWidget(
-                                        hotelDetail: provider.hotelList[index],
-                                      ));
+                                    onTap: () =>
+                                        goToHotelDetailPage(index, provider),
+                                    child: HotelSingleRowWidget(
+                                      hotelDetail: provider.hotelList[index],
+                                      onRoomTypeClick: () =>
+                                          goToRoomTypeDetailPage(
+                                              provider.hotelList[index],
+                                              provider.revampHotelListRequest),
+                                    ),
+                                  );
                                 }
                               } else if (provider.canLoadMore) {
                                 return Center(

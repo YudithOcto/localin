@@ -11,11 +11,13 @@ class OutlineButtonDefault extends StatelessWidget {
   final TextStyle textStyle;
   final Color textColor;
   final Color sideColor;
+  final EdgeInsetsGeometry margin;
 
   OutlineButtonDefault({
     @required this.buttonText,
     @required this.onPressed,
     this.width = double.infinity,
+    this.margin,
     this.height = 48.0,
     this.backgroundColor = ThemeColors.black0,
     this.textStyle = ThemeText.rodinaTitle3,
@@ -28,6 +30,7 @@ class OutlineButtonDefault extends StatelessWidget {
     return Container(
       height: height,
       width: width,
+      margin: margin,
       child: RaisedButton(
         elevation: 1.0,
         color: backgroundColor,

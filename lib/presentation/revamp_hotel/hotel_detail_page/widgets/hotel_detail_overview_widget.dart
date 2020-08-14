@@ -1,48 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
 import 'package:localin/presentation/shared_widgets/custom_rating_widget.dart';
 import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class HotelDetailOverviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<HotelDetailApiProvider>(context);
     return Container(
       padding: const EdgeInsets.all(20.0),
       color: ThemeColors.black0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              CustomRatingWidget(
-                starRating: '4.5',
-                totalRating: '140',
-              ),
-              Row(
-                children: <Widget>[
-                  SvgPicture.asset(
-                    'images/location.svg',
-                  ),
-                  SizedBox(width: 7.0),
-                  Text(
-                    'View in Map',
-                    style: ThemeText.sfMediumCaption
-                        .copyWith(color: ThemeColors.black80),
-                  )
-                ],
-              )
-            ],
-          ),
-          SizedBox(height: 11.0),
-          Text('OYO Life 2736 Pondok Klara', style: ThemeText.rodinaTitle3),
+          Text('${provider.hotelDetailEntity.hotelName}',
+              style: ThemeText.rodinaTitle3),
           SizedBox(height: 2.0),
           RichText(
             text: TextSpan(children: [
               TextSpan(
-                text: 'Near Griya Mitra Park, Bandung',
+                text: '${provider.hotelDetailEntity.shortAddress}',
                 style: ThemeText.sfMediumFootnote
                     .copyWith(color: ThemeColors.black80),
               ),
@@ -51,7 +32,7 @@ class HotelDetailOverviewWidget extends StatelessWidget {
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black80)),
               TextSpan(
-                  text: '1.5km',
+                  text: '${provider.hotelDetailEntity.distance}',
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.primaryBlue)),
               TextSpan(
@@ -61,9 +42,6 @@ class HotelDetailOverviewWidget extends StatelessWidget {
             ]),
           ),
           SizedBox(height: 14.0),
-          RowCategoryWidget(
-            title: 'Hurry. Only 1 room left',
-          ),
         ],
       ),
     );

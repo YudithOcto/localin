@@ -31,10 +31,8 @@ class HotelListFloatingBottomWidget extends StatelessWidget {
                       return CustomSortingWidget(
                         onTap: (index) {},
                         sortingTitle: [
-                          kHighestPopularity,
-                          kLowestPrice,
-                          kHighestPrice,
-                          kHighestRating,
+                          kNearby,
+                          kFurther,
                         ],
                         currentSelectedSort: 0,
                       );

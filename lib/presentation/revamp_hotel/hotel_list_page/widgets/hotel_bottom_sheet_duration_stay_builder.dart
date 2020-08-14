@@ -21,6 +21,7 @@ class HotelBottomSheetDurationStayBuilder extends StatelessWidget {
                   builder: (_) {
                     return HotelBottomSheetChooseCheckoutWidget(
                       text: provider.getListCheckOutDate(),
+                      currentIndex: provider.totalNightSelected,
                     );
                   });
               if (result != null) {
@@ -29,7 +30,7 @@ class HotelBottomSheetDurationStayBuilder extends StatelessWidget {
             },
             child: SingleColumnBottomSheetSearchWidget(
               title: 'DURATION',
-              value: '1 Night(s)',
+              value: '${provider.totalNightSelected} Night(s)',
             ),
           ),
         );

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_image_only_radius.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
-import 'package:localin/presentation/shared_widgets/custom_rating_widget.dart';
-import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_pick_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/number_helper.dart';
@@ -11,7 +10,9 @@ import 'package:localin/utils/number_helper.dart';
 class HotelSingleRowWidget extends StatelessWidget {
   final VoidCallback onTapBookmark;
   final HotelDetailEntity hotelDetail;
-  HotelSingleRowWidget({this.onTapBookmark, this.hotelDetail});
+  final VoidCallback onRoomTypeClick;
+  HotelSingleRowWidget(
+      {this.onTapBookmark, this.hotelDetail, this.onRoomTypeClick});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +104,7 @@ class HotelSingleRowWidget extends StatelessWidget {
           Visibility(
             visible: hotelDetail.roomAvailability.isNotNullNorNotEmpty,
             child: Container(
-              margin: EdgeInsets.only(bottom: 24.0),
+              margin: EdgeInsets.only(bottom: 18.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -154,6 +155,31 @@ class HotelSingleRowWidget extends StatelessWidget {
                 'Room Not Available For this Date',
                 style: ThemeText.rodinaFootnote
                     .copyWith(color: ThemeColors.black0),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: hotelDetail.roomAvailability.isNotNullNorNotEmpty &&
+                hotelDetail.roomAvailability.length > 1,
+            child: InkResponse(
+              onTap: onRoomTypeClick,
+              highlightColor: ThemeColors.primaryBlue,
+              child: Container(
+                margin: const EdgeInsets.only(
+                    bottom: 18.0, left: 15.0, right: 20.0),
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Explore ${hotelDetail.roomAvailability.length - 1} more room types',
+                      style: ThemeText.sfMediumBody
+                          .copyWith(color: ThemeColors.primaryBlue),
+                    ),
+                    Icon(Icons.keyboard_arrow_down,
+                        color: ThemeColors.primaryBlue)
+                  ],
+                ),
               ),
             ),
           )

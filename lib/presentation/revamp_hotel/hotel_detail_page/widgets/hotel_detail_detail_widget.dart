@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/components/bullet_text.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+import 'package:html/parser.dart' as parser;
 
 class HotelDetailDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final detail = Provider.of<HotelDetailApiProvider>(context);
     return Container(
       margin: EdgeInsets.only(bottom: 30.0),
       child: Column(
@@ -33,9 +38,7 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                   child: RowEventWidget(
                     title: 'Check-in time',
                     dateTime: DateHelper.formatDateBookingDetailShort(
-                        DateTime.now()
-                            .add(Duration(days: 10))
-                            .toIso8601String()),
+                        detail?.request?.checkIn?.toIso8601String()),
                   ),
                 ),
                 Padding(
@@ -44,9 +47,7 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                   child: RowEventWidget(
                     title: 'Check-out time',
                     dateTime: DateHelper.formatDateBookingDetailShort(
-                        DateTime.now()
-                            .add(Duration(milliseconds: 500))
-                            .toIso8601String()),
+                        detail?.request?.checkout?.toIso8601String()),
                   ),
                 ),
                 Padding(
@@ -61,10 +62,7 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                       ),
                       SizedBox(height: 4.0),
                       ReadMoreText(
-                        'A popular budget hotel in Bandung OYO 1945 Hotel Bali Indah remains '
-                        'in limelight for multiple reasons. This budget hotel in Bandung,'
-                        ' West Java is located at a distance of about 1.6 km from Taman Tegallega.'
-                        ' It is located only 1.2 km from the Superindo Piset Mall. A perfect blend of',
+                        '${parseHtml(detail?.hotelDetailEntity?.description)}',
                         trimLines: 5,
                         colorClickableText: ThemeColors.primaryBlue,
                         trimMode: TrimMode.Line,
@@ -87,7 +85,7 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                       ),
                       SizedBox(height: 4.0),
                       ReadMoreText(
-                        '- Couples are welcome - Guests can check in using any Government issued ID proof',
+                        '${parseHtml(detail.hotelDetailEntity.policies.map((e) => '• ' + e + '\n').join(''))}',
                         trimLines: 3,
                         colorClickableText: ThemeColors.primaryBlue,
                         trimMode: TrimMode.Line,
@@ -102,6 +100,24 @@ class HotelDetailDetailsWidget extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  parseHtml(String data) {
+    final doc = parser.parse(data);
+    return parser.parse(doc.body.text).documentElement.text;
+  }
+
+  Widget rowRoomInformation(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),
+      child: Bullet(
+        title,
+        style: TextStyle(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w500,
+            color: ThemeColors.dimGrey),
       ),
     );
   }

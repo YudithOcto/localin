@@ -9,7 +9,8 @@ import 'hotel_bottom_sheet_duration_stay_builder.dart';
 
 class HotelBottomSheetChooseCheckoutWidget extends StatefulWidget {
   final List<String> text;
-  HotelBottomSheetChooseCheckoutWidget({this.text});
+  final int currentIndex;
+  HotelBottomSheetChooseCheckoutWidget({this.text, this.currentIndex = 1});
   @override
   _HotelBottomSheetChooseCheckoutWidgetState createState() =>
       _HotelBottomSheetChooseCheckoutWidgetState();
@@ -18,6 +19,13 @@ class HotelBottomSheetChooseCheckoutWidget extends StatefulWidget {
 class _HotelBottomSheetChooseCheckoutWidgetState
     extends State<HotelBottomSheetChooseCheckoutWidget> {
   int currentIndex = 1;
+
+  @override
+  void initState() {
+    currentIndex = widget.currentIndex - 1;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +51,7 @@ class _HotelBottomSheetChooseCheckoutWidgetState
             child: ScrollSnapList(
               scrollDirection: Axis.vertical,
               itemSize: 56,
-              initialIndex: 1,
+              initialIndex: currentIndex.toDouble(),
               key: sslKey,
               focusOnItemTap: true,
               onItemFocus: (index) {
@@ -53,33 +61,27 @@ class _HotelBottomSheetChooseCheckoutWidgetState
               },
               itemCount: widget.text.length,
               itemBuilder: (context, index) {
-                return InkResponse(
-                  onTap: () {
-                    Navigator.of(context).pop(index + 1);
-                  },
-                  highlightColor: ThemeColors.primaryBlue,
-                  child: Container(
-                    height: 56.0,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '${index + 1} night(s)',
-                          style: ThemeText.sfMediumHeadline.copyWith(
-                              color: currentIndex == index
-                                  ? ThemeColors.primaryBlue
-                                  : ThemeColors.primaryBlue.withOpacity(0.3)),
-                        ),
-                        Text(
-                          widget.text[index],
-                          style: ThemeText.sfRegularBody.copyWith(
-                              color: currentIndex == index
-                                  ? ThemeColors.primaryBlue
-                                  : ThemeColors.primaryBlue.withOpacity(0.3)),
-                        ),
-                      ],
-                    ),
+                return Container(
+                  height: 56.0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '${index + 1} night(s)',
+                        style: ThemeText.sfMediumHeadline.copyWith(
+                            color: currentIndex == index
+                                ? ThemeColors.primaryBlue
+                                : ThemeColors.primaryBlue.withOpacity(0.3)),
+                      ),
+                      Text(
+                        widget.text[index],
+                        style: ThemeText.sfRegularBody.copyWith(
+                            color: currentIndex == index
+                                ? ThemeColors.primaryBlue
+                                : ThemeColors.primaryBlue.withOpacity(0.3)),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -98,7 +100,7 @@ class _HotelBottomSheetChooseCheckoutWidgetState
                 Expanded(
                   child: FilledButtonDefault(
                     onPressed: () =>
-                        Navigator.of(context).pop(widget.text[currentIndex]),
+                        Navigator.of(context).pop(currentIndex + 1),
                     buttonText: 'Select',
                     textTheme: ThemeText.rodinaTitle3
                         .copyWith(color: ThemeColors.black0),

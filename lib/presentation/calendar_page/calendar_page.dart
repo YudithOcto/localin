@@ -11,11 +11,9 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatelessWidget {
   static const routeName = 'CalendarPage';
-
+  static const defaultDate = 'DefaultDate';
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CalendarTicketProvider>(
@@ -37,14 +35,20 @@ class _CalendarContentState extends State<CalendarContent> {
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    DateTime _dateTime = routeArgs[CalendarPage.defaultDate];
     return Scaffold(
       backgroundColor: ThemeColors.black10,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: ThemeColors.black0,
-        leading: Icon(
-          Icons.close,
-          color: ThemeColors.black80,
+        leading: InkResponse(
+          onTap: () => Navigator.of(context).pop(),
+          child: Icon(
+            Icons.close,
+            color: ThemeColors.black80,
+          ),
         ),
         titleSpacing: 0.0,
         title: Text(
@@ -63,6 +67,7 @@ class _CalendarContentState extends State<CalendarContent> {
                 onDaySelected: (date, events) async {
                   Navigator.of(context).pop(date);
                 },
+                initialSelectedDay: _dateTime ?? DateTime.now(),
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 calendarController: _calendarController,
                 daysOfWeekStyle: DaysOfWeekStyle(

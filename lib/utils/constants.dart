@@ -77,11 +77,7 @@ const kTransactionTypeExplore = 'ExploreType';
 const kRefresh = 'refreshPage';
 
 const kNearby = 'Nearby';
-
-const kHighestPopularity = 'Highest Popularity';
-const kLowestPrice = 'Lowest Price';
-const kHighestPrice = 'Highest Price';
-const kHighestRating = 'Highest Rating';
+const kFurther = 'Most further';
 
 class Constants {
   static const kAddress =

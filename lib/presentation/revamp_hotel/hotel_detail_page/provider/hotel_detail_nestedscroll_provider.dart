@@ -15,9 +15,6 @@ class HotelDetailNestedScrollProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  final _scrollController = ItemScrollController();
-  ItemScrollController get scrollController => _scrollController;
-
   AutoScrollController controller = AutoScrollController(
       viewportBoundaryGetter: () => Rect.fromLTRB(
           0, 0, 0, MediaQuery.of(navigator.currentContext).padding.bottom));

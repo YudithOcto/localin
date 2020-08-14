@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_header.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_single_row_widget.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_search_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
+import 'hotel_detail_room_type_list_builder.dart';
+
 class HotelDetailRoomTypePickPage extends StatelessWidget {
   static const routeName = 'HotelDetailRoomTypePickPage';
+  static const sortingRequest = 'SortingRequest';
+  static const hotelDetail = 'HotelDetail';
+
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    HotelDetailEntity detail = routes[hotelDetail];
+    RevampHotelListRequest request = routes[sortingRequest];
     return ChangeNotifierProvider<HotelListSearchProvider>(
-      create: (_) => HotelListSearchProvider(),
+      create: (_) => HotelListSearchProvider(request: request, detail: detail),
       child: Scaffold(
         backgroundColor: ThemeColors.black10,
         appBar: AppBar(
@@ -29,10 +38,11 @@ class HotelDetailRoomTypePickPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'OYO Life 2736 Pondok Klara',
+                '${detail.hotelName}',
                 style: ThemeText.sfMediumHeadline,
               ),
-              Text('Bandung, Jawa Barat • 1.5km from your location',
+              Text(
+                  '${detail.shortAddress} • ${detail.distance} from your location',
                   style: ThemeText.sfMediumCaption)
             ],
           ),
@@ -43,18 +53,7 @@ class HotelDetailRoomTypePickPage extends StatelessWidget {
             ),
           ],
         ),
-        body: ListView(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          children: <Widget>[
-            HotelDetailRoomTypeHeader(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(
-                  4, (index) => HotelDetailRoomTypeSingleRowWidget()),
-            )
-          ],
-        ),
+        body: HotelDetailRoomTypeListBuilder(),
       ),
     );
   }

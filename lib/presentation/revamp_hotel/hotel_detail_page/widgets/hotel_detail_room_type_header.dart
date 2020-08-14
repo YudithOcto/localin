@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_search_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_choose_checkout_widget.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_duration_stay_builder.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_room_guest_builder.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -24,27 +23,40 @@ class HotelDetailRoomTypeHeader extends StatelessWidget {
         children: <Widget>[
           InkResponse(
             highlightColor: ThemeColors.primaryBlue,
-            onTap: () {
-              Navigator.of(context).pushNamed(CalendarPage.routeName);
+            onTap: () async {
+              final result = await Navigator.of(context)
+                  .pushNamed(CalendarPage.routeName, arguments: {
+                CalendarPage.defaultDate: provider.checkIn,
+              });
+              if (result != null) {
+                provider.checkInDate = result;
+                provider.getRoomAvailability();
+              }
             },
             child: Row(
               children: <Widget>[
                 SvgPicture.asset('images/calendar.svg',
                     width: 25.0, height: 20.0),
                 SizedBox(width: 10.0),
-                Text('Sat, 23 May 2020', style: ThemeText.sfRegularFootnote),
+                Text('${provider.currentCheckInDate}',
+                    style: ThemeText.sfRegularFootnote),
               ],
             ),
           ),
           InkResponse(
-            onTap: () {
-              showModalBottomSheet(
+            onTap: () async {
+              final result = await showModalBottomSheet(
                   context: context,
                   builder: (_) {
                     return HotelBottomSheetChooseCheckoutWidget(
                       text: provider.getListCheckOutDate(),
+                      currentIndex: provider.totalNightSelected,
                     );
                   });
+              if (result != null) {
+                provider.checkOutDate = result;
+                provider.getRoomAvailability();
+              }
             },
             child: Row(
               children: <Widget>[
@@ -54,19 +66,25 @@ class HotelDetailRoomTypeHeader extends StatelessWidget {
                       width: 25.0, height: 20.0),
                 ),
                 Text(
-                  '1 Night(s)',
+                  '${provider.totalNightSelected} Night(s)',
                   style: ThemeText.sfRegularFootnote,
                 ),
               ],
             ),
           ),
           InkResponse(
-            onTap: () {
-              showModalBottomSheet(
+            onTap: () async {
+              final result = await showModalBottomSheet(
                   context: context,
                   builder: (_) {
-                    return HotelBottomSheetRoomGuestBuilder();
+                    return HotelBottomSheetRoomGuestBuilder(
+                      totalPreviousRequest: provider.totalRoomSelected,
+                    );
                   });
+              if (result != null) {
+                provider.totalRoomRequested = result;
+                provider.getRoomAvailability();
+              }
             },
             child: Row(
               children: <Widget>[
@@ -75,16 +93,8 @@ class HotelDetailRoomTypeHeader extends StatelessWidget {
                   child: SvgPicture.asset('images/door_icon.svg',
                       width: 25.0, height: 20.0),
                 ),
-                Text('1', style: ThemeText.sfRegularFootnote),
-                Container(
-                  margin: const EdgeInsets.only(left: 8.0, right: 10.0),
-                  child: SvgPicture.asset('images/icon_user.svg',
-                      width: 25.0, height: 20.0),
-                ),
-                Text(
-                  '1',
-                  style: ThemeText.sfRegularFootnote,
-                )
+                Text('${provider.totalRoomSelected} Rooms',
+                    style: ThemeText.sfRegularFootnote),
               ],
             ),
           )

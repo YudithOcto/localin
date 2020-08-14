@@ -73,7 +73,7 @@ class HotelListProvider with ChangeNotifier {
         _revampHotelListRequest.checkIn,
         _revampHotelListRequest.checkout,
         _revampHotelListRequest.totalRooms);
-    if (response != null && response.total > 0) {
+    if (response != null && response.error == null && response.total > 0) {
       if (_hotelList.isEmpty) {
         _hotelList.add(HotelDetailEntity());
       }
@@ -98,8 +98,31 @@ class HotelListProvider with ChangeNotifier {
             : temp.search,
         checkIn: data.checkIn != null ? data.checkIn : temp.checkIn,
         checkout: data.checkout != null ? data.checkout : temp.checkout,
+        sort: data.sort != null ? data.sort : temp.sort,
+        minPrice: data.minPrice != null ? data.minPrice : temp.minPrice ?? 0.0,
+        maxPrice:
+            data.maxPrice != null ? data.maxPrice : temp.maxPrice ?? 2000000,
         totalRooms:
             data.totalRooms != null ? data.totalRooms : temp.totalRooms);
+  }
+
+  filterHotelList() {
+    List<HotelDetailEntity> _detailEntity = List();
+    _hotelList.forEach((hotel) {
+      if (hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty) {
+        hotel.roomAvailability.forEach((room) {
+          if (room.sellingAmount.toDouble() >=
+                  _revampHotelListRequest.minPrice &&
+              room.sellingAmount.toDouble() <=
+                  _revampHotelListRequest.maxPrice) {
+            _detailEntity.add(hotel);
+          }
+        });
+      }
+    });
+    _hotelList.clear();
+    _hotelList.addAll(_detailEntity);
+    notifyListeners();
   }
 
   @override

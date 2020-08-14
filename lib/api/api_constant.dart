@@ -53,6 +53,7 @@ class ApiConstant {
   static const String kHotelRoomAvailability = 'v1/hotel/availability';
   static const String kHotelBooking = 'v1/hotel/booking';
   static const String kHotelHistory = 'v1/hotel/riwayat-booking';
+  static const String kBookmarkHotel = 'v1/hotel';
 
   /// DANA
   static const String kDanaMe = 'payment/dana/me';

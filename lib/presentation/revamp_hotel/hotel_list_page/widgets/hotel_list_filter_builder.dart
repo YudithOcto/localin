@@ -68,7 +68,17 @@ class HotelListFilterBuilder extends StatelessWidget {
         ),
         bottomNavigationBar: FilledButtonDefault(
           radius: 0.0,
-          onPressed: () {},
+          onPressed: () {
+            Provider.of<HotelListProvider>(context, listen: false)
+                .panelController
+                .animatePanelToPosition(0.0,
+                    duration: Duration(milliseconds: 250));
+            Provider.of<HotelListProvider>(context, listen: false)
+                    .revampHotelDataRequest =
+                Provider.of<HotelListFilterProvider>(context).request;
+            Provider.of<HotelListProvider>(context, listen: false)
+                .filterHotelList();
+          },
           buttonText: 'Apply Filter',
           textTheme: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
         ),

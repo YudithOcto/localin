@@ -22,6 +22,7 @@ import 'package:localin/presentation/restaurant/restaurant_bookmark_list_page.da
 import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
 import 'package:localin/presentation/restaurant/restaurant_page.dart';
 import 'package:localin/presentation/restaurant/search_restaurant_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/hotel_booking_confirmation_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_bookmark_page/hotel_bookmark_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_all_facilities_page.dart';
@@ -144,5 +145,7 @@ Map<String, WidgetBuilder> get generalRoutes {
     HotelDetailPhotosPage.routeName: (_) => HotelDetailPhotosPage(),
     HotelDetailRoomTypePickPage.routeName: (_) => HotelDetailRoomTypePickPage(),
     HotelBookmarkPage.routeName: (_) => HotelBookmarkPage(),
+    HotelBookingConfirmationPage.routeName: (_) =>
+        HotelBookingConfirmationPage(),
   };
 }
