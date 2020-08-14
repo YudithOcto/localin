@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_filter_provider.dart';
 
 class RevampHotelListRequest with EquatableMixin {
   @override
@@ -18,7 +19,7 @@ class RevampHotelListRequest with EquatableMixin {
       this.checkIn,
       this.checkout,
       this.totalRooms,
-      this.minPrice,
-      this.maxPrice,
+      this.minPrice = DEFAULT_PRICE_LOWEST,
+      this.maxPrice = DEFAULT_PRICE_HIGHEST,
       this.sort});
 }

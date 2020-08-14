@@ -56,6 +56,9 @@ class HotelListProvider with ChangeNotifier {
   List<HotelDetailEntity> _hotelList = List();
   List<HotelDetailEntity> get hotelList => _hotelList;
 
+  int _totalHotel = 0;
+  int _trackOriginalListLength = 0;
+
   Future<Null> getRestaurantList({bool isRefresh = true, String search}) async {
     if (isRefresh) {
       _canLoadMore = true;
@@ -77,9 +80,11 @@ class HotelListProvider with ChangeNotifier {
       if (_hotelList.isEmpty) {
         _hotelList.add(HotelDetailEntity());
       }
+      _totalHotel = response.total;
       _hotelList.addAll(response.hotelDetailEntity);
+      _trackOriginalListLength += response.hotelDetailEntity.length;
       _pageRequest += 1;
-      _canLoadMore = _hotelList.length < response.total;
+      _canLoadMore = _trackOriginalListLength < _totalHotel;
       _streamController.add(searchState.success);
     } else {
       _streamController.add(searchState.empty);
@@ -104,25 +109,31 @@ class HotelListProvider with ChangeNotifier {
             data.maxPrice != null ? data.maxPrice : temp.maxPrice ?? 2000000,
         totalRooms:
             data.totalRooms != null ? data.totalRooms : temp.totalRooms);
+    notifyListeners();
   }
 
   filterHotelList() {
     List<HotelDetailEntity> _detailEntity = List();
     _hotelList.forEach((hotel) {
       if (hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty) {
-        hotel.roomAvailability.forEach((room) {
-          if (room.sellingAmount.toDouble() >=
-                  _revampHotelListRequest.minPrice &&
-              room.sellingAmount.toDouble() <=
-                  _revampHotelListRequest.maxPrice) {
-            _detailEntity.add(hotel);
-          }
-        });
+        if (hotel.roomAvailability.first.sellingAmount.toDouble() >=
+                _revampHotelListRequest.minPrice &&
+            hotel.roomAvailability.first.sellingAmount.toDouble() <=
+                _revampHotelListRequest.maxPrice) {
+          _detailEntity.add(hotel);
+        }
       }
     });
     _hotelList.clear();
     _hotelList.addAll(_detailEntity);
     notifyListeners();
+  }
+
+  bool isVisible(int roomPrice) {
+    if (roomPrice == null) return true;
+    double price = roomPrice.toDouble();
+    return price >= _revampHotelListRequest.minPrice &&
+        price <= _revampHotelListRequest.maxPrice;
   }
 
   @override

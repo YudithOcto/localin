@@ -57,14 +57,11 @@ class _ExploreMainPageContentWidgetState
           ),
         ),
       ),
-      body: ChangeNotifierProvider<ExploreMainProvider>(
-        create: (_) => ExploreMainProvider(),
-        child: Column(
-          children: <Widget>[
-            ExploreFilterListRow(),
-            MainEventList(),
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          ExploreFilterListRow(),
+          MainEventList(),
+        ],
       ),
     );
   }

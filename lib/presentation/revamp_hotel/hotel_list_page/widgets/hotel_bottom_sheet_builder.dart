@@ -6,6 +6,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_duration_stay_builder.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_bottom_sheet_room_guest_builder.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/single_column_bottom_sheet_search_widget.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_search/hotel_revamp_search_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -42,9 +43,15 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                     ),
                     SizedBox(width: 21.0),
                     Expanded(
-                      child: SingleColumnBottomSheetSearchWidget(
-                        title: 'WHERE YOU GO?',
-                        value: 'Nearby',
+                      child: InkResponse(
+                        onTap: () async {
+                          final result = await Navigator.of(context)
+                              .pushNamed(HotelRevampSearchPage.routeName);
+                        },
+                        child: SingleColumnBottomSheetSearchWidget(
+                          title: 'WHERE YOU GO?',
+                          value: 'Nearby',
+                        ),
                       ),
                     ),
                   ],

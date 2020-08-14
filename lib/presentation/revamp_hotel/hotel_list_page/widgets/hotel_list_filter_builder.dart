@@ -76,8 +76,6 @@ class HotelListFilterBuilder extends StatelessWidget {
             Provider.of<HotelListProvider>(context, listen: false)
                     .revampHotelDataRequest =
                 Provider.of<HotelListFilterProvider>(context).request;
-            Provider.of<HotelListProvider>(context, listen: false)
-                .filterHotelList();
           },
           buttonText: 'Apply Filter',
           textTheme: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),

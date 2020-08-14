@@ -28,6 +28,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_all_facilities_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_photos_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_search/hotel_revamp_search_page.dart';
 import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
@@ -147,5 +148,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     HotelBookmarkPage.routeName: (_) => HotelBookmarkPage(),
     HotelBookingConfirmationPage.routeName: (_) =>
         HotelBookingConfirmationPage(),
+    HotelRevampSearchPage.routeName: (_) => HotelRevampSearchPage(),
   };
 }

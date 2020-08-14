@@ -137,15 +137,28 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                                 if (index == 0) {
                                   return QuickSearchRowWidget();
                                 } else {
-                                  return InkResponse(
-                                    onTap: () =>
-                                        goToHotelDetailPage(index, provider),
-                                    child: HotelSingleRowWidget(
-                                      hotelDetail: provider.hotelList[index],
-                                      onRoomTypeClick: () =>
-                                          goToRoomTypeDetailPage(
-                                              provider.hotelList[index],
-                                              provider.revampHotelListRequest),
+                                  return Visibility(
+                                    visible: provider.isVisible(provider
+                                            .hotelList[index]
+                                            .roomAvailability
+                                            .isNotNullNorEmpty
+                                        ? provider
+                                            .hotelList[index]
+                                            .roomAvailability
+                                            .first
+                                            .sellingAmount
+                                        : null),
+                                    child: InkResponse(
+                                      onTap: () =>
+                                          goToHotelDetailPage(index, provider),
+                                      child: HotelSingleRowWidget(
+                                        hotelDetail: provider.hotelList[index],
+                                        onRoomTypeClick: () =>
+                                            goToRoomTypeDetailPage(
+                                                provider.hotelList[index],
+                                                provider
+                                                    .revampHotelListRequest),
+                                      ),
                                     ),
                                   );
                                 }
@@ -164,5 +177,11 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
             );
           }),
     );
+  }
+}
+
+extension on List {
+  bool get isNotNullNorEmpty {
+    return this != null && this.isNotEmpty;
   }
 }
