@@ -33,17 +33,18 @@ class ExploreMainFilterProvider with ChangeNotifier {
             _selectedFilter.replaceRange(2, 3, [sortList[modelRequest.sort]]);
           }
 
-          if (modelRequest.category != null) {
+          _selectedCategoryFilter.clear();
+          if (modelRequest.category != null &&
+              modelRequest.category.isNotEmpty) {
             _selectedFilter.replaceRange(
                 0, 1, [modelRequest.category.map((e) => e.category).join(',')]);
-            _selectedCategoryFilter.clear();
             _selectedCategoryFilter.addAll(modelRequest.category);
           }
           notifyListeners();
         }
       }
     } catch (error) {
-      print(error);
+      debugPrint(error);
     }
   }
 

@@ -1481,7 +1481,8 @@ class ApiProvider {
   }
 
   Future<ExploreEventResponseModel> getEventData(int pageRequest, String search,
-      String sort, List<int> categoryId, String date) async {
+      String sort, List<String> categoryId, String date,
+      {String mode = 'default'}) async {
     try {
       Map<String, dynamic> map = Map();
       map['page'] = pageRequest;
@@ -1490,14 +1491,17 @@ class ApiProvider {
         map['search'] = search;
       }
       if (categoryId != null && categoryId.isNotEmpty) {
-        map['kategori_id'] = categoryId.map((e) => e).toList();
+        map['kategori_id[]'] = categoryId.join(',');
       }
       if (sort != null && sort.isNotEmpty) {
         map['sort[]'] = getSorting(sort);
       }
-      if (date != null && date.isNotEmpty) {
+      if (date != null &&
+          date.isNotEmpty &&
+          date.substring(date.length - 1, date.length) != "0") {
         map['date'] = date;
       }
+      map['mode'] = mode;
       final response = await _dio.get(ApiConstant.kExploreEvent,
           options: Options(headers: {REQUIRED_TOKEN: true}),
           queryParameters: map);

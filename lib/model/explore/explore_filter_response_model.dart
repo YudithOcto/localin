@@ -36,20 +36,18 @@ class ExploreFilterResponseModel implements BaseModel {
 }
 
 class CategoryExploreDetail with EquatableMixin {
-  String id;
-  int categoryId;
+  String categoryId;
   String category;
 
-  CategoryExploreDetail({this.id, this.categoryId, this.category});
+  CategoryExploreDetail({this.categoryId, this.category});
 
   factory CategoryExploreDetail.fromJson(Map<String, dynamic> json) {
     return CategoryExploreDetail(
-      id: json['id'],
       categoryId: json['kategori_id'],
       category: json['kategori'],
     );
   }
 
   @override
-  List<Object> get props => [id, category, categoryId];
+  List<Object> get props => [category, categoryId];
 }

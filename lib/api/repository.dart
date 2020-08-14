@@ -397,10 +397,11 @@ class Repository {
       {String search,
       int pageRequest,
       String sort,
-      List<int> categoryId,
-      String date}) {
-    return apiProvider.getEventData(
-        pageRequest, search, sort, categoryId, date);
+      List<String> categoryId,
+      String date,
+      String mode}) {
+    return apiProvider.getEventData(pageRequest, search, sort, categoryId, date,
+        mode: mode);
   }
 
   Future<ExploreFilterResponseModel> getCategoryFilterEvent() {
