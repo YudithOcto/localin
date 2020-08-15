@@ -68,7 +68,7 @@ import 'package:localin/presentation/webview/revamp_webview.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 
 import 'presentation/explore/submit_form/confirmation_ticket_details_page.dart';
-import 'presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_pick_page.dart';
+import 'presentation/revamp_hotel/hotel_room_type_page/hotel_detail_room_type_pick_page.dart';
 
 Map<String, WidgetBuilder> get generalRoutes {
   return {

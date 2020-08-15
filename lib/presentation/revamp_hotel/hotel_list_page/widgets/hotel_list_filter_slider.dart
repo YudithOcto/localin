@@ -38,7 +38,10 @@ class HotelLIstFilterSlider extends StatelessWidget {
           ),
           SizedBox(height: 20.0),
           FlutterSlider(
-            values: [50000, 2000000],
+            values: [
+              Provider.of<HotelListFilterProvider>(context).currentLowest,
+              Provider.of<HotelListFilterProvider>(context).currentHighest
+            ],
             handlerWidth: 25.0,
             tooltip: FlutterSliderTooltip(disabled: true),
             handlerHeight: 25.0,

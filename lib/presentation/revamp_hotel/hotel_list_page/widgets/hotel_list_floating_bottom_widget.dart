@@ -27,14 +27,19 @@ class HotelListFloatingBottomWidget extends StatelessWidget {
               onTap: () {
                 showModalBottomSheet(
                     context: context,
-                    builder: (context) {
+                    builder: (ctx) {
                       return CustomSortingWidget(
-                        onTap: (index) {},
+                        onTap: (sort) {
+                          Navigator.of(context).pop();
+                          Provider.of<HotelListProvider>(context, listen: false)
+                              .sorting = sort;
+                        },
                         sortingTitle: [
                           kNearby,
                           kFurther,
                         ],
-                        currentSelectedSort: 0,
+                        currentSelectedSort:
+                            Provider.of<HotelListProvider>(context).currentSort,
                       );
                     });
               },

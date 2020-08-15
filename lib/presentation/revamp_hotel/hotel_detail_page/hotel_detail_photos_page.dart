@@ -19,7 +19,9 @@ class HotelDetailPhotosPage extends StatelessWidget {
       backgroundColor: ThemeColors.black10,
       appBar: AppBar(
         backgroundColor: ThemeColors.black0,
-        leading: Icon(Icons.arrow_back, color: ThemeColors.black80),
+        leading: InkResponse(
+            onTap: () => Navigator.of(context).pop(),
+            child: Icon(Icons.arrow_back, color: ThemeColors.black80)),
         titleSpacing: 0.0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

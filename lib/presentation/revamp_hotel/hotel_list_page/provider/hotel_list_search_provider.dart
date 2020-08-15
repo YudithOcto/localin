@@ -6,12 +6,14 @@ import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_availability.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 
 class HotelListSearchProvider with ChangeNotifier {
   HotelListSearchProvider(
       {RevampHotelListRequest request, HotelDetailEntity detail}) {
     _requestModel = request;
+    trackBookmark = detail.isBookmark;
     _hotelDetailEntity = detail;
     getRoomAvailability();
   }
@@ -35,6 +37,20 @@ class HotelListSearchProvider with ChangeNotifier {
     _requestModel.checkout = _requestModel.checkIn.add(Duration(days: index));
     notifyListeners();
   }
+
+  String get search {
+    if (_requestModel.search != null && _requestModel.search.isNotEmpty) {
+      return _requestModel.search;
+    }
+    return 'Nearby';
+  }
+
+  set searchKeyword(String search) {
+    _requestModel.search = search;
+    notifyListeners();
+  }
+
+  bool trackBookmark = false;
 
   HotelDetailEntity _hotelDetailEntity;
   HotelDetailEntity get hotelDetail => _hotelDetailEntity;
@@ -87,6 +103,19 @@ class HotelListSearchProvider with ChangeNotifier {
     } else {
       _roomState.add(RoomState.empty);
     }
+  }
+
+  Future<String> changeBookmark() async {
+    String queryType = _hotelDetailEntity.isBookmark
+        ? kUnbookmarkQueryType
+        : kBookmarkQueryType;
+    final result = await _repository.changeBookmarkStatus(
+        queryType, _hotelDetailEntity.hotelId);
+    if (!result.error) {
+      _hotelDetailEntity.isBookmark = !_hotelDetailEntity.isBookmark;
+      notifyListeners();
+    }
+    return result?.message;
   }
 
   @override

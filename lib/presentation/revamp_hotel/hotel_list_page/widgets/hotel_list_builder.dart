@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_bookmark_page/hotel_bookmark_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_pick_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_room_type_page/hotel_detail_room_type_pick_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/appbar_detail_content_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_list_filter_builder.dart';
@@ -41,20 +42,19 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
         .pushNamed(HotelRevampDetailPage.routeName, arguments: {
       HotelRevampDetailPage.hotelId: provider.hotelList[index].hotelId,
       HotelRevampDetailPage.previousSort: provider.revampHotelListRequest,
-      HotelRevampDetailPage.roomSelected:
-          provider.hotelList[index].roomAvailability.isNotEmpty
-              ? provider.hotelList[index].roomAvailability.first
-              : null,
     });
   }
 
-  goToRoomTypeDetailPage(
-      HotelDetailEntity hotelDetail, RevampHotelListRequest request) {
-    Navigator.of(context)
+  goToRoomTypeDetailPage(int index, HotelDetailEntity hotelDetail,
+      RevampHotelListRequest request) async {
+    final result = await Navigator.of(context)
         .pushNamed(HotelDetailRoomTypePickPage.routeName, arguments: {
       HotelDetailRoomTypePickPage.hotelDetail: hotelDetail,
       HotelDetailRoomTypePickPage.sortingRequest: request,
     });
+    if (result != null) {
+      Provider.of<HotelListProvider>(context).changeBookmark(index);
+    }
   }
 
   @override
@@ -101,8 +101,12 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                             : InkResponse(
                                 highlightColor: ThemeColors.primaryBlue,
                                 onTap: () async {
-                                  Navigator.of(context)
-                                      .pushNamed(HotelBookmarkPage.routeName);
+                                  Navigator.of(context).pushNamed(
+                                      HotelBookmarkPage.routeName,
+                                      arguments: {
+                                        HotelBookmarkPage.previousRequest:
+                                            provider.revampHotelListRequest,
+                                      });
                                 },
                                 child: SvgPicture.asset(
                                     'images/bookmark_full.svg',
@@ -122,8 +126,10 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                       stream: provider.stream,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
-                                ConnectionState.waiting &&
-                            provider.pageRequested <= 1) {
+                                    ConnectionState.waiting &&
+                                provider.pageRequested <= 1 ||
+                            (snapshot.hasData &&
+                                snapshot.data == searchState.loading)) {
                           return Center(child: CircularProgressIndicator());
                         } else {
                           return ListView.builder(
@@ -131,37 +137,38 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                             controller: provider.scrollController,
                             padding: const EdgeInsets.only(bottom: 80.0),
                             itemBuilder: (context, index) {
-                              if (snapshot.data == searchState.empty) {
+                              if (index == 0) {
+                                return QuickSearchRowWidget();
+                              } else if (snapshot.data == searchState.empty) {
                                 return HotelEmptyWidget();
                               } else if (index < provider.hotelList.length) {
-                                if (index == 0) {
-                                  return QuickSearchRowWidget();
-                                } else {
-                                  return Visibility(
-                                    visible: provider.isVisible(provider
-                                            .hotelList[index]
-                                            .roomAvailability
-                                            .isNotNullNorEmpty
-                                        ? provider
-                                            .hotelList[index]
-                                            .roomAvailability
-                                            .first
-                                            .sellingAmount
-                                        : null),
-                                    child: InkResponse(
-                                      onTap: () =>
-                                          goToHotelDetailPage(index, provider),
-                                      child: HotelSingleRowWidget(
-                                        hotelDetail: provider.hotelList[index],
-                                        onRoomTypeClick: () =>
-                                            goToRoomTypeDetailPage(
-                                                provider.hotelList[index],
-                                                provider
-                                                    .revampHotelListRequest),
-                                      ),
+                                return Visibility(
+                                  visible: provider.isVisible(provider
+                                          .hotelList[index]
+                                          .roomAvailability
+                                          .isNotNullNorEmpty
+                                      ? provider.hotelList[index]
+                                          .roomAvailability.first.sellingAmount
+                                      : null),
+                                  child: InkResponse(
+                                    onTap: () =>
+                                        goToHotelDetailPage(index, provider),
+                                    child: HotelSingleRowWidget(
+                                      onTapBookmark: () async {
+                                        final result = await provider
+                                            .changeBookmark(index);
+                                        CustomToast.showCustomBookmarkToast(
+                                            context, result);
+                                      },
+                                      hotelDetail: provider.hotelList[index],
+                                      onRoomTypeClick: () =>
+                                          goToRoomTypeDetailPage(
+                                              index,
+                                              provider.hotelList[index],
+                                              provider.revampHotelListRequest),
                                     ),
-                                  );
-                                }
+                                  ),
+                                );
                               } else if (provider.canLoadMore) {
                                 return Center(
                                     child: CircularProgressIndicator());

@@ -32,14 +32,18 @@ class HotelBookingConfirmationPage extends StatelessWidget {
             child: Icon(Icons.arrow_back, color: ThemeColors.black80)),
         titleSpacing: 0.0,
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-        color: ThemeColors.primaryBlue,
-        height: 48.0,
-        alignment: FractionalOffset.center,
-        child: Text(
-          'Pay Now',
-          style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
+      bottomNavigationBar: InkResponse(
+        onTap: () {},
+        highlightColor: ThemeColors.black0,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+          color: ThemeColors.primaryBlue,
+          height: 48.0,
+          alignment: FractionalOffset.center,
+          child: Text(
+            'Pay Now',
+            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
+          ),
         ),
       ),
       body: SingleChildScrollView(

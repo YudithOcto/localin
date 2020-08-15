@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +14,8 @@ import 'hotel_bottom_sheet_builder.dart';
 class QuickSearchRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future showBottomSheet(BuildContext context) {
+    Future showBottomSheet(
+        BuildContext context, RevampHotelListRequest request) {
       return showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -22,8 +25,7 @@ class QuickSearchRowWidget extends StatelessWidget {
         )),
         builder: (BuildContext ctx) {
           return HotelBottomSheetBuilder(
-            previousRequest:
-                Provider.of<HotelListProvider>(context).revampHotelListRequest,
+            previousRequest: request,
           );
         },
       );
@@ -31,8 +33,22 @@ class QuickSearchRowWidget extends StatelessWidget {
 
     return InkResponse(
       highlightColor: ThemeColors.primaryBlue,
-      onTap: () {
-        showBottomSheet(context);
+      onTap: () async {
+        Map result = await showBottomSheet(context,
+            Provider.of<HotelListProvider>(context).revampHotelListRequest);
+        Future.delayed(Duration.zero, () {
+          if (result != null) {
+            if (result.containsKey(kRefresh)) {
+              Provider.of<HotelListProvider>(context).revampHotelDataRequest =
+                  result[kRefresh];
+              Provider.of<HotelListProvider>(context)
+                  .getRestaurantList(isRefresh: true);
+            } else {
+              Provider.of<HotelListProvider>(context).revampHotelDataRequest =
+                  result['not_refresh'];
+            }
+          }
+        });
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 19.0, horizontal: 20.0),

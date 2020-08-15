@@ -10,16 +10,23 @@ class RevampHotelListRequest with EquatableMixin {
   DateTime checkIn;
   DateTime checkout;
   int totalRooms;
+  int totalAdults;
+  int totalChild;
   double minPrice;
   double maxPrice;
   String sort;
+  List<String> facilities;
 
-  RevampHotelListRequest(
-      {this.search,
-      this.checkIn,
-      this.checkout,
-      this.totalRooms,
-      this.minPrice = DEFAULT_PRICE_LOWEST,
-      this.maxPrice = DEFAULT_PRICE_HIGHEST,
-      this.sort});
+  RevampHotelListRequest({
+    this.search,
+    this.checkIn,
+    this.checkout,
+    this.totalRooms,
+    this.minPrice = DEFAULT_PRICE_LOWEST,
+    this.maxPrice = DEFAULT_PRICE_HIGHEST,
+    this.facilities,
+    this.sort,
+    this.totalAdults,
+    this.totalChild,
+  });
 }

@@ -10,7 +10,32 @@ import 'package:provider/provider.dart';
 
 import 'hotel_list_filter_facilities.dart';
 
-class HotelListFilterBuilder extends StatelessWidget {
+class HotelListFilterBuilder extends StatefulWidget {
+  @override
+  _HotelListFilterBuilderState createState() => _HotelListFilterBuilderState();
+}
+
+class _HotelListFilterBuilderState extends State<HotelListFilterBuilder> {
+  bool _isInit = true;
+  final _scrollController = ScrollController();
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<HotelListFilterProvider>(context).getFacility();
+      _scrollController
+        ..addListener(() {
+          if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent) {
+            Provider.of<HotelListFilterProvider>(context)
+                .getFacility(isRefresh: false);
+          }
+        });
+      _isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -69,18 +94,23 @@ class HotelListFilterBuilder extends StatelessWidget {
         bottomNavigationBar: FilledButtonDefault(
           radius: 0.0,
           onPressed: () {
+            final provider =
+                Provider.of<HotelListProvider>(context, listen: false);
+            provider.panelController.animatePanelToPosition(0.0,
+                duration: Duration(milliseconds: 250));
+            provider.revampHotelDataRequest =
+                Provider.of<HotelListFilterProvider>(context).request;
+            provider.getRestaurantList();
             Provider.of<HotelListProvider>(context, listen: false)
                 .panelController
                 .animatePanelToPosition(0.0,
                     duration: Duration(milliseconds: 250));
-            Provider.of<HotelListProvider>(context, listen: false)
-                    .revampHotelDataRequest =
-                Provider.of<HotelListFilterProvider>(context).request;
           },
           buttonText: 'Apply Filter',
           textTheme: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black0),
         ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

@@ -6,6 +6,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/provider/base_model_provider.dart';
 import 'package:localin/utils/date_helper.dart';
 
@@ -88,9 +89,7 @@ class SearchHotelProvider extends BaseModelProvider {
         '${_searchFormController.text}',
         _pageRequestOffset,
         _pageRequestLimit,
-        _selectedCheckIn,
-        _selectedCheckOut,
-        _userRoomTotal);
+        RevampHotelListRequest());
     if (result != null && result.hotelDetailEntity.isNotEmptyNorNull) {
       _pageRequestOffset += 1;
       _totalPage = result?.total ?? 0;

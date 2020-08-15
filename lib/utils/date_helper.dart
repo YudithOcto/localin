@@ -86,6 +86,6 @@ class DateHelper {
 
   static String checkInCheckOutTime(DateTime checkIn, DateTime checkout) {
     return '${formatDate(date: checkIn, format: 'EEE, d MMM')} - ${formatDate(date: checkout, format: 'EEE, d MMM')}, '
-        '${checkout.difference(checkIn).inDays}';
+        '${checkout.difference(checkIn).inDays} Night';
   }
 }

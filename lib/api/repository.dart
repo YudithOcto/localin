@@ -25,7 +25,10 @@ import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/model/hotel/hotel_facilitity_response_model.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/hotel_search_suggest_model.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
@@ -286,17 +289,10 @@ class Repository {
   }
 
   ///Hotel
-  Future<HotelListBaseResponse> getHotelList(
-      String latitude,
-      String longitude,
-      String keyword,
-      int page,
-      int limit,
-      DateTime checkIn,
-      DateTime checkout,
-      int total) {
+  Future<HotelListBaseResponse> getHotelList(String latitude, String longitude,
+      String keyword, int page, int limit, RevampHotelListRequest request) {
     return apiProvider.getHotelList(
-        latitude, longitude, keyword, page, limit, checkIn, checkout, total);
+        latitude, longitude, keyword, page, limit, request);
   }
 
   Future<HotelListBaseResponse> getHotelDetail(
@@ -309,6 +305,10 @@ class Repository {
       int hotelID, DateTime checkIn, DateTime checkOut, int roomTotal) {
     return apiProvider.getRoomAvailabilityDetail(
         hotelID, checkIn, checkOut, roomTotal);
+  }
+
+  Future<HotelSearchSuggestModel> searchHotelAndLocation(String search) {
+    return apiProvider.searchHotelAndLocation(search);
   }
 
   Future<BookingHistoryBaseResponse> getBookingHistoryList(
@@ -334,6 +334,19 @@ class Repository {
 
   Future<BookingCancelResponse> cancelBooking(String bookingId) {
     return apiProvider.cancelBooking(bookingId);
+  }
+
+  Future<BaseResponse> changeBookmarkStatus(String urlChange, int hotelId) {
+    return apiProvider.changeBookmarkStatusHotel(urlChange, hotelId);
+  }
+
+  Future<HotelListBaseResponse> getHotelBookmarkList(
+      RevampHotelListRequest request) {
+    return apiProvider.getHotelBookmarkList(request);
+  }
+
+  Future<HotelFacilityResponseModel> getHotelFacilityList(int page) {
+    return apiProvider.getFacilityList(page);
   }
 
   ///Dana

@@ -8,6 +8,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HotelListProvider with ChangeNotifier {
@@ -59,7 +60,7 @@ class HotelListProvider with ChangeNotifier {
   int _totalHotel = 0;
   int _trackOriginalListLength = 0;
 
-  Future<Null> getRestaurantList({bool isRefresh = true, String search}) async {
+  Future<Null> getRestaurantList({bool isRefresh = true}) async {
     if (isRefresh) {
       _canLoadMore = true;
       _hotelList.clear();
@@ -70,16 +71,14 @@ class HotelListProvider with ChangeNotifier {
     final response = await _repository.getHotelList(
         '${_userCoordinates.latitude}',
         '${_userCoordinates.longitude}',
-        search,
+        _revampHotelListRequest.search,
         _pageRequest,
         10,
-        _revampHotelListRequest.checkIn,
-        _revampHotelListRequest.checkout,
-        _revampHotelListRequest.totalRooms);
+        _revampHotelListRequest);
+    if (_hotelList.isEmpty) {
+      _hotelList.add(HotelDetailEntity());
+    }
     if (response != null && response.error == null && response.total > 0) {
-      if (_hotelList.isEmpty) {
-        _hotelList.add(HotelDetailEntity());
-      }
       _totalHotel = response.total;
       _hotelList.addAll(response.hotelDetailEntity);
       _trackOriginalListLength += response.hotelDetailEntity.length;
@@ -98,35 +97,52 @@ class HotelListProvider with ChangeNotifier {
   set revampHotelDataRequest(RevampHotelListRequest data) {
     final temp = _revampHotelListRequest;
     _revampHotelListRequest = RevampHotelListRequest(
-        search: data.search != null && data.search.isNotEmpty
-            ? data.search
-            : temp.search,
-        checkIn: data.checkIn != null ? data.checkIn : temp.checkIn,
-        checkout: data.checkout != null ? data.checkout : temp.checkout,
-        sort: data.sort != null ? data.sort : temp.sort,
-        minPrice: data.minPrice != null ? data.minPrice : temp.minPrice ?? 0.0,
-        maxPrice:
-            data.maxPrice != null ? data.maxPrice : temp.maxPrice ?? 2000000,
-        totalRooms:
-            data.totalRooms != null ? data.totalRooms : temp.totalRooms);
+      search: data.search != null && data.search.isNotEmpty
+          ? data.search
+          : temp.search,
+      checkIn: data.checkIn != null ? data.checkIn : temp.checkIn,
+      checkout: data.checkout != null ? data.checkout : temp.checkout,
+      sort: data.sort != null ? data.sort : temp.sort,
+      minPrice: data.minPrice != null ? data.minPrice : temp.minPrice ?? 0.0,
+      maxPrice:
+          data.maxPrice != null ? data.maxPrice : temp.maxPrice ?? 2000000,
+      totalRooms: data.totalRooms != null ? data.totalRooms : temp.totalRooms,
+      facilities: data.facilities != null && data.facilities.isNotEmpty
+          ? data.facilities
+          : temp.facilities,
+    );
     notifyListeners();
   }
 
-  filterHotelList() {
-    List<HotelDetailEntity> _detailEntity = List();
-    _hotelList.forEach((hotel) {
-      if (hotel.roomAvailability != null && hotel.roomAvailability.isNotEmpty) {
-        if (hotel.roomAvailability.first.sellingAmount.toDouble() >=
-                _revampHotelListRequest.minPrice &&
-            hotel.roomAvailability.first.sellingAmount.toDouble() <=
-                _revampHotelListRequest.maxPrice) {
-          _detailEntity.add(hotel);
-        }
-      }
-    });
-    _hotelList.clear();
-    _hotelList.addAll(_detailEntity);
+  int get currentSort {
+    if (_revampHotelListRequest.sort == 'asc') {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+
+  set sorting(String sort) {
+    _revampHotelListRequest.sort = sort == kNearby ? 'asc' : 'desc';
+    getRestaurantList();
+  }
+
+  changeBookmarkLocally(int index) {
+    _hotelList[index].isBookmark = !_hotelList[index].isBookmark;
     notifyListeners();
+  }
+
+  Future<String> changeBookmark(int index) async {
+    String queryType = _hotelList[index].isBookmark
+        ? kUnbookmarkQueryType
+        : kBookmarkQueryType;
+    final result = await _repository.changeBookmarkStatus(
+        queryType, _hotelList[index].hotelId);
+    if (!result.error) {
+      _hotelList[index].isBookmark = !_hotelList[index].isBookmark;
+      notifyListeners();
+    }
+    return result?.message;
   }
 
   bool isVisible(int roomPrice) {

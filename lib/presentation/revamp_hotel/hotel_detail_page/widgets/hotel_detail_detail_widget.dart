@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/bullet_text.dart';
+import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_room_request_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -35,10 +37,24 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                 Padding(
                   padding:
                       const EdgeInsets.only(right: 20.0, left: 20.0, top: 16.0),
-                  child: RowEventWidget(
-                    title: 'Check-in time',
-                    dateTime: DateHelper.formatDateBookingDetailShort(
-                        detail?.request?.checkIn?.toIso8601String()),
+                  child: InkResponse(
+                    onTap: () async {
+                      final result = await Navigator.of(context)
+                          .pushNamed(CalendarPage.routeName, arguments: {
+                        CalendarPage.defaultDate: detail?.request?.checkIn
+                      });
+                      if (result != null) {
+                        detail.changeCheckInTime(result);
+                        Provider.of<HotelDetailRoomRequestProvider>(context,
+                                listen: false)
+                            .getRoomRequest(detail.request);
+                      }
+                    },
+                    child: RowEventWidget(
+                      title: 'Check-in time',
+                      dateTime: DateHelper.formatDateBookingDetailShort(
+                          detail?.request?.checkIn?.toIso8601String()),
+                    ),
                   ),
                 ),
                 Padding(

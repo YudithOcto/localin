@@ -40,7 +40,7 @@ class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
               padding:
                   const EdgeInsets.only(bottom: 2.0, left: 15.0, right: 15.0),
               child: Text(
-                '',
+                '${hotelDetail.hotelDetail.facilities.isNullOrEmpty ? '' : hotelDetail.hotelDetail.facilities.join(' • ')}',
                 style: ThemeText.sfMediumFootnote
                     .copyWith(color: ThemeColors.black80),
               ),
@@ -91,7 +91,8 @@ class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
                     });
               },
               child: Container(
-                margin: EdgeInsets.only(top: 21.0, left: 15.0, right: 15.0),
+                margin: EdgeInsets.only(
+                    top: 21.0, left: 15.0, right: 15.0, bottom: 18.0),
                 height: 48.0,
                 padding:
                     const EdgeInsets.only(bottom: 2.0, left: 15.0, right: 15.0),
@@ -110,5 +111,11 @@ class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension on List {
+  bool get isNullOrEmpty {
+    return this == null || this.isEmpty;
   }
 }

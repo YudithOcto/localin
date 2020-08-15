@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_room_type_header.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_room_type_page/hotel_detail_room_type_header.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_search_provider.dart';
 import 'package:localin/provider/hotel/hotel_detail_provider.dart';
 import 'package:provider/provider.dart';

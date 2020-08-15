@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,10 @@ import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/model/hotel/hotel_facilitity_response_model.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/hotel_search_suggest_model.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
@@ -1112,21 +1116,33 @@ class ApiProvider {
       String search,
       int page,
       int limit,
-      DateTime checkInDate,
-      DateTime checkOutDate,
-      int total) async {
+      RevampHotelListRequest request) async {
     try {
+      Map<String, dynamic> map = Map();
+      map['latitude'] = latitude;
+      map['longitude'] = longitude;
+      map['page'] = page;
+      map['limit'] = limit;
+      if (search.isNotNullNorEmpty) {
+        map['keyword'] = search;
+      }
+      if (request.checkIn != null) {
+        map['checkin'] = DateHelper.formatDateRangeForOYO(request.checkIn);
+      }
+      if (request.checkout != null) {
+        map['checkout'] = DateHelper.formatDateRangeForOYO(request.checkout);
+      }
+      if (request.totalRooms != null && request.totalRooms > 0) {
+        map['room'] = request.totalRooms;
+      }
+      if (request.facilities != null && request.facilities.isNotEmpty) {
+        map['fasilitas[]'] = request.facilities.map((e) => e).toList();
+      }
+      if (request.sort.isNotNullNorEmpty) {
+        map['order'] = request.sort;
+      }
       final response = await _dio.get(ApiConstant.kHotel,
-          queryParameters: {
-            'latitude': latitude,
-            'longitude': longitude,
-            'keyword': search,
-            'page': page,
-            'limit': limit,
-            'checkin': DateHelper.formatDateRangeForOYO(checkInDate),
-            'checkout': DateHelper.formatDateRangeForOYO(checkOutDate),
-            'room': total,
-          },
+          queryParameters: map,
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return HotelListBaseResponse.fromJson(response.data);
     } catch (error) {
@@ -1183,6 +1199,21 @@ class ApiProvider {
     }
   }
 
+  Future<HotelSearchSuggestModel> searchHotelAndLocation(String search) async {
+    try {
+      final result = await _dio.post('${ApiConstant.kHotel}/suggest',
+          queryParameters: {'search': search},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return HotelSearchSuggestModel.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return HotelSearchSuggestModel.withError(_handleError(error));
+      } else {
+        return HotelSearchSuggestModel.withError(error.toString());
+      }
+    }
+  }
+
   Future<BookingHistoryBaseResponse> getBookingHistoryList(
       int offset, int limit) async {
     try {
@@ -1216,8 +1247,7 @@ class ApiProvider {
   Future<BaseResponse> changeBookmarkStatusHotel(
       String query, int hotelId) async {
     try {
-      final result = await _dio.get(
-          '${ApiConstant.kBookmarkHotel}/$query/$hotelId',
+      final result = await _dio.get('${ApiConstant.kHotel}/$query/$hotelId',
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return BaseResponse.fromJson(result.data);
     } catch (e) {
@@ -1225,6 +1255,41 @@ class ApiProvider {
         return BaseResponse.withError(_handleError(e));
       } else {
         return BaseResponse.withError(e.toString());
+      }
+    }
+  }
+
+  Future<HotelFacilityResponseModel> getFacilityList(int page) async {
+    try {
+      final result = await _dio.get(ApiConstant.kHotelFacility,
+          queryParameters: {'page': page, 'limit': 10},
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return HotelFacilityResponseModel.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return HotelFacilityResponseModel.withError(_handleError(error));
+      } else {
+        return HotelFacilityResponseModel.withError(error.toString());
+      }
+    }
+  }
+
+  Future<HotelListBaseResponse> getHotelBookmarkList(
+      RevampHotelListRequest request) async {
+    try {
+      final result = await _dio.get('${ApiConstant.kHotel}/bookmark',
+          queryParameters: {
+            'checkin': DateHelper.formatDateRangeForOYO(request.checkIn),
+            'checkout': DateHelper.formatDateRangeForOYO(request.checkout),
+            'room': request.totalRooms,
+          },
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return HotelListBaseResponse.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return HotelListBaseResponse.withError(_handleError(error));
+      } else {
+        return HotelListBaseResponse.withError(error.toString());
       }
     }
   }
@@ -1672,5 +1737,11 @@ class ApiProvider {
         return error.toString();
       }
     }
+  }
+}
+
+extension on String {
+  bool get isNotNullNorEmpty {
+    return this != null && this.isNotEmpty;
   }
 }

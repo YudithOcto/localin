@@ -5,7 +5,7 @@ import 'package:localin/themes.dart';
 
 class CustomSortingWidget extends StatelessWidget {
   final List<String> sortingTitle;
-  final Function(int) onTap;
+  final Function(String) onTap;
   final int currentSelectedSort;
 
   CustomSortingWidget(
@@ -42,7 +42,7 @@ class CustomSortingWidget extends StatelessWidget {
               itemCount: sortingTitle.length,
               itemBuilder: (context, index) {
                 return InkResponse(
-                  onTap: () => onTap(index),
+                  onTap: () => onTap(sortingTitle[index]),
                   highlightColor: ThemeColors.primaryBlue,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

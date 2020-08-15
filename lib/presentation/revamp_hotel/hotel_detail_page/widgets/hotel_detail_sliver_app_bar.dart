@@ -2,11 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_image_radius.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_photos_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_nestedscroll_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class HotelDetailSliverAppbar extends StatelessWidget {
@@ -45,17 +47,30 @@ class HotelDetailSliverAppbar extends StatelessWidget {
       actions: <Widget>[
         Visibility(
           visible: !isExpanded,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: SvgPicture.asset('images/bookmark_outline.svg',
-                width: 14.0, height: 20.0),
+          child: InkResponse(
+            onTap: () async {
+              final result = await Provider.of<HotelDetailApiProvider>(context,
+                      listen: false)
+                  .changeBookmark();
+              CustomToast.showCustomBookmarkToast(context, result);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: SvgPicture.asset(
+                  'images/${hotelDetail.hotelDetailEntity.isBookmark ? 'bookmark_full' : 'bookmark_outline'}.svg',
+                  color: hotelDetail.hotelDetailEntity.isBookmark
+                      ? ThemeColors.primaryBlue
+                      : ThemeColors.black80,
+                  width: 14.0,
+                  height: 20.0),
+            ),
           ),
         )
       ],
       leading: Visibility(
         visible: !isExpanded,
         child: InkWell(
-          onTap: () {},
+          onTap: () => Navigator.of(context).pop(kRefresh),
           child: Icon(
             Icons.arrow_back,
             color: ThemeColors.black80,
@@ -104,7 +119,7 @@ class HotelDetailSliverAppbar extends StatelessWidget {
                 left: 20.0,
                 top: 50.0,
                 child: InkWell(
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () => Navigator.of(context).pop(kRefresh),
                   child: Icon(
                     Icons.arrow_back,
                     color: ThemeColors.black0,
@@ -114,11 +129,21 @@ class HotelDetailSliverAppbar extends StatelessWidget {
               Positioned(
                   right: 20.0,
                   top: 50.0,
-                  child: SvgPicture.asset(
-                    'images/bookmark_outline.svg',
-                    width: 14.0,
-                    height: 20.0,
-                    color: ThemeColors.black0,
+                  child: InkResponse(
+                    onTap: () async {
+                      final result = await Provider.of<HotelDetailApiProvider>(
+                              context,
+                              listen: false)
+                          .changeBookmark();
+                      CustomToast.showCustomBookmarkToast(context, result);
+                    },
+                    highlightColor: ThemeColors.primaryBlue,
+                    child: SvgPicture.asset(
+                      'images/${hotelDetail.hotelDetailEntity.isBookmark ? 'bookmark_full' : 'bookmark_outline'}.svg',
+                      width: 14.0,
+                      height: 20.0,
+                      color: ThemeColors.black0,
+                    ),
                   ))
             ],
           ),
