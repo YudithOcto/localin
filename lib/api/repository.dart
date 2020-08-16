@@ -316,16 +316,9 @@ class Repository {
     return apiProvider.getBookingHistoryList(offset, limit);
   }
 
-  Future<BookHotelResponse> bookHotel(
-      int hotelId,
-      int roomCategoryId,
-      int totalAdult,
-      int totalRoom,
-      DateTime checkIn,
-      DateTime checkOut,
-      String roomName) {
-    return apiProvider.bookHotel(hotelId, roomCategoryId, totalAdult, totalRoom,
-        checkIn, checkOut, roomName);
+  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
+      RevampHotelListRequest request, String roomName) {
+    return apiProvider.bookHotel(hotelId, roomCategoryId, request, roomName);
   }
 
   Future<BookingDetailResponse> getBookingDetail(String bookingDetailId) {
@@ -392,7 +385,7 @@ class Repository {
     return apiProvider.getTransactionDetail(transId, type);
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+  Future<TransactionResponseModel> getCommunityTransactionList(
       int page, int limit,
       {String type}) {
     return apiProvider.getCommunityTransactionList(page, limit, type);

@@ -82,7 +82,7 @@ class HotelDetailRoomTypeHeader extends StatelessWidget {
                     );
                   });
               if (result != null) {
-                provider.totalRoomRequested = result;
+                provider.changeRoomAndGuest = result;
                 provider.getRoomAvailability();
               }
             },

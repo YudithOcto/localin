@@ -1141,6 +1141,9 @@ class ApiProvider {
       if (request.sort.isNotNullNorEmpty) {
         map['order'] = request.sort;
       }
+      map['adult'] = request.totalAdults;
+      map['child'] = request.totalChild;
+
       final response = await _dio.get(ApiConstant.kHotel,
           queryParameters: map,
           options: Options(headers: {REQUIRED_TOKEN: true}));
@@ -1294,23 +1297,15 @@ class ApiProvider {
     }
   }
 
-  Future<BookHotelResponse> bookHotel(
-      int hotelId,
-      int roomCategoryId,
-      int totalAdult,
-      int totalRoom,
-      DateTime checkIn,
-      DateTime checkOut,
-      String roomName) async {
+  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
+      RevampHotelListRequest request, String roomName) async {
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
-      'count_room': totalRoom,
-      'count_adult': totalAdult,
-//      'checkin': incheck,
-//      'checkout': outcheck,
-      'checkin': DateHelper.formatDateRangeForOYO(checkIn),
-      'checkout': DateHelper.formatDateRangeForOYO(checkOut),
+      'count_room': request.totalRooms,
+      'count_adult': request.totalAdults,
+      'checkin': DateHelper.formatDateRangeForOYO(request.checkIn),
+      'checkout': DateHelper.formatDateRangeForOYO(request.checkout),
       'timezone': await getFlutterTimezone(),
       'room_name': roomName,
     });
@@ -1479,7 +1474,7 @@ class ApiProvider {
     }
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+  Future<TransactionResponseModel> getCommunityTransactionList(
       int page, int limit, String transactionType) async {
     try {
       final response = await _dio.get(ApiConstant.kTransaction,
@@ -1489,12 +1484,12 @@ class ApiProvider {
             'type': transactionType
           },
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      return TransactionCommunityResponseModel.getListJson(response.data);
+      return TransactionResponseModel.getListJson(response.data);
     } catch (error) {
       if (error is DioError) {
-        return TransactionCommunityResponseModel.withError(_handleError(error));
+        return TransactionResponseModel.withError(_handleError(error));
       } else {
-        return TransactionCommunityResponseModel.withError(error.toString());
+        return TransactionResponseModel.withError(error.toString());
       }
     }
   }
@@ -1503,7 +1498,7 @@ class ApiProvider {
     var model;
     switch (type) {
       case kTransactionTypeCommunity:
-        model = TransactionCommunityResponseModel;
+        model = TransactionResponseModel;
         break;
       case kTransactionTypeExplore:
         model = TransactionExploreDetailResponse;
@@ -1519,7 +1514,7 @@ class ApiProvider {
           options: Options(headers: {REQUIRED_TOKEN: true}));
       switch (type) {
         case kTransactionTypeCommunity:
-          return TransactionCommunityResponseModel.fromJson(response.data);
+          return TransactionResponseModel.fromJson(response.data);
           break;
         case kTransactionTypeExplore:
           return TransactionExploreDetailResponse.fromJson(response.data);
@@ -1529,11 +1524,9 @@ class ApiProvider {
       switch (type) {
         case kTransactionTypeCommunity:
           if (error is DioError) {
-            return TransactionCommunityResponseModel.withError(
-                _handleError(error));
+            return TransactionResponseModel.withError(_handleError(error));
           } else {
-            return TransactionCommunityResponseModel.withError(
-                error.toString());
+            return TransactionResponseModel.withError(error.toString());
           }
           break;
         case kTransactionTypeExplore:

@@ -97,8 +97,7 @@ class _TransactionCommunityContentWidgetState
         ),
         bottomNavigationBar: Consumer<TransactionDetailProvider>(
           builder: (__, provider, _) {
-            final item =
-                provider.transactionDetail as TransactionCommunityDetail;
+            final item = provider.transactionDetail as TransactionDetailModel;
             return item == null
                 ? Container()
                 : BottomButtonPaymentWidget(
@@ -120,7 +119,7 @@ class _TransactionCommunityContentWidgetState
             } else {
               final provider = Provider.of<TransactionDetailProvider>(context);
               if (provider.transactionDetail != null) {
-                TransactionCommunityDetail item = provider.transactionDetail;
+                TransactionDetailModel item = provider.transactionDetail;
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

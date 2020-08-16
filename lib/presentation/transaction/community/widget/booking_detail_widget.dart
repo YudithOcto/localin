@@ -10,7 +10,7 @@ import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class BookingDetailWidget extends StatefulWidget {
-  final TransactionCommunityDetail detail;
+  final TransactionDetailModel detail;
   final bool showPaymentRow;
   BookingDetailWidget({@required this.detail, this.showPaymentRow = false});
   @override

@@ -82,6 +82,10 @@ const kFurther = 'Most further';
 const kBookmarkQueryType = 'bookmark';
 const kUnbookmarkQueryType = 'unbookmark';
 
+const kAdult = 'adults';
+const kRoom = 'rooms';
+const kChild = 'child';
+
 class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'

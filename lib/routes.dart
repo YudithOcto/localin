@@ -29,6 +29,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_photos_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_search/hotel_revamp_search_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_successfull/hotel_successful_page.dart';
 import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
@@ -61,6 +62,7 @@ import 'package:localin/presentation/search/search_location/search_location_page
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
+import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
 import 'package:localin/splash_screen.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
@@ -149,5 +151,7 @@ Map<String, WidgetBuilder> get generalRoutes {
     HotelBookingConfirmationPage.routeName: (_) =>
         HotelBookingConfirmationPage(),
     HotelRevampSearchPage.routeName: (_) => HotelRevampSearchPage(),
+    HotelSuccessfulPage.routeName: (_) => HotelSuccessfulPage(),
+    TransactionHotelDetailPage.routeName: (_) => TransactionHotelDetailPage(),
   };
 }

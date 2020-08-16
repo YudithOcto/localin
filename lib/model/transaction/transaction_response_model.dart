@@ -1,39 +1,36 @@
-class TransactionCommunityResponseModel {
+class TransactionResponseModel {
   bool error;
   String message;
-  TransactionCommunityDetail data;
+  TransactionDetailModel data;
   int total;
-  List<TransactionCommunityDetail> transactionList;
+  List<TransactionDetailModel> transactionList;
 
-  TransactionCommunityResponseModel(
+  TransactionResponseModel(
       {this.error, this.message, this.data, this.transactionList, this.total});
 
-  factory TransactionCommunityResponseModel.fromJson(
-      Map<String, dynamic> data) {
-    return TransactionCommunityResponseModel(
+  factory TransactionResponseModel.fromJson(Map<String, dynamic> data) {
+    return TransactionResponseModel(
         error: false,
         message: null,
-        data: TransactionCommunityDetail.fromMap(data['data']));
+        data: TransactionDetailModel.fromMap(data['data']));
   }
 
-  factory TransactionCommunityResponseModel.getListJson(
-      Map<String, dynamic> data) {
-    return TransactionCommunityResponseModel(
+  factory TransactionResponseModel.getListJson(Map<String, dynamic> data) {
+    return TransactionResponseModel(
         error: false,
         message: data['message'],
         total: data['data']['paging']['total'],
-        transactionList: List<TransactionCommunityDetail>.from(data['data']
-                ['data']
-            .map((e) => TransactionCommunityDetail.fromMap(e))));
+        transactionList: List<TransactionDetailModel>.from(data['data']['data']
+            .map((e) => TransactionDetailModel.fromMap(e))));
   }
 
-  TransactionCommunityResponseModel.withError(String value)
+  TransactionResponseModel.withError(String value)
       : error = true,
         message = value,
         data = null;
 }
 
-class TransactionCommunityDetail {
+class TransactionDetailModel {
   String transactionId;
   String modul;
   String description;
@@ -48,7 +45,7 @@ class TransactionCommunityDetail {
   String transactionTypeId;
   ServiceDetail serviceDetail;
 
-  TransactionCommunityDetail({
+  TransactionDetailModel({
     this.transactionId,
     this.modul,
     this.description,
@@ -64,8 +61,8 @@ class TransactionCommunityDetail {
     this.serviceDetail,
   });
 
-  factory TransactionCommunityDetail.fromMap(Map<String, dynamic> body) {
-    return TransactionCommunityDetail(
+  factory TransactionDetailModel.fromMap(Map<String, dynamic> body) {
+    return TransactionDetailModel(
       transactionId: body['transaksi_id'],
       modul: body['modul'],
       discount: body['discount'],

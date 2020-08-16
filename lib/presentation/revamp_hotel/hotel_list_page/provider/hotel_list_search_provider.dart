@@ -61,13 +61,17 @@ class HotelListSearchProvider with ChangeNotifier {
   DateTime get checkIn => _requestModel.checkIn;
   DateTime get checkOut => _requestModel.checkout;
   int get totalRoomSelected => _requestModel.totalRooms;
+  int get totalGuestSelected =>
+      _requestModel.totalAdults + _requestModel.totalChild;
 
   int get totalNightSelected {
     return _requestModel.checkout.difference(_requestModel.checkIn).inDays;
   }
 
-  set totalRoomRequested(int total) {
-    _requestModel.totalRooms = total;
+  set changeRoomAndGuest(Map<String, int> map) {
+    _requestModel.totalRooms = map[kRoom];
+    _requestModel.totalChild = map[kChild];
+    _requestModel.totalAdults = map[kAdult];
     notifyListeners();
   }
 

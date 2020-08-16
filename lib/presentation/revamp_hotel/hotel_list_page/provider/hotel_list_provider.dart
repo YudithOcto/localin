@@ -110,6 +110,13 @@ class HotelListProvider with ChangeNotifier {
       facilities: data.facilities != null && data.facilities.isNotEmpty
           ? data.facilities
           : temp.facilities,
+      totalChild: data.totalChild != null && data.totalChild != temp.totalChild
+          ? data.totalChild
+          : temp.totalChild,
+      totalAdults:
+          data.totalAdults != null && data.totalAdults != temp.totalAdults
+              ? data.totalAdults
+              : temp.totalAdults,
     );
     notifyListeners();
   }

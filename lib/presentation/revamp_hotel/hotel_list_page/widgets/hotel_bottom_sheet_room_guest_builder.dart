@@ -5,6 +5,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/room_
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/single_button_room_guest_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class HotelBottomSheetRoomGuestBuilder extends StatelessWidget {
@@ -49,30 +50,30 @@ class HotelBottomSheetRoomGuestBuilder extends StatelessWidget {
                 thickness: 2.0,
                 color: ThemeColors.black40,
               ),
-//              Consumer<RoomGuestProvider>(builder: (_, roomProvider, __) {
-//                return HotelBottomSheetRoomGuestSingleRowWidget(
-//                  title: 'Adult(s)',
-//                  add: () => roomProvider.changeAdultValue = true,
-//                  subtract: () => roomProvider.changeAdultValue = false,
-//                  value: roomProvider.adultSelected,
-//                  isChildren: false,
-//                );
-//              }),
-//              Divider(
-//                thickness: 2.0,
-//                color: ThemeColors.black40,
-//              ),
-//              Consumer<RoomGuestProvider>(
-//                builder: (_, roomProvider, __) {
-//                  return HotelBottomSheetRoomGuestSingleRowWidget(
-//                    title: 'Children(s)',
-//                    add: () => roomProvider.changeChildValue = true,
-//                    subtract: () => roomProvider.changeChildValue = false,
-//                    value: roomProvider.childSelected,
-//                    isChildren: true,
-//                  );
-//                },
-//              ),
+              Consumer<RoomGuestProvider>(builder: (_, roomProvider, __) {
+                return HotelBottomSheetRoomGuestSingleRowWidget(
+                  title: 'Adult(s)',
+                  add: () => roomProvider.changeAdultValue = true,
+                  subtract: () => roomProvider.changeAdultValue = false,
+                  value: roomProvider.adultSelected,
+                  isChildren: false,
+                );
+              }),
+              Divider(
+                thickness: 2.0,
+                color: ThemeColors.black40,
+              ),
+              Consumer<RoomGuestProvider>(
+                builder: (_, roomProvider, __) {
+                  return HotelBottomSheetRoomGuestSingleRowWidget(
+                    title: 'Children(s)',
+                    add: () => roomProvider.changeChildValue = true,
+                    subtract: () => roomProvider.changeChildValue = false,
+                    value: roomProvider.childSelected,
+                    isChildren: true,
+                  );
+                },
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 30.0, bottom: 16.0),
                 child: Row(
@@ -86,9 +87,13 @@ class HotelBottomSheetRoomGuestBuilder extends StatelessWidget {
                     Expanded(
                       child: FilledButtonDefault(
                         onPressed: () {
-                          Navigator.of(context).pop(
-                              Provider.of<RoomGuestProvider>(context)
-                                  .roomSelected);
+                          final provider =
+                              Provider.of<RoomGuestProvider>(context);
+                          Map<String, int> map = Map();
+                          map[kRoom] = provider.roomSelected;
+                          map[kAdult] = provider.adultSelected;
+                          map[kChild] = provider.childSelected;
+                          Navigator.of(context).pop(map);
                         },
                         buttonText: 'Apply',
                         textTheme: ThemeText.rodinaTitle3

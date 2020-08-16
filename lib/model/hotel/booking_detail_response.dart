@@ -107,16 +107,19 @@ class HotelDetailModel {
   String category;
   String street;
   String state;
+  String shortAddress;
 
-  HotelDetailModel(
-      {this.hotelId,
-      this.oyoId,
-      this.name,
-      this.latitude,
-      this.longitude,
-      this.category,
-      this.street,
-      this.state});
+  HotelDetailModel({
+    this.hotelId,
+    this.oyoId,
+    this.name,
+    this.latitude,
+    this.longitude,
+    this.category,
+    this.street,
+    this.state,
+    this.shortAddress,
+  });
 
   factory HotelDetailModel.fromJson(Map<String, dynamic> body) {
     return HotelDetailModel(
@@ -128,6 +131,7 @@ class HotelDetailModel {
       category: body['category'],
       street: body['street'],
       state: body['state'],
+      shortAddress: body['shortAddress'],
     );
   }
 }

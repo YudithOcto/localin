@@ -161,13 +161,17 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                             if (result != null) {
                               Provider.of<HotelListSearchProvider>(context,
                                       listen: false)
-                                  .totalRoomRequested = result;
+                                  .changeRoomAndGuest = result;
                             }
                           },
-                          child: SingleColumnBottomSheetSearchWidget(
-                            title: 'TOTAL ROOM(S)',
-                            value:
-                                '${Provider.of<HotelListSearchProvider>(context).totalRoomSelected} Room',
+                          child: Consumer<HotelListSearchProvider>(
+                            builder: (_, provider, __) {
+                              return SingleColumnBottomSheetSearchWidget(
+                                title: 'TOTAL ROOM(S) & GUEST(S)',
+                                value: '${provider.totalRoomSelected} Room, '
+                                    '${provider.totalGuestSelected} Guest',
+                              );
+                            },
                           ),
                         ),
                       ),

@@ -3,8 +3,17 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel
 
 class RevampHotelListRequest with EquatableMixin {
   @override
-  List<Object> get props =>
-      [search, checkIn, checkout, totalRooms, minPrice, maxPrice, sort];
+  List<Object> get props => [
+        search,
+        checkIn,
+        checkout,
+        totalRooms,
+        minPrice,
+        maxPrice,
+        sort,
+        totalChild,
+        totalAdults
+      ];
 
   String search;
   DateTime checkIn;
@@ -21,12 +30,12 @@ class RevampHotelListRequest with EquatableMixin {
     this.search,
     this.checkIn,
     this.checkout,
-    this.totalRooms,
+    this.totalRooms = 1,
     this.minPrice = DEFAULT_PRICE_LOWEST,
     this.maxPrice = DEFAULT_PRICE_HIGHEST,
     this.facilities,
     this.sort,
-    this.totalAdults,
-    this.totalChild,
+    this.totalAdults = 1,
+    this.totalChild = 0,
   });
 }
