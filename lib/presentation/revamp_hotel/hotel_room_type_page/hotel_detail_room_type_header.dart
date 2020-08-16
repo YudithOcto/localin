@@ -11,8 +11,7 @@ import 'package:provider/provider.dart';
 class HotelDetailRoomTypeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider =
-        Provider.of<HotelListSearchProvider>(context, listen: false);
+    final provider = Provider.of<HotelListSearchProvider>(context);
     return Container(
       color: ThemeColors.black0,
       padding: const EdgeInsets.only(
@@ -78,7 +77,9 @@ class HotelDetailRoomTypeHeader extends StatelessWidget {
                   context: context,
                   builder: (_) {
                     return HotelBottomSheetRoomGuestBuilder(
-                      totalPreviousRequest: provider.totalRoomSelected,
+                      totalPreviousRoomRequest: provider.totalRoomSelected,
+                      totalPreviousAdultRequest: provider.totalAdultSelected,
+                      totalPreviousChildRequest: provider.totalChildSelected,
                     );
                   });
               if (result != null) {
@@ -93,7 +94,35 @@ class HotelDetailRoomTypeHeader extends StatelessWidget {
                   child: SvgPicture.asset('images/door_icon.svg',
                       width: 25.0, height: 20.0),
                 ),
-                Text('${provider.totalRoomSelected} Rooms',
+                Text('${provider.totalRoomSelected}',
+                    style: ThemeText.sfRegularFootnote),
+              ],
+            ),
+          ),
+          InkResponse(
+            onTap: () async {
+              final result = await showModalBottomSheet(
+                  context: context,
+                  builder: (_) {
+                    return HotelBottomSheetRoomGuestBuilder(
+                      totalPreviousRoomRequest: provider.totalRoomSelected,
+                      totalPreviousAdultRequest: provider.totalAdultSelected,
+                      totalPreviousChildRequest: provider.totalChildSelected,
+                    );
+                  });
+              if (result != null) {
+                provider.changeRoomAndGuest = result;
+                provider.getRoomAvailability();
+              }
+            },
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.only(left: 20.0, right: 8.0),
+                  child: SvgPicture.asset('images/icon_user.svg',
+                      width: 25.0, height: 20.0),
+                ),
+                Text('${provider.totalGuestSelected}',
                     style: ThemeText.sfRegularFootnote),
               ],
             ),

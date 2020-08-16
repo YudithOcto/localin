@@ -26,16 +26,17 @@ class RestaurantProvider with ChangeNotifier {
             _scrollController.position.maxScrollExtent * 0.03 &&
         _isShowSearchAppBar) {
       _isShowSearchAppBar = false;
+      notifyListeners();
     } else if (_scrollController.offset <
             _scrollController.position.maxScrollExtent * 0.03 &&
         !_isShowSearchAppBar) {
       _isShowSearchAppBar = true;
+      notifyListeners();
     } else if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         _canLoadMore) {
       getRestaurantList(isRefresh: false);
     }
-    notifyListeners();
   }
 
   set showSearchAppBar(bool value) {
@@ -62,7 +63,8 @@ class RestaurantProvider with ChangeNotifier {
       {bool isRefresh = true,
       String search = '',
       String sort,
-      String order}) async {
+      String order,
+      int isLocation}) async {
     if (isRefresh) {
       _restaurantList.clear();
       _restaurantTotal = 0;
@@ -72,7 +74,7 @@ class RestaurantProvider with ChangeNotifier {
     _streamController.add(searchState.loading);
     final response = await _repository.getRestaurantList(
         _pageRequest, search.isEmpty || search == kNearby ? '' : search,
-        sort: sort, order: order);
+        sort: sort, order: order, isLocation: isLocation);
     if (response != null && response.total > 0) {
       _restaurantList.addAll(response.detail);
       _restaurantTotal = response.total;

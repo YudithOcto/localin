@@ -24,7 +24,7 @@ class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
           children: <Widget>[
             CustomImageOnlyRadius(
               height: 188.0,
-              imageUrl: '${hotelDetail.hotelDetail.image}',
+              imageUrl: '${hotelDetail.hotelImage}',
               width: double.maxFinite,
               placeHolderColor: ThemeColors.black60,
               topLeft: 8.0,

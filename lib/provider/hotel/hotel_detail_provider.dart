@@ -51,18 +51,18 @@ class HotelDetailProvider extends BaseModelProvider {
   }
 
   Future<void> getRoomAvailability() async {
-    _roomState.add(RoomState.loading);
-    roomAvailability.clear();
-    final result = await _repository.getRoomAvailability(
-        _hotelID, _selectedCheckIn, _selectedCheckOut, _roomTotal);
-    if (result != null && result.error == null) {
-      _roomState.add(RoomState.success);
-      discount = result.discount ?? 0;
-      roomAvailability.addAll(result.roomAvailability);
-    } else {
-      _roomState.add(RoomState.empty);
-      _errorMessage = result.error;
-    }
+//    _roomState.add(RoomState.loading);
+//    roomAvailability.clear();
+//    final result = await _repository.getRoomAvailability(
+//        _hotelID, _selectedCheckIn, _selectedCheckOut, _roomTotal);
+//    if (result != null && result.error == null) {
+//      _roomState.add(RoomState.success);
+//      discount = result.discount ?? 0;
+//      roomAvailability.addAll(result.roomAvailability);
+//    } else {
+//      _roomState.add(RoomState.empty);
+//      _errorMessage = result.error;
+//    }
   }
 
   void setRoomDateSearch(DateTime checkIn, DateTime checkOut) {

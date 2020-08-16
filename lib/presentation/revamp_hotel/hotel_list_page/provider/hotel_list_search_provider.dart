@@ -26,7 +26,7 @@ class HotelListSearchProvider with ChangeNotifier {
 
   List<String> getListCheckOutDate() {
     List<String> result = [];
-    for (int i = 0; i <= 20; i++) {
+    for (int i = 0; i <= 7; i++) {
       result.add(
           'Check-out ${_requestModel.checkIn.add(Duration(days: i + 1)).parseDate}');
     }
@@ -55,12 +55,26 @@ class HotelListSearchProvider with ChangeNotifier {
   HotelDetailEntity _hotelDetailEntity;
   HotelDetailEntity get hotelDetail => _hotelDetailEntity;
 
+  String get hotelImage {
+    if (_hotelDetailEntity.image != null &&
+        _hotelDetailEntity.image.isNotEmpty) {
+      return _hotelDetailEntity.image;
+    } else if (_hotelDetailEntity.images != null &&
+        _hotelDetailEntity.images.isNotEmpty) {
+      return _hotelDetailEntity.images.first;
+    } else {
+      return '';
+    }
+  }
+
   RevampHotelListRequest _requestModel = RevampHotelListRequest();
   RevampHotelListRequest get requestModel => _requestModel;
 
   DateTime get checkIn => _requestModel.checkIn;
   DateTime get checkOut => _requestModel.checkout;
   int get totalRoomSelected => _requestModel.totalRooms;
+  int get totalAdultSelected => _requestModel.totalAdults;
+  int get totalChildSelected => _requestModel.totalChild;
   int get totalGuestSelected =>
       _requestModel.totalAdults + _requestModel.totalChild;
 
@@ -96,17 +110,17 @@ class HotelListSearchProvider with ChangeNotifier {
     _roomState.add(RoomState.loading);
     _roomAvailability.clear();
     final result = await _repository.getRoomAvailability(
-        _hotelDetailEntity.hotelId,
-        _requestModel.checkIn,
-        _requestModel.checkout,
-        _requestModel.totalRooms);
-    if (result != null && result.error == null) {
+        _hotelDetailEntity.hotelId, _requestModel);
+    if (result != null &&
+        result.error == null &&
+        result.roomAvailability.isNotEmpty) {
       _roomState.add(RoomState.success);
       discount = result.discount;
       _roomAvailability.addAll(result.roomAvailability);
     } else {
       _roomState.add(RoomState.empty);
     }
+    notifyListeners();
   }
 
   Future<String> changeBookmark() async {

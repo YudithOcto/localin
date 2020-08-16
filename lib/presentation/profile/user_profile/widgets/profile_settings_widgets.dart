@@ -95,7 +95,6 @@ class ProfileSettingsWidgets extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
           child: Consumer<AuthProvider>(
             builder: (context, provider, child) {
-              print(provider.userModel.status);
               return RowProfileSettingsWidget(
                 title: 'Verification',
                 description: 'Verify your account',

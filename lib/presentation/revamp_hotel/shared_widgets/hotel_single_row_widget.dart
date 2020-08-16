@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_image_only_radius.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_room_type_page/hotel_detail_room_type_pick_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/number_helper.dart';
@@ -116,13 +115,17 @@ class HotelSingleRowWidget extends StatelessWidget {
                           .copyWith(color: ThemeColors.orange),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8, top: 2.0),
-                    child: Text(
-                      '${hotelDetail.roomAvailability.isNotNullNorNotEmpty ? getFormattedCurrency(hotelDetail.roomAvailability.first.sellingAmount - (hotelDetail.discount ?? 0)) : ''}',
-                      style: ThemeText.sfRegularBody.copyWith(
-                          color: ThemeColors.black80,
-                          decoration: TextDecoration.lineThrough),
+                  Visibility(
+                    visible: hotelDetail.discount != null &&
+                        hotelDetail.discount > 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8, top: 2.0),
+                      child: Text(
+                        '${hotelDetail.roomAvailability.isNotNullNorNotEmpty ? getFormattedCurrency(hotelDetail.roomAvailability.first.sellingAmount - (hotelDetail.discount ?? 0)) : ''}',
+                        style: ThemeText.sfRegularBody.copyWith(
+                            color: ThemeColors.black80,
+                            decoration: TextDecoration.lineThrough),
+                      ),
                     ),
                   ),
                   Padding(

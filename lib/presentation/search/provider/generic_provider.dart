@@ -55,7 +55,8 @@ class GenericProvider with ChangeNotifier {
             offset: _offset, limit: _limit, search: search);
         break;
       case TYPE_EVENT:
-        return _repository.getEventList(pageRequest: _offset, search: search);
+        return _repository.getEventList(
+            pageRequest: _offset, search: search, mode: 'search');
         break;
     }
   }

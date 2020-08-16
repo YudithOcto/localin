@@ -85,14 +85,11 @@ class _MyAppState extends State<MyApp> {
 
   void registerNotification() {
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
-      print(message);
       showNotification(message);
       return;
     }, onResume: (Map<String, dynamic> message) {
-      print(message);
       return;
     }, onLaunch: (Map<String, dynamic> message) {
-      print(message);
       return;
     });
 
@@ -123,7 +120,7 @@ class _MyAppState extends State<MyApp> {
           platformChannelSpecifics,
           payload: data.toString());
     } catch (error) {
-      print(error);
+      debugPrint(error);
     }
   }
 
@@ -138,9 +135,9 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
       try {
-        print(payload);
+        debugPrint(payload);
       } catch (error) {
-        print(error);
+        debugPrint(error);
       }
     });
   }
@@ -149,7 +146,7 @@ class _MyAppState extends State<MyApp> {
     SharedPreferences sf = await SharedPreferences.getInstance();
     _firebaseMessaging.getToken().then((token) {
       sf.setString('tokenFirebase', token);
-      print('Firebase $token');
+      debugPrint('Firebase $token');
     });
   }
 }

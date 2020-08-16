@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_availability.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
@@ -9,7 +10,9 @@ import '../../../../text_themes.dart';
 class HotelBookingPriceDetailWidget extends StatelessWidget {
   final RevampHotelListRequest request;
   final RoomAvailability roomAvailability;
-  HotelBookingPriceDetailWidget({this.request, this.roomAvailability});
+  final HotelDetailEntity detail;
+  HotelBookingPriceDetailWidget(
+      {this.detail, this.request, this.roomAvailability});
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +24,25 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 20.0),
-          SinglePriceDetailRow(
-            title: '(${request.totalRooms}) ${roomAvailability.categoryName}',
-            value: '${getFormattedCurrency(roomAvailability.sellingAmount)}',
-          ),
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                request.totalRooms,
+                (index) => SinglePriceDetailRow(
+                  title:
+                      '(1x) ${detail.hotelName}, ${roomAvailability.categoryName}',
+                  value:
+                      '${getFormattedCurrency(roomAvailability.sellingAmount)}',
+                ),
+              )),
           SinglePriceDetailRow(
             title: 'Admin Fee',
             value: 'Free',
           ),
           SinglePriceDetailRow(
             title: 'Total',
-            value: '${getFormattedCurrency(roomAvailability.sellingAmount)}',
+            value:
+                '${getFormattedCurrency(roomAvailability.sellingAmount * request.totalRooms)}',
           ),
         ],
       ),
@@ -50,9 +61,11 @@ class SinglePriceDetailRow extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              '$title',
-              style: ThemeText.sfMediumHeadline,
+            Expanded(
+              child: Text(
+                '$title',
+                style: ThemeText.sfMediumHeadline,
+              ),
             ),
             Text(
               '$value',

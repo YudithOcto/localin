@@ -34,7 +34,7 @@ class RevampHotelListRequest with EquatableMixin {
     this.minPrice = DEFAULT_PRICE_LOWEST,
     this.maxPrice = DEFAULT_PRICE_HIGHEST,
     this.facilities,
-    this.sort,
+    this.sort = 'asc',
     this.totalAdults = 1,
     this.totalChild = 0,
   });

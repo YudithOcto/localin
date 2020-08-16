@@ -480,7 +480,6 @@ class ApiProvider {
       Map<String, dynamic> query = Map();
       query['page'] = offset;
       query['limit'] = limit;
-      print(keyword);
       if (keyword != null && keyword.isNotEmpty) {
         query['keyword'] = keyword;
       }
@@ -625,7 +624,6 @@ class ApiProvider {
           queryParameters: map,
           options: Options(headers: {REQUIRED_TOKEN: true}));
       final model = CommunityDetailBaseResponse.fromJson(response.data);
-      print(model.communityDetailList.toString());
       return model;
     } catch (error) {
       if (error is DioError) {
@@ -1181,15 +1179,17 @@ class ApiProvider {
   }
 
   Future<RoomBaseResponse> getRoomAvailabilityDetail(
-      int hotelId, DateTime checkIn, DateTime checkOut, int room) async {
+      int hotelId, RevampHotelListRequest request) async {
     try {
       final result =
           await _dio.get('${ApiConstant.kHotelRoomAvailability}/$hotelId',
               queryParameters: {
-                'checkin': DateHelper.formatDateRangeForOYO(checkIn),
-                'checkout': DateHelper.formatDateRangeForOYO(checkOut),
+                'checkin': DateHelper.formatDateRangeForOYO(request.checkIn),
+                'checkout': DateHelper.formatDateRangeForOYO(request.checkout),
                 'timezone': await getFlutterTimezone(),
-                'room': room,
+                'room': request.totalRooms,
+                'adult': request.totalAdults,
+                'child': request.totalChild,
               },
               options: Options(headers: {REQUIRED_TOKEN: true}));
       return RoomBaseResponse.fromJson(result.data);
@@ -1557,7 +1557,8 @@ class ApiProvider {
   }
 
   Future<ExploreEventResponseModel> getEventData(int pageRequest, String search,
-      String sort, List<int> categoryId, String date) async {
+      String sort, List<String> categoryId, String date,
+      {String mode = 'default'}) async {
     try {
       Map<String, dynamic> map = Map();
       map['page'] = pageRequest;
@@ -1566,14 +1567,17 @@ class ApiProvider {
         map['search'] = search;
       }
       if (categoryId != null && categoryId.isNotEmpty) {
-        map['kategori_id'] = categoryId.map((e) => e).toList();
+        map['kategori_id[]'] = categoryId.join(',');
       }
       if (sort != null && sort.isNotEmpty) {
         map['sort[]'] = getSorting(sort);
       }
-      if (date != null && date.isNotEmpty) {
+      if (date != null &&
+          date.isNotEmpty &&
+          date.substring(date.length - 1, date.length) != "0") {
         map['date'] = date;
       }
+      map['mode'] = mode;
       final response = await _dio.get(ApiConstant.kExploreEvent,
           options: Options(headers: {REQUIRED_TOKEN: true}),
           queryParameters: map);

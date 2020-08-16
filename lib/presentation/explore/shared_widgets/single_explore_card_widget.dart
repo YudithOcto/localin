@@ -79,13 +79,13 @@ class SingleExploreCardWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                '',
+                '${detail?.location?.address}',
                 style: ThemeText.sfMediumFootnote
                     .copyWith(color: ThemeColors.black80),
               ),
             ),
             Text(
-              '${getFormattedCurrency(detail?.endPrice)}',
+              '${getFormattedCurrency(detail?.startPrice)}',
               style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.orange),
             )
           ],

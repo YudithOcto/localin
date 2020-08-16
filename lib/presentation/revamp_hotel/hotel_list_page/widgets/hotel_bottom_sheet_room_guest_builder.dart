@@ -9,13 +9,21 @@ import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class HotelBottomSheetRoomGuestBuilder extends StatelessWidget {
-  final int totalPreviousRequest;
-  HotelBottomSheetRoomGuestBuilder({this.totalPreviousRequest = 1});
+  final int totalPreviousRoomRequest;
+  final int totalPreviousAdultRequest;
+  final int totalPreviousChildRequest;
+  HotelBottomSheetRoomGuestBuilder(
+      {this.totalPreviousRoomRequest = 1,
+      this.totalPreviousAdultRequest = 1,
+      this.totalPreviousChildRequest});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RoomGuestProvider>(
-      create: (_) => RoomGuestProvider(totalRoomSelected: totalPreviousRequest),
+      create: (_) => RoomGuestProvider(
+          totalRoomSelected: totalPreviousRoomRequest,
+          totalAdultSelected: totalPreviousAdultRequest,
+          totalChildSelected: totalPreviousChildRequest),
       child: LayoutBuilder(builder: (context, boxConstraint) {
         return Container(
           padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 27.0),

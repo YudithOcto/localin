@@ -53,8 +53,11 @@ class HotelBookingBottomWidgetPayment extends StatelessWidget {
             });
             if (navWebViewResult != null &&
                 navWebViewResult == SUCCESS_VERIFICATION) {
-              Navigator.of(context)
-                  .pushReplacementNamed(HotelSuccessfulPage.routeName);
+              Navigator.of(context).pushReplacementNamed(
+                  HotelSuccessfulPage.routeName,
+                  arguments: {
+                    HotelSuccessfulPage.bookingId: result.detail.bookingId,
+                  });
             } else {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   MainBottomNavigation.routeName, (route) => false,

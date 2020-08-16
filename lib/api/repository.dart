@@ -302,9 +302,8 @@ class Repository {
   }
 
   Future<RoomBaseResponse> getRoomAvailability(
-      int hotelID, DateTime checkIn, DateTime checkOut, int roomTotal) {
-    return apiProvider.getRoomAvailabilityDetail(
-        hotelID, checkIn, checkOut, roomTotal);
+      int hotelID, RevampHotelListRequest request) {
+    return apiProvider.getRoomAvailabilityDetail(hotelID, request);
   }
 
   Future<HotelSearchSuggestModel> searchHotelAndLocation(String search) {
@@ -403,10 +402,11 @@ class Repository {
       {String search,
       int pageRequest,
       String sort,
-      List<int> categoryId,
-      String date}) {
-    return apiProvider.getEventData(
-        pageRequest, search, sort, categoryId, date);
+      List<String> categoryId,
+      String date,
+      String mode}) {
+    return apiProvider.getEventData(pageRequest, search, sort, categoryId, date,
+        mode: mode);
   }
 
   Future<ExploreFilterResponseModel> getCategoryFilterEvent() {

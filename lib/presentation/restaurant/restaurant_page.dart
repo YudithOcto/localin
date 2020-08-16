@@ -77,6 +77,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                   if (result == kNearby) {
                                     provider.getRestaurantList(
                                         isRefresh: true,
+                                        isLocation: 1,
                                         sort: 'jarak',
                                         order: 'asc');
                                   } else {
@@ -109,7 +110,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
                           } else {
                             return ListView.builder(
                               shrinkWrap: true,
-                              key: ObjectKey(provider.restaurantList.hashCode),
                               controller: provider.scrollController,
                               padding: const EdgeInsets.only(bottom: 80.0),
                               physics: ClampingScrollPhysics(),
@@ -167,9 +167,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
             provider.showSearchAppBar = false;
             if (result == kNearby) {
               provider.getRestaurantList(
-                  isRefresh: true, sort: 'jarak', order: 'asc');
+                  isRefresh: true, sort: 'jarak', order: 'asc', isLocation: 1);
             } else {
-              provider.getRestaurantList(isRefresh: true, search: result);
+              provider.getRestaurantList(
+                  isRefresh: true, search: result, isLocation: 1);
             }
           }
         },

@@ -24,7 +24,7 @@ class ExploreMainProvider with ChangeNotifier {
   Future<Null> getEventList(
       {bool isRefresh = true,
       String search,
-      List<int> categoryId,
+      List<String> categoryId,
       String sort,
       String date}) async {
     if (isRefresh) {
@@ -38,7 +38,8 @@ class ExploreMainProvider with ChangeNotifier {
         search: search,
         categoryId: categoryId,
         sort: sort,
-        date: date);
+        date: date,
+        mode: 'default');
     if (result != null && result.total > 0) {
       _eventList.addAll(result.detail);
       _canLoadMore = result.total > _eventList.length;

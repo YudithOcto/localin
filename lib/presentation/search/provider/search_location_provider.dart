@@ -61,7 +61,6 @@ class SearchLocationProvider with ChangeNotifier {
     if (result != null &&
         result.detail != null &&
         (result.detail.isNotEmpty || result.detail.isNotEmpty)) {
-      print(result.detail.length);
       _searchList.addAll(result.detail);
       _offset += 1;
       _canLoadMore = result.total > _searchList.length;

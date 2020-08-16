@@ -25,8 +25,8 @@ class HotelDetailRoomRequestProvider with ChangeNotifier {
 
   Future<Null> getRoomRequest(RevampHotelListRequest request) async {
     _streamController.add(RoomState.loading);
-    final _roomRequest = await _repository.getRoomAvailability(
-        _hotelId, request.checkIn, request.checkout, request.totalRooms);
+    final _roomRequest =
+        await _repository.getRoomAvailability(_hotelId, request);
     if (!_roomRequest.roomAvailability.isNullOrEmpty) {
       _streamController.add(RoomState.success);
       _selectedRoom = _roomRequest.roomAvailability.first;

@@ -42,7 +42,8 @@ class HotelBookingBasicDetailWidget extends StatelessWidget {
           SizedBox(height: 4.0),
           RowEventWidget(
             title: 'Duration',
-            dateTime: '${request.totalRooms} Night(s)',
+            dateTime:
+                '${request.checkout.difference(request.checkIn).inDays} Night(s)',
           ),
           Container(
             margin: const EdgeInsets.only(top: 4.0),
@@ -65,7 +66,15 @@ class HotelBookingBasicDetailWidget extends StatelessWidget {
                   '${hotelDetail.facilities.isEmpty ? '' : hotelDetail.facilities.join(' • ')}',
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black80),
-                )
+                ),
+                SizedBox(height: 15.0),
+                Text('Capacity', style: ThemeText.sfSemiBoldFootnote),
+                SizedBox(height: 2.0),
+                Text('2 guest(s)/room', style: ThemeText.sfMediumBody),
+                SizedBox(height: 2.0),
+                Text(
+                    '(a total of ${request.totalAdults + request.totalChild} guests in ${request.totalRooms} rooms)',
+                    style: ThemeText.sfMediumBody),
               ],
             ),
           ),

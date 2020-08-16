@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 class TransactionHotelDetailPage extends StatelessWidget {
   static const routeName = 'TransactionHotelDetailPage';
   static const bookingId = 'TransactionBookingId';
+  static const fromSuccessPage = 'FromSuccessPage';
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TransactionHotelDetailProvider>(

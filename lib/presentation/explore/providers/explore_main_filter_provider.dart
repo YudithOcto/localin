@@ -25,27 +25,27 @@ class ExploreMainFilterProvider with ChangeNotifier {
         notifyListeners();
       } else {
         if (modelRequest != null) {
-          if (modelRequest.month != null) {
+          if (modelRequest.month != null && modelRequest.month != -1) {
             _selectedFilter.replaceRange(1, 2, [monthList[modelRequest.month]]);
           }
 
-          if (modelRequest.sort != null) {
+          if (modelRequest.sort != null && modelRequest.sort != -1) {
             _selectedFilter.replaceRange(2, 3, [sortList[modelRequest.sort]]);
           }
 
-          if (modelRequest.category != null) {
+          _selectedCategoryFilter.clear();
+          if (modelRequest.category != null &&
+              modelRequest.category.isNotEmpty) {
             _selectedFilter.replaceRange(
                 0, 1, [modelRequest.category.map((e) => e.category).join(',')]);
-            _selectedCategoryFilter.clear();
             _selectedCategoryFilter.addAll(modelRequest.category);
           }
+          notifyListeners();
         }
       }
     } catch (error) {
-      print(error);
+      debugPrint(error);
     }
-
-    notifyListeners();
   }
 
   List<CategoryExploreDetail> _selectedCategoryFilter = [];

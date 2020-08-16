@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
+import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
 class HotelSuccessfulPage extends StatelessWidget {
   static const routeName = 'HotelSuccessfulPage';
+  static const bookingId = 'BookingId';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +67,15 @@ class HotelSuccessfulPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
+                    final route = ModalRoute.of(context).settings.arguments
+                        as Map<String, dynamic>;
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                        MainBottomNavigation.routeName, (route) => false);
+                        TransactionHotelDetailPage.routeName, (route) => false,
+                        arguments: {
+                          TransactionHotelDetailPage.bookingId:
+                              route[bookingId],
+                          TransactionHotelDetailPage.fromSuccessPage: true,
+                        });
                   },
                   child: Container(
                     decoration: BoxDecoration(

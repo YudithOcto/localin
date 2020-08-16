@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_detail_widget.dart';
 import 'package:localin/text_themes.dart';
@@ -26,22 +25,20 @@ class TransactionHotelBookingDetail extends StatelessWidget {
           SizedBox(height: 12.0),
           RowEventWidget(
             title: 'Check-in',
-            dateTime: DateHelper.formatDateBookingDetailShort(
-                DateTime.fromMillisecondsSinceEpoch(detail.checkIn)
-                    .toIso8601String()),
+            dateTime:
+                DateHelper.formatDateBookingDetailShort(detail.checkIn.date),
           ),
           SizedBox(height: 4.0),
           RowEventWidget(
             title: 'Check-out',
-            dateTime: DateHelper.formatDateBookingDetailShort(
-                DateTime.fromMillisecondsSinceEpoch(detail.checkOut)
-                    .toIso8601String()),
+            dateTime:
+                DateHelper.formatDateBookingDetailShort(detail.checkOut.date),
           ),
           SizedBox(height: 4.0),
           RowEventWidget(
             title: 'Duration',
             dateTime:
-                '${DateTime.fromMillisecondsSinceEpoch(detail.checkIn).difference(DateTime.fromMillisecondsSinceEpoch(detail.checkOut)).inDays} Night(s)',
+                '${detail.checkOut.parseDate.difference(detail.checkIn.parseDate).inDays} Night(s)',
           ),
           Container(
             margin: const EdgeInsets.only(top: 4.0),
@@ -59,12 +56,31 @@ class TransactionHotelBookingDetail extends StatelessWidget {
                 SizedBox(height: 3.0),
                 Text('${detail?.roomName} (x1)',
                     style: ThemeText.sfSemiBoldBody),
+                SizedBox(height: 15.0),
+                Text('Capacity', style: ThemeText.sfSemiBoldFootnote),
                 SizedBox(height: 2.0),
+                Text('2 guest(s)/room', style: ThemeText.sfMediumBody),
+                SizedBox(height: 2.0),
+                Text('(a total of ${detail?.guestCount} guests in 1 rooms)',
+                    style: ThemeText.sfMediumBody),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+extension on int {
+  String get date {
+    int getMilliseconds = this * 1000;
+    return DateTime.fromMillisecondsSinceEpoch(getMilliseconds)
+        .toIso8601String();
+  }
+
+  DateTime get parseDate {
+    int getMilliseconds = this * 1000;
+    return DateTime.fromMillisecondsSinceEpoch(getMilliseconds);
   }
 }

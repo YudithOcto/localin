@@ -151,11 +151,16 @@ class HotelBottomSheetBuilder extends StatelessWidget {
                             final result = await showModalBottomSheet(
                                 context: context,
                                 builder: (_) {
+                                  final provider =
+                                      Provider.of<HotelListSearchProvider>(
+                                          context);
                                   return HotelBottomSheetRoomGuestBuilder(
-                                    totalPreviousRequest:
-                                        Provider.of<HotelListSearchProvider>(
-                                                context)
-                                            .totalRoomSelected,
+                                    totalPreviousRoomRequest:
+                                        provider.totalRoomSelected,
+                                    totalPreviousChildRequest:
+                                        provider.totalChildSelected,
+                                    totalPreviousAdultRequest:
+                                        provider.totalAdultSelected,
                                   );
                                 });
                             if (result != null) {

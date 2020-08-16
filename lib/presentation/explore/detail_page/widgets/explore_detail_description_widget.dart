@@ -5,6 +5,7 @@ import 'package:localin/presentation/shared_widgets/custom_category_radius.dart'
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
+import 'package:html/parser.dart' as parser;
 
 class ExploreDetailDescriptionWidget extends StatelessWidget {
   @override
@@ -53,11 +54,16 @@ class ExploreDetailDescriptionWidget extends StatelessWidget {
           ),
           SizedBox(height: 8.0),
           Text(
-            '${provider.eventDetail?.description}',
+            '${parseHtml(provider.eventDetail?.description)}',
             style: ThemeText.sfRegularBody,
           )
         ],
       ),
     );
+  }
+
+  parseHtml(String data) {
+    final doc = parser.parse(data);
+    return parser.parse(doc.body.text).documentElement.text;
   }
 }

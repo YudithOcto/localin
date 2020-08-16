@@ -3,6 +3,7 @@ const List<String> monthList = [
   'February',
   'March',
   'April',
+  'May',
   'June',
   'July',
   'August',
@@ -20,7 +21,7 @@ const List<String> sortList = [
 ];
 
 String getSorting(String value) {
-  if (value == 'Closest date') {
+  if (value == 'Closest date' || value == 'Asc') {
     return 'date-asc';
   } else if (value == 'Furthest Date') {
     return 'date-desc';

@@ -73,6 +73,7 @@ class HotelBookingConfirmationPage extends StatelessWidget {
               ),
               HotelBookingPriceDetailWidget(
                 request: request,
+                detail: detail,
                 roomAvailability: roomRequest,
               )
             ],

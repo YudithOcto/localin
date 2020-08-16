@@ -1,7 +1,7 @@
 name: localin
 description: Localin app
 
-version: 1.5.0+150
+version: 1.5.1+151
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -67,6 +67,7 @@ dependencies:
   flutter_xlider: ^3.4.0
   scroll_to_index: ^1.0.6
   readmore: ^1.0.0
+  url_launcher: ^5.5.0
 
 dev_dependencies:
   flutter_test:

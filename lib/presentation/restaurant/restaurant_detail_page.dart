@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_provider.dart';
 import 'package:localin/presentation/restaurant/provider/restaurant_detail_provider.dart';
@@ -9,8 +10,11 @@ import 'package:localin/presentation/restaurant/shared_widget/restaurant_basic_d
 import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
 import 'package:localin/presentation/shared_widgets/custom_rating_widget.dart';
 import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
+import 'package:localin/presentation/shared_widgets/subtitle.dart';
+import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   static const routeName = 'RestaurantDetailPage';
@@ -161,6 +165,88 @@ class _RestaurantDetailBuilderWidgetState
                                   horizontal: 20.0, vertical: 13.0),
                               child: RestaurantBasicDetailWidget(
                                 restaurantDetail: restaurantDetail,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 24.0, bottom: 8.0, left: 20.0, right: 20.0),
+                        child: Subtitle(
+                          title: 'RESTAURANT DETAIL',
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              color: ThemeColors.black0,
+                              padding: const EdgeInsets.only(
+                                  top: 16.0,
+                                  bottom: 8.0,
+                                  left: 20.0,
+                                  right: 20.0),
+                              width: double.maxFinite,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    'Opening Hours',
+                                    style: ThemeText.sfMediumBody
+                                        .copyWith(color: ThemeColors.black80),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    margin: EdgeInsets.only(top: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: ThemeColors.black10,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Text(
+                                      '${restaurantDetail.timings}',
+                                      style: ThemeText.sfMediumFootnote,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 24.0,
+                                  ),
+                                  Text(
+                                    'Dishes & Cuisines',
+                                    style: ThemeText.sfMediumBody
+                                        .copyWith(color: ThemeColors.black80),
+                                  ),
+                                  SizedBox(
+                                    height: 4.0,
+                                  ),
+                                  Text(
+                                    '${restaurantDetail.cuisines}',
+                                    style: ThemeText.sfRegularBody,
+                                  ),
+                                  SizedBox(height: 26.0),
+                                  Visibility(
+                                    visible:
+                                        restaurantDetail.phoneNumbers != null &&
+                                            restaurantDetail
+                                                .phoneNumbers.isNotEmpty,
+                                    child: OutlineButtonDefault(
+                                      onPressed: () async {
+                                        String phoneNumber =
+                                            '${restaurantDetail.phoneNumbers.replaceAll(' ', '')}';
+                                        if (await canLaunch(
+                                            'tel:$phoneNumber')) {
+                                          await launch('tel:$phoneNumber');
+                                        } else {
+                                          CustomToast.showCustomBookmarkToast(
+                                              context,
+                                              'We cannot dial this number $phoneNumber');
+                                        }
+                                      },
+                                      buttonText: 'Call Now',
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ],

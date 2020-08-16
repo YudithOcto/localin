@@ -67,7 +67,8 @@ class _TransactionHotelListWidgetState
                             TransactionHotelDetailPage.routeName,
                             arguments: {
                               TransactionHotelDetailPage.bookingId:
-                                  provider.hotelList[index]?.bookingId
+                                  provider.hotelList[index]?.bookingId,
+                              TransactionHotelDetailPage.fromSuccessPage: false,
                             });
                       },
                       child: BookingDetailWidget(

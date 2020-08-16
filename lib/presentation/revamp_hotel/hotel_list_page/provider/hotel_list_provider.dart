@@ -67,7 +67,9 @@ class HotelListProvider with ChangeNotifier {
       _pageRequest = 1;
     }
     if (!_canLoadMore) return;
-    _streamController.add(searchState.loading);
+    if (_pageRequest == 1) {
+      _streamController.add(searchState.loading);
+    }
     final response = await _repository.getHotelList(
         '${_userCoordinates.latitude}',
         '${_userCoordinates.longitude}',
@@ -80,7 +82,11 @@ class HotelListProvider with ChangeNotifier {
     }
     if (response != null && response.error == null && response.total > 0) {
       _totalHotel = response.total;
-      _hotelList.addAll(response.hotelDetailEntity);
+      response.hotelDetailEntity.forEach((e) {
+        if (e.roomAvailability != null && e.roomAvailability.isNotEmpty) {
+          _hotelList.add(e);
+        }
+      });
       _trackOriginalListLength += response.hotelDetailEntity.length;
       _pageRequest += 1;
       _canLoadMore = _trackOriginalListLength < _totalHotel;

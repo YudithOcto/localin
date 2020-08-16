@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/transaction/hotel/provider/transaction_hotel_detail_provider.dart';
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_booking_detail.dart';
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_contact_detail.dart';
@@ -27,7 +28,15 @@ class _TransactionHotelDetailBuilderState
   bool _isInit = true;
 
   onBackPressed() {
-    if (Provider.of<TransactionHotelDetailProvider>(context).trackNeedRefresh) {
+    final routes =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    if (routes[TransactionHotelDetailPage.fromSuccessPage]) {
+      Navigator.of(context)
+          .pushReplacementNamed(MainBottomNavigation.routeName, arguments: {
+        MainBottomNavigation.overrideSelectedIndex: 0,
+      });
+    } else if (Provider.of<TransactionHotelDetailProvider>(context)
+        .trackNeedRefresh) {
       Navigator.of(context).pop(kRefresh);
     } else {
       Navigator.of(context).pop();
@@ -49,77 +58,83 @@ class _TransactionHotelDetailBuilderState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ThemeColors.black10,
-      appBar: CustomAppBar(
-        appBar: AppBar(),
-        pageTitle: 'Purchase Details',
-        leadingIcon: InkWell(
-          onTap: () => onBackPressed(),
-          child: Icon(
-            Icons.arrow_back,
-            color: ThemeColors.black80,
+    return WillPopScope(
+      onWillPop: () async {
+        onBackPressed();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: ThemeColors.black10,
+        appBar: CustomAppBar(
+          appBar: AppBar(),
+          pageTitle: 'Purchase Details',
+          leadingIcon: InkWell(
+            onTap: () => onBackPressed(),
+            child: Icon(
+              Icons.arrow_back,
+              color: ThemeColors.black80,
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: Consumer<TransactionHotelDetailProvider>(
-        builder: (_, provider, __) {
-          return TransactionHotelDetailBottomWidget();
-        },
-      ),
-      body: StreamBuilder<transactionDetailState>(
-          stream: Provider.of<TransactionHotelDetailProvider>(context,
-                  listen: false)
-              .stream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container(
-                alignment: FractionalOffset.center,
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.2),
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              if (snapshot.hasData &&
-                  snapshot.data == transactionDetailState.success) {
-                final _detail =
-                    Provider.of<TransactionHotelDetailProvider>(context)
-                        .bookingDetailModel;
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TopBarTransactionStatusWidget(
-                        backgroundColor: ThemeColors.orange,
-                        status: _detail.status,
-                        expiredAt: _detail.expiredAt,
-                      ),
-                      TransactionHotelBookingDetail(
-                        detail: _detail,
-                      ),
-                      TransactionHotelDetailRefundInformation(),
-                      TransactionHotelContactDetail(),
-                      RowLocationWidget(
-                        latitude: _detail?.hotelDetail?.latitude,
-                        longitude: _detail?.hotelDetail?.longitude,
-                        eventName: _detail.hotelDetail.name,
-                        eventAddress: _detail.hotelDetail.shortAddress,
-                      ),
-                      TransactionHotelPriceDetail(
-                        bookingDetail: _detail,
-                      ),
-                    ],
-                  ),
+        bottomNavigationBar: Consumer<TransactionHotelDetailProvider>(
+          builder: (_, provider, __) {
+            return TransactionHotelDetailBottomWidget();
+          },
+        ),
+        body: StreamBuilder<transactionDetailState>(
+            stream: Provider.of<TransactionHotelDetailProvider>(context,
+                    listen: false)
+                .stream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  alignment: FractionalOffset.center,
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.2),
+                  child: CircularProgressIndicator(),
                 );
               } else {
-                return EmptyCommunityWithCustomMessage(
-                  title: 'couldnt find your transaction',
-                  message:
-                      'we have trouble finding your transaction. Please try again',
-                );
+                if (snapshot.hasData &&
+                    snapshot.data == transactionDetailState.success) {
+                  final _detail =
+                      Provider.of<TransactionHotelDetailProvider>(context)
+                          .bookingDetailModel;
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TopBarTransactionStatusWidget(
+                          backgroundColor: ThemeColors.orange,
+                          status: _detail.status,
+                          expiredAt: _detail.expiredAt,
+                        ),
+                        TransactionHotelBookingDetail(
+                          detail: _detail,
+                        ),
+                        TransactionHotelDetailRefundInformation(),
+                        TransactionHotelContactDetail(),
+                        RowLocationWidget(
+                          latitude: _detail?.hotelDetail?.latitude,
+                          longitude: _detail?.hotelDetail?.longitude,
+                          eventName: _detail.hotelDetail.name,
+                          eventAddress: _detail.hotelDetail.shortAddress,
+                        ),
+                        TransactionHotelPriceDetail(
+                          bookingDetail: _detail,
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return EmptyCommunityWithCustomMessage(
+                    title: 'couldnt find your transaction',
+                    message:
+                        'we have trouble finding your transaction. Please try again',
+                  );
+                }
               }
-            }
-          }),
+            }),
+      ),
     );
   }
 }
