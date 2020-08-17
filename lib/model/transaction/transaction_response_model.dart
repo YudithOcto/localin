@@ -96,6 +96,9 @@ class ServiceDetail {
   String latitude;
   String longitude;
   String quantity;
+  DateTime checkIn;
+  DateTime checkOut;
+  int night;
 
   ServiceDetail({
     this.invoiceId,
@@ -111,26 +114,37 @@ class ServiceDetail {
     this.latitude,
     this.longitude,
     this.quantity,
+    this.checkIn,
+    this.checkOut,
+    this.night,
   });
 
   factory ServiceDetail.fromJson(Map<String, dynamic> body) {
     return ServiceDetail(
-        invoiceId: body['invoice_id'].toString(),
-        bookingCode: body['booking_kode'],
-        title: body['keterangan'],
-        duration: body['quantity'].toString(),
-        totalPayment: body['invoice_payment_total'],
-        communitySlug: body['community_slug'] ?? '',
-        startDate: body['start_date'] == null
-            ? DateTime.now()
-            : DateTime.parse(body['start_date']),
-        endDate: body['end_date'] == null
-            ? DateTime.now()
-            : DateTime.parse(body['end_date']),
-        address: body['address'] == null ? '' : body['address'],
-        city: body['kota'] == null ? '' : body['kota'],
-        quantity: body['quantity'] == null ? 0 : body['quantity'].toString(),
-        latitude: body['latitude'] == null ? '' : body['latitude'],
-        longitude: body['longitude'] == null ? '' : body['longitude']);
+      invoiceId: body['invoice_id'].toString(),
+      bookingCode: body['booking_kode'],
+      title: body['keterangan'],
+      duration: body['quantity'].toString(),
+      totalPayment: body['invoice_payment_total'],
+      communitySlug: body['community_slug'] ?? '',
+      startDate: body['start_date'] == null
+          ? DateTime.now()
+          : DateTime.parse(body['start_date']),
+      endDate: body['end_date'] == null
+          ? DateTime.now()
+          : DateTime.parse(body['end_date']),
+      address: body['address'] == null ? '' : body['address'],
+      city: body['kota'] == null ? '' : body['kota'],
+      quantity: body['quantity'] == null ? "0" : body['quantity'].toString(),
+      latitude: body['latitude'] == null ? '' : body['latitude'],
+      longitude: body['longitude'] == null ? '' : body['longitude'],
+      checkIn: body['checkin'] == null
+          ? DateTime.now()
+          : DateTime.parse(body['checkin']),
+      checkOut: body['checkout'] == null
+          ? DateTime.now()
+          : DateTime.parse(body['checkout']),
+      night: body['night'] == null ? 0 : body['night'],
+    );
   }
 }

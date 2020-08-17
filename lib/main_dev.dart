@@ -16,8 +16,8 @@ Future<void> main() async {
   // Pass all uncaught errors from the framework to Crashlytics.
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
-
-  runZoned(() {
-    runApp(MyApp());
-  }, onError: Crashlytics.instance.recordError);
+  runApp(MyApp());
+//  runZoned(() {
+//    runApp(MyApp());
+//  }, onError: Crashlytics.instance.recordError);
 }

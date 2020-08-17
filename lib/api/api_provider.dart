@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:localin/api/api_constant.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/main.dart';
+import 'package:localin/model/amp_response_model.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
@@ -50,6 +49,7 @@ import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/date_helper.dart';
+import 'package:localin/utils/location_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String REQUIRED_TOKEN = 'required_token';
@@ -1121,7 +1121,7 @@ class ApiProvider {
       map['longitude'] = longitude;
       map['page'] = page;
       map['limit'] = limit;
-      if (search.isNotNullNorEmpty) {
+      if (search.isNotNullNorEmpty && search != kNearby) {
         map['keyword'] = search;
       }
       if (request.checkIn != null) {
@@ -1134,7 +1134,10 @@ class ApiProvider {
         map['room'] = request.totalRooms;
       }
       if (request.facilities != null && request.facilities.isNotEmpty) {
-        map['fasilitas[]'] = request.facilities.map((e) => e).toList();
+        map['fasilitas[]'] = request.facilities
+            .where((element) => element != 'All')
+            .map((e) => e)
+            .toList();
       }
       if (request.sort.isNotNullNorEmpty) {
         map['order'] = request.sort;
@@ -1478,11 +1481,7 @@ class ApiProvider {
       int page, int limit, String transactionType) async {
     try {
       final response = await _dio.get(ApiConstant.kTransaction,
-          queryParameters: {
-            'limit': limit,
-            'page': page,
-            'type': transactionType
-          },
+          queryParameters: {'limit': limit, 'type': transactionType},
           options: Options(headers: {REQUIRED_TOKEN: true}));
       return TransactionResponseModel.getListJson(response.data);
     } catch (error) {
@@ -1575,7 +1574,7 @@ class ApiProvider {
       if (date != null &&
           date.isNotEmpty &&
           date.substring(date.length - 1, date.length) != "0") {
-        map['date'] = date;
+        map['date'] = '${DateTime.now().year}-$date';
       }
       map['mode'] = mode;
       final response = await _dio.get(ApiConstant.kExploreEvent,
@@ -1732,6 +1731,23 @@ class ApiProvider {
         return _handleError(error);
       } else {
         return error.toString();
+      }
+    }
+  }
+
+  Future<AmpResponseModel> getAmpUrl(String url) async {
+    try {
+      List<String> urls = [url];
+      final response =
+          await _dio.post('${ApiConstant.kGoogleAmp}$kGoogleApiKey', data: {
+        'urls': urls.map((e) => e).toList(),
+      });
+      return AmpResponseModel.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return AmpResponseModel.withError(_handleError(error));
+      } else {
+        return AmpResponseModel.withError(error.toString());
       }
     }
   }

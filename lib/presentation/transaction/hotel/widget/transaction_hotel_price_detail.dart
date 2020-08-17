@@ -33,10 +33,11 @@ class TransactionHotelPriceDetail extends StatelessWidget {
                   '(1x) ${bookingDetail?.name}, ${bookingDetail?.roomName}',
                   '${getFormattedCurrency(bookingDetail?.userPrice)}'),
               _divider(),
-              _singleRowPriceWidget('Admin Fee', 'Free'),
+              _singleRowPriceWidget('Admin Fee',
+                  '${bookingDetail.adminFee > 0 ? getFormattedCurrency(bookingDetail.adminFee) : 'Free'}'),
               _divider(),
-              _singleRowPriceWidget(
-                  'Total', '${getFormattedCurrency(bookingDetail?.userPrice)}')
+              _singleRowPriceWidget('Total',
+                  '${getFormattedCurrency(bookingDetail.userPrice + bookingDetail?.adminFee)}')
             ],
           ),
         ),

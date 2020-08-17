@@ -30,7 +30,7 @@ class HotelLastSearchDao {
 
   Future<bool> _shouldInsertData(HotelSuggestLocalModel model) async {
     try {
-      final finder = Finder(filter: Filter.equals('hotel_id', model.hotelId));
+      final finder = Finder(filter: Filter.equals('title', model.title));
       final result = await _hotelLastSearchStore
           .update(await _db, model.toJson(), finder: finder);
       return result < 1;
@@ -67,7 +67,7 @@ class HotelLastSearchDao {
       final finder = Finder(
         limit: 3,
         sortOrders: [
-          SortOrder(Field.key, false),
+          SortOrder(Field.key, true),
         ],
       );
       final recordSnapshots =

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
+import 'package:localin/model/amp_response_model.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
@@ -442,5 +443,9 @@ class Repository {
 
   Future<String> bookmarkRestaurant(int restaurantId, {bool isDelete = false}) {
     return apiProvider.bookmarkRestaurant(restaurantId, isDelete: isDelete);
+  }
+
+  Future<AmpResponseModel> getCheckedAmp(String url) {
+    return apiProvider.getAmpUrl(url);
   }
 }

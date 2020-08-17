@@ -87,4 +87,8 @@ class ApiConstant {
   /// RESTAURANT
   static const String kSearchRestaurant = 'v1/restoran';
   static const String kBookmarkedRestaurant = 'v1/restoran/bookmark';
+
+  /// REQUEST AMP
+  static const String kGoogleAmp =
+      'https://acceleratedmobilepageurl.googleapis.com/v1/ampUrls:batchGet?key=';
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/home/home_page.dart';
 import 'package:localin/presentation/inbox/notification_list_page.dart';
 import 'package:localin/presentation/news/pages/news_main_page.dart';

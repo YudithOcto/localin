@@ -32,17 +32,18 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
                   title:
                       '(1x) ${detail.hotelName}, ${roomAvailability.categoryName}',
                   value:
-                      '${getFormattedCurrency(roomAvailability.sellingAmount)}',
+                      '${getFormattedCurrency(roomAvailability.pricePerNight.oneNight)}',
                 ),
               )),
           SinglePriceDetailRow(
             title: 'Admin Fee',
-            value: 'Free',
+            value:
+                '${roomAvailability.adminFee.isNotNullNorEmpty ? getFormattedCurrency(roomAvailability.adminFee) : 'Free'}',
           ),
           SinglePriceDetailRow(
             title: 'Total',
             value:
-                '${getFormattedCurrency(roomAvailability.sellingAmount * request.totalRooms)}',
+                '${getFormattedCurrency((roomAvailability.pricePerNight.oneNight * request.totalRooms) + roomAvailability.adminFee)}',
           ),
         ],
       ),
@@ -82,5 +83,11 @@ class SinglePriceDetailRow extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+extension on int {
+  bool get isNotNullNorEmpty {
+    return this != null && this > 0;
   }
 }

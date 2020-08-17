@@ -95,7 +95,8 @@ class QuickSearchRowWidget extends StatelessWidget {
                   children: <Widget>[
                     SvgPicture.asset('images/search_grey.svg'),
                     SizedBox(width: 13.75),
-                    Text('Nearby',
+                    Text(
+                        '${provider.revampHotelListRequest.search ?? 'Nearby'}',
                         style: ThemeText.sfRegularBody
                             .copyWith(color: ThemeColors.black100)),
                   ],

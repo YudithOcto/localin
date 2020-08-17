@@ -44,9 +44,11 @@ class TransactionListPageWrapperWidget extends StatelessWidget {
                     .selectedHeader = value;
               },
               children: <Widget>[
-                ChangeNotifierProvider<TransactionHotelListProvider>(
-                  create: (_) => TransactionHotelListProvider(),
-                  child: TransactionHotelListWidget(),
+                ChangeNotifierProvider<TransactionListProvider>(
+                  create: (_) => TransactionListProvider(),
+                  child: TransactionListWidget(
+                    type: 'stay',
+                  ),
                 ),
                 ChangeNotifierProvider<TransactionListProvider>(
                   create: (_) => TransactionListProvider(),

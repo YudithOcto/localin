@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/presentation/transaction/community/provider/transaction_list_provider.dart';
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
 import 'package:localin/presentation/transaction/community/widget/transaction_empty_community_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/widgets/transaction_empty_explore_page.dart';
+import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +95,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
     );
   }
 
-  navigateToDetailPage(final item) async {
+  navigateToDetailPage(TransactionDetailModel item) async {
     if (item.transactionType == 'komunitas') {
       final result = await Navigator.of(context)
           .pushNamed(TransactionCommunityDetailPage.routeName, arguments: {
@@ -105,7 +107,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
       if (result != null && result == kRefresh) {
         loadData(isRefresh: true);
       }
-    } else {
+    } else if (item.transactionType == 'loket') {
       final result = await Navigator.of(context).pushNamed(
         TransactionExploreDetailPage.routeName,
         arguments: {
@@ -115,6 +117,12 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
       if (result != null && result == kRefresh) {
         loadData(isRefresh: true);
       }
+    } else {
+      Navigator.of(context)
+          .pushNamed(TransactionHotelDetailPage.routeName, arguments: {
+        TransactionHotelDetailPage.bookingId: item.transactionId,
+        TransactionHotelDetailPage.fromSuccessPage: false,
+      });
     }
   }
 }

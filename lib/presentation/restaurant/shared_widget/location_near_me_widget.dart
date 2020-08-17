@@ -5,6 +5,9 @@ import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 
 class LocationNearMeWidget extends StatelessWidget {
+  final String title;
+  LocationNearMeWidget({this.title = 'Restaurant Near Me'});
+
   @override
   Widget build(BuildContext context) {
     return InkResponse(
@@ -20,7 +23,7 @@ class LocationNearMeWidget extends StatelessWidget {
             SvgPicture.asset('images/location_icon_grey.svg'),
             SizedBox(width: 12.0),
             Text(
-              'Restaurant Near Me',
+              '$title',
               style: ThemeText.rodinaHeadline
                   .copyWith(color: ThemeColors.primaryBlue),
             )

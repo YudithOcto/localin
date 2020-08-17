@@ -51,7 +51,7 @@ class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0, right: 8),
                   child: Text(
-                    '${getFormattedCurrency(detail.sellingAmount)}',
+                    '${getFormattedCurrency(detail.pricePerNight.oneNight)}',
                     style: ThemeText.rodinaTitle3
                         .copyWith(color: ThemeColors.orange),
                   ),

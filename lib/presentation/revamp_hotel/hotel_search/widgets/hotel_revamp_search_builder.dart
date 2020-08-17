@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/hotel/hotel_search_suggest_model.dart';
 import 'package:localin/model/hotel/hotel_suggest_base.dart';
 import 'package:localin/model/hotel/hotel_suggest_local_model.dart';
+import 'package:localin/model/hotel/hotel_suggest_nearby.dart';
 import 'package:localin/model/hotel/hotel_suggest_title.dart';
+import 'package:localin/presentation/restaurant/shared_widget/location_near_me_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_search/hotel_revamp_search_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_search/provider/hotel_search_provider.dart';
@@ -181,6 +183,10 @@ class _HotelRevampSearchBuilderState extends State<HotelRevampSearchBuilder> {
         title: base.title,
         subtitle: base.subtitle,
         category: base.category,
+      );
+    } else if (base is HotelSuggestNearby) {
+      return LocationNearMeWidget(
+        title: 'Hotel Near Me',
       );
     }
   }

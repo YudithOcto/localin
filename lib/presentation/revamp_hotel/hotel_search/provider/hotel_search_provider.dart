@@ -8,6 +8,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_search_suggest_model.dart';
 import 'package:localin/model/hotel/hotel_suggest_base.dart';
 import 'package:localin/model/hotel/hotel_suggest_local_model.dart';
+import 'package:localin/model/hotel/hotel_suggest_nearby.dart';
 import 'package:localin/model/hotel/hotel_suggest_title.dart';
 import 'package:localin/presentation/search/provider/generic_provider.dart';
 
@@ -52,6 +53,7 @@ class HotelSearchProvider with ChangeNotifier {
   }
 
   addDefaultResult(HotelSearchSuggestModel model) async {
+    _hotelList.add(HotelSuggestNearby(title: 'Hotel Near me'));
     List<HotelSuggestLocalModel> data = await getLastSearchFromLocal();
     if (data != null && data.isNotEmpty) {
       _hotelList.add(HotelSuggestTitle(title: 'Your Last Search'));

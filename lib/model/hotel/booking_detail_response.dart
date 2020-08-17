@@ -42,6 +42,7 @@ class BookingDetailModel {
   HotelDetailModel hotelDetail;
   String requestCheckInDate;
   String requestCheckOutDate;
+  int adminFee;
 
   BookingDetailModel({
     this.hotelId,
@@ -66,6 +67,7 @@ class BookingDetailModel {
     this.guestCount,
     this.requestCheckInDate,
     this.requestCheckOutDate,
+    this.adminFee,
   });
 
   factory BookingDetailModel.fromJson(Map<String, dynamic> body) {
@@ -94,6 +96,7 @@ class BookingDetailModel {
       expiredAt: body['expired_at'],
       requestCheckInDate: body['request_checkin'],
       requestCheckOutDate: body['request_checkout'],
+      adminFee: body['admin_fee'] ?? 0,
     );
   }
 }

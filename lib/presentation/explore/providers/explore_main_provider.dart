@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
+import 'package:localin/model/explore/explore_filter_model_request.dart';
+import 'package:localin/presentation/explore/utils/filter.dart';
 
 class ExploreMainProvider with ChangeNotifier {
   final _repository = Repository();
@@ -21,12 +23,14 @@ class ExploreMainProvider with ChangeNotifier {
 
   bool isMount = true;
 
-  Future<Null> getEventList(
-      {bool isRefresh = true,
-      String search,
-      List<String> categoryId,
-      String sort,
-      String date}) async {
+  ExploreFilterModelRequest _filterRequest = ExploreFilterModelRequest();
+  ExploreFilterModelRequest get filterRequest => _filterRequest;
+  set changeFilterRequest(ExploreFilterModelRequest request) {
+    _filterRequest = request;
+    getEventList(isRefresh: true);
+  }
+
+  Future<Null> getEventList({bool isRefresh = true, String search}) async {
     if (isRefresh) {
       _eventList.clear();
       _canLoadMore = true;
@@ -36,9 +40,14 @@ class ExploreMainProvider with ChangeNotifier {
     final result = await _repository.getEventList(
         pageRequest: _pageOffset,
         search: search,
-        categoryId: categoryId,
-        sort: sort,
-        date: date,
+        categoryId: _filterRequest.category != null &&
+                _filterRequest.category.isNotEmpty
+            ? _filterRequest.category.map((e) => e.categoryId).toList()
+            : null,
+        sort:
+            _filterRequest.sort != null ? sortList[_filterRequest.sort] : null,
+        date:
+            _filterRequest.month != null ? '${_filterRequest.month + 1}' : null,
         mode: 'default');
     if (result != null && result.total > 0) {
       _eventList.addAll(result.detail);

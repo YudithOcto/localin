@@ -50,7 +50,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  'BOOKING ID: ${widget.detail.transactionId}',
+                  'BOOKING ID: ${widget.detail.bookingID}',
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black80),
                 ),
@@ -162,9 +162,13 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
   String get contentMessage {
     if (widget.detail.modul == 'komunitas') {
       return 'Komunitas Pro (Bulanan)';
-    } else {
+    } else if (widget.detail.modul == 'loket') {
       return '${formatTime(widget?.detail?.serviceDetail?.startDate)} - '
           '${formatTime(widget?.detail?.serviceDetail?.endDate)} \u2022 ${widget?.detail?.serviceDetail?.quantity} visitor(s)';
+    } else if (widget.detail.modul == 'stay') {
+      return '${formatTime(widget.detail.serviceDetail.checkIn)} • ${widget.detail.serviceDetail.night} night(s)';
+    } else {
+      return '';
     }
   }
 
@@ -203,5 +207,15 @@ extension on int {
   String get transformTicketPrice {
     if (this == null || this == 0) return 'Free';
     return getFormattedCurrency(this);
+  }
+}
+
+extension on TransactionDetailModel {
+  String get bookingID {
+    if (this.modul == 'komunitas' || this.modul == 'loket') {
+      return this.transactionId;
+    } else {
+      return this.serviceDetail.bookingCode;
+    }
   }
 }

@@ -70,7 +70,7 @@ class HotelDetailBottomWidget extends StatelessWidget {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text:
-                                        '${getFormattedCurrency(roomProvider.selectedRoom?.sellingAmount)}',
+                                        '${getFormattedCurrency(roomProvider.selectedRoom?.pricePerNight.oneNight)}',
                                     style: ThemeText.rodinaTitle2
                                         .copyWith(color: ThemeColors.orange)),
                                 TextSpan(

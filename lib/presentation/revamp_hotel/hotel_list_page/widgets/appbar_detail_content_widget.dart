@@ -13,7 +13,7 @@ class AppBarDetailContentWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Hotel Nearby',
+          '${provider.revampHotelListRequest.search ?? 'Hotel Nearby'}',
           style: ThemeText.sfMediumHeadline,
         ),
         Row(

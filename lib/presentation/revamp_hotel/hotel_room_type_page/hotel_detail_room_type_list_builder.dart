@@ -36,8 +36,9 @@ class HotelDetailRoomTypeListBuilder extends StatelessWidget {
                             '${provider.totalRoomSelected} room(s) for ${provider.totalGuestSelected} guest(s)',
                       );
                     }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    return ListView(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
                       children: List.generate(
                           Provider.of<HotelListSearchProvider>(context)
                               .roomAvailability

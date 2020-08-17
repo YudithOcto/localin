@@ -17,7 +17,7 @@ class ExploreFilterPage extends StatelessWidget {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return ChangeNotifierProvider<ExploreFilterProvider>(
-      create: (_) => ExploreFilterProvider(routeArgs[previousFilterModel]),
+      create: (_) => ExploreFilterProvider(),
       child: ExploreFilterWrapper(),
     );
   }

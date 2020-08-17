@@ -16,8 +16,11 @@ import 'package:localin/presentation/revamp_hotel/shared_widgets/hotel_single_ro
 import 'package:localin/presentation/search/provider/generic_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import 'hotel_bottom_sheet_builder.dart';
 
 class HotelListBuilder extends StatefulWidget {
   @override
@@ -55,6 +58,22 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
     if (result != null) {
       Provider.of<HotelListProvider>(context).changeBookmark(index);
     }
+  }
+
+  Future showBottomSheet(BuildContext context, RevampHotelListRequest request) {
+    return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12.0),
+        topRight: Radius.circular(12.0),
+      )),
+      builder: (BuildContext ctx) {
+        return HotelBottomSheetBuilder(
+          previousRequest: request,
+        );
+      },
+    );
   }
 
   @override
@@ -95,7 +114,27 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                                 snapshot.data
                             ? InkResponse(
                                 highlightColor: ThemeColors.primaryBlue,
-                                onTap: () async {},
+                                onTap: () async {
+                                  Map result = await showBottomSheet(
+                                      context,
+                                      Provider.of<HotelListProvider>(context)
+                                          .revampHotelListRequest);
+                                  Future.delayed(Duration.zero, () {
+                                    if (result != null) {
+                                      if (result.containsKey(kRefresh)) {
+                                        Provider.of<HotelListProvider>(context)
+                                                .revampHotelDataRequest =
+                                            result[kRefresh];
+                                        Provider.of<HotelListProvider>(context)
+                                            .getRestaurantList(isRefresh: true);
+                                      } else {
+                                        Provider.of<HotelListProvider>(context)
+                                                .revampHotelDataRequest =
+                                            result['not_refresh'];
+                                      }
+                                    }
+                                  });
+                                },
                                 child:
                                     SvgPicture.asset('images/search_grey.svg'))
                             : InkResponse(
