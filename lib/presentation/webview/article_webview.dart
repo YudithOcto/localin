@@ -1,18 +1,11 @@
 import 'dart:async';
 
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/api/repository.dart';
-import 'package:localin/components/custom_toast.dart';
-import 'package:localin/model/amp_response_model.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/widgets/news_detail/appbar_bookmark_share_action_widget.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWebView extends StatefulWidget {
@@ -47,7 +40,10 @@ class _ArticleWebViewState extends State<ArticleWebView> {
       } else if (result.ampUrls.first.originalUrl.isNotEmpty) {
         return result.ampUrls.first.originalUrl;
       } else {
-        return '';
+        final routeArgs =
+            ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+        String url = routeArgs[ArticleWebView.url];
+        return url;
       }
     } else {
       return '';

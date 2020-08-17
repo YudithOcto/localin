@@ -7,6 +7,7 @@ import 'package:localin/presentation/transaction/community/widget/transaction_em
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/widgets/transaction_empty_explore_page.dart';
 import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
+import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_empty_widget.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -67,8 +68,10 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                   if (snapshot.data == transactionState.empty) {
                     if (widget.type == 'explore') {
                       return TransactionEmptyExplorePage();
-                    } else {
+                    } else if (widget.type == 'community') {
                       return TransactionEmptyCommunityPage();
+                    } else {
+                      return TransactionHotelEmptyWidget();
                     }
                   } else if (index < provider.listCommunityTransaction.length) {
                     return InkWell(
@@ -118,11 +121,14 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
         loadData(isRefresh: true);
       }
     } else {
-      Navigator.of(context)
+      final result = await Navigator.of(context)
           .pushNamed(TransactionHotelDetailPage.routeName, arguments: {
         TransactionHotelDetailPage.bookingId: item.transactionId,
         TransactionHotelDetailPage.fromSuccessPage: false,
       });
+      if (result != null && result == kRefresh) {
+        loadData(isRefresh: true);
+      }
     }
   }
 }

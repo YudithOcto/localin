@@ -70,10 +70,12 @@ class RoomGuestProvider with ChangeNotifier {
   set changeChildValue(bool isAdding) {
     if (isAdding) {
       int _tempCheck = _childSelected + 1;
-      if (_tempCheck < _adultSelected) {
-        _childSelected += 1;
+      if (_tempCheck > _adultSelected) {
         CustomToast.showCustomBookmarkToast(navigator.currentContext,
             'Number of child Can\'t Be More Than Adults');
+        return;
+      } else {
+        _childSelected += 1;
       }
     } else {
       if (_childSelected <= 0) {

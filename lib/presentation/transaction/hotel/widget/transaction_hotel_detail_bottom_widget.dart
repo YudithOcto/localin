@@ -19,44 +19,74 @@ class TransactionHotelDetailBottomWidget extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container();
-          }
-          return provider.bookingDetailModel.status.contains('Confirm Booking')
-              ? Container(
-                  padding: const EdgeInsets.all(20.0),
-                  child: FilledButtonDefault(
-                    buttonText: 'Cancel this Booking',
-                    textTheme: ThemeText.rodinaTitle3
-                        .copyWith(color: ThemeColors.black0),
-                    onPressed: () {
-                      _cancelPayment(context, 'Request Refund',
-                          'Are you sure want to cancel your booking? Refunds will be transferred automatically to your Dana account.');
-                    },
+          } else {
+            if (provider.bookingDetailModel.status.contains('Finished')) {
+              return Container(
+                padding: const EdgeInsets.all(20.0),
+                child: FilledButtonDefault(
+                  buttonText: 'Cancel this Booking',
+                  textTheme: ThemeText.rodinaTitle3
+                      .copyWith(color: ThemeColors.black0),
+                  onPressed: () {
+                    _cancelPayment(context, 'Request Refund',
+                        'Are you sure want to cancel your booking? Refunds will be transferred automatically to your Dana account.');
+                  },
+                ),
+              );
+            } else if (provider.bookingDetailModel.status
+                .contains('Canceled')) {
+              return Container(
+                height: 0.0,
+              );
+            } else {
+              return Row(
+                children: <Widget>[
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        if (DateTime.now().isAfter(DateTime.parse(
+                            provider.bookingDetailModel.expiredAt))) {
+                          _cancelPayment(context, 'Cancel Payment',
+                              'Are you sure want to cancel your booking?');
+                        } else {
+                          _cancelPayment(context, 'Request Refund',
+                              'Are you sure want to cancel your booking? Refunds will be transferred automatically to your Dana account.');
+                        }
+                      },
+                      child: Container(
+                        height: 48.0,
+                        alignment: FractionalOffset.center,
+                        decoration: BoxDecoration(
+                          color: ThemeColors.black60,
+                          borderRadius:
+                              BorderRadius.only(topLeft: Radius.circular(4.0)),
+                        ),
+                        child: Text(
+                          'Cancel',
+                          textAlign: TextAlign.center,
+                          style: ThemeText.rodinaTitle3
+                              .copyWith(color: ThemeColors.black0),
+                        ),
+                      ),
+                    ),
                   ),
-                )
-              : Row(
-                  children: <Widget>[
-                    Expanded(
+                  Expanded(
+                    child: Visibility(
+                      visible: provider?.bookingDetailModel?.status
+                              ?.contains('Waiting') ??
+                          false,
                       child: InkWell(
-                        onTap: () {
-                          if (DateTime.now().isAfter(DateTime.parse(
-                              provider.bookingDetailModel.expiredAt))) {
-                            _cancelPayment(context, 'Cancel Payment',
-                                'Are you sure want to cancel your booking?');
-                          } else {
-                            _cancelPayment(context, 'Request Refund',
-                                'Are you sure want to cancel your booking? Refunds will be transferred automatically to your Dana account.');
-                          }
-                        },
+                        onTap: () => _payNowDialog(context),
                         child: Container(
                           height: 48.0,
                           alignment: FractionalOffset.center,
                           decoration: BoxDecoration(
-                            color: ThemeColors.black60,
+                            color: ThemeColors.primaryBlue,
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(4.0)),
+                                topRight: Radius.circular(4.0)),
                           ),
                           child: Text(
-                            'Cancel',
+                            'Pay Now',
                             textAlign: TextAlign.center,
                             style: ThemeText.rodinaTitle3
                                 .copyWith(color: ThemeColors.black0),
@@ -64,33 +94,11 @@ class TransactionHotelDetailBottomWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Visibility(
-                        visible: provider?.bookingDetailModel?.status
-                                ?.contains('Waiting') ??
-                            false,
-                        child: InkWell(
-                          onTap: () => _payNowDialog(context),
-                          child: Container(
-                            height: 48.0,
-                            alignment: FractionalOffset.center,
-                            decoration: BoxDecoration(
-                              color: ThemeColors.primaryBlue,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(4.0)),
-                            ),
-                            child: Text(
-                              'Pay Now',
-                              textAlign: TextAlign.center,
-                              style: ThemeText.rodinaTitle3
-                                  .copyWith(color: ThemeColors.black0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
+                  ),
+                ],
+              );
+            }
+          }
         });
   }
 

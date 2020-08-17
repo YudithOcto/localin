@@ -33,7 +33,8 @@ class _TransactionHotelDetailBuilderState
     if (routes[TransactionHotelDetailPage.fromSuccessPage]) {
       Navigator.of(context)
           .pushReplacementNamed(MainBottomNavigation.routeName, arguments: {
-        MainBottomNavigation.overrideSelectedIndex: 0,
+        MainBottomNavigation.overrideSelectedMenu: 2,
+        MainBottomNavigation.overrideSelectedTransactionIndex: 0,
       });
     } else if (Provider.of<TransactionHotelDetailProvider>(context)
         .trackNeedRefresh) {
@@ -116,8 +117,8 @@ class _TransactionHotelDetailBuilderState
                         RowLocationWidget(
                           latitude: _detail?.hotelDetail?.latitude,
                           longitude: _detail?.hotelDetail?.longitude,
-                          eventName: _detail.hotelDetail.name,
-                          eventAddress: _detail.hotelDetail.shortAddress,
+                          eventName: _detail?.hotelDetail?.name,
+                          eventAddress: _detail?.hotelDetail?.shortAddress,
                         ),
                         TransactionHotelPriceDetail(
                           bookingDetail: _detail,

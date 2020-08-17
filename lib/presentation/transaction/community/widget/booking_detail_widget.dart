@@ -105,32 +105,29 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
                         ? StreamBuilder<String>(
                             stream: _countdown.differenceStream,
                             builder: (context, snapshot) {
-                              return Visibility(
-                                visible: snapshot.hasData,
-                                child: Row(
-                                  children: <Widget>[
-                                    SvgPicture.asset(
-                                      'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
-                                      width: 20.0,
-                                      height: 20.0,
+                              return Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
+                                    width: 20.0,
+                                    height: 20.0,
+                                  ),
+                                  SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
+                                      style: ThemeText.sfMediumFootnote
+                                          .copyWith(
+                                              color: snapshot.data == null
+                                                  ? kTransactionCancelled
+                                                      .rowColor
+                                                  : widget
+                                                      .detail.status.rowColor),
                                     ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
-                                        style: ThemeText.sfMediumFootnote
-                                            .copyWith(
-                                                color: snapshot.data == null
-                                                    ? kTransactionCancelled
-                                                        .rowColor
-                                                    : widget.detail.status
-                                                        .rowColor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               );
                             },
                           )

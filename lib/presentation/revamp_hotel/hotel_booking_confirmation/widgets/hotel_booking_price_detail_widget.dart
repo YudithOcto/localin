@@ -16,6 +16,7 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int duration = request.checkout.difference(request.checkIn).inDays;
     return Container(
       color: ThemeColors.black0,
       width: double.maxFinite,
@@ -32,7 +33,7 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
                   title:
                       '(1x) ${detail.hotelName}, ${roomAvailability.categoryName}',
                   value:
-                      '${getFormattedCurrency(roomAvailability.pricePerNight.oneNight)}',
+                      '${getFormattedCurrency(roomAvailability.pricePerNight.oneNight * duration)}',
                 ),
               )),
           SinglePriceDetailRow(
@@ -43,7 +44,7 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
           SinglePriceDetailRow(
             title: 'Total',
             value:
-                '${getFormattedCurrency((roomAvailability.pricePerNight.oneNight * request.totalRooms) + roomAvailability.adminFee)}',
+                '${getFormattedCurrency((roomAvailability.pricePerNight.oneNight * request.totalRooms) * duration + roomAvailability.adminFee)}',
           ),
         ],
       ),

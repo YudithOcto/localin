@@ -6,7 +6,9 @@ import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_availability.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/hotel_booking_provider.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_successfull/hotel_successful_page.dart';
+import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -60,8 +62,12 @@ class HotelBookingBottomWidgetPayment extends StatelessWidget {
                   });
             } else {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                  MainBottomNavigation.routeName, (route) => false,
-                  arguments: {MainBottomNavigation.overrideSelectedIndex: 0});
+                  TransactionHotelDetailPage.routeName, (route) => false,
+                  arguments: {
+                    TransactionHotelDetailPage.bookingId:
+                        result?.detail?.bookingId,
+                    TransactionHotelDetailPage.fromSuccessPage: true,
+                  });
             }
           }
         }

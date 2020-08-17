@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/outline_button_default.dart';
-import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

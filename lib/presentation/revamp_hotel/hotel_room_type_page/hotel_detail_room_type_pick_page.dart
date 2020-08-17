@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_toast.dart';
-import 'package:localin/model/hotel/hotel_list_base_response.dart';
-import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_search_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

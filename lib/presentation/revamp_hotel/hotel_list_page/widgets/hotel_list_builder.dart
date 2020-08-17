@@ -179,7 +179,33 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                               if (index == 0) {
                                 return QuickSearchRowWidget();
                               } else if (snapshot.data == searchState.empty) {
-                                return HotelEmptyWidget();
+                                return HotelEmptyWidget(
+                                  onTap: () async {
+                                    Map result = await showBottomSheet(
+                                        context,
+                                        Provider.of<HotelListProvider>(context)
+                                            .revampHotelListRequest);
+                                    Future.delayed(Duration.zero, () {
+                                      if (result != null) {
+                                        if (result.containsKey(kRefresh)) {
+                                          Provider.of<HotelListProvider>(
+                                                      context)
+                                                  .revampHotelDataRequest =
+                                              result[kRefresh];
+                                          Provider.of<HotelListProvider>(
+                                                  context)
+                                              .getRestaurantList(
+                                                  isRefresh: true);
+                                        } else {
+                                          Provider.of<HotelListProvider>(
+                                                      context)
+                                                  .revampHotelDataRequest =
+                                              result['not_refresh'];
+                                        }
+                                      }
+                                    });
+                                  },
+                                );
                               } else if (index < provider.hotelList.length) {
                                 return Visibility(
                                   visible: provider.isVisible(provider

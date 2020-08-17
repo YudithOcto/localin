@@ -15,7 +15,6 @@ class HotelDetailRoomTypeListBuilder extends StatelessWidget {
         HotelDetailRoomTypeHeader(),
         Expanded(
           child: Container(
-            alignment: FractionalOffset.center,
             child: StreamBuilder<RoomState>(
                 stream:
                     Provider.of<HotelListSearchProvider>(context, listen: false)
