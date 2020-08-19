@@ -60,7 +60,8 @@ class _TransactionExploreContentWidgetState
       Navigator.of(context).pushNamedAndRemoveUntil(
           MainBottomNavigation.routeName, (route) => false,
           arguments: {
-            MainBottomNavigation.overrideSelectedIndex: 2,
+            MainBottomNavigation.overrideSelectedMenu: 2,
+            MainBottomNavigation.overrideSelectedTransactionIndex: 2,
           });
     } else if (provider.isNavigateBackNeedRefresh) {
       Navigator.of(context).pop(kRefresh);

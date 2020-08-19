@@ -13,8 +13,8 @@ class TransactionListProvider with ChangeNotifier {
   int _page = 1;
   int get page => _page;
 
-  List<TransactionCommunityDetail> _listCommunityTransaction = List();
-  List<TransactionCommunityDetail> get listCommunityTransaction =>
+  List<TransactionDetailModel> _listCommunityTransaction = List();
+  List<TransactionDetailModel> get listCommunityTransaction =>
       _listCommunityTransaction;
 
   bool _isMounted = true;

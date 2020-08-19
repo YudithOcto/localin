@@ -33,7 +33,7 @@ class TransactionDetailProvider with ChangeNotifier {
       tempData.status = status;
       transactionDetail = tempData;
     } else if (type == kTransactionTypeCommunity) {
-      final tempData = transactionDetail as TransactionCommunityDetail;
+      final tempData = transactionDetail as TransactionDetailModel;
       tempData.status = status;
     }
     navigateRefresh = true;

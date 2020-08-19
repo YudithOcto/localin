@@ -26,7 +26,7 @@ String getSorting(String value) {
   } else if (value == 'Furthest Date') {
     return 'date-desc';
   } else if (value == 'Lowest Price') {
-    return 'price_asc';
+    return 'price-asc';
   } else if (value == 'Expensive Price') {
     return 'price-desc';
   } else {

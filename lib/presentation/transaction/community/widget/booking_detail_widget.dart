@@ -10,7 +10,7 @@ import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class BookingDetailWidget extends StatefulWidget {
-  final TransactionCommunityDetail detail;
+  final TransactionDetailModel detail;
   final bool showPaymentRow;
   BookingDetailWidget({@required this.detail, this.showPaymentRow = false});
   @override
@@ -50,7 +50,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  'BOOKING ID: ${widget.detail.transactionId}',
+                  'BOOKING ID: ${widget.detail.bookingID}',
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black80),
                 ),
@@ -105,32 +105,29 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
                         ? StreamBuilder<String>(
                             stream: _countdown.differenceStream,
                             builder: (context, snapshot) {
-                              return Visibility(
-                                visible: snapshot.hasData,
-                                child: Row(
-                                  children: <Widget>[
-                                    SvgPicture.asset(
-                                      'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
-                                      width: 20.0,
-                                      height: 20.0,
+                              return Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    'images/${snapshot.data == null ? kTransactionCancelled.svgIcon : widget.detail.status.svgIcon}.svg',
+                                    width: 20.0,
+                                    height: 20.0,
+                                  ),
+                                  SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
+                                      style: ThemeText.sfMediumFootnote
+                                          .copyWith(
+                                              color: snapshot.data == null
+                                                  ? kTransactionCancelled
+                                                      .rowColor
+                                                  : widget
+                                                      .detail.status.rowColor),
                                     ),
-                                    SizedBox(
-                                      width: 5.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        '${snapshot.data == null ? kTransactionCancelled : '${widget.detail.status} \u2022'} ${snapshot.data ?? ''}',
-                                        style: ThemeText.sfMediumFootnote
-                                            .copyWith(
-                                                color: snapshot.data == null
-                                                    ? kTransactionCancelled
-                                                        .rowColor
-                                                    : widget.detail.status
-                                                        .rowColor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               );
                             },
                           )
@@ -162,9 +159,13 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
   String get contentMessage {
     if (widget.detail.modul == 'komunitas') {
       return 'Komunitas Pro (Bulanan)';
-    } else {
+    } else if (widget.detail.modul == 'loket') {
       return '${formatTime(widget?.detail?.serviceDetail?.startDate)} - '
           '${formatTime(widget?.detail?.serviceDetail?.endDate)} \u2022 ${widget?.detail?.serviceDetail?.quantity} visitor(s)';
+    } else if (widget.detail.modul == 'stay') {
+      return '${formatTime(widget.detail.serviceDetail.checkIn)} • ${widget.detail.serviceDetail.night} night(s)';
+    } else {
+      return '';
     }
   }
 
@@ -203,5 +204,15 @@ extension on int {
   String get transformTicketPrice {
     if (this == null || this == 0) return 'Free';
     return getFormattedCurrency(this);
+  }
+}
+
+extension on TransactionDetailModel {
+  String get bookingID {
+    if (this.modul == 'komunitas' || this.modul == 'loket') {
+      return this.transactionId;
+    } else {
+      return this.serviceDetail.bookingCode;
+    }
   }
 }

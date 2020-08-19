@@ -11,6 +11,7 @@ class BookingDetail {
   String checkIn;
   String checkOut;
   String status;
+  String createdAt;
   String updatedAt;
 
   BookingDetail(
@@ -26,6 +27,7 @@ class BookingDetail {
       this.checkIn,
       this.checkOut,
       this.status,
+      this.createdAt,
       this.updatedAt});
 
   factory BookingDetail.fromJson(Map<String, dynamic> body) {
@@ -42,6 +44,7 @@ class BookingDetail {
         checkIn: body['checkin'],
         checkOut: body['checkout'],
         status: body['status'],
+        createdAt: body['created_at'],
         updatedAt: body['updated_at']);
   }
 }

@@ -7,8 +7,8 @@ import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_provider.dart';
 import 'package:localin/presentation/restaurant/provider/restaurant_detail_provider.dart';
 import 'package:localin/presentation/restaurant/shared_widget/restaurant_basic_detail_widget.dart';
-import 'package:localin/presentation/restaurant/shared_widget/restaurant_category_widget.dart';
-import 'package:localin/presentation/restaurant/shared_widget/restaurant_rating_widget.dart';
+import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
+import 'package:localin/presentation/shared_widgets/custom_rating_widget.dart';
 import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
@@ -148,12 +148,14 @@ class _RestaurantDetailBuilderWidgetState
                                   vertical: 20.0, horizontal: 20.0),
                               child: Row(
                                 children: <Widget>[
-                                  RestaurantCategoryWidget(
+                                  RowCategoryWidget(
                                     title: restaurantDetail?.categoryName,
                                   ),
                                   SizedBox(width: 12.0),
-                                  RestaurantRatingWidget(
-                                    restaurantDetail: restaurantDetail,
+                                  CustomRatingWidget(
+                                    starRating: restaurantDetail?.userRating,
+                                    totalRating:
+                                        restaurantDetail?.userRatingVotes,
                                   ),
                                 ],
                               ),

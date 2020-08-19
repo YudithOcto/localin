@@ -77,6 +77,14 @@ const kTransactionTypeExplore = 'ExploreType';
 const kRefresh = 'refreshPage';
 
 const kNearby = 'Nearby';
+const kFurther = 'Most further';
+
+const kBookmarkQueryType = 'bookmark';
+const kUnbookmarkQueryType = 'unbookmark';
+
+const kAdult = 'adults';
+const kRoom = 'rooms';
+const kChild = 'child';
 
 class Constants {
   static const kAddress =

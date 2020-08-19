@@ -24,9 +24,12 @@ class RestaurantDetailProvider with ChangeNotifier {
   Future<Null> getRestaurantDetail(String restaurantId) async {
     _streamController.add(eventState.loading);
     final response = await _repository.getRestaurantDetail(restaurantId);
-    _restaurantDetail = response.detail;
-    _streamController
-        .add(response.error ? eventState.empty : eventState.success);
+    if (response != null && !response.error) {
+      _restaurantDetail = response.detail;
+      _streamController.add(eventState.success);
+    } else {
+      _streamController.add(eventState.empty);
+    }
     notifyListeners();
   }
 

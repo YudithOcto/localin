@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
+import 'package:localin/model/amp_response_model.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
@@ -25,7 +26,10 @@ import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/model/hotel/hotel_facilitity_response_model.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/hotel_search_suggest_model.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
@@ -286,17 +290,10 @@ class Repository {
   }
 
   ///Hotel
-  Future<HotelListBaseResponse> getHotelList(
-      String latitude,
-      String longitude,
-      String keyword,
-      int page,
-      int limit,
-      DateTime checkIn,
-      DateTime checkout,
-      int total) {
+  Future<HotelListBaseResponse> getHotelList(String latitude, String longitude,
+      String keyword, int page, int limit, RevampHotelListRequest request) {
     return apiProvider.getHotelList(
-        latitude, longitude, keyword, page, limit, checkIn, checkout, total);
+        latitude, longitude, keyword, page, limit, request);
   }
 
   Future<HotelListBaseResponse> getHotelDetail(
@@ -306,9 +303,12 @@ class Repository {
   }
 
   Future<RoomBaseResponse> getRoomAvailability(
-      int hotelID, DateTime checkIn, DateTime checkOut, int roomTotal) {
-    return apiProvider.getRoomAvailabilityDetail(
-        hotelID, checkIn, checkOut, roomTotal);
+      int hotelID, RevampHotelListRequest request) {
+    return apiProvider.getRoomAvailabilityDetail(hotelID, request);
+  }
+
+  Future<HotelSearchSuggestModel> searchHotelAndLocation(String search) {
+    return apiProvider.searchHotelAndLocation(search);
   }
 
   Future<BookingHistoryBaseResponse> getBookingHistoryList(
@@ -316,16 +316,9 @@ class Repository {
     return apiProvider.getBookingHistoryList(offset, limit);
   }
 
-  Future<BookHotelResponse> bookHotel(
-      int hotelId,
-      int roomCategoryId,
-      int totalAdult,
-      int totalRoom,
-      DateTime checkIn,
-      DateTime checkOut,
-      String roomName) {
-    return apiProvider.bookHotel(hotelId, roomCategoryId, totalAdult, totalRoom,
-        checkIn, checkOut, roomName);
+  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
+      RevampHotelListRequest request, String roomName) {
+    return apiProvider.bookHotel(hotelId, roomCategoryId, request, roomName);
   }
 
   Future<BookingDetailResponse> getBookingDetail(String bookingDetailId) {
@@ -334,6 +327,19 @@ class Repository {
 
   Future<BookingCancelResponse> cancelBooking(String bookingId) {
     return apiProvider.cancelBooking(bookingId);
+  }
+
+  Future<BaseResponse> changeBookmarkStatus(String urlChange, int hotelId) {
+    return apiProvider.changeBookmarkStatusHotel(urlChange, hotelId);
+  }
+
+  Future<HotelListBaseResponse> getHotelBookmarkList(
+      RevampHotelListRequest request) {
+    return apiProvider.getHotelBookmarkList(request);
+  }
+
+  Future<HotelFacilityResponseModel> getHotelFacilityList(int page) {
+    return apiProvider.getFacilityList(page);
   }
 
   ///Dana
@@ -379,7 +385,7 @@ class Repository {
     return apiProvider.getTransactionDetail(transId, type);
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+  Future<TransactionResponseModel> getCommunityTransactionList(
       int page, int limit,
       {String type}) {
     return apiProvider.getCommunityTransactionList(page, limit, type);
@@ -437,5 +443,9 @@ class Repository {
 
   Future<String> bookmarkRestaurant(int restaurantId, {bool isDelete = false}) {
     return apiProvider.bookmarkRestaurant(restaurantId, isDelete: isDelete);
+  }
+
+  Future<AmpResponseModel> getCheckedAmp(String url) {
+    return apiProvider.getAmpUrl(url);
   }
 }

@@ -1,7 +1,7 @@
 name: localin
 description: Localin app
 
-version: 1.5.1+151
+version: 1.6.0+160
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -26,7 +26,7 @@ dependencies:
   video_player: ^0.10.9+1
   geocoder: ^0.2.1
   flutter_pagewise: ^1.2.3
-  cached_network_image: ^2.0.0
+  cached_network_image: ^2.2.0+1
   flutter_webview_plugin: ^0.3.11
   android_intent: ^0.3.5
   photo_view: ^0.9.1
@@ -50,7 +50,7 @@ dependencies:
   oktoast: ^2.3.2
   webview_flutter: ^0.3.21
   get_it: ^4.0.2
-  scrollable_positioned_list: ^0.1.5
+  scrollable_positioned_list: ^0.1.7
   keyboard_visibility: ^0.5.6
   photo_manager: ^0.5.1
   equatable: ^1.1.1
@@ -63,6 +63,10 @@ dependencies:
   google_place: ^0.3.1
   sliding_up_panel: ^1.0.2
   table_calendar: ^2.2.3
+  scroll_snap_list: ^0.4.1
+  flutter_xlider: ^3.4.0
+  scroll_to_index: ^1.0.6
+  readmore: ^1.0.0
   url_launcher: ^5.5.0
 
 dev_dependencies:

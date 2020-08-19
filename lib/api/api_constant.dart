@@ -53,6 +53,7 @@ class ApiConstant {
   static const String kHotelRoomAvailability = 'v1/hotel/availability';
   static const String kHotelBooking = 'v1/hotel/booking';
   static const String kHotelHistory = 'v1/hotel/riwayat-booking';
+  static const String kHotelFacility = 'v1/hotel/fasilitas';
 
   /// DANA
   static const String kDanaMe = 'payment/dana/me';
@@ -86,4 +87,8 @@ class ApiConstant {
   /// RESTAURANT
   static const String kSearchRestaurant = 'v1/restoran';
   static const String kBookmarkedRestaurant = 'v1/restoran/bookmark';
+
+  /// REQUEST AMP
+  static const String kGoogleAmp =
+      'https://acceleratedmobilepageurl.googleapis.com/v1/ampUrls:batchGet?key=';
 }

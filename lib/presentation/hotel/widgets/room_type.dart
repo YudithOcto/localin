@@ -31,12 +31,12 @@ class _RoomTypeState extends State<RoomType> {
         StreamBuilder<RoomState>(
           stream: provider.roomState,
           builder: (context, asyncSnapshot) {
-            if (asyncSnapshot.data == RoomState.Busy) {
+            if (asyncSnapshot.data == RoomState.loading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             } else {
-              if (asyncSnapshot.data == RoomState.DataError) {
+              if (asyncSnapshot.data == RoomState.empty) {
                 return Center(
                   child: Column(
                     children: <Widget>[

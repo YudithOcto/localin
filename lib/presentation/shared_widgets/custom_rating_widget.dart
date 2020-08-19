@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/shared_widgets/star_rating_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
-class RestaurantRatingWidget extends StatelessWidget {
-  final RestaurantDetail restaurantDetail;
-  RestaurantRatingWidget({@required this.restaurantDetail});
+class CustomRatingWidget extends StatelessWidget {
+  final String starRating;
+  final String totalRating;
+  CustomRatingWidget({@required this.starRating, @required this.totalRating});
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +22,11 @@ class RestaurantRatingWidget extends StatelessWidget {
           children: <Widget>[
             StarRating(
               starCount: 5,
-              rating: restaurantDetail?.userRating?.parseRating,
+              rating: starRating.parseRating,
               color: ThemeColors.yellow40,
             ),
             SizedBox(width: 9.0),
-            Text('(${restaurantDetail?.userRatingVotes})',
-                style: ThemeText.sfRegularCaption)
+            Text('($totalRating)', style: ThemeText.sfRegularCaption)
           ],
         ),
       ),

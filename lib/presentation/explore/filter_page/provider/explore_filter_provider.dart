@@ -4,14 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_filter_model_request.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ExploreFilterProvider with ChangeNotifier {
-  ExploreFilterProvider(ExploreFilterModelRequest previousModel) {
-    if (previousModel != null) {
-      addPreviousFilter(previousModel);
-    }
-  }
-
   addPreviousFilter(ExploreFilterModelRequest previousModel) {
     _selectedMonth = previousModel.month;
     _selectedSort = previousModel.sort;
@@ -71,13 +66,15 @@ class ExploreFilterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  get eventRequestModel {
+  ExploreFilterModelRequest get eventRequestModel {
     return ExploreFilterModelRequest(
       month: _selectedMonth,
       sort: _selectedSort,
       category: _selectedCategory,
     );
   }
+
+  final panelController = PanelController();
 
   @override
   void dispose() {

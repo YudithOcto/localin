@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/presentation/hotel/booking_history_page.dart';
 import 'package:localin/presentation/transaction/community/provider/transaction_list_provider.dart';
 import 'package:localin/presentation/transaction/shared_widgets/transaction_list_widget.dart';
 import 'package:localin/presentation/transaction/provider/transaction_header_provider.dart';
@@ -43,7 +42,12 @@ class TransactionListPageWrapperWidget extends StatelessWidget {
                     .selectedHeader = value;
               },
               children: <Widget>[
-                BookingHistoryPage(),
+                ChangeNotifierProvider<TransactionListProvider>(
+                  create: (_) => TransactionListProvider(),
+                  child: TransactionListWidget(
+                    type: 'stay',
+                  ),
+                ),
                 ChangeNotifierProvider<TransactionListProvider>(
                   create: (_) => TransactionListProvider(),
                   child: TransactionListWidget(
