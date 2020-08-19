@@ -207,31 +207,22 @@ class _HotelListBuilderState extends State<HotelListBuilder> {
                                   },
                                 );
                               } else if (index < provider.hotelList.length) {
-                                return Visibility(
-                                  visible: provider.isVisible(provider
-                                          .hotelList[index]
-                                          .roomAvailability
-                                          .isNotNullNorEmpty
-                                      ? provider.hotelList[index]
-                                          .roomAvailability.first.sellingAmount
-                                      : null),
-                                  child: InkResponse(
-                                    onTap: () =>
-                                        goToHotelDetailPage(index, provider),
-                                    child: HotelSingleRowWidget(
-                                      onTapBookmark: () async {
-                                        final result = await provider
-                                            .changeBookmark(index);
-                                        CustomToast.showCustomBookmarkToast(
-                                            context, result);
-                                      },
-                                      hotelDetail: provider.hotelList[index],
-                                      onRoomTypeClick: () =>
-                                          goToRoomTypeDetailPage(
-                                              index,
-                                              provider.hotelList[index],
-                                              provider.revampHotelListRequest),
-                                    ),
+                                return InkResponse(
+                                  onTap: () =>
+                                      goToHotelDetailPage(index, provider),
+                                  child: HotelSingleRowWidget(
+                                    onTapBookmark: () async {
+                                      final result =
+                                          await provider.changeBookmark(index);
+                                      CustomToast.showCustomBookmarkToast(
+                                          context, result);
+                                    },
+                                    hotelDetail: provider.hotelList[index],
+                                    onRoomTypeClick: () =>
+                                        goToRoomTypeDetailPage(
+                                            index,
+                                            provider.hotelList[index],
+                                            provider.revampHotelListRequest),
                                   ),
                                 );
                               } else if (provider.canLoadMore) {

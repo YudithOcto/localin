@@ -84,13 +84,20 @@ class HotelListProvider with ChangeNotifier {
       _totalHotel = response.total;
       response.hotelDetailEntity.forEach((e) {
         if (e.roomAvailability != null && e.roomAvailability.isNotEmpty) {
-          _hotelList.add(e);
+          if (isVisible(e.roomAvailability.first.pricePerNight.oneNight)) {
+            _hotelList.add(e);
+          }
         }
       });
-      _trackOriginalListLength += response.hotelDetailEntity.length;
-      _pageRequest += 1;
-      _canLoadMore = _trackOriginalListLength < _totalHotel;
-      _streamController.add(searchState.success);
+      if (_hotelList.length == 1) {
+        _canLoadMore = false;
+        _streamController.add(searchState.empty);
+      } else {
+        _trackOriginalListLength += response.hotelDetailEntity.length;
+        _pageRequest += 1;
+        _canLoadMore = _trackOriginalListLength < _totalHotel;
+        _streamController.add(searchState.success);
+      }
     } else {
       _streamController.add(searchState.empty);
       _canLoadMore = false;

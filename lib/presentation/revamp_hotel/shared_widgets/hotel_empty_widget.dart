@@ -37,7 +37,7 @@ class HotelEmptyWidget extends StatelessWidget {
           Visibility(
             visible: isVisible,
             child: OutlineButtonDefault(
-              onPressed: () => onTap,
+              onPressed: onTap,
               margin: const EdgeInsets.symmetric(vertical: 35.0),
               backgroundColor: ThemeColors.black10,
               buttonText: 'Search Hotel',
