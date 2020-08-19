@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:localin/api/api_provider.dart';
+import 'package:localin/model/amp_response_model.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
@@ -15,15 +16,24 @@ import 'package:localin/model/community/community_my_group_response.dart';
 import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
+import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/model/explore/explore_event_response_model.dart';
+import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/model/hotel/booking_history_base_response.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/model/hotel/hotel_facilitity_response_model.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
+import 'package:localin/model/hotel/hotel_search_suggest_model.dart';
+import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
+import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
@@ -280,17 +290,10 @@ class Repository {
   }
 
   ///Hotel
-  Future<HotelListBaseResponse> getHotelList(
-      String latitude,
-      String longitude,
-      String keyword,
-      int page,
-      int limit,
-      DateTime checkIn,
-      DateTime checkout,
-      int total) {
+  Future<HotelListBaseResponse> getHotelList(String latitude, String longitude,
+      String keyword, int page, int limit, RevampHotelListRequest request) {
     return apiProvider.getHotelList(
-        latitude, longitude, keyword, page, limit, checkIn, checkout, total);
+        latitude, longitude, keyword, page, limit, request);
   }
 
   Future<HotelListBaseResponse> getHotelDetail(
@@ -300,9 +303,12 @@ class Repository {
   }
 
   Future<RoomBaseResponse> getRoomAvailability(
-      int hotelID, DateTime checkIn, DateTime checkOut, int roomTotal) {
-    return apiProvider.getRoomAvailabilityDetail(
-        hotelID, checkIn, checkOut, roomTotal);
+      int hotelID, RevampHotelListRequest request) {
+    return apiProvider.getRoomAvailabilityDetail(hotelID, request);
+  }
+
+  Future<HotelSearchSuggestModel> searchHotelAndLocation(String search) {
+    return apiProvider.searchHotelAndLocation(search);
   }
 
   Future<BookingHistoryBaseResponse> getBookingHistoryList(
@@ -310,16 +316,9 @@ class Repository {
     return apiProvider.getBookingHistoryList(offset, limit);
   }
 
-  Future<BookHotelResponse> bookHotel(
-      int hotelId,
-      int roomCategoryId,
-      int totalAdult,
-      int totalRoom,
-      DateTime checkIn,
-      DateTime checkOut,
-      String roomName) {
-    return apiProvider.bookHotel(hotelId, roomCategoryId, totalAdult, totalRoom,
-        checkIn, checkOut, roomName);
+  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
+      RevampHotelListRequest request, String roomName) {
+    return apiProvider.bookHotel(hotelId, roomCategoryId, request, roomName);
   }
 
   Future<BookingDetailResponse> getBookingDetail(String bookingDetailId) {
@@ -328,6 +327,19 @@ class Repository {
 
   Future<BookingCancelResponse> cancelBooking(String bookingId) {
     return apiProvider.cancelBooking(bookingId);
+  }
+
+  Future<BaseResponse> changeBookmarkStatus(String urlChange, int hotelId) {
+    return apiProvider.changeBookmarkStatusHotel(urlChange, hotelId);
+  }
+
+  Future<HotelListBaseResponse> getHotelBookmarkList(
+      RevampHotelListRequest request) {
+    return apiProvider.getHotelBookmarkList(request);
+  }
+
+  Future<HotelFacilityResponseModel> getHotelFacilityList(int page) {
+    return apiProvider.getFacilityList(page);
   }
 
   ///Dana
@@ -369,12 +381,11 @@ class Repository {
     return apiProvider.searchLocation(offset, limit, search);
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionDetail(
-      String transId) {
-    return apiProvider.getCommunityTransactionDetail(transId);
+  Future<dynamic> getTransactionDetails(String transId, String type) {
+    return apiProvider.getTransactionDetail(transId, type);
   }
 
-  Future<TransactionCommunityResponseModel> getCommunityTransactionList(
+  Future<TransactionResponseModel> getCommunityTransactionList(
       int page, int limit,
       {String type}) {
     return apiProvider.getCommunityTransactionList(page, limit, type);
@@ -386,5 +397,55 @@ class Repository {
 
   Future<String> cancelTransaction(String transactionId) {
     return apiProvider.cancelTransaction(transactionId);
+  }
+
+  Future<ExploreEventResponseModel> getEventList(
+      {String search,
+      int pageRequest,
+      String sort,
+      List<String> categoryId,
+      String date,
+      String mode}) {
+    return apiProvider.getEventData(pageRequest, search, sort, categoryId, date,
+        mode: mode);
+  }
+
+  Future<ExploreFilterResponseModel> getCategoryFilterEvent() {
+    return apiProvider.getCategoryFilterEvent();
+  }
+
+  Future<ExploreEventDetailModel> getExploreEventDetail(int eventId) {
+    return apiProvider.getExploreEventDetail(eventId);
+  }
+
+  Future<ExploreAvailableEventDatesModel> getAvailableDates(
+      int eventId, int pageRequest) {
+    return apiProvider.getExploreAvailableDates(eventId, pageRequest);
+  }
+
+  Future<ExploreOrderResponseModel> orderTicket(String jsonRequest) {
+    return apiProvider.orderTicket(jsonRequest);
+  }
+
+  Future<RestaurantResponseModel> getRestaurantList(int page, String search,
+      {int limit = 10, String sort, String order, int isLocation}) {
+    return apiProvider.getRestaurantList(page, search,
+        limit: limit, sort: sort, order: order, isLocation: isLocation);
+  }
+
+  Future<RestaurantResponseModel> getRestaurantDetail(String restaurantId) {
+    return apiProvider.getRestaurantDetail(restaurantId);
+  }
+
+  Future<RestaurantResponseModel> getBookmarkedRestaurants(int page) {
+    return apiProvider.getBookmarkedRestaurants(page);
+  }
+
+  Future<String> bookmarkRestaurant(int restaurantId, {bool isDelete = false}) {
+    return apiProvider.bookmarkRestaurant(restaurantId, isDelete: isDelete);
+  }
+
+  Future<AmpResponseModel> getCheckedAmp(String url) {
+    return apiProvider.getAmpUrl(url);
   }
 }

@@ -1,15 +1,19 @@
 class NotificationModelResponse {
   bool error;
   String message;
+  int total;
   NotificationModel model;
 
-  NotificationModelResponse({this.error, this.message, this.model});
+  NotificationModelResponse({this.error, this.message, this.model, this.total});
 
   factory NotificationModelResponse.fromJson(Map<String, dynamic> body) {
     return NotificationModelResponse(
       error: body['error'],
+      total: body['data']['paging']['total'],
       message: body['message'],
-      model: NotificationModel.fromJson(body['data']),
+      model: NotificationModel.fromJson(
+        body['data'],
+      ),
     );
   }
 

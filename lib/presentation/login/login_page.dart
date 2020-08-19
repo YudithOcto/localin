@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/animation/fade_in_animation.dart';
+import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/webview/webview_page.dart';
@@ -175,7 +176,7 @@ class Content extends StatelessWidget {
                         final response = await Navigator.of(context)
                             .pushNamed(WebViewPage.routeName, arguments: {
                           WebViewPage.urlName:
-                              'https://localin.id/privacy-policy.html',
+                              '${buildEnvironment.baseUrl}privacy-policy.html',
                           WebViewPage.title: 'Privacy Policy',
                         });
                       },

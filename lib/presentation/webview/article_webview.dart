@@ -1,16 +1,11 @@
 import 'dart:async';
 
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/components/custom_toast.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/widgets/news_detail/appbar_bookmark_share_action_widget.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleWebView extends StatefulWidget {
@@ -27,6 +22,8 @@ class _ArticleWebViewState extends State<ArticleWebView> {
       Completer<WebViewController>();
   num _stackToView = 1;
   bool _isChanged = false;
+  Future checkAmp;
+  bool _isInit = true;
 
   void _handleLoad(String value) {
     setState(() {
@@ -34,14 +31,44 @@ class _ArticleWebViewState extends State<ArticleWebView> {
     });
   }
 
+  Future<String> checkAmpUrl(String url) async {
+    final result = await Repository().getCheckedAmp(url);
+    if (result.message.isEmpty) {
+      if (result.ampUrls.first.cdnAmpUrl != null &&
+          result.ampUrls.first.errorCode.isEmpty) {
+        return result.ampUrls.first.cdnAmpUrl;
+      } else if (result.ampUrls.first.originalUrl.isNotEmpty) {
+        return result.ampUrls.first.originalUrl;
+      } else {
+        final routeArgs =
+            ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+        String url = routeArgs[ArticleWebView.url];
+        return url;
+      }
+    } else {
+      return '';
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      String url = routeArgs[ArticleWebView.url];
+      checkAmp = checkAmpUrl(url);
+      _isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    String url = routeArgs[ArticleWebView.url];
     ArticleDetail model =
         routeArgs[ArticleWebView.articleModel] ?? ArticleDetail();
-    //url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');
+
     return WillPopScope(
       onWillPop: () async {
         final future = await _controller.future;
@@ -75,33 +102,42 @@ class _ArticleWebViewState extends State<ArticleWebView> {
               articleDetail: model,
             ),
           ),
-          body: Builder(
-            builder: (context) => IndexedStack(
-              index: _stackToView,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: WebView(
-                        initialUrl: url,
-                        javascriptMode: JavascriptMode.unrestricted,
-                        onWebViewCreated: (webViewController) {
-                          _controller.complete(webViewController);
-                        },
-                        onPageFinished: _handleLoad,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Center(
+          body: FutureBuilder<String>(
+              future: checkAmp,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
                     child: CircularProgressIndicator(),
+                  );
+                }
+                return Builder(
+                  builder: (context) => IndexedStack(
+                    index: _stackToView,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: WebView(
+                              initialUrl: snapshot.data,
+                              javascriptMode: JavascriptMode.unrestricted,
+                              onWebViewCreated: (webViewController) {
+                                _controller.complete(webViewController);
+                              },
+                              onPageFinished: _handleLoad,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
+                );
+              }),
         ),
       ),
     );

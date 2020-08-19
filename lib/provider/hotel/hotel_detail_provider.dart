@@ -37,32 +37,32 @@ class HotelDetailProvider extends BaseModelProvider {
 
   Future<BookHotelResponse> bookHotel(
       int roomCategoryId, String roomName) async {
-    _roomState.add(RoomState.Busy);
-    final result = await _repository.bookHotel(
-        hotelDetailEntity.hotelId,
-        roomCategoryId,
-        roomTotal * 2,
-        roomTotal,
-        _selectedCheckIn,
-        _selectedCheckOut,
-        roomName);
-    _roomState.add(RoomState.DataRetrieved);
-    return result;
+    _roomState.add(RoomState.loading);
+//    final result = await _repository.bookHotel(
+//        hotelDetailEntity.hotelId,
+//        roomCategoryId,
+//        roomTotal * 2,
+//        roomTotal,
+//        _selectedCheckIn,
+//        _selectedCheckOut,
+//        roomName);
+    _roomState.add(RoomState.success);
+    //   return result;
   }
 
   Future<void> getRoomAvailability() async {
-    _roomState.add(RoomState.Busy);
-    roomAvailability.clear();
-    final result = await _repository.getRoomAvailability(
-        _hotelID, _selectedCheckIn, _selectedCheckOut, _roomTotal);
-    if (result != null && result.error == null) {
-      _roomState.add(RoomState.DataRetrieved);
-      discount = result.discount ?? 0;
-      roomAvailability.addAll(result.roomAvailability);
-    } else {
-      _roomState.add(RoomState.DataError);
-      _errorMessage = result.error;
-    }
+//    _roomState.add(RoomState.loading);
+//    roomAvailability.clear();
+//    final result = await _repository.getRoomAvailability(
+//        _hotelID, _selectedCheckIn, _selectedCheckOut, _roomTotal);
+//    if (result != null && result.error == null) {
+//      _roomState.add(RoomState.success);
+//      discount = result.discount ?? 0;
+//      roomAvailability.addAll(result.roomAvailability);
+//    } else {
+//      _roomState.add(RoomState.empty);
+//      _errorMessage = result.error;
+//    }
   }
 
   void setRoomDateSearch(DateTime checkIn, DateTime checkOut) {
@@ -108,4 +108,4 @@ class HotelDetailProvider extends BaseModelProvider {
   }
 }
 
-enum RoomState { Busy, DataRetrieved, DataError }
+enum RoomState { loading, success, empty }

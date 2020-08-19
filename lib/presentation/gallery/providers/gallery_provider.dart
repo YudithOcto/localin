@@ -49,10 +49,6 @@ class GalleryProvider with ChangeNotifier {
             selectedAsset
                 .map((e) => selectedBytes.add(e.lengthInBytes))
                 .toList();
-//            assetList.map((e) => print(e.lengthInBytes)).toList();
-//            selectedAsset
-//                .map((e) => print('\n\n\n${e.lengthInBytes}'))
-//                .toList();
             notifyListeners();
           }
         }

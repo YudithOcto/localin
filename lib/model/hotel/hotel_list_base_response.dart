@@ -55,6 +55,7 @@ class HotelDetailEntity {
   List<String> restrictions;
   List<String> images;
   String image;
+  bool isBookmark;
 
   HotelDetailEntity({
     this.hotelId,
@@ -80,6 +81,7 @@ class HotelDetailEntity {
     this.restrictions,
     this.images,
     this.image,
+    this.isBookmark,
   });
 
   factory HotelDetailEntity.fromJson(Map<String, dynamic> body) {
@@ -89,40 +91,41 @@ class HotelDetailEntity {
     List restriction = body['restrictions'];
     List availability = body['availability'];
     return HotelDetailEntity(
-        hotelId: body['hotel_id'],
-        oyoId: body['oyoId'],
-        hotelName: body['name'],
-        countryCode: body['negaraCode'],
-        description: body['description'],
-        street: body['street'],
-        city: body['city'],
-        state: body['state'],
-        country: body['country'],
-        zipCode: body['zipcode'],
-        latitude: body['latitude'],
-        longitude: body['longitude'],
-        shortAddress: body['shortAddress'],
-        landingUrl: body['landingUrl'],
-        category: body['category'],
-        distance: body['distance'],
-        discount: body['diskon'],
-        image: body['images'],
-        facilities: facilities == null
-            ? null
-            : facilities.map((value) => value as String).toList(),
-        images: images == null
-            ? null
-            : images.map((value) => value as String).toList(),
-        policies: policies == null
-            ? null
-            : policies.map((value) => value as String).toList(),
-        restrictions: restriction == null
-            ? null
-            : restriction.map((value) => value as String).toList(),
-        roomAvailability: availability == null
-            ? null
-            : availability
-                .map((value) => RoomAvailability.fromJson(value))
-                .toList());
+      hotelId: body['hotel_id'],
+      oyoId: body['oyoId'],
+      hotelName: body['name'],
+      countryCode: body['negaraCode'],
+      description: body['description'],
+      street: body['street'],
+      city: body['city'],
+      state: body['state'],
+      country: body['country'],
+      zipCode: body['zipcode'],
+      latitude: body['latitude'],
+      longitude: body['longitude'],
+      shortAddress: body['shortAddress'],
+      landingUrl: body['landingUrl'],
+      category: body['category'],
+      distance: body['distance'],
+      discount: body['diskon'],
+      image: body['images'],
+      facilities: facilities == null
+          ? []
+          : facilities.map((value) => value as String).toList(),
+      images:
+          images == null ? [] : images.map((value) => value as String).toList(),
+      policies: policies == null
+          ? []
+          : policies.map((value) => value as String).toList(),
+      restrictions: restriction == null
+          ? []
+          : restriction.map((value) => value as String).toList(),
+      roomAvailability: availability == null
+          ? []
+          : availability
+              .map((value) => RoomAvailability.fromJson(value))
+              .toList(),
+      isBookmark: body['is_like'] ?? false,
+    );
   }
 }

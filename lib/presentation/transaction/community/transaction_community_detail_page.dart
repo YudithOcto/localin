@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
-import 'package:localin/components/custom_dialog.dart';
-import 'package:localin/components/custom_toast.dart';
-import 'package:localin/components/filled_button_default.dart';
-import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
-import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
-import 'package:localin/presentation/transaction/community/provider/transaction_community_provider.dart';
+import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/presentation/transaction/community/widget/row_price_widget.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/transaction/shared_widgets/bottom_button_payment_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/constants.dart';
-import 'package:localin/utils/countdown.dart';
 import 'package:localin/utils/number_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -30,8 +24,8 @@ class TransactionCommunityDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TransactionCommunityProvider(),
+    return ChangeNotifierProvider<TransactionDetailProvider>(
+      create: (_) => TransactionDetailProvider(),
       child: TransactionCommunityContentWidget(),
     );
   }
@@ -49,97 +43,16 @@ class _TransactionCommunityContentWidgetState
   Future getTransactionData;
   String _transactionId;
   bool _isNeedToBackHome = false;
-  String _communitySlug;
 
   loadData() {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     _transactionId = routeArgs[TransactionCommunityDetailPage.transactionId];
-    _communitySlug = routeArgs[TransactionCommunityDetailPage.communitySlug];
     _isNeedToBackHome =
         routeArgs[TransactionCommunityDetailPage.onBackPressedHome] ?? false;
     getTransactionData =
-        Provider.of<TransactionCommunityProvider>(context, listen: false)
-            .getCommunityTransactionDetail(_transactionId);
-  }
-
-  onPressedPayment() async {
-    await CustomDialog.showCustomDialogVerticalMultipleButton(context,
-        dialogButtons: getButtonWidget(),
-        title: 'Purchase',
-        message: 'You will get more features by purchase');
-  }
-
-  List<Widget> getDialogWidget() {
-    List<Widget> widgetList = List();
-    widgetList.add(buttonDialog1());
-    return widgetList;
-  }
-
-  Widget buttonDialog1() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              CommunityDetailPage.routeName, (route) => false,
-              arguments: {
-                CommunityDetailPage.communityData: _communitySlug,
-                CommunityDetailPage.needBackToHome: true,
-              });
-        },
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-          child: Text(
-            'Close',
-            textAlign: TextAlign.center,
-            style: ThemeText.rodinaTitle3.copyWith(color: ThemeColors.black80),
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<Widget> getButtonWidget() {
-    List<Widget> widget = List();
-    widget.add(FilledButtonDefault(
-      buttonText: 'OK',
-      onPressed: () async {
-        Navigator.of(context).pop();
-        CustomDialog.showLoadingDialog(context, message: 'Please wait');
-        final result = await Provider.of<TransactionCommunityProvider>(context,
-                listen: false)
-            .payTransaction(_transactionId);
-        CustomDialog.closeDialog(context);
-        final response = await Navigator.of(context)
-            .pushNamed(WebViewPage.routeName, arguments: {
-          WebViewPage.urlName: result?.urlRedirect,
-          WebViewPage.title: 'Dana',
-        });
-        if (response != null && response == SUCCESS_VERIFICATION) {
-          CustomDialog.showCustomDialogVerticalMultipleButton(context,
-              dialogButtons: getDialogWidget(),
-              title: 'Congratulations!',
-              message:
-                  'You have successfully create your own community. Invite your friends into your community.');
-        }
-      },
-      backgroundColor: ThemeColors.primaryBlue,
-      textTheme: ThemeText.rodinaHeadline.copyWith(color: ThemeColors.black0),
-    ));
-    widget.add(InkWell(
-      onTap: () => Navigator.of(context).pop(),
-      child: Container(
-        margin: EdgeInsets.only(top: 10.0),
-        alignment: FractionalOffset.center,
-        child: Text(
-          'Cancel',
-          style: ThemeText.rodinaHeadline,
-        ),
-      ),
-    ));
-    return widget;
+        Provider.of<TransactionDetailProvider>(context, listen: false)
+            .getTransactionDetail(_transactionId, kTransactionTypeCommunity);
   }
 
   @override
@@ -156,7 +69,12 @@ class _TransactionCommunityContentWidgetState
       Navigator.of(context).pushNamedAndRemoveUntil(
           MainBottomNavigation.routeName, (route) => false);
     } else {
-      Navigator.of(context).pop();
+      final provider = Provider.of<TransactionDetailProvider>(context);
+      if (provider.isNavigateBackNeedRefresh) {
+        Navigator.of(context).pop(kRefresh);
+      } else {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -177,84 +95,31 @@ class _TransactionCommunityContentWidgetState
           pageTitle: 'Purchase Details',
           titleStyle: ThemeText.sfMediumHeadline,
         ),
-        bottomNavigationBar: Consumer<TransactionCommunityProvider>(
-          builder: (context, provider, child) {
-            return Visibility(
-              visible: provider.transactionDetail?.status ==
-                      kTransactionWaitingPayment ??
-                  false,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        CustomDialog.showLoadingDialog(context,
-                            message: 'Please wait');
-                        final result =
-                            await Provider.of<TransactionCommunityProvider>(
-                                    context,
-                                    listen: false)
-                                .cancelTransaction(_transactionId);
-                        CustomDialog.closeDialog(context);
-                        CustomToast.showCustomBookmarkToast(context, result);
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: 48.0,
-                        alignment: FractionalOffset.center,
-                        decoration: BoxDecoration(
-                          color: ThemeColors.black60,
-                          borderRadius:
-                              BorderRadius.only(topLeft: Radius.circular(4.0)),
-                        ),
-                        child: Text(
-                          'Cancel',
-                          textAlign: TextAlign.center,
-                          style: ThemeText.rodinaTitle3
-                              .copyWith(color: ThemeColors.black0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: onPressedPayment,
-                      child: Container(
-                        height: 48.0,
-                        alignment: FractionalOffset.center,
-                        decoration: BoxDecoration(
-                          color: ThemeColors.primaryBlue,
-                          borderRadius:
-                              BorderRadius.only(topRight: Radius.circular(4.0)),
-                        ),
-                        child: Text(
-                          'Pay Now',
-                          textAlign: TextAlign.center,
-                          style: ThemeText.rodinaTitle3
-                              .copyWith(color: ThemeColors.black0),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
+        bottomNavigationBar: Consumer<TransactionDetailProvider>(
+          builder: (__, provider, _) {
+            final item = provider.transactionDetail as TransactionDetailModel;
+            return item == null
+                ? Container()
+                : BottomButtonPaymentWidget(
+                    isVisible:
+                        item?.status == kTransactionWaitingPayment ?? false,
+                    transactionId: item.transactionId,
+                    type: kTransactionTypeCommunity,
+                  );
           },
         ),
-        body: StreamBuilder<transactionCommunityState>(
-          stream:
-              Provider.of<TransactionCommunityProvider>(context, listen: false)
-                  .transStream,
+        body: StreamBuilder<transactionDetailState>(
+          stream: Provider.of<TransactionDetailProvider>(context, listen: false)
+              .transStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             } else {
-              final provider =
-                  Provider.of<TransactionCommunityProvider>(context);
+              final provider = Provider.of<TransactionDetailProvider>(context);
               if (provider.transactionDetail != null) {
-                final item = provider.transactionDetail;
+                TransactionDetailModel item = provider.transactionDetail;
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

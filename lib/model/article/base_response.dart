@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class BaseResponse extends Equatable {
+class BaseResponse with EquatableMixin {
   bool error;
   String message;
 

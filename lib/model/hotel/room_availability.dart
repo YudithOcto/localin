@@ -3,12 +3,15 @@ class RoomAvailability {
   String categoryName;
   int sellingAmount;
   PricePerNight pricePerNight;
+  int adminFee;
 
-  RoomAvailability(
-      {this.categoryId,
-      this.categoryName,
-      this.sellingAmount,
-      this.pricePerNight});
+  RoomAvailability({
+    this.categoryId,
+    this.categoryName,
+    this.sellingAmount,
+    this.pricePerNight,
+    this.adminFee,
+  });
 
   factory RoomAvailability.fromJson(Map<String, dynamic> body) {
     return RoomAvailability(
@@ -16,6 +19,7 @@ class RoomAvailability {
       categoryName: body['categoryName'],
       sellingAmount: body['sellingAmount'],
       pricePerNight: PricePerNight.fromJson(body['occupancyWisePerNightPrice']),
+      adminFee: body['admin_fee'],
     );
   }
 }

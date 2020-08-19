@@ -178,76 +178,74 @@ class _NotificationColumnContentWidgetState
           stream: Provider.of<NotificationProvider>(context)
               .notificationStateStream,
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data == NotificationState.NoData) {
-                return EmptyInboxWidget(valueChanged: widget.valueChanged);
-              } else {
-                return Expanded(
-                  child: Consumer<NotificationProvider>(
-                    builder: (context, notifProvider, child) {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          notifProvider.getNotificationList(isRefresh: true);
-                        },
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) {
-                            return Container(
-                              width: double.maxFinite,
-                              height: 1.0,
-                              color: ThemeColors.black10,
-                            );
-                          },
-                          physics: ClampingScrollPhysics(),
-                          controller: _scrollController,
-                          itemCount: notifProvider.notificationList.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index < notifProvider.notificationList.length) {
-                              return Dismissible(
-                                direction: DismissDirection.endToStart,
-                                background: stackBehindDismiss(),
-                                key: Key(
-                                    notifProvider.notificationList[index].id +
-                                        notifProvider.notificationList.length
-                                            .toString()),
-                                child: SingleCardNotification(
-                                  detailModel:
-                                      notifProvider.notificationList[index],
-                                ),
-                                onDismissed: (direction) async {
-                                  final tempSelectedIndex = index;
-                                  final tempItem =
-                                      notifProvider.notificationList[index];
-                                  CustomDialog.showLoadingDialog(context);
-                                  final result = await notifProvider
-                                      .deleteNotificationById(notifProvider
-                                          .notificationList[index].id);
-                                  notifProvider.deleteItem(index);
-                                  CustomDialog.closeDialog(context);
-                                  showToastMessage(notifProvider, tempItem,
-                                      tempSelectedIndex);
-                                },
-                              );
-                            } else if (!notifProvider.isCanLoadMore) {
-                              return Container();
-                            } else {
-                              return Container(
-                                  alignment: Alignment.center,
-                                  child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
-            } else {
+            if (snapshot.connectionState == ConnectionState.waiting &&
+                Provider.of<NotificationProvider>(context).offsetPageRequest <=
+                    1) {
               return Container(
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.3),
                 child: CircularProgressIndicator(),
               );
             }
+            return Expanded(
+              child: Consumer<NotificationProvider>(
+                builder: (context, notifProvider, child) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      notifProvider.getNotificationList(isRefresh: true);
+                    },
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Container(
+                          width: double.maxFinite,
+                          height: 1.0,
+                          color: ThemeColors.black10,
+                        );
+                      },
+                      physics: ClampingScrollPhysics(),
+                      controller: _scrollController,
+                      itemCount: notifProvider.notificationList.length + 1,
+                      itemBuilder: (context, index) {
+                        if (snapshot.data == NotificationState.NoData) {
+                          return EmptyInboxWidget(
+                              valueChanged: widget.valueChanged);
+                        } else if (index <
+                            notifProvider.notificationList.length) {
+                          return Dismissible(
+                            direction: DismissDirection.endToStart,
+                            background: stackBehindDismiss(),
+                            key: Key(notifProvider.notificationList[index].id +
+                                notifProvider.notificationList.length
+                                    .toString()),
+                            child: SingleCardNotification(
+                              detailModel:
+                                  notifProvider.notificationList[index],
+                            ),
+                            onDismissed: (direction) async {
+                              final tempSelectedIndex = index;
+                              final tempItem =
+                                  notifProvider.notificationList[index];
+                              CustomDialog.showLoadingDialog(context);
+                              final result =
+                                  await notifProvider.deleteNotificationById(
+                                      notifProvider.notificationList[index].id);
+                              notifProvider.deleteItem(index);
+                              CustomDialog.closeDialog(context);
+                              showToastMessage(
+                                  notifProvider, tempItem, tempSelectedIndex);
+                            },
+                          );
+                        } else if (notifProvider.isCanLoadMore) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
           },
         ),
       ],

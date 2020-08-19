@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TransactionHeaderProvider with ChangeNotifier {
+  TransactionHeaderProvider({int index}) {
+    _headerCurrentSelected = index;
+    Future.delayed(Duration.zero, () => _pageController.jumpToPage(index));
+  }
+
   int _headerCurrentSelected = 0;
   int get currentHeaderSelected => _headerCurrentSelected;
 
@@ -10,12 +15,13 @@ class TransactionHeaderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> _newsTab = ['Stay', 'Community'];
+  List<String> _newsTab = ['Stay', 'Community', 'explore'];
   List<String> get newsTabTitle => _newsTab;
 
   List<String> _iconsTab = [
     'images/transaction_stay_tab_icon.svg',
     'images/transaction_community_tab_icon.svg',
+    'images/transaction_explore_tab.svg',
   ];
   List<String> get iconTab => _iconsTab;
 

@@ -5,8 +5,9 @@ import 'package:localin/presentation/home/widget/home_header_clipper.dart';
 import 'package:localin/presentation/error_page/empty_page.dart';
 import 'package:localin/presentation/home/widget/home_single_services_wrapper_widget.dart';
 import 'package:localin/presentation/home/widget/row_dana_widget.dart';
+import 'package:localin/presentation/restaurant/restaurant_page.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
@@ -97,25 +98,25 @@ class HomeHeaderWidget extends StatelessWidget {
                           serviceIcon: 'home_service_stay_icon.svg',
                           serviceName: 'STAY',
                           onPressed: () {
-                            Provider.of<HomeProvider>(context, listen: false)
-                                .setRoomPage(true);
+                            Navigator.of(context)
+                                .pushNamed(HotelListPage.routeName);
                           },
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_eat_icon.svg',
                           serviceName: 'EAT',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(RestaurantPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
-                          serviceIcon: 'home_service_attraction_icon.svg',
-                          serviceName: 'ATTRACT',
+                          serviceIcon: 'explore.svg',
+                          serviceName: 'EXPLORE',
                           onPressed: () => Navigator.of(context)
-                              .pushNamed(EmptyPage.routeName),
+                              .pushNamed(ExploreMainPage.routeName),
                         ),
                         HomeSingleServicesWrapperWidget(
                           serviceIcon: 'home_service_ticket_icon.svg',
-                          serviceName: 'EVENT',
+                          serviceName: 'MOVIE',
                           onPressed: () => Navigator.of(context)
                               .pushNamed(EmptyPage.routeName),
                         ),

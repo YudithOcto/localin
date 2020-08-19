@@ -64,7 +64,6 @@ class VerifyCodeProvider with ChangeNotifier {
     verifyingCodeStateChanges();
     final response = await _repository
         .verifyPhoneVerificationCode(int.parse(_currentFilledVerifyCode));
-    print(response.error);
     if (response.error != null && !response.error.contains('ganti') ||
         response.error == null) {
       clearTextFormField();

@@ -83,4 +83,9 @@ class DateHelper {
       return "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
     return "just now";
   }
+
+  static String checkInCheckOutTime(DateTime checkIn, DateTime checkout) {
+    return '${formatDate(date: checkIn, format: 'EEE, d MMM')} - ${formatDate(date: checkout, format: 'EEE, d MMM')}, '
+        '${checkout.difference(checkIn).inDays} Night';
+  }
 }

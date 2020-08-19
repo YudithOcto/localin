@@ -16,6 +16,8 @@ class NewsArticleProvider with ChangeNotifier {
   bool get canLoadMoreArticle => _canLoadMore;
   int _pageTotal = 0;
 
+  bool _isMounted = true;
+
   StreamController<NewsArticleState> _articleLoadController =
       StreamController<NewsArticleState>.broadcast();
   Stream<NewsArticleState> get streamArticle => _articleLoadController.stream;
@@ -37,23 +39,23 @@ class NewsArticleProvider with ChangeNotifier {
       return null;
     }
 
-    _articleLoadController.add(NewsArticleState.Loading);
+    setState(NewsArticleState.Loading);
     final response = await _apiRepository.getArticleList(
         _pageRequest, _limitPageRequest,
         isBookmark: isBookmark, isLiked: isLiked);
-    if (response != null &&
-        response.data != null &&
-        (response.data.isNotEmpty || _articleList.isNotEmpty)) {
-      _articleLoadController.add(NewsArticleState.Success);
+    if (response != null && response.total > 0) {
+      setState(NewsArticleState.Success);
       _articleList.addAll(response.data);
       _pageTotal = response.total;
       _canLoadMore = _pageTotal > _articleList.length;
       _pageRequest += 1;
     } else {
       _canLoadMore = false;
-      _articleLoadController.add(NewsArticleState.NoData);
+      setState(NewsArticleState.NoData);
     }
-    notifyListeners();
+    if (_isMounted) {
+      notifyListeners();
+    }
     return _articleList;
   }
 
@@ -78,8 +80,15 @@ class NewsArticleProvider with ChangeNotifier {
     return [];
   }
 
+  setState(NewsArticleState state) {
+    if (_isMounted) {
+      _articleLoadController.add(state);
+    }
+  }
+
   @override
   void dispose() {
+    _isMounted = false;
     _articleLoadController.close();
     super.dispose();
   }

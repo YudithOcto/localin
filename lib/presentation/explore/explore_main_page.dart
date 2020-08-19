@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/explore/filter_page/provider/explore_filter_provider.dart';
 import 'package:localin/presentation/explore/providers/explore_main_provider.dart';
-import 'package:localin/presentation/explore/widgets/explore_main_page_content_widget.dart';
+import 'package:localin/presentation/explore/shared_widgets//explore_main_page_content_widget.dart';
 import 'package:provider/provider.dart';
 
 class ExploreMainPage extends StatelessWidget {
@@ -13,6 +14,9 @@ class ExploreMainPage extends StatelessWidget {
         ChangeNotifierProvider<ExploreMainProvider>(
           create: (_) => ExploreMainProvider(),
         ),
+        ChangeNotifierProvider<ExploreFilterProvider>(
+          create: (_) => ExploreFilterProvider(),
+        )
       ],
       child: ExploreMainPageContentWidget(),
     );

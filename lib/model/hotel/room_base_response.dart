@@ -10,7 +10,7 @@ class RoomBaseResponse {
   factory RoomBaseResponse.fromJson(Map<String, dynamic> body) {
     List rooms = body['rooms'];
     return RoomBaseResponse(
-      discount: body['diskon'],
+      discount: body['diskon'] ?? 0,
       error: null,
       roomAvailability: rooms == null
           ? null

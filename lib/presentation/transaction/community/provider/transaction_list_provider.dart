@@ -13,8 +13,8 @@ class TransactionListProvider with ChangeNotifier {
   int _page = 1;
   int get page => _page;
 
-  List<TransactionCommunityDetail> _listCommunityTransaction = List();
-  List<TransactionCommunityDetail> get listCommunityTransaction =>
+  List<TransactionDetailModel> _listCommunityTransaction = List();
+  List<TransactionDetailModel> get listCommunityTransaction =>
       _listCommunityTransaction;
 
   bool _isMounted = true;
@@ -22,16 +22,17 @@ class TransactionListProvider with ChangeNotifier {
   final _streamController = StreamController<transactionState>.broadcast();
   Stream<transactionState> get apiStream => _streamController.stream;
 
-  Future<Null> getCommunityTransaction({bool isRefresh = true}) async {
+  Future<Null> getTransactionList(
+      {bool isRefresh = true, @required String type}) async {
     if (isRefresh) {
       _page = 1;
       _canLoadMore = true;
       _listCommunityTransaction.clear();
     }
 
-    final result = await _repository.getCommunityTransactionList(page, 10,
-        type: 'community');
-    if (!result.error) {
+    final result =
+        await _repository.getCommunityTransactionList(page, 10, type: type);
+    if (result != null && result.total > 0) {
       _listCommunityTransaction.addAll(result.transactionList);
       _canLoadMore = result.total > _listCommunityTransaction.length;
       _page += 1;

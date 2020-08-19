@@ -34,7 +34,7 @@ class NewsPublishedArticleProvider with ChangeNotifier {
 
     final response =
         await _repository.getUserArticle(offset: _userArticleOffset);
-    if (response != null && response.error == null) {
+    if (response != null && response.total > 0) {
       _userArticleList.addAll(response.data);
       _userArticleOffset += 1;
       _canLoadMoreArticleList = response.total > _userArticleList.length;

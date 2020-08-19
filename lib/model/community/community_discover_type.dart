@@ -1,1 +1,1 @@
-abstract class CommunityDiscoverType {}
+class CommunityDiscoverType {}

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:localin/model/community/community_discover_type.dart';
 import 'package:localin/model/community/community_member_detail.dart';
 
-class CommunityDetail implements CommunityDiscoverType {
+class CommunityDetail extends CommunityDiscoverType {
   String id;
   String slug;
   String name;

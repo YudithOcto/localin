@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
-import 'package:localin/presentation/home/widget/stay/gallery_photo_view.dart';
+import 'package:localin/presentation/shared_widgets/gallery_photo_view.dart';
 import 'package:localin/presentation/news/provider/create_article_provider.dart';
 import 'package:localin/presentation/shared_widgets/add_image_gallery_widget.dart';
 import 'package:localin/presentation/shared_widgets/single_image_gallery_widget.dart';
@@ -38,11 +38,14 @@ class HorizontalGalleryListSelectedWidget extends StatelessWidget {
             } else {
               return InkWell(
                 onTap: () {
+                  final image = provider.selectedImage
+                      .map((e) => MemoryImage(e))
+                      .toList();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => GalleryPhotoView(
-                        memoryGalleryItems: provider.selectedImage,
+                        imageProviderItems: image,
                         backgroundDecoration: const BoxDecoration(
                           color: ThemeColors.black100,
                         ),

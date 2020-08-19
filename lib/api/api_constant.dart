@@ -1,5 +1,4 @@
 class ApiConstant {
-  static const String kBaseUrl = 'https://api.localin.xyz/';
   static const String kLoginUrl = 'v1/login';
   static const String kLogoutUrl = 'v1/logout';
   static const String kUpdateProfile = 'v1/member/update';
@@ -54,6 +53,7 @@ class ApiConstant {
   static const String kHotelRoomAvailability = 'v1/hotel/availability';
   static const String kHotelBooking = 'v1/hotel/booking';
   static const String kHotelHistory = 'v1/hotel/riwayat-booking';
+  static const String kHotelFacility = 'v1/hotel/fasilitas';
 
   /// DANA
   static const String kDanaMe = 'payment/dana/me';
@@ -77,4 +77,18 @@ class ApiConstant {
   static const String kTransactionPayment = 'v1/transaksi/pay';
   static const String kTransaction = 'v1/transaksi';
   static const String kTransactionCancel = 'v1/transaksi/cancel';
+
+  static const String kExploreEvent = 'v1/explore/event';
+  static const String kCategoryFilterEvent = 'v1/explore/kategori';
+  static const String kExploreEventAvailableDate =
+      'v1/explore/schedule-available';
+  static const String kExploreOrder = 'v1/explore/order';
+
+  /// RESTAURANT
+  static const String kSearchRestaurant = 'v1/restoran';
+  static const String kBookmarkedRestaurant = 'v1/restoran/bookmark';
+
+  /// REQUEST AMP
+  static const String kGoogleAmp =
+      'https://acceleratedmobilepageurl.googleapis.com/v1/ampUrls:batchGet?key=';
 }

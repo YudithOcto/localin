@@ -6,10 +6,11 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/countdown.dart';
+import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class BookingDetailWidget extends StatefulWidget {
-  final TransactionCommunityDetail detail;
+  final TransactionDetailModel detail;
   final bool showPaymentRow;
   BookingDetailWidget({@required this.detail, this.showPaymentRow = false});
   @override
@@ -49,13 +50,13 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  'BOOKING ID: ${widget.detail.transactionId}',
+                  'BOOKING ID: ${widget.detail.bookingID}',
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black80),
                 ),
               ),
               Text(
-                '${getFormattedCurrency(widget.detail.totalPayment)}',
+                '${widget.detail.totalPayment?.transformTicketPrice}',
                 style: ThemeText.sfSemiBoldFootnote
                     .copyWith(color: ThemeColors.green),
               )
@@ -78,11 +79,14 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
             ),
             child: Row(
               children: <Widget>[
-                SvgPicture.asset('images/community_pro_icon.svg'),
+                SvgPicture.asset(
+                    'images/${widget.detail.modul == 'komunitas' ? 'community_pro_icon' : 'calendar'}.svg'),
                 SizedBox(width: 12.0),
-                Text(
-                  'Komunitas Pro (Bulanan)',
-                  style: ThemeText.sfMediumFootnote,
+                Expanded(
+                  child: Text(
+                    '$contentMessage',
+                    style: ThemeText.sfMediumFootnote,
+                  ),
                 )
               ],
             ),
@@ -151,6 +155,23 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
       ),
     );
   }
+
+  String get contentMessage {
+    if (widget.detail.modul == 'komunitas') {
+      return 'Komunitas Pro (Bulanan)';
+    } else if (widget.detail.modul == 'loket') {
+      return '${formatTime(widget?.detail?.serviceDetail?.startDate)} - '
+          '${formatTime(widget?.detail?.serviceDetail?.endDate)} \u2022 ${widget?.detail?.serviceDetail?.quantity} visitor(s)';
+    } else if (widget.detail.modul == 'stay') {
+      return '${formatTime(widget.detail.serviceDetail.checkIn)} • ${widget.detail.serviceDetail.night} night(s)';
+    } else {
+      return '';
+    }
+  }
+
+  String formatTime(DateTime datetime) {
+    return DateHelper.formatDate(date: datetime, format: 'EEE, dd MMMM yyyy');
+  }
 }
 
 extension on String {
@@ -175,6 +196,23 @@ extension on String {
       return 'circle_checked_green';
     } else {
       return 'circle_checked_blue';
+    }
+  }
+}
+
+extension on int {
+  String get transformTicketPrice {
+    if (this == null || this == 0) return 'Free';
+    return getFormattedCurrency(this);
+  }
+}
+
+extension on TransactionDetailModel {
+  String get bookingID {
+    if (this.modul == 'komunitas' || this.modul == 'loket') {
+      return this.transactionId;
+    } else {
+      return this.serviceDetail.bookingCode;
     }
   }
 }
