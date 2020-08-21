@@ -702,7 +702,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.7"
->>>>>>> 36a24f59169d44fdeadf5f1fea75d638c20d8cee
   sealed_unions:
     dependency: transitive
     description:
