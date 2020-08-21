@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/widgets/row_profile_settings_widget.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
@@ -10,8 +11,6 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../themes.dart';
 
 class ProfileSettingsWidgets extends StatelessWidget {
   @override
@@ -101,6 +100,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
                 iconValue: 'images/profile_verification.svg',
                 showButton: provider.userModel.status != kUserStatusVerified,
                 onPressed: () async {
+                  if (provider.userModel.status == kUserStatusVerified) {
+                    CustomToast.showCustomToast(
+                        context, 'My Account Already Verified');
+                    return;
+                  }
                   Navigator.of(context)
                       .pushNamed(RevampUserVerificationPage.routeName);
                 },

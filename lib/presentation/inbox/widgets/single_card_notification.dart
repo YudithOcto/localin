@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
-import 'package:localin/presentation/hotel/booking_detail_page.dart';
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
+import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
 import 'package:localin/provider/notification/notification_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/text_themes.dart';
@@ -22,8 +22,11 @@ class SingleCardNotification extends StatelessWidget {
             .updateReadNotification(detailModel.id);
         switch (detailModel?.type) {
           case 'hotel':
-            Navigator.of(context).pushNamed(BookingDetailPage.routeName,
-                arguments: {BookingDetailPage.bookingId: detailModel?.typeId});
+            Navigator.of(context)
+                .pushNamed(TransactionHotelDetailPage.routeName, arguments: {
+              TransactionHotelDetailPage.bookingId: detailModel?.typeId,
+              TransactionHotelDetailPage.fromSuccessPage: false,
+            });
             break;
           case 'artikel':
             Navigator.of(context)

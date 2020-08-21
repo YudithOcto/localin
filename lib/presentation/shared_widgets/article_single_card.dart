@@ -200,6 +200,9 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
       if (result != null) {
         setState(() {
           widget?.articleDetail?.isBookmark = result;
+          if (result == 0) {
+            widget.onRefresh(true);
+          }
         });
       }
     } else {
@@ -212,6 +215,9 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
         widget.articleDetail.totalLike = result.totalLike;
         widget.articleDetail.isBookmark = result.isBookmark;
         widget.articleDetail.totalComment = result.totalComment;
+        if (result.isBookmark == 0) {
+          widget.onRefresh(true);
+        }
         setState(() {});
       }
     }

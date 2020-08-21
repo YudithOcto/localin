@@ -695,13 +695,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
-  scrollable_positioned_list:
-    dependency: "direct main"
-    description:
-      name: scrollable_positioned_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.7"
   sealed_unions:
     dependency: transitive
     description:
@@ -928,7 +921,7 @@ packages:
     dependency: transitive
     description:
       name: xml
-      url: "https://pub.dartlang.org"q
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "3.6.1"
 sdks:

@@ -100,6 +100,11 @@ class _ArticleWebViewState extends State<ArticleWebView> {
             ),
             flexibleSpace: AppBarBookMarkShareActionWidget(
               articleDetail: model,
+              valueChanged: (value) {
+                setState(() {
+                  _isChanged = value;
+                });
+              },
             ),
           ),
           body: FutureBuilder<String>(

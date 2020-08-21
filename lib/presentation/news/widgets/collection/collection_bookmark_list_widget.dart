@@ -53,6 +53,7 @@ class _CollectionBookmarkListWidgetState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
         onArticleRefresh();

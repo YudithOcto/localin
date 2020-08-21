@@ -36,10 +36,6 @@ import 'package:localin/presentation/explore/explore_main_page.dart';
 import 'package:localin/presentation/explore/submit_form/submit_form_page.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/order_successful_page.dart';
 import 'package:localin/presentation/gallery/multi_picker_gallery_page.dart';
-import 'package:localin/presentation/hotel/booking_detail_page.dart';
-import 'package:localin/presentation/hotel/booking_history_page.dart';
-import 'package:localin/presentation/hotel/hotel_detail_page.dart';
-import 'package:localin/presentation/hotel/success_booking_page.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/login/input_phone_number_page.dart';
@@ -80,10 +76,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     EmptyPage.routeName: (_) => EmptyPage(),
     CommunityDetailPage.routeName: (_) => CommunityDetailPage(),
     NotificationListPage.routeName: (_) => NotificationListPage(),
-    SuccessBookingPage.routeName: (_) => SuccessBookingPage(),
-    BookingDetailPage.routeName: (_) => BookingDetailPage(),
-    BookingHistoryPage.routeName: (_) => BookingHistoryPage(),
-    HotelDetailPage.routeName: (_) => HotelDetailPage(),
     GoogleMapFullScreen.routeName: (_) => GoogleMapFullScreen(),
     WebViewPage.routeName: (_) => WebViewPage(),
     InputPhoneNumberPage.routeName: (_) => InputPhoneNumberPage(),

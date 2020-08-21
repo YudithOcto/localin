@@ -20,7 +20,6 @@ class NewsDetailContentWidget extends StatefulWidget {
 }
 
 class _NewsDetailContentWidgetState extends State<NewsDetailContentWidget> {
-  bool isInit = true;
   Future getArticleDetail;
   bool _isInit = true;
 
@@ -54,6 +53,7 @@ class _NewsDetailContentWidgetState extends State<NewsDetailContentWidget> {
                 flexSpace: SafeArea(
                   child: AppBarBookMarkShareActionWidget(
                     articleDetail: provider.articleDetail,
+                    valueChanged: (v) => provider.changeBookmark = v,
                   ),
                 ),
                 appBar: AppBar(),

@@ -1416,7 +1416,7 @@ class ApiProvider {
       final response = await _dio.get(
           '${ApiConstant.kNotificationList}/$notificationId',
           options: Options(headers: {REQUIRED_TOKEN: true}));
-      return response.data['status'];
+      return response.data['error'];
     } catch (error) {
       return false;
     }

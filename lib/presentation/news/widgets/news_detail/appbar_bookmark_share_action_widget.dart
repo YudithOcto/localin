@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 
 class AppBarBookMarkShareActionWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
-  AppBarBookMarkShareActionWidget({this.articleDetail});
+  final ValueChanged<bool> valueChanged;
+  AppBarBookMarkShareActionWidget({this.articleDetail, this.valueChanged});
 
   @override
   _AppBarBookMarkShareActionWidgetState createState() =>
@@ -47,6 +48,9 @@ class _AppBarBookMarkShareActionWidgetState
               onTap: () async {
                 final response = await Provider.of<HomeProvider>(context)
                     .bookmarkArticle(_articleDetail?.id);
+                if (widget.valueChanged != null) {
+                  widget.valueChanged(true);
+                }
                 if (response.error != null) {
                   CustomToast.showCustomToast(context, response.error);
                 } else {

@@ -6,13 +6,11 @@ import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
-import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
   List<CommunityDetail> communityDetail = List();
   List<ArticleDetail> _articleDetailList = List();
-  bool isRoomPage = false;
   final int _limitPageRequest = 10;
   int _pageRequest = 1;
   StreamController<articleState> _articleController =
@@ -58,11 +56,6 @@ class HomeProvider with ChangeNotifier {
 
   Future<DanaUserAccountResponse> getDanaStatus() async {
     return await _repository.getUserDanaStatus();
-  }
-
-  void setRoomPage(bool value) {
-    this.isRoomPage = value;
-    notifyListeners();
   }
 
   Future<DanaUserAccountResponse> getUserDanaStatus() async {

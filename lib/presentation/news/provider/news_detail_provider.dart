@@ -37,4 +37,11 @@ class NewsDetailProvider with ChangeNotifier {
       return null;
     }
   }
+
+  bool _isNewsBookmarkChanged;
+  bool get isNewsBookmarkChange => _isNewsBookmarkChanged;
+  set changeBookmark(bool value) {
+    _isNewsBookmarkChanged = value;
+    notifyListeners();
+  }
 }

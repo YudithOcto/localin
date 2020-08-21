@@ -41,9 +41,14 @@ class NotificationProvider extends BaseModelProvider {
     notifyListeners();
   }
 
-  Future<bool> updateReadNotification(String notifId) async {
-    final response = await _repository.readNotificationUpdate(notifId);
-    return response;
+  Future<Null> updateReadNotification(String notifId) async {
+    final data =
+        _notificationListData.singleWhere((element) => element.id == notifId);
+    if (data.isRead == 0) {
+      data.isRead = 1;
+      await _repository.readNotificationUpdate(notifId);
+      notifyListeners();
+    }
   }
 
   void deleteItem(int index) {
