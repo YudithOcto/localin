@@ -9,7 +9,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hote
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_facilities_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_overview_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/wrap_to_scroll_tag_widget.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
 import 'package:localin/themes.dart';
 

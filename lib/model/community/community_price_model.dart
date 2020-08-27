@@ -25,14 +25,20 @@ class CommunityPriceDetail {
   int basicFare;
   int adminFare;
   int totalFare;
+  bool isFreeCommunityAvailable;
 
-  CommunityPriceDetail({this.basicFare, this.adminFare, this.totalFare});
+  CommunityPriceDetail(
+      {this.basicFare,
+      this.adminFare,
+      this.totalFare,
+      this.isFreeCommunityAvailable});
 
   factory CommunityPriceDetail.fromJson(Map<String, dynamic> json) {
     return CommunityPriceDetail(
       basicFare: json['dasar_bayar'],
       adminFare: json['admin_fee'],
       totalFare: json['biaya'],
+      isFreeCommunityAvailable: json['free-community'] ?? false,
     );
   }
 }

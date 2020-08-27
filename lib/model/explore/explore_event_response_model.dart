@@ -1,25 +1,38 @@
+import 'package:equatable/equatable.dart';
 import 'package:localin/model/article/tag_model_model.dart';
 
-class ExploreEventResponseModel {
+import 'base_event_request_model.dart';
+
+class ExploreEventResponseModel extends BaseEventRequestmodel {
   bool error;
   String message;
   int total;
-  dynamic detail;
+  List<ExploreEventDetail> detail;
+  List<ExploreSearchLocation> listSearchLocation;
 
   ExploreEventResponseModel(
-      {this.error, this.message, this.total, this.detail});
+      {this.error,
+      this.message,
+      this.total,
+      this.detail,
+      this.listSearchLocation});
 
   ExploreEventResponseModel.withError(String value)
       : message = value,
         total = 0,
         error = true,
-        detail = [];
+        detail = [],
+        listSearchLocation = [];
 
   factory ExploreEventResponseModel.fromJson(Map<String, dynamic> json) {
     return ExploreEventResponseModel(
       error: false,
       message: json['message'],
       total: json['data']['pagination']['total'],
+      listSearchLocation: json['data']['location'] == null
+          ? []
+          : List<ExploreSearchLocation>.from(json['data']['location']
+              .map((e) => ExploreSearchLocation.fromJson(e))),
       detail: json['data']['data'] == null
           ? []
           : List<ExploreEventDetail>.from(
@@ -28,7 +41,24 @@ class ExploreEventResponseModel {
   }
 }
 
-class ExploreEventDetail {
+class ExploreSearchLocation extends BaseEventRequestmodel with EquatableMixin {
+  @override
+  List<Object> get props => [districtName, total];
+
+  String districtName;
+  int total;
+
+  ExploreSearchLocation({this.districtName, this.total});
+
+  factory ExploreSearchLocation.fromJson(Map<String, dynamic> body) {
+    return ExploreSearchLocation(
+      districtName: body['district_name'],
+      total: body['total'],
+    );
+  }
+}
+
+class ExploreEventDetail extends BaseEventRequestmodel {
   ExploreEventDetail(
       {this.idEvent,
       this.eventName,

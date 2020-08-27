@@ -38,6 +38,7 @@ class ArticleSingleCard extends StatefulWidget {
 }
 
 const kArticleMediaType = 'media';
+const kArticleVideoType = 'video';
 
 class _ArticleSingleCardState extends State<ArticleSingleCard> {
   Future<Color> getImagePalette(ImageProvider imageProvider) async {
@@ -206,16 +207,21 @@ class _ArticleSingleCardState extends State<ArticleSingleCard> {
         });
       }
     } else {
+      bool isVideoType = widget?.articleDetail?.type == kArticleVideoType;
       final result = await Navigator.of(context)
           .pushNamed(NewsDetailPage.routeName, arguments: {
-        NewsDetailPage.newsSlug: widget?.articleDetail?.slug,
+        NewsDetailPage.newsSlug: isVideoType
+            ? widget?.articleDetail?.id
+            : widget?.articleDetail?.slug,
+        NewsDetailPage.videoSlug:
+            isVideoType ? widget?.articleDetail?.slug : '',
       });
       if (result != null && result is ArticleDetail) {
         widget.articleDetail.isLike = result.isLike;
         widget.articleDetail.totalLike = result.totalLike;
         widget.articleDetail.isBookmark = result.isBookmark;
         widget.articleDetail.totalComment = result.totalComment;
-        if (result.isBookmark == 0) {
+        if (widget.articleDetail.isBookmark != result.isBookmark) {
           widget.onRefresh(true);
         }
         setState(() {});

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -20,15 +21,42 @@ class WebViewPage extends StatefulWidget {
 class _WebViewPageState extends State<WebViewPage> {
   final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
-//  StreamSubscription _onDestroy;
   StreamSubscription<String> _onUrlChanged;
-//  StreamSubscription<WebViewStateChanged> _onStateChanged;
-
+  bool _isInit = true;
+  Future checkAmp;
   @override
   void dispose() {
     _onUrlChanged.cancel();
     flutterWebviewPlugin.dispose();
     super.dispose();
+  }
+
+  Future<String> checkAmpUrl(String url) async {
+    final result = await Repository().getCheckedAmp(url);
+    if (result.message.isEmpty) {
+      if (result.ampUrls.first.cdnAmpUrl != null &&
+          result.ampUrls.first.errorCode.isEmpty) {
+        return result.ampUrls.first.cdnAmpUrl;
+      } else if (result.ampUrls.first.originalUrl.isNotEmpty) {
+        return result.ampUrls.first.originalUrl;
+      } else {
+        return url;
+      }
+    } else {
+      return '';
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      String url = routeArgs[WebViewPage.urlName];
+      checkAmp = checkAmpUrl(url);
+      _isInit = false;
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -69,55 +97,64 @@ class _WebViewPageState extends State<WebViewPage> {
       child: Scaffold(
         body: MaterialApp(
           routes: {
-            '/': (_) => WebviewScaffold(
-                  appBar: AppBar(
-                    backgroundColor: ThemeColors.black0,
-                    elevation: 0,
-                    titleSpacing: 0.0,
-                    title: Container(
-                      margin: EdgeInsets.only(right: 80.0),
-                      child: Text(
-                        title ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        style: ThemeText.sfMediumHeadline,
+            '/': (_) => FutureBuilder<String>(
+                future: checkAmp,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return WebviewScaffold(
+                    appBar: AppBar(
+                      backgroundColor: ThemeColors.black0,
+                      elevation: 0,
+                      titleSpacing: 0.0,
+                      title: Container(
+                        margin: EdgeInsets.only(right: 80.0),
+                        child: Text(
+                          title ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          style: ThemeText.sfMediumHeadline,
+                        ),
                       ),
-                    ),
-                    leading: InkWell(
-                      onTap: () async {
-                        if (await flutterWebviewPlugin.canGoBack()) {
-                          await flutterWebviewPlugin.goBack();
-                        } else {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: Icon(
-                        Icons.keyboard_backspace,
-                        color: ThemeColors.black80,
-                      ),
-                    ),
-                  ),
-                  withJavascript: true,
-                  javascriptChannels: Set.from([
-                    JavascriptChannel(
-                        name: 'Print',
-                        onMessageReceived: (JavascriptMessage data) {
-                          if (data.message.contains(SUCCESS_VERIFICATION)) {
-                            Future.delayed(Duration(milliseconds: 2000), () {
-                              Navigator.of(context).pop('${data.message}');
-                              flutterWebviewPlugin.close();
-                            });
+                      leading: InkWell(
+                        onTap: () async {
+                          if (await flutterWebviewPlugin.canGoBack()) {
+                            await flutterWebviewPlugin.goBack();
+                          } else {
+                            Navigator.of(context).pop();
                           }
-                        }),
-                  ]),
-                  hidden: true,
-                  withZoom: true,
-                  url: url,
-                  displayZoomControls: true,
-                  withOverviewMode: true,
-                  useWideViewPort: true,
-                  //withLocalStorage: true,
-                  // appCacheEnabled: true,
-                ),
+                        },
+                        child: Icon(
+                          Icons.keyboard_backspace,
+                          color: ThemeColors.black80,
+                        ),
+                      ),
+                    ),
+                    withJavascript: true,
+                    javascriptChannels: Set.from([
+                      JavascriptChannel(
+                          name: 'Print',
+                          onMessageReceived: (JavascriptMessage data) {
+                            if (data.message.contains(SUCCESS_VERIFICATION)) {
+                              Future.delayed(Duration(milliseconds: 2000), () {
+                                Navigator.of(context).pop('${data.message}');
+                                flutterWebviewPlugin.close();
+                              });
+                            }
+                          }),
+                    ]),
+                    hidden: true,
+                    withZoom: true,
+                    url: snapshot.data,
+                    displayZoomControls: true,
+                    withOverviewMode: true,
+                    useWideViewPort: true,
+                    //withLocalStorage: true,
+                    // appCacheEnabled: true,
+                  );
+                }),
           },
         ),
       ),

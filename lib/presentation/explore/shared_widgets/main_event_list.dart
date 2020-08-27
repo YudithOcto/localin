@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/explore/providers/explore_main_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/single_explore_card_widget.dart';
-import 'package:localin/presentation/search/generic_search/empty_event.dart';
+import 'package:localin/presentation/search/search_event/empty_event.dart';
 import 'package:localin/provider/location/location_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

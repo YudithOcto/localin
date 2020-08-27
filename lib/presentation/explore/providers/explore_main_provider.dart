@@ -5,6 +5,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_model_request.dart';
 import 'package:localin/presentation/explore/utils/filter.dart';
+import 'package:localin/utils/constants.dart';
 
 class ExploreMainProvider with ChangeNotifier {
   final _repository = Repository();
@@ -22,6 +23,12 @@ class ExploreMainProvider with ChangeNotifier {
   Stream<exploreState> get stream => _streamController.stream;
 
   bool isMount = true;
+  String _searchText = '';
+  String get searchText => _searchText;
+  set searchTextValue(String val) {
+    _searchText = val;
+    notifyListeners();
+  }
 
   ExploreFilterModelRequest _filterRequest = ExploreFilterModelRequest();
   ExploreFilterModelRequest get filterRequest => _filterRequest;
@@ -30,7 +37,14 @@ class ExploreMainProvider with ChangeNotifier {
     getEventList(isRefresh: true);
   }
 
-  Future<Null> getEventList({bool isRefresh = true, String search}) async {
+  bool _isNearby;
+  bool get isNearby => _isNearby;
+  set nearby(bool nearby) {
+    _isNearby = nearby;
+    notifyListeners();
+  }
+
+  Future<Null> getEventList({bool isRefresh = true}) async {
     if (isRefresh) {
       _eventList.clear();
       _canLoadMore = true;
@@ -39,7 +53,7 @@ class ExploreMainProvider with ChangeNotifier {
     setState(exploreState.loading);
     final result = await _repository.getEventList(
         pageRequest: _pageOffset,
-        search: search,
+        search: _searchText != kNearby ? searchText : '',
         categoryId: _filterRequest.category != null &&
                 _filterRequest.category.isNotEmpty
             ? _filterRequest.category.map((e) => e.categoryId).toList()
@@ -48,6 +62,7 @@ class ExploreMainProvider with ChangeNotifier {
             _filterRequest.sort != null ? sortList[_filterRequest.sort] : null,
         date:
             _filterRequest.month != null ? '${_filterRequest.month + 1}' : null,
+        isNearby: _isNearby,
         mode: 'default');
     if (result != null && result.total > 0) {
       _eventList.addAll(result.detail);

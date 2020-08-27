@@ -7,7 +7,7 @@ import 'package:geocoder/model.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 

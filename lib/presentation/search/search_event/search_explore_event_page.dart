@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_image_radius.dart';
+import 'package:localin/model/explore/base_event_request_model.dart';
+import 'package:localin/model/explore/explore_event_local_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
-import 'package:localin/model/location/search_location_response.dart';
-import 'package:localin/presentation/error_page/empty_page.dart';
+import 'package:localin/model/explore/explore_suggest_nearby.dart';
+import 'package:localin/model/explore/explore_title.dart';
+import 'package:localin/model/explore/explorer_event_category_detail.dart';
 import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/restaurant/shared_widget/location_near_me_widget.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
+import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/debounce.dart';
 import 'package:provider/provider.dart';
 
 import 'empty_event.dart';
+import 'explore_location_widget.dart';
 
 class SearchExploreEventPage extends StatelessWidget {
   static const routeName = 'SearchExplorePage';
@@ -18,8 +25,8 @@ class SearchExploreEventPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<GenericProvider>(
-      create: (_) => GenericProvider(),
+    return ChangeNotifierProvider<SearchEventProvider>(
+      create: (_) => SearchEventProvider(),
       child: SearchExploreContentWidget(),
     );
   }
@@ -42,7 +49,7 @@ class _SearchExploreContentWidgetState
   void didChangeDependencies() {
     if (_isInit) {
       _scrollController.addListener(_listen);
-      Provider.of<GenericProvider>(context, listen: false)
+      Provider.of<SearchEventProvider>(context, listen: false)
           .loadSearchData(type: _pageType);
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
@@ -55,7 +62,7 @@ class _SearchExploreContentWidgetState
   _listen() {
     if (_scrollController.offset >=
         _scrollController.position.maxScrollExtent) {
-      Provider.of<GenericProvider>(context, listen: false)
+      Provider.of<SearchEventProvider>(context, listen: false)
           .loadSearchData(type: _pageType, isRefresh: false);
     }
   }
@@ -77,11 +84,11 @@ class _SearchExploreContentWidgetState
           height: 43.0,
           margin: EdgeInsets.only(right: 20.0),
           child: TextFormField(
-            controller: Provider.of<GenericProvider>(context, listen: false)
+            controller: Provider.of<SearchEventProvider>(context, listen: false)
                 .searchController,
             autofocus: true,
             onChanged: (v) {
-              _debounce.run(() => Provider.of<GenericProvider>(context,
+              _debounce.run(() => Provider.of<SearchEventProvider>(context,
                       listen: false)
                   .loadSearchData(type: _pageType, isRefresh: true, search: v));
             },
@@ -105,11 +112,11 @@ class _SearchExploreContentWidgetState
           ),
         ),
       ),
-      body: Consumer<GenericProvider>(
+      body: Consumer<SearchEventProvider>(
         builder: (context, provider, child) {
           return RefreshIndicator(
             onRefresh: () async {
-              Provider.of<GenericProvider>(context, listen: false)
+              Provider.of<SearchEventProvider>(context, listen: false)
                   .loadSearchData(isRefresh: true, type: _pageType);
             },
             child: StreamBuilder<searchState>(
@@ -147,9 +154,32 @@ class _SearchExploreContentWidgetState
     );
   }
 
-  Widget successfulWidget(dynamic data) {
-    if (data is LocationResponseDetail) {
-      return Container();
+  Widget successfulWidget(BaseEventRequestmodel data) {
+    Map<String, dynamic> navigateBackMap = Map();
+    if (data is ExploreTitle) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+        child: Subtitle(
+          title: data.title,
+        ),
+      );
+    } else if (data is ExploreSearchLocation) {
+      return ExploreLocationWidget(
+        title: data.districtName,
+        subtitle: 'City',
+        category: '${data.total} event(s)',
+        onTap: () {
+          Provider.of<SearchEventProvider>(context, listen: false)
+              .addToSearchLocal(ExploreEventLocalModel(
+            title: data.districtName,
+            subtitle: 'City',
+            category: '${data.total} event(s)',
+            timeStamp: DateTime.now().toIso8601String(),
+          ));
+          navigateBackMap[kLocationMap] = data.districtName;
+          Navigator.of(context).pop(navigateBackMap);
+        },
+      );
     } else if (data is ExploreEventDetail) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
@@ -187,20 +217,50 @@ class _SearchExploreContentWidgetState
           ),
         ),
       );
+    } else if (data is ExploreSuggestNearby) {
+      return LocationNearMeWidget(
+        title: data.title,
+      );
+    } else if (data is ExploreEventLocalModel) {
+      return ExploreLocationWidget(
+        title: data.title,
+        subtitle: data.subtitle,
+        category: '${data.category}',
+        onTap: () {
+          Provider.of<SearchEventProvider>(context, listen: false)
+              .addToSearchLocal(ExploreEventLocalModel(
+            title: data.title,
+            subtitle: 'City',
+            category: '${data.category}',
+            timeStamp: DateTime.now().toIso8601String(),
+          ));
+          navigateBackMap[kLocationMap] = data.title;
+          Navigator.of(context).pop(navigateBackMap);
+        },
+      );
+    } else if (data is ExploreEventCategoryDetail) {
+      return ExploreLocationWidget(
+        title: data.categoryName,
+        subtitle: '',
+        category: '${data.total} event(s)',
+        onTap: () {
+          Provider.of<SearchEventProvider>(context, listen: false)
+              .addToSearchLocal(ExploreEventLocalModel(
+            title: data.categoryName,
+            subtitle: 'City',
+            category: '${data.total} event(s)',
+            timeStamp: DateTime.now().toIso8601String(),
+          ));
+          navigateBackMap[kCategoryMap] = data;
+          Navigator.of(context).pop(navigateBackMap);
+        },
+      );
     } else {
       return Container();
     }
   }
 
   Widget emptyState() {
-    switch (_pageType) {
-      case TYPE_LOCATION:
-        return EmptyPage();
-        break;
-      case TYPE_EVENT:
-        return EmptyExploreEvent();
-        break;
-    }
-    return Container();
+    return EmptyExploreEvent();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/presentation/news/shared_widget/mini_user_public_profile.dart';
 import 'package:localin/text_themes.dart';
@@ -12,7 +13,8 @@ import 'news_detail_related_widget.dart';
 
 class NewsDetailBodyContentWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
-  NewsDetailBodyContentWidget({this.articleDetail});
+  final Widget youtubeWidget;
+  NewsDetailBodyContentWidget({this.articleDetail, this.youtubeWidget});
   @override
   _NewsDetailBodyContentWidgetState createState() =>
       _NewsDetailBodyContentWidgetState();
@@ -98,25 +100,27 @@ class _NewsDetailBodyContentWidgetState
                 .copyWith(color: ThemeColors.black80),
           ),
         ),
-        SizedBox(
-          width: double.maxFinite,
-          child: CarouselSlider(
-            items: imageSliders,
-            options: CarouselOptions(
-                height: 209.0,
-                autoPlay: false,
-                enableInfiniteScroll:
-                    imageSliders != null && imageSliders.length > 1,
-                enlargeCenterPage: false,
-                viewportFraction: 1.0,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _currentSelected = index;
-                  });
-                }),
-          ),
-        ),
+        _articleDetail.type != kTypeVideo
+            ? SizedBox(
+                width: double.maxFinite,
+                child: CarouselSlider(
+                  items: imageSliders,
+                  options: CarouselOptions(
+                      height: 209.0,
+                      autoPlay: false,
+                      enableInfiniteScroll:
+                          imageSliders != null && imageSliders.length > 1,
+                      enlargeCenterPage: false,
+                      viewportFraction: 1.0,
+                      aspectRatio: 2.0,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentSelected = index;
+                        });
+                      }),
+                ),
+              )
+            : widget.youtubeWidget,
         Padding(
           padding: const EdgeInsets.only(top: 13.0, bottom: 19.0),
           child: imageSliders != null && imageSliders.length > 1

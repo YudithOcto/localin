@@ -1,4 +1,4 @@
-import 'event_request_model.dart';
+import 'base_event_request_model.dart';
 import 'explore_available_event_dates_model.dart';
 
 class ExploreEventSubmissionDetails {

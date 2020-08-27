@@ -1,6 +1,7 @@
 import 'package:localin/model/explore/explore_schedule_model.dart';
 
 import 'explore_available_event_dates_model.dart';
+import 'explorer_event_category_detail.dart';
 
 class ExploreEventDetail {
   ExploreEventDetail({
@@ -20,6 +21,8 @@ class ExploreEventDetail {
     this.statusEventName,
     this.schedules,
     this.available,
+    this.category,
+    this.schedulesCount,
   });
 
   int idEvent;
@@ -36,8 +39,10 @@ class ExploreEventDetail {
   String organizationAvatar;
   int statusEvent;
   String statusEventName;
+  int schedulesCount;
   List<ExploreScheduleModel> schedules;
   List<ExploreAvailableEventDatesDetail> available;
+  List<ExploreEventCategoryDetail> category;
 
   factory ExploreEventDetail.fromJson(Map<String, dynamic> json) =>
       ExploreEventDetail(
@@ -55,6 +60,7 @@ class ExploreEventDetail {
         organizationAvatar: json["organization_avatar"],
         statusEvent: json["status_event"],
         statusEventName: json["status_event_name"],
+        schedulesCount: json['schedules_count'],
         schedules: json['schedules'] == null
             ? []
             : List<ExploreScheduleModel>.from(
@@ -64,5 +70,9 @@ class ExploreEventDetail {
             : List<ExploreAvailableEventDatesDetail>.from(
                 json['available_tiket']
                     .map((e) => ExploreAvailableEventDatesDetail.fromJson(e))),
+        category: json['kategori'] == null
+            ? []
+            : List<ExploreEventCategoryDetail>.from(json['kategori']
+                .map((e) => ExploreEventCategoryDetail.fromMap(e))),
       );
 }

@@ -76,6 +76,8 @@ const kTransactionTypeExplore = 'ExploreType';
 
 const kRefresh = 'refreshPage';
 
+const kLocationMap = 'LocationMap';
+const kCategoryMap = 'categoryMap';
 const kNearby = 'Nearby';
 const kFurther = 'Most further';
 

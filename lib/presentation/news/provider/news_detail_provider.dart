@@ -2,9 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class NewsDetailProvider with ChangeNotifier {
   final Repository _repository = Repository();
+  YoutubePlayerController controller;
+
+  NewsDetailProvider({String url}) {
+    print(url);
+    if (url != null && url.isNotEmpty) {
+      controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(url),
+        flags: YoutubePlayerFlags(
+          autoPlay: false,
+        ),
+      );
+    }
+  }
 
   Future<ArticleBaseResponse> likeArticle(String articleId) async {
     final response = await _repository.likeArticle(articleId);

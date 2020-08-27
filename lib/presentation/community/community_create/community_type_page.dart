@@ -143,7 +143,8 @@ class _CommunityTypeCreateContentState
                                 ),
                                 Spacer(),
                                 Visibility(
-                                  visible: !model.isEditMode,
+                                  visible: !model.isEditMode &&
+                                      snapshot.data.isFreeCommunityAvailable,
                                   child: InkWell(
                                     onTap: () => createCommunity(type: 'free'),
                                     child: Text('Continue with free',

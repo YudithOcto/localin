@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:localin/api/api_constant.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
@@ -16,7 +17,6 @@ import 'package:localin/presentation/profile/user_profile_verification/revamp_us
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class CommunityDiscoverPage extends StatelessWidget {
@@ -113,17 +113,17 @@ class _ScrollContentState extends State<ScrollContent> {
                     title: 'My Communities',
                   ),
                   InkWell(
-                    onTap: () {
-                      final auth =
-                          Provider.of<AuthProvider>(context, listen: false);
-                      if (auth.userModel.status == kUserStatusVerified) {
+                    onTap: () async {
+                      final response = await Provider.of<AuthProvider>(context,
+                              listen: false)
+                          .checkVerifiedAccount(ApiConstant.kCreateCommunity);
+                      if (!response.error) {
                         Navigator.of(context)
                             .pushNamed(CommunityCreatePage.routeName);
                       } else {
                         CustomDialog.showCustomDialogWithMultipleButton(context,
                             title: 'Create Community',
-                            message:
-                                'Your Account Has Not Been Verified, Please Verify Your Account',
+                            message: '${response?.message}',
                             cancelText: 'Close',
                             onCancel: () => Navigator.of(context).pop(),
                             okText: 'Verified',

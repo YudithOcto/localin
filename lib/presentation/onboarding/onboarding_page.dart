@@ -133,8 +133,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   opacity: _currentPage == _numPages - 1 ? 1 : 0,
                   child: Container(
                     height: 48.0,
+                    margin: const EdgeInsets.only(top: 22.0),
                     width: double.infinity,
-                    margin: EdgeInsets.all(22),
                     decoration: BoxDecoration(
                         color: _currentPage == _numPages - 1
                             ? ThemeColors.primaryBlue

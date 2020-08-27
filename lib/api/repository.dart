@@ -17,6 +17,7 @@ import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_default_search_response.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
@@ -120,6 +121,10 @@ class Repository {
   Future<ArticleBaseResponse> getOtherArticle(
       int offset, int page, String id) async {
     return apiProvider.getOtherUserArticle(offset, page, id);
+  }
+
+  Future<BaseResponse> validateUserAccount(String url) async {
+    return apiProvider.validateUserAccount(url);
   }
 
   Future<ArticleBaseResponse> createArticle(FormData form) async {
@@ -405,9 +410,21 @@ class Repository {
       String sort,
       List<String> categoryId,
       String date,
-      String mode}) {
-    return apiProvider.getEventData(pageRequest, search, sort, categoryId, date,
-        mode: mode);
+      String mode,
+      bool isNearby}) {
+    return apiProvider.getEventData(
+      pageRequest,
+      search,
+      sort,
+      categoryId,
+      date,
+      mode: mode,
+      isNearby: isNearby,
+    );
+  }
+
+  Future<ExploreDefaultSearchResponse> getEventDefaultSearch() {
+    return apiProvider.searchDefaultEvent();
   }
 
   Future<ExploreFilterResponseModel> getCategoryFilterEvent() {

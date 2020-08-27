@@ -22,10 +22,12 @@ import 'package:localin/model/community/community_price_model.dart';
 import 'package:localin/model/dana/dana_activate_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/model/explore/explore_available_event_dates_model.dart';
+import 'package:localin/model/explore/explore_default_search_response.dart';
 import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
 import 'package:localin/model/explore/explore_response_model.dart';
+import 'package:localin/model/explore/explorer_event_category_detail.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -414,6 +416,20 @@ class ApiProvider {
         return ArticleBaseResponse.withError(_handleError(error));
       } else {
         return ArticleBaseResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<BaseResponse> validateUserAccount(String url) async {
+    try {
+      final response = await _dio.get(url,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return BaseResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return BaseResponse.withError(_handleError(error));
+      } else {
+        return BaseResponse.withError(error.toString());
       }
     }
   }
@@ -1555,9 +1571,23 @@ class ApiProvider {
     }
   }
 
+  Future<ExploreDefaultSearchResponse> searchDefaultEvent() async {
+    try {
+      final response = await _dio.get(ApiConstant.kExploreDefaultSearch,
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return ExploreDefaultSearchResponse.fromMap(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return ExploreDefaultSearchResponse.withError(_handleError(error));
+      } else {
+        return ExploreDefaultSearchResponse.withError(error.toString());
+      }
+    }
+  }
+
   Future<ExploreEventResponseModel> getEventData(int pageRequest, String search,
       String sort, List<String> categoryId, String date,
-      {String mode = 'default'}) async {
+      {String mode = 'default', bool isNearby}) async {
     try {
       Map<String, dynamic> map = Map();
       map['page'] = pageRequest;
@@ -1575,6 +1605,9 @@ class ApiProvider {
           date.isNotEmpty &&
           date.substring(date.length - 1, date.length) != "0") {
         map['date'] = '${DateTime.now().year}-$date';
+      }
+      if (isNearby != null) {
+        map['is_nearby'] = 1;
       }
       map['mode'] = mode;
       final response = await _dio.get(ApiConstant.kExploreEvent,

@@ -30,6 +30,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/hotel_list_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_search/hotel_revamp_search_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_successfull/hotel_successful_page.dart';
+import 'package:localin/presentation/search/search_event/search_explore_event_page.dart';
 import 'package:localin/presentation/shared_widgets/explore_operational_hours_page.dart';
 import 'package:localin/presentation/explore/filter_page/explore_filter_page.dart';
 import 'package:localin/presentation/explore/explore_main_page.dart';
@@ -52,7 +53,6 @@ import 'package:localin/presentation/profile/user_profile/revamp_edit_profile_pa
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_success_page.dart';
-import 'package:localin/presentation/search/generic_search/search_explore_event_page.dart';
 import 'package:localin/presentation/search/search_article/search_article_page.dart';
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/presentation/search/tag_page/tags_detail_list_page.dart';

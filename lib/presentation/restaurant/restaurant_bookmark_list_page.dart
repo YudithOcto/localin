@@ -4,7 +4,7 @@ import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/restaurant/provider/restaurant_bookmark_list_provider.dart';
 import 'package:localin/presentation/restaurant/shared_widget/empty_restaurant_widget.dart';
 import 'package:localin/presentation/restaurant/shared_widget/single_row_restaurant_widget.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 

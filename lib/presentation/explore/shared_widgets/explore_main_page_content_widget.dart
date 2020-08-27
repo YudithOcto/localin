@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:localin/model/explore/explore_filter_response_model.dart';
+import 'package:localin/model/explore/explorer_event_category_detail.dart';
 import 'package:localin/presentation/explore/filter_page/provider/explore_filter_provider.dart';
+import 'package:localin/presentation/explore/providers/explore_main_provider.dart';
 import 'package:localin/presentation/explore/shared_widgets/explore_filter_sliding_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/explore_floating_bottom_widget.dart';
 import 'package:localin/presentation/explore/shared_widgets/main_event_list.dart';
-import 'package:localin/presentation/search/generic_search/search_explore_event_page.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
+import 'package:localin/presentation/search/search_event/search_explore_event_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -53,12 +57,40 @@ class _ExploreMainPageContentWidgetState
                   ),
                 ),
                 title: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
+                  onTap: () async {
+                    final result = await Navigator.of(context).pushNamed(
                         SearchExploreEventPage.routeName,
                         arguments: {
                           SearchExploreEventPage.typePage: TYPE_EVENT
                         });
+                    final mainProvider = Provider.of<ExploreMainProvider>(
+                        context,
+                        listen: false);
+                    if (result != null) {
+                      if (result is Map<String, dynamic>) {
+                        if (result.containsKey(kCategoryMap)) {
+                          ExploreEventCategoryDetail categoryDetail =
+                              result[kCategoryMap];
+                          provider.selectCategory = CategoryExploreDetail(
+                            categoryId: categoryDetail.categoryId,
+                            category: categoryDetail.categoryName,
+                          );
+                          mainProvider.changeFilterRequest =
+                              provider.eventRequestModel;
+                          mainProvider.getEventList(isRefresh: true);
+                        } else {
+                          String location = result[kLocationMap];
+                          provider.resetFilter();
+                          mainProvider.changeFilterRequest =
+                              provider.eventRequestModel;
+                          mainProvider.searchTextValue = location;
+                          mainProvider.getEventList(isRefresh: true);
+                        }
+                      } else {
+                        mainProvider.nearby = true;
+                        mainProvider.getEventList(isRefresh: true);
+                      }
+                    }
                   },
                   child: Container(
                     alignment: FractionalOffset.centerLeft,

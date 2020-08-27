@@ -7,7 +7,7 @@ import 'package:localin/presentation/restaurant/search_restaurant_page.dart';
 import 'package:localin/presentation/restaurant/shared_widget/bottom_sort_restaurant_widget.dart';
 import 'package:localin/presentation/restaurant/shared_widget/empty_restaurant_widget.dart';
 import 'package:localin/presentation/restaurant/shared_widget/single_row_restaurant_widget.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/presentation/shared_widgets/borderless_search_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';

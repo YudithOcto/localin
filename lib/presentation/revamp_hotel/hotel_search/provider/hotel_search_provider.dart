@@ -10,7 +10,7 @@ import 'package:localin/model/hotel/hotel_suggest_base.dart';
 import 'package:localin/model/hotel/hotel_suggest_local_model.dart';
 import 'package:localin/model/hotel/hotel_suggest_nearby.dart';
 import 'package:localin/model/hotel/hotel_suggest_title.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 
 class HotelSearchProvider with ChangeNotifier {
   final searchController = TextEditingController();

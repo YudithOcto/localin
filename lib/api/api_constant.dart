@@ -78,11 +78,13 @@ class ApiConstant {
   static const String kTransaction = 'v1/transaksi';
   static const String kTransactionCancel = 'v1/transaksi/cancel';
 
+  /// EXPLORER
   static const String kExploreEvent = 'v1/explore/event';
   static const String kCategoryFilterEvent = 'v1/explore/kategori';
   static const String kExploreEventAvailableDate =
       'v1/explore/schedule-available';
   static const String kExploreOrder = 'v1/explore/order';
+  static const String kExploreDefaultSearch = 'v1/explore/page-search';
 
   /// RESTAURANT
   static const String kSearchRestaurant = 'v1/restoran';

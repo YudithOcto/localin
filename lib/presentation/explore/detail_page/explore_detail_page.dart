@@ -51,7 +51,6 @@ class _ExploreDetailWrapperContentState
               Provider.of<ExploreEventDetailProvider>(context, listen: false)
                   .stream,
           builder: (context, snapshot) {
-            print(snapshot);
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),

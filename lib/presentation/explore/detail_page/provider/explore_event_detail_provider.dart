@@ -3,9 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localin/api/explore_last_search_dao.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_event_detail.dart';
-import 'package:localin/model/explore/explore_event_detail_model.dart';
+import 'package:localin/model/explore/explore_event_local_model.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
 
@@ -21,8 +22,15 @@ class ExploreEventDetailProvider with ChangeNotifier {
   Future<Null> getEventDetail(int eventID) async {
     final result = await _repository.getExploreEventDetail(eventID);
     if (result != null && result.error == false) {
-      _streamController.add(eventDetailState.success);
       _eventDetail = result.detail;
+      addToSearchLocal(ExploreEventLocalModel(
+          title: _eventDetail.eventName,
+          subtitle: eventDetail.category.isNotNullNorEmpty
+              ? eventDetail.category.first.categoryName
+              : '',
+          category: '',
+          timeStamp: DateTime.now().toIso8601String()));
+      _streamController.add(eventDetailState.success);
     } else {
       _streamController.add(eventDetailState.empty);
     }
@@ -84,6 +92,13 @@ class ExploreEventDetailProvider with ChangeNotifier {
   void dispose() {
     _streamController.close();
     super.dispose();
+  }
+
+  final ExploreLastSearchDao _exploreLastSearchDao = ExploreLastSearchDao();
+
+  Future<int> addToSearchLocal(ExploreEventLocalModel exploreLocalModel) async {
+    final result = await _exploreLastSearchDao.insert(exploreLocalModel);
+    return result;
   }
 }
 

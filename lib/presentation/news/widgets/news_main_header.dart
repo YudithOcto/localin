@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:localin/api/api_constant.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_header_provider.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../text_themes.dart';
@@ -122,8 +122,9 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
   }
 
   loadCreateArticlePage() async {
-    if (Provider.of<AuthProvider>(context, listen: false).userModel.status ==
-        kUserStatusVerified) {
+    final response = await Provider.of<AuthProvider>(context, listen: false)
+        .checkVerifiedAccount(ApiConstant.kCreateArticle);
+    if (!response.error) {
       final result = await Navigator.of(context)
           .pushNamed(NewsCreateArticlePage.routeName, arguments: {
         NewsCreateArticlePage.previousDraft: null,
@@ -140,8 +141,7 @@ class _NewsMainHeaderState extends State<NewsMainHeader> {
         }
       }
     } else {
-      CustomToast.showCustomBookmarkToast(
-          context, 'Verify Your Account To Create a Article');
+      CustomToast.showCustomBookmarkToast(context, response?.message);
     }
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 
 class RestaurantBookmarkListProvider with ChangeNotifier {
   final _scrollController = ScrollController();

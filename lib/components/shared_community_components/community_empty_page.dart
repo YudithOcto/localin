@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:localin/api/api_constant.dart';
 import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
@@ -50,8 +51,10 @@ class CommunityEmptyPage extends StatelessWidget {
           ),
           OutlineButtonDefault(
             onPressed: () async {
-              final auth = Provider.of<AuthProvider>(context, listen: false);
-              if (auth.userModel.status == kUserStatusVerified) {
+              final response =
+                  await Provider.of<AuthProvider>(context, listen: false)
+                      .checkVerifiedAccount(ApiConstant.kCreateArticle);
+              if (!response.error) {
                 Navigator.of(context)
                     .pushNamed(CommunityCreatePage.routeName, arguments: {
                   CommunityCreatePage.previousCommunityData: null,
@@ -59,8 +62,7 @@ class CommunityEmptyPage extends StatelessWidget {
               } else {
                 CustomDialog.showCustomDialogWithMultipleButton(context,
                     title: 'Create Community',
-                    message:
-                        'Your Account Has Not Been Verified, Please Verify Your Account',
+                    message: '${response?.message}',
                     cancelText: 'Close',
                     onCancel: () => Navigator.of(context).pop(),
                     okText: 'Verified',

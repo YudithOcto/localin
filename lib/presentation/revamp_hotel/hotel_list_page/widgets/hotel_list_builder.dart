@@ -13,7 +13,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/hotel_
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/quick_search_row_widget.dart';
 import 'package:localin/presentation/revamp_hotel/shared_widgets/hotel_empty_widget.dart';
 import 'package:localin/presentation/revamp_hotel/shared_widgets/hotel_single_row_widget.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';

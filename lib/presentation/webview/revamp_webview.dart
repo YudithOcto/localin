@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:localin/api/repository.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -19,11 +20,41 @@ class _RevampWebviewState extends State<RevampWebview> {
       Completer<WebViewController>();
   num _stackToView = 1;
   bool isFromProfile = false;
+  Future getAmpUrl;
+  bool _isInit = true;
 
   void _handleLoad(String value) {
     setState(() {
       _stackToView = 0;
     });
+  }
+
+  Future<String> checkAmpUrl(String url) async {
+    final result = await Repository().getCheckedAmp(url);
+    if (result.message.isEmpty) {
+      if (result.ampUrls.first.cdnAmpUrl != null &&
+          result.ampUrls.first.errorCode.isEmpty) {
+        return result.ampUrls.first.cdnAmpUrl;
+      } else if (result.ampUrls.first.originalUrl.isNotEmpty) {
+        return result.ampUrls.first.originalUrl;
+      } else {
+        return url;
+      }
+    } else {
+      return '';
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      String url = routeArgs[RevampWebview.url];
+      getAmpUrl = checkAmpUrl(url);
+      _isInit = false;
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -60,13 +91,22 @@ class _RevampWebviewState extends State<RevampWebview> {
             ),
             leading: NavigationControls(_controller.future),
           ),
-          body: WebView(
-            initialUrl: url,
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (webViewController) {
-              _controller.complete(webViewController);
-            },
-          ),
+          body: FutureBuilder<String>(
+              future: getAmpUrl,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return WebView(
+                  initialUrl: snapshot.data,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  onWebViewCreated: (webViewController) {
+                    _controller.complete(webViewController);
+                  },
+                );
+              }),
         ),
       ),
     );

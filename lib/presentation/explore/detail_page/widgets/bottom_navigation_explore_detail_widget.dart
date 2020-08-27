@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -11,6 +12,9 @@ class BottomNavigationExploreDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final eventDetail =
         Provider.of<ExploreEventDetailProvider>(context).eventDetail;
+    bool isButtonActive = eventDetail != null &&
+        eventDetail.schedulesCount != null &&
+        eventDetail.schedulesCount > 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Row(
@@ -30,20 +34,28 @@ class BottomNavigationExploreDetailWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context)
-                  .pushNamed(BookTicketListSelectionPage.routeName, arguments: {
-                BookTicketListSelectionPage.eventDetail: eventDetail,
-              });
+              if (isButtonActive) {
+                Navigator.of(context).pushNamed(
+                    BookTicketListSelectionPage.routeName,
+                    arguments: {
+                      BookTicketListSelectionPage.eventDetail: eventDetail,
+                    });
+              } else {
+                CustomToast.showCustomBookmarkToast(
+                    context, 'There are no ticket available currently.');
+              }
             },
             child: Container(
               decoration: BoxDecoration(
-                  color: ThemeColors.primaryBlue,
+                  color: isButtonActive
+                      ? ThemeColors.primaryBlue
+                      : ThemeColors.black80,
                   borderRadius: BorderRadius.circular(4.0)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 12.0, horizontal: 20.0),
                 child: Text(
-                  'Buy',
+                  '${isButtonActive ? 'Buy' : 'Ticket Not Available'}',
                   style: ThemeText.rodinaTitle3
                       .copyWith(color: ThemeColors.black0),
                 ),

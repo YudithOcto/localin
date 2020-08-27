@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_facilitity_response_model.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 
 const DEFAULT_PRICE_HIGHEST = 2000000.0;
 const DEFAULT_PRICE_LOWEST = 0.0;

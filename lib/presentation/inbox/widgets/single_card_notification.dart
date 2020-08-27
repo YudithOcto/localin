@@ -5,6 +5,7 @@ import 'package:localin/presentation/community/community_detail/community_detail
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
+import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/notification/notification_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/text_themes.dart';
@@ -44,6 +45,12 @@ class SingleCardNotification extends StatelessWidget {
             Navigator.of(context)
                 .pushNamed(TransactionExploreDetailPage.routeName, arguments: {
               TransactionExploreDetailPage.transactionId: detailModel.typeId,
+            });
+            break;
+          case 'promo':
+            Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
+              WebViewPage.title: 'Promo',
+              WebViewPage.urlName: detailModel.typeId,
             });
             break;
         }

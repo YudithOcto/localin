@@ -6,7 +6,7 @@ import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/hotel_suggest_local_model.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
-import 'package:localin/presentation/search/provider/generic_provider.dart';
+import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/utils/constants.dart';
 
 class HotelDetailApiProvider with ChangeNotifier {
