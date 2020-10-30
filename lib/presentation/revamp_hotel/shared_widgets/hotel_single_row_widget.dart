@@ -115,17 +115,13 @@ class HotelSingleRowWidget extends StatelessWidget {
                           .copyWith(color: ThemeColors.orange),
                     ),
                   ),
-                  Visibility(
-                    visible: hotelDetail.discount != null &&
-                        hotelDetail.discount > 0,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8, top: 2.0),
-                      child: Text(
-                        '${hotelDetail.roomAvailability.isNotNullNorNotEmpty ? getFormattedCurrency(hotelDetail.roomAvailability.first.sellingAmount - (hotelDetail.discount ?? 0)) : ''}',
-                        style: ThemeText.sfRegularBody.copyWith(
-                            color: ThemeColors.black80,
-                            decoration: TextDecoration.lineThrough),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8, top: 2.0),
+                    child: Text(
+                      '${hotelDetail.roomAvailability.isNotNullNorNotEmpty ? getFormattedCurrency(increasePriceCalculation(hotelDetail.roomAvailability.first.sellingAmount)) : ''}',
+                      style: ThemeText.sfRegularBody.copyWith(
+                          color: ThemeColors.black80,
+                          decoration: TextDecoration.lineThrough),
                     ),
                   ),
                   Padding(

@@ -6,3 +6,10 @@ String getFormattedCurrency(int value) {
   final formatter = NumberFormat('#,##0', 'en_US');
   return 'IDR ${formatter.format(value)}';
 }
+
+int increasePriceCalculation(int price) {
+  if (price == null) return 0;
+  double finalPrice = (40 / 100) * price.toDouble();
+  price = finalPrice.toInt() + price;
+  return price;
+}
