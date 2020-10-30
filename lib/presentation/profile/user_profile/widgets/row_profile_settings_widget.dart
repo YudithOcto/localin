@@ -11,6 +11,7 @@ class RowProfileSettingsWidget extends StatelessWidget {
   final String title;
   final String description;
   final bool isButtonActivated;
+  final String referralBackground;
 
   RowProfileSettingsWidget({
     @required this.onPressed,
@@ -19,6 +20,7 @@ class RowProfileSettingsWidget extends StatelessWidget {
     @required this.description,
     this.showButton = false,
     this.isButtonActivated = false,
+    this.referralBackground,
   });
 
   @override
@@ -28,10 +30,24 @@ class RowProfileSettingsWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          SvgPicture.asset(
-            iconValue,
-            fit: BoxFit.cover,
-          ),
+          referralBackground != null && referralBackground.isNotEmpty
+              ? Stack(
+                  alignment: FractionalOffset.center,
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      referralBackground,
+                      fit: BoxFit.cover,
+                    ),
+                    SvgPicture.asset(
+                      iconValue,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
+                )
+              : SvgPicture.asset(
+                  iconValue,
+                  fit: BoxFit.cover,
+                ),
           SizedBox(
             width: 16.0,
           ),

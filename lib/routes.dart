@@ -18,6 +18,7 @@ import 'package:localin/presentation/community/community_search/search_community
 import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
+import 'package:localin/presentation/profile/referral_code/referral_code_page.dart';
 import 'package:localin/presentation/restaurant/restaurant_bookmark_list_page.dart';
 import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
 import 'package:localin/presentation/restaurant/restaurant_page.dart';
@@ -145,5 +146,6 @@ Map<String, WidgetBuilder> get generalRoutes {
     HotelRevampSearchPage.routeName: (_) => HotelRevampSearchPage(),
     HotelSuccessfulPage.routeName: (_) => HotelSuccessfulPage(),
     TransactionHotelDetailPage.routeName: (_) => TransactionHotelDetailPage(),
+    ReferralCodePage.routeName: (_) => ReferralCodePage(),
   };
 }

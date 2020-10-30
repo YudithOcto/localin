@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/presentation/profile/referral_code/referral_code_page.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/widgets/row_profile_settings_widget.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
@@ -112,6 +113,19 @@ class ProfileSettingsWidgets extends StatelessWidget {
             },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+          child: RowProfileSettingsWidget(
+            title: 'Referral',
+            description: 'Get Your Referral Code and Share',
+            iconValue: 'images/icon_referral.svg',
+            referralBackground: 'images/icon_referral_background.svg',
+            showButton: false,
+            onPressed: () {
+              Navigator.of(context).pushNamed(ReferralCodePage.routeName);
+            },
+          ),
+        )
       ],
     );
   }
