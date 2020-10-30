@@ -37,24 +37,10 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                 Padding(
                   padding:
                       const EdgeInsets.only(right: 20.0, left: 20.0, top: 16.0),
-                  child: InkResponse(
-                    onTap: () async {
-                      final result = await Navigator.of(context)
-                          .pushNamed(CalendarPage.routeName, arguments: {
-                        CalendarPage.defaultDate: detail?.request?.checkIn
-                      });
-                      if (result != null) {
-                        detail.changeCheckInTime(result);
-                        Provider.of<HotelDetailRoomRequestProvider>(context,
-                                listen: false)
-                            .getRoomRequest(detail.request);
-                      }
-                    },
-                    child: RowEventWidget(
-                      title: 'Check-in time',
-                      dateTime: DateHelper.formatDateBookingDetailShort(
-                          detail?.request?.checkIn?.toIso8601String()),
-                    ),
+                  child: RowEventWidget(
+                    title: 'Check-in time',
+                    dateTime: DateHelper.buildPoliciesCheckInCheckOut(
+                        detail?.hotelDetailEntity?.policies[0] ?? '', true),
                   ),
                 ),
                 Padding(
@@ -62,8 +48,8 @@ class HotelDetailDetailsWidget extends StatelessWidget {
                       const EdgeInsets.only(right: 20.0, left: 20.0, top: 8.0),
                   child: RowEventWidget(
                     title: 'Check-out time',
-                    dateTime: DateHelper.formatDateBookingDetailShort(
-                        detail?.request?.checkout?.toIso8601String()),
+                    dateTime: DateHelper.buildPoliciesCheckInCheckOut(
+                        detail?.hotelDetailEntity?.policies[1] ?? '', false),
                   ),
                 ),
                 Padding(

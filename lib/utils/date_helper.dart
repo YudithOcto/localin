@@ -88,4 +88,13 @@ class DateHelper {
     return '${formatDate(date: checkIn, format: 'EEE, d MMM')} - ${formatDate(date: checkout, format: 'EEE, d MMM')}, '
         '${checkout.difference(checkIn).inDays} Night';
   }
+
+  static String buildPoliciesCheckInCheckOut(String text, bool isCheckIn) {
+    if (text == null || text.isEmpty) return '';
+    if (text.length > 8) {
+      String timeSlice = text.substring(text.length - 8, text.length);
+      return '${isCheckIn ? 'From' : 'Before'} $timeSlice';
+    }
+    return '';
+  }
 }
