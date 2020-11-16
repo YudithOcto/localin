@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 
 class CommunityCategoryPopularList extends StatefulWidget {
   final String categoryId;
+
   CommunityCategoryPopularList({this.categoryId});
+
   @override
   _CommunityCategoryPopularListState createState() =>
       _CommunityCategoryPopularListState();

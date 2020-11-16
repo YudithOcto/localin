@@ -13,6 +13,7 @@ class ParentCommentCard extends StatefulWidget {
   final int index;
   final Function onFunction;
   final ArticleCommentDetail commentDetail;
+
   ParentCommentCard(
       {this.index, this.onFunction, @required this.commentDetail});
 
@@ -22,6 +23,7 @@ class ParentCommentCard extends StatefulWidget {
 
 class _ParentCommentCardState extends State<ParentCommentCard> {
   bool showReply = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -159,8 +161,10 @@ class DashedLine extends StatelessWidget {
   final double height;
   final double dashWidth;
   final Color color;
+
   const DashedLine(
       {this.height = 1, this.color = Colors.black, this.dashWidth = 5.0});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

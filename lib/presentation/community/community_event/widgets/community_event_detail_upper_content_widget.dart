@@ -76,7 +76,9 @@ class RowTimeWidget extends StatelessWidget {
   final DateTime date;
   final String time;
   final String title;
+
   RowTimeWidget(this.title, {@required this.date, @required this.time});
+
   @override
   Widget build(BuildContext context) {
     return Container(

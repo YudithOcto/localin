@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localin/presentation/explore/detail_page/provider/explore_event_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 class ExploreDetailLocationWidget extends StatefulWidget {
   @override

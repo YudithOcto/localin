@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/news/provider/news_article_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +12,9 @@ class RowBookmark extends StatefulWidget {
   final ArticleDetail articleDetail;
   final ValueChanged<bool> onRefresh;
   final ValueChanged<bool> onUndo;
+
   RowBookmark({this.articleDetail, this.onRefresh, this.onUndo});
+
   @override
   _RowBookmarkState createState() => _RowBookmarkState();
 }

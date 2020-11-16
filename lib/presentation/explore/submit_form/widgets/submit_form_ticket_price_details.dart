@@ -25,45 +25,72 @@ class SubmitFormTicketPriceDetails extends StatelessWidget {
           color: ThemeColors.black0,
           child: Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Total Price',
-                    style: ThemeText.sfSemiBoldHeadline,
-                  ),
-                  Text(
-                    '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
-                    style: ThemeText.sfSemiBoldHeadline,
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: DashedLine(
-                  color: ThemeColors.black20,
-                  height: 1.5,
+              singleRowTitleValue(provider.singlePaxPrice,
+                  '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
+                  isNeedGrey: true),
+              divider(),
+              singleRowTitleValue('Service Fee',
+                  '${provider.adminFee == 0 ? 'Free' : getFormattedCurrency(provider.adminFee)}',
+                  isNeedGrey: true),
+              Visibility(
+                visible: provider.isCouponActive,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    divider(),
+                    singleRowTitleValue('Coupon',
+                        '- ${getFormattedCurrency(provider.couponDiscount)}')
+                  ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '${provider.singlePaxPrice}',
-                    style: ThemeText.sfMediumBody
-                        .copyWith(color: ThemeColors.black80),
-                  ),
-                  Text(
-                    '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
-                    style: ThemeText.sfMediumBody
-                        .copyWith(color: ThemeColors.black80),
-                  )
-                ],
+              Visibility(
+                visible: provider.isLocalPointActive,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    divider(),
+                    singleRowTitleValue('Local Point',
+                        '- ${getFormattedCurrency(provider.localPointDiscount)}')
+                  ],
+                ),
               ),
+              divider(),
+              singleRowTitleValue('Total Price',
+                  '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}')
             ],
           ),
         )
       ],
+    );
+  }
+
+  singleRowTitleValue(String title, String value, {bool isNeedGrey = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          '$title',
+          style: isNeedGrey
+              ? ThemeText.sfMediumHeadline.copyWith(color: ThemeColors.black80)
+              : ThemeText.sfSemiBoldHeadline,
+        ),
+        Text(
+          '$value',
+          style: isNeedGrey
+              ? ThemeText.sfMediumHeadline.copyWith(color: ThemeColors.black80)
+              : ThemeText.sfSemiBoldHeadline,
+        )
+      ],
+    );
+  }
+
+  divider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: DashedLine(
+        color: ThemeColors.black20,
+        height: 1.5,
+      ),
     );
   }
 }

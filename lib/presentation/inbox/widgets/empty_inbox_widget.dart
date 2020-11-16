@@ -7,7 +7,9 @@ import '../../../text_themes.dart';
 
 class EmptyInboxWidget extends StatelessWidget {
   final ValueChanged<int> valueChanged;
+
   EmptyInboxWidget({this.valueChanged});
+
   @override
   Widget build(BuildContext context) {
     return Container(

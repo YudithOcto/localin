@@ -1,6 +1,6 @@
 import 'dart:async';
+
 import 'package:localin/api/repository.dart';
-import 'package:localin/model/community/community_category.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/provider/base_model_provider.dart';
 
@@ -9,6 +9,7 @@ class CommunityFeedProvider extends BaseModelProvider {
   String currentCategoryId;
 
   List<CommunityDetail> _userCommunityList = [];
+
   List<CommunityDetail> get userCommunityList => _userCommunityList;
 
   Future<List<CommunityDetail>> getUserCommunityList(

@@ -20,6 +20,7 @@ class CalendarTicketProvider with ChangeNotifier {
   // key = selected date, value = list of ticket of that selected date
   Map<DateTime, List<ExploreAvailableEventDatesDetail>> _currentSelectedTicket =
       Map();
+
   void addSelectedDateAndTicket(
       DateTime dateTime, List<ExploreAvailableEventDatesDetail> detail) {
     _currentSelectedTicket[dateTime] = detail;

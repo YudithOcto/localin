@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/model/community/community_event_member_response.dart';
 import 'package:localin/text_themes.dart';
@@ -8,6 +7,7 @@ import 'package:localin/utils/date_helper.dart';
 
 class CommunityMemberWidget extends StatelessWidget {
   final EventMemberDetail detail;
+
   CommunityMemberWidget({this.detail});
 
   @override

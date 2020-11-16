@@ -7,9 +7,11 @@ import 'package:localin/themes.dart';
 
 class ArticleCommentDescription extends StatelessWidget {
   final ArticleDetail _articleDetail;
+
   ArticleCommentDescription({ArticleDetail detail})
       : assert(detail != null),
         _articleDetail = detail;
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class SearchLocationPage extends StatelessWidget {
   static const routeName = 'SearchLocationPage';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SearchLocationProvider>(
@@ -31,6 +32,7 @@ class _SearchLocationListWidgetState extends State<SearchLocationListWidget> {
   bool _isInit = true;
   final ScrollController _scrollController = ScrollController();
   var streamLocation;
+
   @override
   void didChangeDependencies() {
     if (_isInit) {

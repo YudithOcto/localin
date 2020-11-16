@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/presentation/transaction/community/provider/transaction_list_provider.dart';
-import 'package:localin/presentation/transaction/shared_widgets/transaction_list_widget.dart';
 import 'package:localin/presentation/transaction/provider/transaction_header_provider.dart';
+import 'package:localin/presentation/transaction/shared_widgets/transaction_list_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 class TransactionListPage extends StatelessWidget {
   static const routeName = 'transactionListPage';
   final int selectedHeaderIndex;
+
   TransactionListPage({this.selectedHeaderIndex});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

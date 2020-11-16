@@ -5,8 +5,10 @@ import 'package:photo_manager/photo_manager.dart';
 
 class GalleryProvider with ChangeNotifier {
   int _currentPage = 0;
+
   int get currentPage => _currentPage;
   int _lastPage;
+
   int get lastPage => _lastPage;
   List<Uint8List> assetList = [];
   List<Uint8List> selectedAsset = [];

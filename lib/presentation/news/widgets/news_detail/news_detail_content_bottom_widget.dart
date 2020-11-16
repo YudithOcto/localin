@@ -11,7 +11,9 @@ import 'package:provider/provider.dart';
 
 class NewsDetailContentBottomWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
+
   NewsDetailContentBottomWidget({@required this.articleDetail});
+
   @override
   _NewsDetailContentBottomWidgetState createState() =>
       _NewsDetailContentBottomWidgetState();
@@ -20,6 +22,7 @@ class NewsDetailContentBottomWidget extends StatefulWidget {
 class _NewsDetailContentBottomWidgetState
     extends State<NewsDetailContentBottomWidget> {
   ArticleDetail _articleDetail;
+
   @override
   void initState() {
     _articleDetail = widget.articleDetail;

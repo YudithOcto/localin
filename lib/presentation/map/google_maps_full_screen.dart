@@ -12,6 +12,7 @@ import 'package:localin/themes.dart';
 class GoogleMapFullScreen extends StatefulWidget {
   static const routeName = 'GoogleMapPage';
   static const targetLocation = 'targetLocation';
+
   @override
   _GoogleMapFullScreenState createState() => _GoogleMapFullScreenState();
 }

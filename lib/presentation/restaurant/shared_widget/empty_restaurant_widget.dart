@@ -8,6 +8,7 @@ class EmptyRestaurantWidget extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool isShowButton;
+
   EmptyRestaurantWidget({
     this.onPressed,
     this.title = 'Can\'t find restaurants',

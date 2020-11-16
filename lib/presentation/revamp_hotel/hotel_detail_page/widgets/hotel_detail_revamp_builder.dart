@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_sliver_app_bar.dart';
-import 'package:localin/utils/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_bottom_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_detail_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_facilities_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_overview_widget.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_sliver_app_bar.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/wrap_to_scroll_tag_widget.dart';
 import 'package:localin/presentation/search/provider/search_event_provider.dart';
 import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class HotelDetailRevampBuilder extends StatefulWidget {
   @override
@@ -26,6 +26,7 @@ class _HotelDetailRevampBuilderState extends State<HotelDetailRevampBuilder>
   TabController _tabController;
 
   bool isExpanded = true;
+
   bool get _isAppBarExpanded {
     return _autoScrollController.hasClients &&
         _autoScrollController.offset > (160 - kToolbarHeight);

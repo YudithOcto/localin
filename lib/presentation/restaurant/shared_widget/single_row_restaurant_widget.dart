@@ -5,14 +5,15 @@ import 'package:localin/model/restaurant/restaurant_local_model.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
 import 'package:localin/presentation/restaurant/restaurant_detail_page.dart';
 import 'package:localin/presentation/restaurant/shared_widget/restaurant_basic_detail_widget.dart';
-import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
 import 'package:localin/presentation/shared_widgets/custom_rating_widget.dart';
+import 'package:localin/presentation/shared_widgets/row_category_widget.dart';
 import 'package:localin/themes.dart';
 
 class SingleRowRestaurantWidget extends StatelessWidget {
   final RestaurantDetail restaurantDetail;
   final VoidCallback onTap;
   final ValueChanged<bool> onValueChanged;
+
   SingleRowRestaurantWidget(
       {@required this.restaurantDetail, this.onTap, this.onValueChanged});
 

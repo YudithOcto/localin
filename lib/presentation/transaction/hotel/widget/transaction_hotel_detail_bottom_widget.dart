@@ -4,7 +4,7 @@ import 'package:localin/components/custom_toast.dart';
 import 'package:localin/components/filled_button_default.dart';
 import 'package:localin/presentation/transaction/hotel/provider/transaction_hotel_detail_provider.dart';
 import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
@@ -133,9 +133,9 @@ class TransactionHotelDetailBottomWidget extends StatelessWidget {
         return;
       }
       final response = await Navigator.of(context)
-          .pushNamed(WebViewPage.routeName, arguments: {
-        WebViewPage.urlName: result?.urlRedirect,
-        WebViewPage.title: 'Transaction',
+          .pushNamed(TransactionWebView.routeName, arguments: {
+        TransactionWebView.urlName: result?.urlRedirect,
+        TransactionWebView.title: 'Transaction Hotel',
       });
       if (response != null && response == SUCCESS_VERIFICATION) {
         final provider =

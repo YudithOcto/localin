@@ -1,6 +1,5 @@
 import 'package:localin/model/explore/explore_base_model.dart';
 
-import 'explore_available_event_dates_model.dart';
 import 'explore_event_detail.dart';
 
 class ExploreEventDetailModel implements BaseModel {

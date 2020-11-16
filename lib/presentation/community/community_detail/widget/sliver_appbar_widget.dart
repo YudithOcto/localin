@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
   @override
   double get minExtent => 160 - kToolbarHeight;
+
   @override
   double get maxExtent => 350 - kToolbarHeight;
 

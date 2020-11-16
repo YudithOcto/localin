@@ -1,6 +1,5 @@
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/community/community_discover_type.dart';
-import 'package:localin/presentation/community/community_create/community_type_page.dart';
 
 class CommunityCommentBaseResponse {
   String error;
@@ -115,8 +114,11 @@ class CommunityComment implements CommunityDiscoverType {
       communityTotalMember: body['komunitas_total_member'] ?? null,
       communityCategoryId: body['komunitas_kategori'] ?? null,
       communityCategoryName: body['komunitas_kategori_name'] ?? null,
-      isLike:
-          body['is_like'] == null ? false : body['is_like'] == 1 ? true : false,
+      isLike: body['is_like'] == null
+          ? false
+          : body['is_like'] == 1
+              ? true
+              : false,
       totalLike: body['total_like'] == null ? 0 : body['total_like'],
     );
   }

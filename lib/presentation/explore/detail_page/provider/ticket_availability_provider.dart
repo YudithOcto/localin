@@ -16,14 +16,17 @@ class TicketAvailabilityProvider with ChangeNotifier {
   }
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   List<ExploreScheduleModel> _eventTicketList = [];
+
   List<ExploreScheduleModel> get eventTicketList => _eventTicketList;
 
   int maxQuantity = 0;
 
   final _streamController = StreamController<shareExploreState>.broadcast();
+
   Stream<shareExploreState> get calendarStream => _streamController.stream;
 
   Future<List<ExploreScheduleModel>> getAvailableSchedules(

@@ -7,11 +7,13 @@ class CircleImage extends StatelessWidget {
   final double width;
   final double height;
   final BoxFit fit;
+
   CircleImage(
       {this.imageUrl,
       this.width = 19.0,
       this.height = 19.0,
       this.fit = BoxFit.contain});
+
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(

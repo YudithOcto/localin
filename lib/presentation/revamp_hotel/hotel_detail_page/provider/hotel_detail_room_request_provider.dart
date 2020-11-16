@@ -10,6 +10,7 @@ class HotelDetailRoomRequestProvider with ChangeNotifier {
   final _repository = Repository();
 
   RoomAvailability _selectedRoom;
+
   RoomAvailability get selectedRoom => _selectedRoom;
 
   int _hotelId = 0;
@@ -21,6 +22,7 @@ class HotelDetailRoomRequestProvider with ChangeNotifier {
   }
 
   final _streamController = StreamController<RoomState>.broadcast();
+
   Stream<RoomState> get roomStream => _streamController.stream;
 
   Future<Null> getRoomRequest(RevampHotelListRequest request) async {

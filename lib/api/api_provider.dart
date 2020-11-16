@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -10,9 +11,9 @@ import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
 import 'package:localin/model/article/article_tag_response.dart';
 import 'package:localin/model/article/base_response.dart';
+import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_comment_base_response.dart';
 import 'package:localin/model/community/community_detail_base_response.dart';
-import 'package:localin/model/community/community_base_response_category.dart';
 import 'package:localin/model/community/community_event_member_response.dart';
 import 'package:localin/model/community/community_event_response_model.dart';
 import 'package:localin/model/community/community_join_response.dart';
@@ -27,7 +28,6 @@ import 'package:localin/model/explore/explore_event_detail_model.dart';
 import 'package:localin/model/explore/explore_event_response_model.dart';
 import 'package:localin/model/explore/explore_filter_response_model.dart';
 import 'package:localin/model/explore/explore_response_model.dart';
-import 'package:localin/model/explore/explorer_event_category_detail.dart';
 import 'package:localin/model/hotel/book_hotel_response.dart';
 import 'package:localin/model/hotel/booking_cancel_response.dart';
 import 'package:localin/model/hotel/booking_detail_response.dart';
@@ -41,11 +41,14 @@ import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
+import 'package:localin/model/transaction/admin_fee_response_model.dart';
+import 'package:localin/model/transaction/transaction_discount_response_model.dart';
 import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/model/user/user_referral_response.dart';
 import 'package:localin/model/user/user_verification_category_model.dart';
 import 'package:localin/presentation/explore/utils/filter.dart';
 import 'package:localin/presentation/login/login_page.dart';
@@ -226,6 +229,21 @@ class ApiProvider {
         return UserModel.withError(_handleError(error));
       } else {
         return UserModel.withError(error);
+      }
+    }
+  }
+
+  Future<UserReferralResponse> inputFriendsReferral({String referral}) async {
+    try {
+      final response = await _dio.post(ApiConstant.kInputUserReferral,
+          data: FormData.fromMap({'kode_referral': referral}),
+          options: Options(headers: {REQUIRED_TOKEN: true}));
+      return UserReferralResponse.fromJson(response.data);
+    } catch (error) {
+      if (error is DioError) {
+        return UserReferralResponse.errorJson(_handleError(error));
+      } else {
+        return UserReferralResponse.errorJson(error.toString());
       }
     }
   }
@@ -1316,13 +1334,20 @@ class ApiProvider {
     }
   }
 
-  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
-      RevampHotelListRequest request, String roomName) async {
+  Future<BookHotelResponse> bookHotel(
+      int hotelId,
+      int roomCategoryId,
+      RevampHotelListRequest request,
+      String roomName,
+      String coupon,
+      int useLocalPoint) async {
     FormData _formData = FormData.fromMap({
       'hotel_id': hotelId,
       'room_category': roomCategoryId,
       'count_room': request.totalRooms,
       'count_adult': request.totalAdults,
+      'kupon': coupon,
+      'use_poin': useLocalPoint,
       'checkin': DateHelper.formatDateRangeForOYO(request.checkIn),
       'checkout': DateHelper.formatDateRangeForOYO(request.checkout),
       'timezone': await getFlutterTimezone(),
@@ -1367,6 +1392,21 @@ class ApiProvider {
         return _handleError(error);
       } else {
         return error.toString();
+      }
+    }
+  }
+
+  Future<TransactionDiscountResponseModel> getTransactionDiscount(
+      FormData map) async {
+    try {
+      final result = await _dio.post(ApiConstant.kTransactionDiscount,
+          data: map, options: Options(headers: {REQUIRED_TOKEN: true}));
+      return TransactionDiscountResponseModel.fromJson(result.data);
+    } catch (error) {
+      if (error is DioError) {
+        return TransactionDiscountResponseModel.jsonError(_handleError(error));
+      } else {
+        return TransactionDiscountResponseModel.jsonError(error.toString());
       }
     }
   }
@@ -1567,6 +1607,20 @@ class ApiProvider {
         return BookingPaymentResponse.withError(_handleError(error));
       } else {
         return BookingPaymentResponse.withError(error.toString());
+      }
+    }
+  }
+
+  Future<AdminFeeResponseModel> getAdminFee(FormData form) async {
+    try {
+      final response = await _dio.post(ApiConstant.kTransactionAdminFee,
+          data: form, options: Options(headers: {REQUIRED_TOKEN: true}));
+      return AdminFeeResponseModel.fromJson(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        return AdminFeeResponseModel.errorJson(_handleError(e));
+      } else {
+        return AdminFeeResponseModel.errorJson(e.toString());
       }
     }
   }

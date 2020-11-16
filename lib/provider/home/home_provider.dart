@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/community/community_detail.dart';
+import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 
 class HomeProvider with ChangeNotifier {
@@ -69,6 +70,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   List<ArticleDetail> get articleDetailList => _articleDetailList;
+
   Stream<articleState> get articleStream => _articleController.stream;
 }
 

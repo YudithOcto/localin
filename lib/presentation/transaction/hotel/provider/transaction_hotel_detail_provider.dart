@@ -11,10 +11,12 @@ class TransactionHotelDetailProvider with ChangeNotifier {
   final _repository = Repository();
 
   BookingDetailModel _bookingDetail = BookingDetailModel();
+
   BookingDetailModel get bookingDetailModel => _bookingDetail;
 
   final _streamController =
       StreamController<transactionDetailState>.broadcast();
+
   Stream<transactionDetailState> get stream => _streamController.stream;
 
   Future<Null> getBookingHistoryDetail(String bookingDetailId) async {
@@ -39,7 +41,9 @@ class TransactionHotelDetailProvider with ChangeNotifier {
   }
 
   bool _trackNeedRefresh = false;
+
   bool get trackNeedRefresh => _trackNeedRefresh;
+
   set changeTrackRefresh(bool value) {
     _trackNeedRefresh = value;
     notifyListeners();

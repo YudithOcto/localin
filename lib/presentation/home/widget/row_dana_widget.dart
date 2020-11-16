@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
@@ -152,9 +152,10 @@ class _RowDanaWidgetState extends State<RowDanaWidget> {
     final result =
         await Provider.of<HomeProvider>(context, listen: false).getDanaStatus();
     if (result.error == null) {
-      await Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
-        WebViewPage.urlName: result.data.urlTopUp,
-        WebViewPage.title: 'Dana',
+      await Navigator.of(context)
+          .pushNamed(TransactionWebView.routeName, arguments: {
+        TransactionWebView.urlName: result.data.urlTopUp,
+        TransactionWebView.title: 'Dana',
       });
     } else {
       final authState = Provider.of<AuthProvider>(context, listen: false);
@@ -164,9 +165,9 @@ class _RowDanaWidgetState extends State<RowDanaWidget> {
             .authenticateUserDanaAccount(authState.userModel.handphone);
         if (result.urlRedirect.isNotEmpty && !result.error) {
           final response = await Navigator.of(context)
-              .pushNamed(WebViewPage.routeName, arguments: {
-            WebViewPage.urlName: result.urlRedirect,
-            WebViewPage.title: 'Dana',
+              .pushNamed(TransactionWebView.routeName, arguments: {
+            TransactionWebView.urlName: result.urlRedirect,
+            TransactionWebView.title: 'Dana',
           });
           if (response != null && response == 'success') {
             final dialogSuccess = await CustomDialog.showCustomDialogWithButton(

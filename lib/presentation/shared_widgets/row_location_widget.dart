@@ -13,6 +13,7 @@ class RowLocationWidget extends StatelessWidget {
   final String longitude;
   final String eventName;
   final String eventAddress;
+
   RowLocationWidget(
       {this.latitude, this.longitude, this.eventName, this.eventAddress});
 

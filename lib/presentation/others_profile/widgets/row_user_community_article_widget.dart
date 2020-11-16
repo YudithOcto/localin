@@ -11,6 +11,7 @@ class RowUserCommunityArticleWidget extends StatelessWidget {
 
   RowUserCommunityArticleWidget(
       {@required this.icon, this.value, @required this.title});
+
   @override
   Widget build(BuildContext context) {
     return Row(

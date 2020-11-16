@@ -6,9 +6,11 @@ class TagArticleProvider with ChangeNotifier {
   final Repository _repository = Repository();
 
   bool _canLoadMoreArticle = true;
+
   bool get canLoadMoreArticle => _canLoadMoreArticle;
 
   int _offsetRequest = 1, _limitPageRequest = 10;
+
   int get offsetRequest => _offsetRequest;
 
   List<ArticleDetail> _listArticle = [];

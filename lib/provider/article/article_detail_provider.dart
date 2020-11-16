@@ -73,6 +73,7 @@ class ArticleDetailProvider with ChangeNotifier {
   }
 
   TextEditingController get commentController => _commentController;
+
   Stream<List<ArticleCommentDetail>> get commentStream =>
       _streamArticleDetail.stream;
 

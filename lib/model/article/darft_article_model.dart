@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
-class DraftArticleModel extends Equatable {
+class DraftArticleModel with EquatableMixin {
   String id;
   String title;
   String caption;

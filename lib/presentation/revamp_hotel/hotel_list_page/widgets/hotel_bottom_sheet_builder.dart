@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 class HotelBottomSheetBuilder extends StatelessWidget {
   final RevampHotelListRequest previousRequest;
+
   HotelBottomSheetBuilder({this.previousRequest});
 
   @override

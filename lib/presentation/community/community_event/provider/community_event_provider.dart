@@ -17,23 +17,29 @@ class CommunityEventProvider with ChangeNotifier {
   CommunityEventProvider(String communityId) {
     this._communityId = communityId;
   }
+
   final _repository = Repository();
   String _communityId;
 
   final _streamEvent = StreamController<eventState>.broadcast();
   final _pastStreamEvent = StreamController<eventState>.broadcast();
+
   Stream<eventState> get eventStream => _streamEvent.stream;
+
   Stream<eventState> get pastStream => _pastStreamEvent.stream;
 
   bool _isMounted = true;
 
   bool _isUpcomingEventCanLoadMore = true;
+
   bool get isUpcomingEventCanLoadMore => _isUpcomingEventCanLoadMore;
 
   int _upcomingPageRequest = 1;
+
   int get upcomingPageRequest => _upcomingPageRequest;
 
   List<EventResponseData> _upcomingList = List();
+
   List<EventResponseData> get upcomingList => _upcomingList;
 
   Future<Null> getUpcomingEvent({bool isRefresh = true}) async {
@@ -58,12 +64,15 @@ class CommunityEventProvider with ChangeNotifier {
   }
 
   bool _isPastEventCanLoadMore = true;
+
   bool get isPastEventCanLoadMore => _isPastEventCanLoadMore;
 
   int _pastPageRequest = 1;
+
   int get pastPageRequest => _pastPageRequest;
 
   List<EventResponseData> _pastEventList = List();
+
   List<EventResponseData> get pastEventList => _pastEventList;
 
   Future<Null> getPastEvent({bool isRefresh = true}) async {

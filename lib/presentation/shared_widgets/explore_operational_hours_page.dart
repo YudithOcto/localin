@@ -10,6 +10,7 @@ import 'package:localin/utils/date_helper.dart';
 class ExploreOperationalHoursPage extends StatelessWidget {
   static const routeName = 'ExploreOperationalHours';
   static const OpeningHours = 'OpeningHours';
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =

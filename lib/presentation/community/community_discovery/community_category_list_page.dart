@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/model/community/community_category.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_category_other_list.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_category_popular_list.dart';
@@ -14,6 +13,7 @@ import 'package:provider/provider.dart';
 class CommunityCategoryListPage extends StatelessWidget {
   static const routeName = 'CommunityCategoryPage';
   static const categoryDetail = 'categoryDetail';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

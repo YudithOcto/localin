@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:localin/presentation/shared_widgets/article_single_card.dart';
-import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/others_profile/provider/revamp_others_provider.dart';
 import 'package:localin/presentation/others_profile/widgets/empty_other_user_article_widget.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
 
 class OthersProfileArticleSectionWidget extends StatefulWidget {
   final String id;
   final String username;
+
   OthersProfileArticleSectionWidget(
       {@required this.id, @required this.username});
 

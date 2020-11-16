@@ -7,6 +7,7 @@ import 'package:localin/presentation/explore/submit_form/providers/submit_form_p
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_description.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_price_details.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_visitor.dart';
+import 'package:localin/presentation/shared_widgets/coupon_code_row_widget.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 class SubmitFormPage extends StatelessWidget {
   static const routeName = 'SubmitFormPage';
   static const eventSubmissionDetail = 'eventSubmissionDetail';
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
@@ -105,6 +107,20 @@ class SubmitFormContent extends StatelessWidget {
           children: <Widget>[
             SubmitFormTicketDescription(),
             SubmitFormTicketVisitor(),
+            Consumer<SubmitFormProvider>(
+              builder: (_, provider, __) => CouponCodeRowWidget(
+                onChanged: (s) {
+                  final provider =
+                      Provider.of<SubmitFormProvider>(context, listen: false);
+                  provider.addPriceData = s;
+                },
+                onAppliedParams: (v) {
+                  provider.addParamsDiscount = v;
+                },
+                priceToBeCalculated: provider.adminFee +
+                    provider.eventSubmissionDetails.totalPrice,
+              ),
+            ),
             SubmitFormTicketPriceDetails(),
           ],
         ),

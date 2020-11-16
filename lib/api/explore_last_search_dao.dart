@@ -1,5 +1,6 @@
 import 'package:localin/model/explore/explore_event_local_model.dart';
 import 'package:sembast/sembast.dart';
+
 import 'app_database.dart';
 
 class ExploreLastSearchDao {

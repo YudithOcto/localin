@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/custom_toast.dart';
+import 'package:localin/components/filled_button_default.dart';
+import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
+import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/presentation/community/community_event/community_event_tab_list_page.dart';
 import 'package:localin/presentation/community/community_members/community_members_page.dart';
-import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:localin/utils/constants.dart';
 
 class CommunitySettingsWidget extends StatelessWidget {
   final bool isAdmin;
   final CommunityDetail communityDetail;
   final CommunityDetailProvider provider;
+
   CommunitySettingsWidget(
       {@required this.isAdmin, @required this.communityDetail, this.provider});
 
@@ -73,6 +79,63 @@ class CommunitySettingsWidget extends StatelessWidget {
           child: RowSettings(
             icon: 'images/community_settings_promo.svg',
             title: 'Events',
+          ),
+        ),
+        Visibility(
+          visible: communityDetail.communityType != kFreeCommunity,
+          child: InkResponse(
+            onTap: () {
+              showModalBottomSheet(
+                  context: context,
+                  enableDrag: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0))),
+                  builder: (ctx) => Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text('${communityDetail?.couponCode ?? ''}',
+                                style: ThemeText.sfSemiBoldTitle3
+                                    .copyWith(color: ThemeColors.red)),
+                            SizedBox(height: 31.0),
+                            Text(kCouponCodeMessage,
+                                textAlign: TextAlign.center,
+                                style: ThemeText.sfRegularBody
+                                    .copyWith(color: ThemeColors.black80)),
+                            SizedBox(height: 27.0),
+                            FilledButtonDefault(
+                              onPressed: () {
+                                Clipboard.setData(ClipboardData(
+                                    text:
+                                        '${communityDetail?.couponCode ?? ''}'));
+                                CustomToast.showCustomToastWhite(
+                                    context, 'Coupon code copied.');
+                              },
+                              textTheme: ThemeText.rodinaTitle3
+                                  .copyWith(color: ThemeColors.black0),
+                              backgroundColor: ThemeColors.primaryBlue,
+                              buttonText: 'Copy Code',
+                            ),
+                            SizedBox(height: 27.0),
+                            OutlineButtonDefault(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              buttonText: 'Close',
+                              sideColor: ThemeColors.black20,
+                            )
+                          ],
+                        ),
+                      ));
+            },
+            child: RowSettings(
+              icon: 'images/icon_coupon_code.svg',
+              title: 'Coupon Code',
+            ),
           ),
         ),
         InkWell(

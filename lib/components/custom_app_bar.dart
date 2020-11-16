@@ -21,6 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
     this.titleStyle = ThemeText.sfMediumHeadline,
     this.bottomAppBar,
   });
+
   @override
   Widget build(BuildContext context) {
     return AppBar(

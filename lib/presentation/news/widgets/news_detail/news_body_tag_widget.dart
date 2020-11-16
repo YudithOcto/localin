@@ -5,6 +5,7 @@ import 'package:localin/themes.dart';
 
 class NewsBodyTagWidget extends StatelessWidget {
   final List<TagModel> tagModel;
+
   NewsBodyTagWidget({this.tagModel});
 
   @override

@@ -16,7 +16,9 @@ class SingleCommunityEvent extends StatelessWidget {
   final EventResponseData event;
   final int index;
   final bool isPastEvent;
+
   SingleCommunityEvent({this.event, this.index, this.isPastEvent});
+
   @override
   Widget build(BuildContext context) {
     return Padding(

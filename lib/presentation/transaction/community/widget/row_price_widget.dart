@@ -5,6 +5,7 @@ class RowPriceWidget extends StatelessWidget {
   final String title;
   final String value;
   final TextStyle valueStyle;
+
   RowPriceWidget({this.title, this.value, this.valueStyle});
 
   @override

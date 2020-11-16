@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_event_provider.dart';
 import 'package:localin/presentation/community/community_detail/widget/single_upcoming_widget.dart';
-import 'package:localin/presentation/community/community_event/widgets/single_community_event_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
 
 class CommunityDetailUpcomingEventsWidget extends StatefulWidget {
   final String communityId;
+
   CommunityDetailUpcomingEventsWidget({this.communityId});
 
   @override

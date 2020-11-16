@@ -16,14 +16,18 @@ class ExploreFilterProvider with ChangeNotifier {
   }
 
   int _selectedMonth;
+
   int get selectedMonth => _selectedMonth;
+
   set selectMonth(int index) {
     _selectedMonth = index;
     notifyListeners();
   }
 
   int _selectedSort;
+
   int get selectedSort => _selectedSort;
+
   set selectSort(int index) {
     _selectedSort = index;
     notifyListeners();
@@ -37,14 +41,18 @@ class ExploreFilterProvider with ChangeNotifier {
   }
 
   final _streamController = StreamController<filterState>.broadcast();
+
   Stream<filterState> get stream => _streamController.stream;
 
   final _repository = Repository();
   List<CategoryExploreDetail> _selectedCategory = [];
+
   List<CategoryExploreDetail> get selectedCategory => _selectedCategory;
 
   List<CategoryExploreDetail> _listCategory = [];
+
   List<CategoryExploreDetail> get listCategory => _listCategory;
+
   set selectCategory(CategoryExploreDetail value) {
     if (_selectedCategory.contains(value)) {
       _selectedCategory.remove(value);

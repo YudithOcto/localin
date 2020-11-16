@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
   final RoomAvailability detail;
+
   HotelDetailRoomTypeSingleRowWidget({this.detail});
 
   @override
@@ -56,16 +57,13 @@ class HotelDetailRoomTypeSingleRowWidget extends StatelessWidget {
                         .copyWith(color: ThemeColors.orange),
                   ),
                 ),
-                Visibility(
-                  visible: hotelDetail.discount > 0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8, top: 8.0),
-                    child: Text(
-                      '${getFormattedCurrency(detail.pricePerNight.oneNight - hotelDetail.discount)}',
-                      style: ThemeText.sfRegularBody.copyWith(
-                          color: ThemeColors.black80,
-                          decoration: TextDecoration.lineThrough),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8, top: 2.0),
+                  child: Text(
+                    '${!hotelDetail.roomAvailability.isNullOrEmpty ? getFormattedCurrency(increasePriceCalculation(hotelDetail.roomAvailability.first.sellingAmount)) : ''}',
+                    style: ThemeText.sfRegularBody.copyWith(
+                        color: ThemeColors.black80,
+                        decoration: TextDecoration.lineThrough),
                   ),
                 ),
                 Padding(

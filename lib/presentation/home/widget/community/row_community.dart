@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:localin/model/community/community_detail_base_response.dart';
-import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/components/shared_community_components/community_single_card.dart';
+import 'package:localin/model/community/community_detail_base_response.dart';
+import 'package:localin/presentation/community/community_discovery/community_discover_page.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';

@@ -13,7 +13,9 @@ import '../../../themes.dart';
 
 class NotificationColumnContentWidget extends StatefulWidget {
   final ValueChanged<int> valueChanged;
+
   NotificationColumnContentWidget({this.valueChanged});
+
   @override
   _NotificationColumnContentWidgetState createState() =>
       _NotificationColumnContentWidgetState();
@@ -226,9 +228,8 @@ class _NotificationColumnContentWidgetState
                               final tempItem =
                                   notifProvider.notificationList[index];
                               CustomDialog.showLoadingDialog(context);
-                              final result =
-                                  await notifProvider.deleteNotificationById(
-                                      notifProvider.notificationList[index].id);
+                              await notifProvider.deleteNotificationById(
+                                  notifProvider.notificationList[index].id);
                               notifProvider.deleteItem(index);
                               CustomDialog.closeDialog(context);
                               showToastMessage(

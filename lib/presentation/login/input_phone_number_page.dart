@@ -14,6 +14,7 @@ import '../../text_themes.dart';
 class InputPhoneNumberPage extends StatefulWidget {
   static const routeName = 'VerifyPhoneNumberPage';
   static const userPhoneVerificationCode = 'userPhoneVerificationCode';
+
   @override
   _InputPhoneNumberPageState createState() => _InputPhoneNumberPageState();
 }
@@ -82,6 +83,7 @@ class _InputPhoneNumberPageState extends State<InputPhoneNumberPage> {
 
 class ColumnContent extends StatefulWidget {
   final String isVerificationCodeOpen;
+
   ColumnContent({this.isVerificationCodeOpen});
 
   @override
@@ -146,8 +148,8 @@ class _ColumnContentState extends State<ColumnContent> {
                           : ThemeColors.black0),
                   child: TextFormField(
                     enabled: !provider.isLoading,
-                    inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                     validator: (value) =>
                         value.isEmpty ? 'Phone number is required' : null,

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoder/model.dart';
-
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
@@ -37,24 +36,30 @@ class HotelListProvider with ChangeNotifier {
   }
 
   final _appbarStreamController = StreamController<bool>.broadcast();
+
   Stream get appbarStream => _appbarStreamController.stream;
 
   final _scrollController = ScrollController();
+
   ScrollController get scrollController => _scrollController;
 
   final panelController = PanelController();
 
   final _repository = Repository();
   final _streamController = StreamController<searchState>.broadcast();
+
   Stream<searchState> get stream => _streamController.stream;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequested => _pageRequest;
 
   List<HotelDetailEntity> _hotelList = List();
+
   List<HotelDetailEntity> get hotelList => _hotelList;
 
   int _totalHotel = 0;
@@ -106,7 +111,9 @@ class HotelListProvider with ChangeNotifier {
   }
 
   RevampHotelListRequest _revampHotelListRequest;
+
   RevampHotelListRequest get revampHotelListRequest => _revampHotelListRequest;
+
   set revampHotelDataRequest(RevampHotelListRequest data) {
     final temp = _revampHotelListRequest;
     _revampHotelListRequest = RevampHotelListRequest(

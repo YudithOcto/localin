@@ -8,15 +8,19 @@ class CommunityDetailEventProvider with ChangeNotifier {
   final _repository = Repository();
 
   bool _isUpcomingEventCanLoadMore = true;
+
   bool get isUpcomingEventCanLoadMore => _isUpcomingEventCanLoadMore;
 
   int _upcomingPageRequest = 1;
+
   int get upcomingPageRequest => _upcomingPageRequest;
 
   List<EventResponseData> _upcomingList = List();
+
   List<EventResponseData> get upcomingList => _upcomingList;
 
   final _streamEvent = StreamController<listEventState>.broadcast();
+
   Stream<listEventState> get eventStream => _streamEvent.stream;
 
   Future<Null> getUpcomingEvent(String communityId,

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:localin/utils/countdown.dart';
-import 'package:provider/provider.dart';
 
 class TopBarTransactionStatusWidget extends StatefulWidget {
   final Color backgroundColor;
   final String status;
   final String expiredAt;
+
   TopBarTransactionStatusWidget(
       {Key key,
       @required this.backgroundColor,

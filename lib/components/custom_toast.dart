@@ -17,6 +17,44 @@ class CustomToast {
         backgroundColor: ThemeColors.red10);
   }
 
+  static showCustomToastWhite(BuildContext context, String message,
+      {AlignmentGeometry alignment = Alignment.bottomCenter}) {
+    {
+      okToast.showToastWidget(
+        Container(
+          width: double.maxFinite,
+          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          child: Material(
+            shadowColor: ThemeColors.black80,
+            elevation: 1,
+            color: ThemeColors.black0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.0)),
+            child: Container(
+              height: 60.0,
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              alignment: FractionalOffset.center,
+              child: Text(
+                '$message',
+                style: ThemeText.sfSemiBoldBody,
+              ),
+            ),
+          ),
+        ),
+        animationBuilder: okToast.Miui10AnimBuilder(),
+        animationDuration: Duration(milliseconds: 100),
+        textDirection: TextDirection.ltr,
+        duration: Duration(seconds: 2),
+        animationCurve: Curves.easeIn,
+        context: context,
+        position:
+            okToast.ToastPosition(offset: -90, align: Alignment.bottomCenter),
+        handleTouch: true,
+        dismissOtherToast: true,
+      );
+    }
+  }
+
   static showCustomBookmarkToast(BuildContext context, String message,
       {AlignmentGeometry alignment = Alignment.bottomCenter,
       VoidCallback undoCallback,

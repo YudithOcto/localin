@@ -6,6 +6,7 @@ import 'package:localin/utils/constants.dart';
 
 class LocationNearMeWidget extends StatelessWidget {
   final String title;
+
   LocationNearMeWidget({this.title = 'Restaurant Near Me'});
 
   @override

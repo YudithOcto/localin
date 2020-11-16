@@ -3,10 +3,12 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel_list_provider.dart';
 import 'package:localin/provider/location/location_provider.dart';
 import 'package:provider/provider.dart';
+
 import 'widgets/hotel_list_builder.dart';
 
 class HotelListPage extends StatelessWidget {
   static const routeName = 'HotelListPage';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

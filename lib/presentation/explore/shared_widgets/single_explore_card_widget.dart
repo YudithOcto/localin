@@ -10,6 +10,7 @@ import 'package:localin/utils/number_helper.dart';
 
 class SingleExploreCardWidget extends StatelessWidget {
   final ExploreEventDetail detail;
+
   SingleExploreCardWidget({this.detail});
 
   @override

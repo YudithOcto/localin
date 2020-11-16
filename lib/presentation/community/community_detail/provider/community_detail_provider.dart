@@ -46,6 +46,7 @@ class CommunityDetailProvider extends BaseModelProvider {
 
   final StreamController<communityDetailState> _detailState =
       StreamController<communityDetailState>.broadcast();
+
   Stream<communityDetailState> get streamDetailState => _detailState.stream;
 
   Future<Null> getCommunityDetail(String communitySlug) async {
@@ -78,10 +79,14 @@ class CommunityDetailProvider extends BaseModelProvider {
     setSentCommentLoading(true);
     String type = attachmentFileImage != null
         ? 'image'
-        : attachmentFileVideo != null ? 'video' : null;
+        : attachmentFileVideo != null
+            ? 'video'
+            : null;
     String attachmentFilePath = attachmentFileImage != null
         ? attachmentFileImage.path
-        : attachmentFileVideo != null ? attachmentFileVideo.path : '';
+        : attachmentFileVideo != null
+            ? attachmentFileVideo.path
+            : '';
     FormData formData = FormData.fromMap(
       {
         'komentar': commentController.text,

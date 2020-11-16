@@ -11,6 +11,7 @@ class LatestPostMyGroupProvider with ChangeNotifier {
   final _repository = Repository();
 
   final _streamController = StreamController<myGroupState>.broadcast();
+
   Stream<myGroupState> get state => _streamController.stream;
 
   List<CommunityComment> _latestPost = [];

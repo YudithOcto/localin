@@ -7,6 +7,7 @@ import 'package:localin/themes.dart';
 class HotelDetailAllFacilitiesPage extends StatelessWidget {
   static const routeName = 'HotelDetailAllFacilitiesPage';
   static const facilities = 'Facilities';
+
   @override
   Widget build(BuildContext context) {
     final routes =

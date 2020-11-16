@@ -10,6 +10,7 @@ class HotelSingleRowWidget extends StatelessWidget {
   final VoidCallback onTapBookmark;
   final HotelDetailEntity hotelDetail;
   final VoidCallback onRoomTypeClick;
+
   HotelSingleRowWidget(
       {this.onTapBookmark, this.hotelDetail, this.onRoomTypeClick});
 

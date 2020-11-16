@@ -9,11 +9,13 @@ import 'package:localin/utils/constants.dart';
 
 class RestaurantProvider with ChangeNotifier {
   final _scrollController = ScrollController(keepScrollOffset: false);
+
   ScrollController get scrollController => _scrollController;
 
   final searchController = TextEditingController(text: kNearby);
 
   bool _isShowSearchAppBar = true;
+
   bool get isShowSearchAppBar => _isShowSearchAppBar;
 
   RestaurantProvider() {
@@ -45,18 +47,23 @@ class RestaurantProvider with ChangeNotifier {
 
   final _repository = Repository();
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   final _streamController = StreamController<searchState>.broadcast();
+
   Stream<searchState> get stream => _streamController.stream;
 
   List<RestaurantDetail> _restaurantList = [];
+
   List<RestaurantDetail> get restaurantList => _restaurantList;
 
   int _restaurantTotal = 0;
+
   get restaurantTotal => _restaurantTotal;
 
   getRestaurantList(

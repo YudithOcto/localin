@@ -8,7 +8,9 @@ import 'package:localin/utils/number_helper.dart';
 
 class ExplorePriceDetailWidget extends StatelessWidget {
   final Data exploreDetail;
+
   ExplorePriceDetailWidget({@required this.exploreDetail});
+
   @override
   Widget build(BuildContext context) {
     return Column(

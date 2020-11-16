@@ -18,16 +18,20 @@ class SearchEventProvider with ChangeNotifier {
   final searchController = TextEditingController();
 
   int _offset = 1;
+
   int get offset => _offset;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   final StreamController<searchState> _streamController =
       StreamController<searchState>.broadcast();
+
   Stream<searchState> get searchStream => _streamController.stream;
 
   List<BaseEventRequestmodel> _searchList = [];
+
   List<BaseEventRequestmodel> get searchList => _searchList;
 
   Future<Null> loadSearchData(
@@ -83,6 +87,7 @@ class SearchEventProvider with ChangeNotifier {
   }
 
   List<ExploreEventDetail> _trackEventListDetail = [];
+
   addSearchResult(ExploreEventResponseModel result) {
     _trackEventListDetail.addAll(result.detail);
     if (result.listSearchLocation.isNotNullNorEmpty) {

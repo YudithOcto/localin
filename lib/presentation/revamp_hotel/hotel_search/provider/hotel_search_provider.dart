@@ -18,15 +18,19 @@ class HotelSearchProvider with ChangeNotifier {
   final _repository = Repository();
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   List<HotelSuggestBase> _hotelList = List();
+
   List<HotelSuggestBase> get hotelList => _hotelList;
 
   final _streamController = StreamController<searchState>.broadcast();
+
   Stream<searchState> get stream => _streamController.stream;
 
   Future<Null> searchHotel({bool isRefresh = true, String search = ''}) async {

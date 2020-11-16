@@ -4,11 +4,11 @@ import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/locator.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/shared_widgets/article_single_card.dart';
-import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
 import 'package:localin/presentation/news/provider/news_myarticle_provider.dart';
 import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +52,7 @@ class _MyPublishArticleState extends State<MyPublishArticle>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
         loadArticle(isRefresh: true);

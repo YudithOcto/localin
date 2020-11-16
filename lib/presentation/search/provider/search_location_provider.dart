@@ -31,17 +31,21 @@ class SearchLocationProvider with ChangeNotifier {
   }
 
   int _offset = 1;
+
   int get offset => _offset;
 
   int _limit = 20;
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   final StreamController<locationState> _streamController =
       StreamController<locationState>.broadcast();
+
   Stream<locationState> get locationStream => _streamController.stream;
 
   List<LocationResponseDetail> _searchList = [];
+
   List<LocationResponseDetail> get searchList => _searchList;
 
   Future<Null> loadLocationData({bool isRefresh = true}) async {

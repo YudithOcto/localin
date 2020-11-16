@@ -39,6 +39,7 @@ class NewsDetailProvider with ChangeNotifier {
   }
 
   ArticleDetail _articleDetail;
+
   ArticleDetail get articleDetail => _articleDetail;
 
   Future<ArticleBaseResponse> getArticleDetail(String articleId) async {
@@ -53,7 +54,9 @@ class NewsDetailProvider with ChangeNotifier {
   }
 
   bool _isNewsBookmarkChanged;
+
   bool get isNewsBookmarkChange => _isNewsBookmarkChanged;
+
   set changeBookmark(bool value) {
     _isNewsBookmarkChanged = value;
     notifyListeners();

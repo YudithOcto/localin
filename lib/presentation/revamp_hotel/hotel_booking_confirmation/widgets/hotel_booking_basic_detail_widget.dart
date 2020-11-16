@@ -11,6 +11,7 @@ class HotelBookingBasicDetailWidget extends StatelessWidget {
   final HotelDetailEntity hotelDetail;
   final RoomAvailability roomDetail;
   final RevampHotelListRequest request;
+
   HotelBookingBasicDetailWidget(
       {this.hotelDetail, this.roomDetail, this.request});
 

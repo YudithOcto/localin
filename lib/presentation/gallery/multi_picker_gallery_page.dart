@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 class MultiPickerGalleryPage extends StatelessWidget {
   static const routeName = 'MultiPickerGallery';
   static const chosenImage = 'previousChosenImage';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GalleryProvider>(

@@ -5,9 +5,9 @@ import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.da
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
-import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
-import 'package:localin/presentation/transaction/community/widget/row_price_widget.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
+import 'package:localin/presentation/transaction/community/widget/row_price_widget.dart';
+import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/presentation/transaction/shared_widgets/bottom_button_payment_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/constants.dart';

@@ -7,6 +7,7 @@ import '../../text_themes.dart';
 class EmptyArticleWithCustomMessage extends StatelessWidget {
   final String title;
   final String message;
+
   EmptyArticleWithCustomMessage({@required this.title, @required this.message});
 
   @override

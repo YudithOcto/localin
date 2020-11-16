@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/provider/create/category_list_provider.dart';
-import 'package:localin/presentation/search/provider/search_location_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/debounce.dart';
@@ -8,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class CommunityCategorySearch extends StatelessWidget {
   static const routeName = 'CommunityCategorySearch';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CategoryListProvider>(

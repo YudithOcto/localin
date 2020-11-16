@@ -7,6 +7,7 @@ import 'package:localin/text_themes.dart';
 class FloatingActionBottomAppBarItem {
   String iconData;
   String text;
+
   FloatingActionBottomAppBarItem({this.iconData, this.text});
 }
 
@@ -33,6 +34,7 @@ class FloatingActionBottomAppBar extends StatefulWidget {
       this.notchedShape,
       this.selectedTabIndex,
       this.onTabSelected});
+
   @override
   _FloatingActionBottomAppBarState createState() =>
       _FloatingActionBottomAppBarState();

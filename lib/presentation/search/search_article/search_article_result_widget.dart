@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/locator.dart';
+import 'package:localin/presentation/search/provider/search_article_provider.dart';
 import 'package:localin/presentation/shared_widgets/article_single_card.dart';
 import 'package:localin/presentation/shared_widgets/empty_article.dart';
-import 'package:localin/presentation/search/provider/search_article_provider.dart';
 import 'package:provider/provider.dart';
 
 class SearchArticleResultWidget extends StatefulWidget {

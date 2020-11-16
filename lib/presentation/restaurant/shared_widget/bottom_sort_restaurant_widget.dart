@@ -13,6 +13,7 @@ class BottomSortRestaurantWidget extends StatelessWidget {
   ];
   final Function(int) onPressed;
   final int currentSelectedIndex;
+
   BottomSortRestaurantWidget({this.onPressed, this.currentSelectedIndex});
 
   Future showBottomSheet(BuildContext context) {

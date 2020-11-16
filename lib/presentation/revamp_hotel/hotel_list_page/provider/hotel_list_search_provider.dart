@@ -53,6 +53,7 @@ class HotelListSearchProvider with ChangeNotifier {
   bool trackBookmark = false;
 
   HotelDetailEntity _hotelDetailEntity;
+
   HotelDetailEntity get hotelDetail => _hotelDetailEntity;
 
   String get hotelImage {
@@ -68,13 +69,19 @@ class HotelListSearchProvider with ChangeNotifier {
   }
 
   RevampHotelListRequest _requestModel = RevampHotelListRequest();
+
   RevampHotelListRequest get requestModel => _requestModel;
 
   DateTime get checkIn => _requestModel.checkIn;
+
   DateTime get checkOut => _requestModel.checkout;
+
   int get totalRoomSelected => _requestModel.totalRooms;
+
   int get totalAdultSelected => _requestModel.totalAdults;
+
   int get totalChildSelected => _requestModel.totalChild;
+
   int get totalGuestSelected =>
       _requestModel.totalAdults + _requestModel.totalChild;
 
@@ -98,10 +105,12 @@ class HotelListSearchProvider with ChangeNotifier {
   }
 
   final _roomState = StreamController<RoomState>.broadcast();
+
   Stream<RoomState> get stream => _roomState.stream;
 
   final _repository = Repository();
   List<RoomAvailability> _roomAvailability = List();
+
   List<RoomAvailability> get roomAvailability => _roomAvailability;
 
   int discount = 0;

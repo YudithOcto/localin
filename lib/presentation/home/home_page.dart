@@ -7,10 +7,12 @@ import 'package:localin/presentation/home/widget/home_header_widget.dart';
 import 'package:localin/provider/home/home_provider.dart';
 import 'package:localin/provider/location/location_provider.dart';
 import 'package:provider/provider.dart';
+
 import '../../themes.dart';
 
 class HomePage extends StatefulWidget {
   final ValueChanged<int> valueChanged;
+
   HomePage({this.valueChanged});
 
   @override

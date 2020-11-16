@@ -14,11 +14,13 @@ class RestaurantDetailProvider with ChangeNotifier {
   }
 
   final _streamController = StreamController<eventState>.broadcast();
+
   get stream => _streamController.stream;
 
   final _repository = Repository();
 
   RestaurantDetail _restaurantDetail = RestaurantDetail();
+
   get restaurantDetail => _restaurantDetail;
 
   Future<Null> getRestaurantDetail(String restaurantId) async {
@@ -34,6 +36,7 @@ class RestaurantDetailProvider with ChangeNotifier {
   }
 
   bool _trackChangedBookmark = false;
+
   bool get trackChangedBookmark => _trackChangedBookmark;
 
   Future<String> updateBookmarkRestaurant() async {

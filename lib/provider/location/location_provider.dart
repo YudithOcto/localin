@@ -45,6 +45,8 @@ class LocationProvider with ChangeNotifier {
   }
 
   String get address => _address;
+
   bool get isLocationEnabled => _isLocationEnabled;
+
   Coordinates get userCoordinates => _coordinates;
 }

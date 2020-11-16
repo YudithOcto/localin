@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 class CreatePostPage extends StatelessWidget {
   static const routeName = 'CreatePostPage';
   static const communityId = 'communityId';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CommunityCreatePostProvider>(

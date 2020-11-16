@@ -3,14 +3,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/shared_community_components/community_single_card.dart';
 import 'package:localin/presentation/others_profile/provider/others_profile_community_provider.dart';
 import 'package:provider/provider.dart';
+
 import '../../../text_themes.dart';
 import 'empty_other_user_community_widget.dart';
 
 class OthersProfileCommunitySectionWidget extends StatefulWidget {
   final String userId;
   final String username;
+
   OthersProfileCommunitySectionWidget(
       {@required this.userId, @required this.username});
+
   @override
   _OthersProfileCommunitySectionWidgetState createState() =>
       _OthersProfileCommunitySectionWidgetState();

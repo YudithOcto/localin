@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_detail.dart';
@@ -7,12 +8,15 @@ import 'package:localin/utils/debounce.dart';
 class SearchCommunityProvider with ChangeNotifier {
   final StreamController<searchCommunityState> _searchController =
       StreamController<searchCommunityState>.broadcast();
+
   Stream<searchCommunityState> get streamSearch => _searchController.stream;
 
   bool _isCanLoadMore = false;
+
   bool get isCanLoadMore => _isCanLoadMore;
 
   int _offset = 1;
+
   int get offset => _offset;
   int _limit = 10;
 
@@ -22,6 +26,7 @@ class SearchCommunityProvider with ChangeNotifier {
   final Debounce _debounce = Debounce(milliseconds: 300);
 
   List<CommunityDetail> _communityDetailList = [];
+
   List<CommunityDetail> get resultCommunityList => _communityDetailList;
 
   searchCommunity(String value) {

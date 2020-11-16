@@ -4,6 +4,7 @@ import 'package:localin/themes.dart';
 
 class HotelListFilterSubtitle extends StatelessWidget {
   final String title;
+
   HotelListFilterSubtitle({this.title});
 
   @override

@@ -5,16 +5,18 @@ import 'package:localin/presentation/community/community_detail/community_detail
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/provider/notification/notification_provider.dart';
-import 'package:localin/themes.dart';
 import 'package:localin/text_themes.dart';
+import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
 class SingleCardNotification extends StatelessWidget {
   final NotificationDetailModel detailModel;
+
   SingleCardNotification({this.detailModel});
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -48,9 +50,10 @@ class SingleCardNotification extends StatelessWidget {
             });
             break;
           case 'promo':
-            Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
-              WebViewPage.title: 'Promo',
-              WebViewPage.urlName: detailModel.typeId,
+            Navigator.of(context)
+                .pushNamed(TransactionWebView.routeName, arguments: {
+              TransactionWebView.title: 'Promo',
+              TransactionWebView.urlName: detailModel.typeId,
             });
             break;
         }

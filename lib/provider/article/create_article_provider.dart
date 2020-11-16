@@ -25,7 +25,7 @@ class CreateArticleProvider extends BaseModelProvider {
   bool autoValidate = false;
   Address address;
 
-  CreateArticleProvider() {}
+  CreateArticleProvider();
 
   @override
   void dispose() {

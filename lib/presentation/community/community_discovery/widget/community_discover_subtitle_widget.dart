@@ -5,8 +5,10 @@ import 'package:localin/text_themes.dart';
 class CommunityDiscoverSubtitleWidget extends StatelessWidget {
   final String svgAsset;
   final String title;
+
   CommunityDiscoverSubtitleWidget(
       {@required this.svgAsset, @required this.title});
+
   @override
   Widget build(BuildContext context) {
     return Row(

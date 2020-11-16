@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_image_radius.dart';
-import 'package:localin/presentation/explore/detail_page/explore_detail_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 
@@ -8,6 +7,7 @@ class EventTileWidget extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String subtitle;
+
   EventTileWidget({this.imageUrl, this.title, this.subtitle});
 
   @override

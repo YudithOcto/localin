@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_event/community_create_event_page.dart';
@@ -36,6 +35,7 @@ class CommunityEventTabListPage extends StatelessWidget {
 
 class CommunityEventWrapper extends StatefulWidget {
   final CommunityDetail communityDetail;
+
   CommunityEventWrapper({this.communityDetail});
 
   @override

@@ -10,7 +10,9 @@ import 'package:localin/presentation/news/provider/create_article_provider.dart'
 
 class CommunityCreatePostProvider with ChangeNotifier {
   List<Uint8List> _selectedImage = [];
+
   List<Uint8List> get selectedImage => _selectedImage;
+
   addSelectedImage(List<Uint8List> images) {
     _selectedImage.clear();
     _selectedImage.addAll(images);
@@ -19,17 +21,22 @@ class CommunityCreatePostProvider with ChangeNotifier {
 
   StreamController<searchTags> _streamController =
       StreamController<searchTags>.broadcast();
+
   Stream<searchTags> get streamTags => _streamController.stream;
 
   List<TagModel> _listTags = [];
+
   List<TagModel> get listTags => _listTags;
+
   void clearListTags() {
     _listTags.clear();
     notifyListeners();
   }
 
   List<String> _selectedTags = [];
+
   List<String> get selectedTags => _selectedTags;
+
   set addTags(String tagName) {
     _selectedTags.add(tagName);
     notifyListeners();
@@ -44,6 +51,7 @@ class CommunityCreatePostProvider with ChangeNotifier {
   final TextEditingController captionController = TextEditingController();
 
   final _repository = Repository();
+
   Future<CommunityCommentBaseResponse> addPost(String communityId) async {
     Map<String, dynamic> map = Map();
     if (_selectedImage.isNotEmpty) {

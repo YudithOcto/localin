@@ -10,7 +10,9 @@ import 'hotel_bottom_sheet_duration_stay_builder.dart';
 class HotelBottomSheetChooseCheckoutWidget extends StatefulWidget {
   final List<String> text;
   final int currentIndex;
+
   HotelBottomSheetChooseCheckoutWidget({this.text, this.currentIndex = 1});
+
   @override
   _HotelBottomSheetChooseCheckoutWidgetState createState() =>
       _HotelBottomSheetChooseCheckoutWidgetState();

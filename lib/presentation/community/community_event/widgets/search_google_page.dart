@@ -8,6 +8,7 @@ import 'package:localin/utils/location_helper.dart';
 
 class SearchGooglePage extends StatefulWidget {
   static const routeName = 'SearchGooglePage';
+
   @override
   _SearchGooglePageState createState() => _SearchGooglePageState();
 }

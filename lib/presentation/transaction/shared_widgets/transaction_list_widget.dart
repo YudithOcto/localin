@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 class TransactionListWidget extends StatefulWidget {
   final String type;
+
   TransactionListWidget({this.type});
 
   @override

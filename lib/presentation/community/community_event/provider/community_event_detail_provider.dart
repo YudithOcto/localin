@@ -14,9 +14,11 @@ class CommunityEventDetailProvider with ChangeNotifier {
   }
 
   EventResponseData _eventResponse = EventResponseData();
+
   EventResponseData get eventResponse => _eventResponse;
 
   final _streamController = StreamController<eventDetailState>.broadcast();
+
   Stream<eventDetailState> get streamEvent => _streamController.stream;
 
   Future<void> getEventDetail() async {
@@ -43,10 +45,13 @@ class CommunityEventDetailProvider with ChangeNotifier {
     'Tentative',
     'Not Going',
   ];
+
   List<String> get sortingList => _sortingList;
 
   String _selectedSort = 'Going';
+
   String get selectedSort => _selectedSort;
+
   set selectSort(String value) {
     _selectedSort = value;
     notifyListeners();

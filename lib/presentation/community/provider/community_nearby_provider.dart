@@ -10,15 +10,19 @@ class CommunityNearbyProvider with ChangeNotifier {
   final _repository = Repository();
 
   final _streamController = StreamController<communityNearbyState>.broadcast();
+
   Stream<communityNearbyState> get communityStream => _streamController.stream;
 
   int _offset = 1;
+
   int get offset => _offset;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   List<CommunityDetail> _communityNearbyList = [];
+
   List<CommunityDetail> get communityNearbyList => _communityNearbyList;
 
   Future<Null> getNearbyCommunity({bool isRefresh = true}) async {

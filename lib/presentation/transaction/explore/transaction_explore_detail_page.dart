@@ -3,9 +3,9 @@ import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/shared_widgets/empty_community_with_custom_message.dart';
+import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
 import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
 import 'package:localin/presentation/transaction/explore/widgets/explore_booking_detail_widget.dart';
-import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
 import 'package:localin/presentation/transaction/explore/widgets/explore_price_detail_widget.dart';
 import 'package:localin/presentation/transaction/explore/widgets/explore_visitor_detail_widget.dart';
 import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
@@ -38,6 +38,7 @@ class _TransactionExploreContentWidgetState
     extends State<TransactionExploreContentWidget> {
   bool _isInit = true, _isFromOutSideTransaction = false;
   String _transactionId;
+
   @override
   void didChangeDependencies() {
     if (_isInit) {

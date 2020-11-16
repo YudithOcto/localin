@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/article/article_comment_base_response.dart';
-import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/news/provider/comment_provider.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:provider/provider.dart';
 
 class ArticleCommentList extends StatefulWidget {
   final ScrollController controller;
   final String articleId;
+
   ArticleCommentList({this.controller, this.articleId});
 
   @override

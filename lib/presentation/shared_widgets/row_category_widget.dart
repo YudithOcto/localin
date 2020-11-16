@@ -4,6 +4,7 @@ import 'package:localin/themes.dart';
 
 class RowCategoryWidget extends StatelessWidget {
   final String title;
+
   RowCategoryWidget({@required this.title});
 
   @override

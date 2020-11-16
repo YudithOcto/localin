@@ -1,6 +1,7 @@
-import 'package:sembast/sembast.dart';
-import 'app_database.dart';
 import 'package:localin/model/article/darft_article_model.dart';
+import 'package:sembast/sembast.dart';
+
+import 'app_database.dart';
 
 class DraftDao {
   static const String DRAFT_STORE_NAME = 'draft';
@@ -15,7 +16,11 @@ class DraftDao {
         final db = await _db;
         final data = model.toJson();
         final result = await _shouldInsertData(model);
-        return result ? await _draftStore.add(db, data) : result ? 0 : 1;
+        return result
+            ? await _draftStore.add(db, data)
+            : result
+                ? 0
+                : 1;
       }
       return null;
     } catch (e) {

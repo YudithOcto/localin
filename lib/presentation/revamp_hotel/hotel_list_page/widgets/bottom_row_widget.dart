@@ -5,6 +5,7 @@ import 'package:localin/text_themes.dart';
 class BottomRowWidget extends StatelessWidget {
   final String icon;
   final String title;
+
   BottomRowWidget({@required this.icon, @required this.title});
 
   @override

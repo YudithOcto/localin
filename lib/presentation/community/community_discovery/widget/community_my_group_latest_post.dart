@@ -9,6 +9,7 @@ import 'package:localin/utils/date_helper.dart';
 
 class CommunityMyGroupLatestPost extends StatelessWidget {
   final CommunityComment singlePost;
+
   CommunityMyGroupLatestPost({this.singlePost});
 
   @override

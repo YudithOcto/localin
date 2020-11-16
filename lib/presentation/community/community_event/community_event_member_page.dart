@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 class CommunityEventMemberPage extends StatelessWidget {
   static const routeName = 'CommunityEventMemberPage';
   static const eventId = 'EventId';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

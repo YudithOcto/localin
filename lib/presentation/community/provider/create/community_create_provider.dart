@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
@@ -11,27 +12,31 @@ import 'package:localin/utils/image_helper.dart';
 
 class CommunityCreateProvider with ChangeNotifier {
   final _repository = Repository();
-  String _selectedLocation = '';
-  String get selectedLocation => _selectedLocation;
+  List<String> _selectedLocation = List();
+
+  List<String> get selectedLocation => _selectedLocation;
 
   final _streamController = StreamController<createState>.broadcast();
+
   Stream<createState> get stream => _streamController.stream;
 
-  bool _isEdit = false;
+  bool _isEditCommunity = false;
   CommunityDetail _previousCommunityDetail;
 
-  Future<Null> addPreviousData(CommunityDetail model) async {
+  Future<Null> addPreviousCommunityData(CommunityDetail model) async {
     _streamController.add(createState.loading);
     if (model != null) {
       final data = await ImageHelper.urlToFile(model.logo);
       communityName.text = model.name;
       communityDescription.text = model.description;
-      _selectedLocation = model.address;
+      model.address.forEach((element) {
+        selectedLocation.add(element);
+      });
       _selectedCategory = CommunityCategory(
           categoryName: model.categoryName, id: model.category);
       _selectedImage = data;
       _streamController.add(createState.success);
-      _isEdit = true;
+      _isEditCommunity = true;
       _previousCommunityDetail = model;
     } else {
       _streamController.add(createState.noPreviousData);
@@ -39,12 +44,18 @@ class CommunityCreateProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  set addLocationSelected(String value) {
-    _selectedLocation = value;
+  void addLocationSelected(String value,
+      {bool isEdit = false, int position = 0}) {
+    if (isEdit) {
+      _selectedLocation[position] = value;
+    } else {
+      _selectedLocation.add(value);
+    }
     notifyListeners();
   }
 
   CommunityCategory _selectedCategory;
+
   bool isCategorySelected(CommunityCategory value) {
     if (value != null &&
         value?.categoryName == _selectedCategory?.categoryName) {
@@ -62,7 +73,9 @@ class CommunityCreateProvider with ChangeNotifier {
   final TextEditingController communityDescription = TextEditingController();
 
   File _selectedImage;
+
   File get selectedImage => _selectedImage;
+
   set selectImage(File file) {
     _selectedImage = file;
     notifyListeners();
@@ -92,7 +105,7 @@ class CommunityCreateProvider with ChangeNotifier {
       communityName: communityName.text,
       description: communityDescription?.text,
       imageFile: _selectedImage,
-      isEditMode: _isEdit,
+      isEditMode: _isEditCommunity,
     );
   }
 
@@ -101,7 +114,7 @@ class CommunityCreateProvider with ChangeNotifier {
     Map<String, dynamic> map = Map();
     map['nama'] = model.communityName;
     map['deskripsi'] = model.description;
-    map['address'] = model.locations;
+    map['address'] = model.locations.map((e) => e).toList();
     map['type'] = _previousCommunityDetail.communityType;
     map['kategori'] = model.category.id;
     map['logo'] = MultipartFile.fromFileSync(model.imageFile.path,

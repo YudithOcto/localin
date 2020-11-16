@@ -16,6 +16,7 @@ const NO_COMMENT = 'No';
 class CommunityParentCommentWidget extends StatelessWidget {
   final CommunityComment communityComment;
   final int index;
+
   CommunityParentCommentWidget({this.communityComment, this.index});
 
   @override

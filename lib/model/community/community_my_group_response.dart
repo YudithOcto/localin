@@ -18,6 +18,7 @@ class CommunityMyGroupResponse {
             ? null
             : dta.map((e) => CommunityComment.fromJson(e)).toList());
   }
+
   CommunityMyGroupResponse.withError(String value)
       : error = value,
         data = [];

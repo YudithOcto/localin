@@ -10,6 +10,7 @@ import '../../../../themes.dart';
 class CommunityPaymentSuccessfulPage extends StatelessWidget {
   static const routeName = 'CommunitySuccessfulPage';
   static const communityData = 'communityData';
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class NewsMainPage extends StatefulWidget {
   static const routeName = 'NewsPage';
+
   @override
   _NewsMainPageState createState() => _NewsMainPageState();
 }

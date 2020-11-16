@@ -16,6 +16,7 @@ import '../../themes.dart';
 
 class RevampPhoneVerificationCodePage extends StatefulWidget {
   final String phoneNumber;
+
   RevampPhoneVerificationCodePage({this.phoneNumber});
 
   @override
@@ -43,7 +44,9 @@ class _RevampPhoneVerificationCodePageState
 
 class VerifyContentFormWidget extends StatelessWidget {
   final String phoneNumber;
+
   VerifyContentFormWidget({this.phoneNumber});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<VerifyCodeProvider>(builder: (context, provider, child) {

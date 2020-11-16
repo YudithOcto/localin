@@ -26,11 +26,17 @@ class SearchHotelProvider extends BaseModelProvider {
   List<HotelDetailEntity> _hotelDetailList = [];
 
   TextEditingController get searchController => _searchFormController;
+
   DateTime get selectedCheckIn => _selectedCheckIn;
+
   DateTime get selectedCheckOut => _selectedCheckOut;
+
   int get userTotalPickedRoom => _userRoomTotal;
+
   List<HotelDetailEntity> get hotelDetailList => _hotelDetailList;
+
   bool get canLoadMore => _canLoadMore;
+
   Stream<SearchViewState> get searchStream => _searchHotelController.stream;
 
   SearchHotelProvider({@required AnalyticsService analyticsService}) {

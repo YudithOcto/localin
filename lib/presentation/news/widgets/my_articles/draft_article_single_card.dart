@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart' as parser;
 import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/article/darft_article_model.dart';
 import 'package:localin/presentation/news/pages/news_create_article_page.dart';
@@ -6,7 +7,6 @@ import 'package:localin/presentation/news/provider/news_myarticle_provider.dart'
 import 'package:localin/presentation/news/provider/news_published_article_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:html/parser.dart' as parser;
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +14,7 @@ const popupText = ['Edit', 'Delete'];
 
 class DraftArticleSingleCard extends StatelessWidget {
   final DraftArticleModel model;
+
   DraftArticleSingleCard({this.model});
 
   @override

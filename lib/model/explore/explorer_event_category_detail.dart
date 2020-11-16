@@ -4,6 +4,7 @@ class ExploreEventCategoryDetail extends BaseEventRequestmodel {
   String categoryId;
   String categoryName;
   int total;
+
   ExploreEventCategoryDetail({this.categoryId, this.categoryName, this.total});
 
   factory ExploreEventCategoryDetail.fromMap(Map<String, dynamic> json) {

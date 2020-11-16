@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/community/community_event_member_response.dart';
@@ -8,16 +9,20 @@ import '../../enums.dart';
 class EventMemberTentativeProvider with ChangeNotifier {
   final _repository = Repository();
   final _streamController = StreamController<eventMemberState>.broadcast();
+
   Stream<eventMemberState> get eventMemberStream => _streamController.stream;
   bool _isMounted = true;
 
   bool _isEventTentativeCanLoadMore = true;
+
   bool get isEventTentativeCanLoadMore => _isEventTentativeCanLoadMore;
 
   List<EventMemberDetail> _memberTentativeList = List();
+
   List<EventMemberDetail> get memberTentativeList => _memberTentativeList;
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   Future<Null> getTentativeMember(String eventId,

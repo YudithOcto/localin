@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 class BookTicketListSelectionPage extends StatelessWidget {
   static const routeName = 'BookTicketPage';
   static const eventDetail = 'eventDetail';
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =

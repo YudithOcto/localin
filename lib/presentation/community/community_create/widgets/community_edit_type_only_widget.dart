@@ -12,6 +12,7 @@ import '../community_type_page.dart';
 
 class CommunityEditTypeOnlyWidget extends StatelessWidget {
   final CommunityDetail detail;
+
   CommunityEditTypeOnlyWidget({@required this.detail});
 
   @override

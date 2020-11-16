@@ -18,6 +18,7 @@ class HotelDetailSliverAppbar extends StatelessWidget {
 
   HotelDetailSliverAppbar(
       {this.isExpanded, this.tabController, this.onChanged});
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<HotelDetailNestedScrollProvider>(context);

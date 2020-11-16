@@ -15,20 +15,25 @@ class HotelListFilterProvider with ChangeNotifier {
   }
 
   double _currentHighest = DEFAULT_PRICE_HIGHEST;
+
   double get currentHighest => _currentHighest;
+
   set changeHighest(double value) {
     _currentHighest = value;
     notifyListeners();
   }
 
   double _currentLowest = DEFAULT_PRICE_LOWEST;
+
   double get currentLowest => _currentLowest;
+
   set changeLowest(double value) {
     _currentLowest = value;
     notifyListeners();
   }
 
   List<String> _selectedFacilities = [];
+
   bool isFacilitySelected(String id) {
     if (_selectedFacilities.contains(id)) {
       return true;
@@ -64,15 +69,19 @@ class HotelListFilterProvider with ChangeNotifier {
   final _repository = Repository();
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   List<HotelFacilityDetailModel> _facilityList = List();
+
   List<HotelFacilityDetailModel> get facilityList => _facilityList;
 
   final _streamController = StreamController<searchState>.broadcast();
+
   Stream<searchState> get stream => _streamController.stream;
 
   Future<Null> getFacility({bool isRefresh = true}) async {

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 class CommunityCommentListWidget extends StatefulWidget {
   final String communityId;
+
   CommunityCommentListWidget({Key key, this.communityId}) : super(key: key);
 
   @override

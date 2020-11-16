@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 class AppBarBookMarkShareActionWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
   final ValueChanged<bool> valueChanged;
+
   AppBarBookMarkShareActionWidget({this.articleDetail, this.valueChanged});
 
   @override

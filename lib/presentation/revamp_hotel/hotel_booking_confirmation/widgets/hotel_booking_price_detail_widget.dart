@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_availability.dart';
+import 'package:localin/model/transaction/transaction_discount_response_model.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
+import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/hotel_booking_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/number_helper.dart';
+import 'package:provider/provider.dart';
+
 import '../../../../text_themes.dart';
 
 class HotelBookingPriceDetailWidget extends StatelessWidget {
   final RevampHotelListRequest request;
   final RoomAvailability roomAvailability;
   final HotelDetailEntity detail;
+
   HotelBookingPriceDetailWidget(
       {this.detail, this.request, this.roomAvailability});
 
   @override
   Widget build(BuildContext context) {
     int duration = request.checkout.difference(request.checkIn).inDays;
+    final provider = Provider.of<HotelBookingProvider>(context);
     return Container(
       color: ThemeColors.black0,
       width: double.maxFinite,
@@ -36,26 +42,62 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
                       '${getFormattedCurrency(roomAvailability.pricePerNight.oneNight * duration)}',
                 ),
               )),
+          Visibility(
+            visible: provider.priceData != null &&
+                provider.priceData.couponDiscount != null &&
+                provider.priceData.couponDiscount > 0,
+            child: SinglePriceDetailRow(
+              title: 'Coupon',
+              value:
+                  '- ${getFormattedCurrency(provider.priceData?.couponDiscount)}',
+            ),
+          ),
+          Visibility(
+            visible: provider.priceData != null &&
+                provider.priceData.pointDiscount != null &&
+                provider.priceData.pointDiscount > 0,
+            child: SinglePriceDetailRow(
+              title: 'Local Point',
+              value:
+                  '- ${getFormattedCurrency(provider.priceData?.pointDiscount)}',
+            ),
+          ),
           SinglePriceDetailRow(
-            title: 'Admin Fee',
+            title: 'Tax Fee',
             value:
-                '${roomAvailability.adminFee.isNotNullNorEmpty ? getFormattedCurrency(roomAvailability.adminFee) : 'Free'}',
+                '${provider.baseTax.isNotNullNorEmpty ? getFormattedCurrency(provider.baseTax) : 'Free'}',
+          ),
+          SinglePriceDetailRow(
+            title: 'Service Fee',
+            value:
+                '${provider.baseService.isNotNullNorEmpty ? getFormattedCurrency(provider.baseService) : 'Free'}',
           ),
           SinglePriceDetailRow(
             title: 'Total',
             value:
-                '${getFormattedCurrency((roomAvailability.pricePerNight.oneNight * request.totalRooms) * duration + roomAvailability.adminFee)}',
+                '${getTotal(provider.priceData, (roomAvailability.pricePerNight.oneNight * request.totalRooms) * duration + provider.baseService + provider.baseTax)}',
           ),
         ],
       ),
     );
+  }
+
+  String getTotal(PriceData priceData, int totalBasic) {
+    if (priceData != null &&
+        (priceData.pointDiscount > 0 || priceData.couponDiscount > 0)) {
+      return getFormattedCurrency(priceData.userPrice);
+    } else {
+      return getFormattedCurrency(totalBasic);
+    }
   }
 }
 
 class SinglePriceDetailRow extends StatelessWidget {
   final String title;
   final String value;
+
   SinglePriceDetailRow({this.title, this.value});
+
   @override
   Widget build(BuildContext context) {
     return Column(

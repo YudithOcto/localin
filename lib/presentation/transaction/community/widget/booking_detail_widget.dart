@@ -12,7 +12,9 @@ import 'package:localin/utils/number_helper.dart';
 class BookingDetailWidget extends StatefulWidget {
   final TransactionDetailModel detail;
   final bool showPaymentRow;
+
   BookingDetailWidget({@required this.detail, this.showPaymentRow = false});
+
   @override
   _BookingDetailWidgetState createState() => _BookingDetailWidgetState();
 }

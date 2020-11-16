@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class CommunityOtherRowWidget extends StatelessWidget {
   final CommunityDetail detail;
+
   CommunityOtherRowWidget({@required this.detail});
 
   @override

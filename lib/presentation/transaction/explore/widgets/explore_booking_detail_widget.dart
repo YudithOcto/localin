@@ -9,6 +9,7 @@ import '../../../../themes.dart';
 
 class ExploreBookingDetailWidget extends StatelessWidget {
   final Data exploreDetail;
+
   ExploreBookingDetailWidget({@required this.exploreDetail});
 
   @override

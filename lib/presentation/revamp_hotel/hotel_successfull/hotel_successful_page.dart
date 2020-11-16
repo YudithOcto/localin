@@ -8,6 +8,7 @@ import 'package:localin/themes.dart';
 class HotelSuccessfulPage extends StatelessWidget {
   static const routeName = 'HotelSuccessfulPage';
   static const bookingId = 'BookingId';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

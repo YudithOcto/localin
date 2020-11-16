@@ -9,7 +9,9 @@ class Countdown {
   VoidCallback action;
   StreamController<String> _counterStream =
       StreamController<String>.broadcast();
+
   Stream<String> get differenceStream => _counterStream.stream;
+
   Function(String) get _addDifferences => _counterStream.sink.add;
 
   Countdown({@required this.expiredTime});

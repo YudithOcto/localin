@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
@@ -7,9 +8,10 @@ import 'package:localin/presentation/profile/user_profile/provider/user_profile_
 import 'package:localin/presentation/profile/user_profile/widgets/row_profile_settings_widget.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/presentation/webview/revamp_webview.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
+import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -46,13 +48,18 @@ class ProfileSettingsWidgets extends StatelessWidget {
             description: 'Learn how to get local point',
             iconValue: 'images/profile_point.svg',
             showButton: false,
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(RevampWebview.routeName, arguments: {
-                RevampWebview.url: '${buildEnvironment.baseUrl}#point',
-                RevampWebview.isFromProfile: true,
-                RevampWebview.title: 'Point',
-              });
+            onPressed: () async {
+              await launch('${buildEnvironment.baseUrl}#point',
+                  option: CustomTabsOption(
+                    toolbarColor: ThemeColors.primaryBlue,
+                    enableInstantApps: true,
+                    enableUrlBarHiding: true,
+                    animation: new CustomTabsAnimation.slideIn(),
+                    extraCustomTabs: <String>[
+                      'org.mozilla.firefox',
+                      'com.microsoft.emmx',
+                    ],
+                  ));
             },
           ),
         ),
@@ -63,13 +70,18 @@ class ProfileSettingsWidgets extends StatelessWidget {
             description: 'General Information about Localin',
             iconValue: 'images/profile_about.svg',
             showButton: false,
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(RevampWebview.routeName, arguments: {
-                RevampWebview.url: '${buildEnvironment.baseUrl}',
-                RevampWebview.isFromProfile: true,
-                RevampWebview.title: 'About',
-              });
+            onPressed: () async {
+              await launch('${buildEnvironment.baseUrl}',
+                  option: CustomTabsOption(
+                    toolbarColor: ThemeColors.primaryBlue,
+                    enableInstantApps: true,
+                    enableUrlBarHiding: true,
+                    animation: new CustomTabsAnimation.slideIn(),
+                    extraCustomTabs: <String>[
+                      'org.mozilla.firefox',
+                      'com.microsoft.emmx',
+                    ],
+                  ));
             },
           ),
         ),
@@ -80,14 +92,18 @@ class ProfileSettingsWidgets extends StatelessWidget {
             description: 'Read user agreements',
             iconValue: 'images/profile_privacy_policy.svg',
             showButton: false,
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(RevampWebview.routeName, arguments: {
-                RevampWebview.url:
-                    '${buildEnvironment.baseUrl}privacy-policy.html',
-                RevampWebview.isFromProfile: true,
-                RevampWebview.title: 'Privacy Policy',
-              });
+            onPressed: () async {
+              await launch('${buildEnvironment.baseUrl}privacy-policy.html',
+                  option: CustomTabsOption(
+                    toolbarColor: ThemeColors.primaryBlue,
+                    enableInstantApps: true,
+                    enableUrlBarHiding: true,
+                    animation: new CustomTabsAnimation.slideIn(),
+                    extraCustomTabs: <String>[
+                      'org.mozilla.firefox',
+                      'com.microsoft.emmx',
+                    ],
+                  ));
             },
           ),
         ),
@@ -115,15 +131,21 @@ class ProfileSettingsWidgets extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-          child: RowProfileSettingsWidget(
-            title: 'Referral',
-            description: 'Get Your Referral Code and Share',
-            iconValue: 'images/icon_referral.svg',
-            referralBackground: 'images/icon_referral_background.svg',
-            showButton: false,
-            onPressed: () {
-              Navigator.of(context).pushNamed(ReferralCodePage.routeName);
-            },
+          child: Consumer<AuthProvider>(
+            builder: (_, provider, __) => RowProfileSettingsWidget(
+              title: 'Referral',
+              description: 'Get Your Referral Code and Share',
+              iconValue: 'images/icon_referral.svg',
+              referralBackground: 'images/icon_referral_background.svg',
+              showButton: false,
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(ReferralCodePage.routeName, arguments: {
+                  ReferralCodePage.referralCode:
+                      provider?.userModel?.userReferralCode,
+                });
+              },
+            ),
           ),
         )
       ],
@@ -134,10 +156,17 @@ class ProfileSettingsWidgets extends StatelessWidget {
     final result =
         await Provider.of<HomeProvider>(context, listen: false).getDanaStatus();
     if (result.error == null) {
-      await Navigator.of(context).pushNamed(WebViewPage.routeName, arguments: {
-        WebViewPage.urlName: result.data.urlTopUp,
-        WebViewPage.title: 'Dana',
-      });
+      await launch(result.data.urlTopUp,
+          option: CustomTabsOption(
+            toolbarColor: ThemeColors.primaryBlue,
+            enableInstantApps: true,
+            enableUrlBarHiding: true,
+            animation: new CustomTabsAnimation.slideIn(),
+            extraCustomTabs: <String>[
+              'org.mozilla.firefox',
+              'com.microsoft.emmx',
+            ],
+          ));
     } else {
       final authState = Provider.of<AuthProvider>(context, listen: false);
       if (authState.userModel.handphone != null &&
@@ -146,9 +175,9 @@ class ProfileSettingsWidgets extends StatelessWidget {
             .authenticateUserDanaAccount(authState.userModel.handphone);
         if (result.urlRedirect.isNotEmpty && !result.error) {
           final response = await Navigator.of(context)
-              .pushNamed(WebViewPage.routeName, arguments: {
-            WebViewPage.urlName: result.urlRedirect,
-            WebViewPage.title: 'Dana',
+              .pushNamed(TransactionWebView.routeName, arguments: {
+            TransactionWebView.urlName: result.urlRedirect,
+            TransactionWebView.title: 'Dana',
           });
           if (response != null && response == 'success') {
             final dialogSuccess = await CustomDialog.showCustomDialogWithButton(

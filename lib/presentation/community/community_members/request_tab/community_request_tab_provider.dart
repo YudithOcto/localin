@@ -11,6 +11,7 @@ class CommunityRequestTabProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId = '';
   bool _isAdmin = true;
+
   bool get isAdmin => _isAdmin;
 
   CommunityRequestTabProvider({String communityId, bool isAdmin}) {
@@ -19,15 +20,19 @@ class CommunityRequestTabProvider with ChangeNotifier {
   }
 
   List<CommunityMemberDetail> _requestList = List();
+
   List<CommunityMemberDetail> get requestList => _requestList;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get currentPageRequest => _pageRequest;
 
   final _streamController = StreamController<communityMemberState>.broadcast();
+
   Stream<communityMemberState> get requestStream => _streamController.stream;
 
   bool _isMounted = true;
@@ -82,9 +87,11 @@ class CommunityRequestTabProvider with ChangeNotifier {
     'User Verified',
     'User Unverified'
   ];
+
   List<String> get sortingList => _sortingList;
 
   String _selectedSort = 'Suggested First';
+
   String get selectedSort => _selectedSort;
   String _apiSelectedSort = kSortMemberNew;
 
@@ -117,6 +124,7 @@ class CommunityRequestTabProvider with ChangeNotifier {
   }
 
   String _userSearch = '';
+
   set requestSearchKeyword(String value) {
     _userSearch = value;
     getRequestList(isRefresh: true);

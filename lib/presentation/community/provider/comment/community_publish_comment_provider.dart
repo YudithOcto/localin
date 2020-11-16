@@ -15,16 +15,20 @@ class CommunityPublishCommentProvider with ChangeNotifier {
   final commentTextController = TextEditingController();
 
   bool _isTextEmpty = true;
+
   bool get isTextEmpty => _isTextEmpty;
+
   set emptyText(bool value) {
     _isTextEmpty = value;
     notifyListeners();
   }
 
   final FocusNode _focusNode = FocusNode();
+
   FocusNode get formFocusNode => _focusNode;
 
   CommunityComment _currentClickedReplyCommentData;
+
   CommunityComment get currentClickedReplyData =>
       _currentClickedReplyCommentData;
 

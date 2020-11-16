@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:localin/model/community/community_discover_type.dart';
 import 'package:localin/model/community/community_member_detail.dart';
 
@@ -10,7 +9,7 @@ class CommunityDetail extends CommunityDiscoverType {
   String category;
   String categoryName;
   String description;
-  String address;
+  List<String> address;
   String logo;
   String logoUrl;
   int imageCount;
@@ -33,6 +32,7 @@ class CommunityDetail extends CommunityDiscoverType {
   String transactionId;
   Feature features;
   String expiredAt;
+  String couponCode;
   List<CommunityMemberDetail> listMember;
 
   CommunityDetail({
@@ -66,16 +66,24 @@ class CommunityDetail extends CommunityDiscoverType {
     this.joinStatus,
     this.listMember,
     this.expiredAt,
+    this.couponCode,
   });
 
   factory CommunityDetail.fromJson(Map<String, dynamic> body) {
+    List<String> address = List();
+    if (body['address'] is String) {
+      final data = body['address'];
+      address.add(data);
+    } else {
+      address = List<String>.from(body['address'].map((e) => e));
+    }
     return CommunityDetail(
       id: body['id'],
       slug: body['slug'],
       name: body['nama'],
       category: body['kategori'],
       description: body['deskripsi'],
-      address: body['address'],
+      address: address,
       logo: body['logo'],
       ranting: body['ranting'],
       status: body['status'],
@@ -94,6 +102,7 @@ class CommunityDetail extends CommunityDiscoverType {
       totalMember: body['total_member'],
       loginStatusType: body['is_admin'] ?? false,
       communityType: body['type'],
+      couponCode: body['kode_kupon'] ?? '',
       transactionId: body['transaksi_id'] ?? null,
       isAdmin: body['is_admin'] == null ? false : body['is_admin'],
       joinStatus: body['status_join'] ?? '',

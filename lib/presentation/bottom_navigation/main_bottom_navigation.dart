@@ -6,6 +6,7 @@ import 'package:localin/presentation/news/pages/news_main_page.dart';
 import 'package:localin/presentation/profile/user_profile/revamp_profile_page.dart';
 import 'package:localin/presentation/transaction/shared_widgets/transaction_list_page.dart';
 import 'package:localin/themes.dart';
+
 import '../../text_themes.dart';
 import 'floating_action_bottom_app_bar.dart';
 

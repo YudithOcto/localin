@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/provider/base_model_provider.dart';
@@ -7,6 +8,7 @@ class NotificationProvider extends BaseModelProvider {
   Repository _repository = Repository();
   bool _isCanLoadMore = true;
   int _totalPageRequest = 10, _offsetPageRequest = 1;
+
   int get offsetPageRequest => _offsetPageRequest;
   int totalInbox = 0;
   List<NotificationDetailModel> _notificationListData = [];
@@ -74,8 +76,10 @@ class NotificationProvider extends BaseModelProvider {
   }
 
   List<NotificationDetailModel> get notificationList => _notificationListData;
+
   Stream<NotificationState> get notificationStateStream =>
       _notificationState.stream;
+
   bool get isCanLoadMore => _isCanLoadMore;
 
   @override

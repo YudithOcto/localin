@@ -8,6 +8,7 @@ import 'package:localin/presentation/search/provider/search_event_provider.dart'
 
 class RestaurantBookmarkListProvider with ChangeNotifier {
   final _scrollController = ScrollController();
+
   ScrollController get scrollController => _scrollController;
 
   RestaurantBookmarkListProvider() {
@@ -16,15 +17,19 @@ class RestaurantBookmarkListProvider with ChangeNotifier {
 
   final _repository = Repository();
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   final _streamController = StreamController<searchState>.broadcast();
+
   Stream<searchState> get stream => _streamController.stream;
 
   List<RestaurantDetail> _restaurantList = [];
+
   List<RestaurantDetail> get restaurantList => _restaurantList;
 
   _scrollListener() {
@@ -73,7 +78,9 @@ class RestaurantBookmarkListProvider with ChangeNotifier {
   }
 
   bool _trackChangedVariable = false;
+
   bool get trackChangedVariable => _trackChangedVariable;
+
   @override
   void dispose() {
     _streamController.close();

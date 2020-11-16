@@ -16,8 +16,11 @@ class RevampVerificationProvider with ChangeNotifier {
   final TextEditingController documentController = TextEditingController();
   final StreamController<bool> _sendButtonController =
       StreamController<bool>.broadcast();
+
   List<UserCategoryDetailModel> get categoryList => _userCategory;
+
   String get selectedCategory => _selectedCategory;
+
   Stream<bool> get sendButtonState => _sendButtonController.stream;
 
   RevampVerificationProvider() {

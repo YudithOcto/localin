@@ -35,10 +35,13 @@ import 'package:localin/model/hotel/room_base_response.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/model/notification/notification_model.dart';
 import 'package:localin/model/restaurant/restaurant_response_model.dart';
+import 'package:localin/model/transaction/admin_fee_response_model.dart';
+import 'package:localin/model/transaction/transaction_discount_response_model.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/model/user/update_profile_model.dart';
 import 'package:localin/model/user/user_base_model.dart';
 import 'package:localin/model/user/user_model.dart';
+import 'package:localin/model/user/user_referral_response.dart';
 import 'package:localin/model/user/user_request.dart';
 import 'package:localin/model/user/user_verification_category_model.dart';
 
@@ -59,6 +62,10 @@ class Repository {
 
   Future<UserModel> getUserProfile() async {
     return apiProvider.getUserProfile();
+  }
+
+  Future<UserReferralResponse> inputFriendsReferral(String ref) async {
+    return apiProvider.inputFriendsReferral(referral: ref);
   }
 
   Future<UserVerificationCategoryModel> getUserVerificationCategory() async {
@@ -321,9 +328,15 @@ class Repository {
     return apiProvider.getBookingHistoryList(offset, limit);
   }
 
-  Future<BookHotelResponse> bookHotel(int hotelId, int roomCategoryId,
-      RevampHotelListRequest request, String roomName) {
-    return apiProvider.bookHotel(hotelId, roomCategoryId, request, roomName);
+  Future<BookHotelResponse> bookHotel(
+      int hotelId,
+      int roomCategoryId,
+      RevampHotelListRequest request,
+      String roomName,
+      String coupon,
+      int usePoint) {
+    return apiProvider.bookHotel(
+        hotelId, roomCategoryId, request, roomName, coupon, usePoint);
   }
 
   Future<BookingDetailResponse> getBookingDetail(String bookingDetailId) {
@@ -400,8 +413,17 @@ class Repository {
     return apiProvider.payTransaction(transId);
   }
 
+  Future<AdminFeeResponseModel> getAdminFee(FormData form) {
+    return apiProvider.getAdminFee(form);
+  }
+
   Future<String> cancelTransaction(String transactionId) {
     return apiProvider.cancelTransaction(transactionId);
+  }
+
+  Future<TransactionDiscountResponseModel> getTransactionDiscount(
+      FormData map) {
+    return apiProvider.getTransactionDiscount(map);
   }
 
   Future<ExploreEventResponseModel> getEventList(

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/explore/detail_page/provider/ticket_availability_provider.dart';
 import 'package:localin/presentation/calendar_page/providers/calendar_ticket_provider.dart';
-import 'package:localin/presentation/explore/book_ticket/book_ticket_list_selection_page.dart';
 import 'package:localin/presentation/explore/shared_widgets/row_ticket_selection_quantity_widget.dart';
-import 'package:localin/presentation/explore/shared_widgets/subtotal_ticket_bottom_widget.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 class CalendarPage extends StatelessWidget {
   static const routeName = 'CalendarPage';
   static const defaultDate = 'DefaultDate';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

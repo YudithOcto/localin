@@ -8,7 +8,9 @@ class HotelDetailNestedScrollProvider with ChangeNotifier {
   List<String> tabList = ['Overview', 'Facilities', 'Location', 'Details'];
 
   int _activeIndex = 0;
+
   int get activeIndex => _activeIndex;
+
   set indexActive(int index) {
     _activeIndex = index;
     notifyListeners();

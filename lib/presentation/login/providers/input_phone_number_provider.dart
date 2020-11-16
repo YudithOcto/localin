@@ -9,7 +9,9 @@ class InputPhoneNumberProvider with ChangeNotifier {
   bool _isLoading = false;
 
   bool get autoValidateForm => _autoValidate;
+
   TextEditingController get phoneNumberController => _phoneNumberController;
+
   bool get isLoading => _isLoading;
 
   Future<String> userPhoneRequest() async {

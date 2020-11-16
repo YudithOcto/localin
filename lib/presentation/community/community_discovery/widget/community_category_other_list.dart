@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 class CommunityCategoryOtherList extends StatefulWidget {
   final String categoryId;
+
   CommunityCategoryOtherList({this.categoryId});
 
   @override

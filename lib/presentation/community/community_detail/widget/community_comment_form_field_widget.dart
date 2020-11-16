@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 
 class CommunityCommentFormFieldWidget extends StatelessWidget {
   final String communityId;
+
   CommunityCommentFormFieldWidget({this.communityId});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CommunityPublishCommentProvider>(

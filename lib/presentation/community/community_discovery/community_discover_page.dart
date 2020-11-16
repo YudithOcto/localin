@@ -5,13 +5,13 @@ import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/shared_community_components/community_empty_page.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
+import 'package:localin/presentation/community/community_discovery/widget/community_discover_category_widget.dart';
 import 'package:localin/presentation/community/community_discovery/widget/community_discover_subtitle_widget.dart';
+import 'package:localin/presentation/community/community_discovery/widget/community_my_group_widget.dart';
+import 'package:localin/presentation/community/community_discovery/widget/community_nearby_widget.dart';
 import 'package:localin/presentation/community/community_search/search_community_page.dart';
 import 'package:localin/presentation/community/provider/community_feed_provider.dart';
 import 'package:localin/presentation/community/provider/community_nearby_provider.dart';
-import 'package:localin/presentation/community/community_discovery/widget/community_discover_category_widget.dart';
-import 'package:localin/presentation/community/community_discovery/widget/community_my_group_widget.dart';
-import 'package:localin/presentation/community/community_discovery/widget/community_nearby_widget.dart';
 import 'package:localin/presentation/community/provider/create/category_list_provider.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 
 class CommunityDiscoverPage extends StatelessWidget {
   static const routeName = 'CommunityDiscoverPage';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

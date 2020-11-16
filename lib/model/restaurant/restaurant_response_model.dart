@@ -170,7 +170,9 @@ class RestaurantDetail extends RestaurantSearchBaseModel {
     categoryName = json['establis_name'];
     isBookMark = json['is_bookmark'] == null
         ? false
-        : json['is_bookmark'] == 1 ? true : false;
+        : json['is_bookmark'] == 1
+            ? true
+            : false;
     if (json['higlights'] != null) {
       higlights = new List<RestaurantHighlight>();
       json['higlights'].forEach((v) {

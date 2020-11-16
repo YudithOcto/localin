@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 class SearchRestaurantPage extends StatelessWidget {
   static const routeName = 'SearchRestaurantPage';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SearchRestaurantProvider>(

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
+
 import '../../text_themes.dart';
 import '../../themes.dart';
 

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingPage extends StatefulWidget {
   static const routeName = 'OnBoardingPage';
+
   @override
   _OnBoardingPageState createState() => _OnBoardingPageState();
 }

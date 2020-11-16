@@ -4,12 +4,10 @@ import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/hotel/hotel_list_base_response.dart';
 import 'package:localin/model/hotel/revamp_hotel_list_request.dart';
 import 'package:localin/model/hotel/room_availability.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/hotel_booking_provider.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/hotel_detail_revamp_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_successfull/hotel_successful_page.dart';
 import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
@@ -19,8 +17,10 @@ class HotelBookingBottomWidgetPayment extends StatelessWidget {
   final HotelDetailEntity hotelDetail;
   final RoomAvailability roomDetail;
   final RevampHotelListRequest request;
+
   HotelBookingBottomWidgetPayment(
       {this.hotelDetail, this.roomDetail, this.request});
+
   @override
   Widget build(BuildContext context) {
     return InkResponse(
@@ -49,9 +49,9 @@ class HotelBookingBottomWidgetPayment extends StatelessWidget {
                     .getMiniDanaUrl(result.detail.bookingId);
             CustomDialog.closeDialog(context);
             final navWebViewResult = await Navigator.of(context)
-                .pushNamed(WebViewPage.routeName, arguments: {
-              WebViewPage.urlName: urlResponse?.urlRedirect,
-              WebViewPage.title: 'Dana',
+                .pushNamed(TransactionWebView.routeName, arguments: {
+              TransactionWebView.urlName: urlResponse?.urlRedirect,
+              TransactionWebView.title: 'Hotel Transaction',
             });
             if (navWebViewResult != null &&
                 navWebViewResult == SUCCESS_VERIFICATION) {

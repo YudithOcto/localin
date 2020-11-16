@@ -13,6 +13,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class NewsDetailContentWidget extends StatefulWidget {
   final String videoUrl;
+
   NewsDetailContentWidget({this.videoUrl});
 
   @override

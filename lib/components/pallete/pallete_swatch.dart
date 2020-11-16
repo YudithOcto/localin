@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 const Color _kBackgroundColor = Color(0xffa0a0a0);
 const Color _kSelectionRectangleBackground = Color(0x15000000);

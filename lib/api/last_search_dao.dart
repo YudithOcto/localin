@@ -1,5 +1,6 @@
 import 'package:localin/model/restaurant/restaurant_local_model.dart';
 import 'package:sembast/sembast.dart';
+
 import 'app_database.dart';
 
 class LastSearchDao {

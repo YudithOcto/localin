@@ -96,9 +96,13 @@ class HotelDetailProvider extends BaseModelProvider {
   }
 
   int get roomTotal => _roomTotal;
+
   DateTime get checkInDate => _selectedCheckIn;
+
   DateTime get checkOutDate => _selectedCheckOut;
+
   String get errorMessage => _errorMessage;
+
   Stream<RoomState> get roomState => _roomState.stream;
 
   @override

@@ -11,17 +11,21 @@ class NewsPublishedArticleProvider with ChangeNotifier {
   final Repository _repository = Repository();
 
   int _userArticleOffset = 1;
+
   int get userArticleOffset => _userArticleOffset;
 
   List<ArticleDetail> _userArticleList = [];
+
   List<ArticleDetail> get userArticleList => _userArticleList;
 
   bool _canLoadMoreArticleList = true;
+
   bool get canLoadMoreArticleList => _canLoadMoreArticleList;
 
   bool _isMounted = true;
   StreamController<publishedArticleState> _publishedState =
       StreamController<publishedArticleState>.broadcast();
+
   Stream<publishedArticleState> get publishedStream => _publishedState.stream;
 
   Future<Null> getUserArticle({isRefresh = true}) async {

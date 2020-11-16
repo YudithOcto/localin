@@ -26,6 +26,7 @@ class HotelRevampSearchBuilder extends StatefulWidget {
 class _HotelRevampSearchBuilderState extends State<HotelRevampSearchBuilder> {
   final _debounce = Debounce(milliseconds: 400);
   bool _isInit = true;
+
   @override
   void didChangeDependencies() {
     if (_isInit) {

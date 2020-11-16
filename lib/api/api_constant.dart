@@ -10,6 +10,7 @@ class ApiConstant {
   static const String kOtherUserProfile = 'v1/member/profile';
   static const String kUpdateUserLocation = 'v1/member/update/location';
   static const String kUserVerificationCategory = '/v1/member/kategori';
+  static const String kInputUserReferral = 'v1/member/update/referral';
 
   /// COMMUNITY
   static const String kCommunity = 'v1/komunitas';
@@ -77,6 +78,8 @@ class ApiConstant {
   static const String kTransactionPayment = 'v1/transaksi/pay';
   static const String kTransaction = 'v1/transaksi';
   static const String kTransactionCancel = 'v1/transaksi/cancel';
+  static const String kTransactionDiscount = '/v1/transaksi/diskon';
+  static const String kTransactionAdminFee = '/v1/explore/adminfee';
 
   /// EXPLORER
   static const String kExploreEvent = 'v1/explore/event';

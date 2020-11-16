@@ -9,15 +9,19 @@ class TransactionHotelListProvider with ChangeNotifier {
   final _repository = Repository();
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   List<BookingDetail> _hotelList = List();
+
   List<BookingDetail> get hotelList => _hotelList;
 
   final _streamController = StreamController<eventState>.broadcast();
+
   Stream<eventState> get hotelListStream => _streamController.stream;
 
   Future<Null> getHotelList({bool isRefresh = true}) async {

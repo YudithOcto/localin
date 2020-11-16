@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_detail.dart';
@@ -44,6 +45,7 @@ class UserProfileProvider with ChangeNotifier {
   }
 
   Stream<danaStatus> get danaAccountStream => _danaAccountDetail.stream;
+
   DanaUserAccountResponse get userDanaAccount => _userDanaAccount;
 
   @override

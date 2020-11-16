@@ -5,7 +5,6 @@ import 'package:localin/components/outline_button_default.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../text_themes.dart';
@@ -16,6 +15,7 @@ class CommunityEmptyPage extends StatelessWidget {
   final String title;
   final String content;
   final String btnTxt;
+
   CommunityEmptyPage({
     this.title = 'Can\'t find community around me',
     this.content =

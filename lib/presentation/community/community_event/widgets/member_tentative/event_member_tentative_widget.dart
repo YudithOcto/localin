@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/presentation/community/community_event/community_event_member_page.dart';
 import 'package:localin/presentation/community/community_event/enums.dart';
-import 'package:localin/presentation/community/community_event/widgets/member_going/community_event_going_member_provider.dart';
 import 'package:localin/presentation/community/community_event/widgets/member_tentative/event_member_tentative_provider.dart';
 import 'package:localin/presentation/community/community_members/shared_members_widget/custom_member_text_form_field_widget.dart';
 import 'package:localin/text_themes.dart';

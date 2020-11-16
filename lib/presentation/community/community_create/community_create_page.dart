@@ -51,6 +51,7 @@ class CommunityCreatePage extends StatelessWidget {
 
 class CommunityCreateWrapperWidget extends StatefulWidget {
   final CommunityDetail model;
+
   CommunityCreateWrapperWidget({this.model});
 
   @override
@@ -71,7 +72,7 @@ class _CommunityCreateWrapperWidgetState
     );
     Future.delayed(Duration.zero, () {
       Provider.of<CommunityCreateProvider>(context, listen: false)
-          .addPreviousData(widget.model);
+          .addPreviousCommunityData(widget.model);
     });
     super.initState();
   }

@@ -9,6 +9,7 @@ class HotelEmptyWidget extends StatelessWidget {
   final VoidCallback onTap;
   final String title;
   final String description;
+
   HotelEmptyWidget(
       {this.isVisible = true,
       this.onTap,

@@ -1,11 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
-import 'package:localin/presentation/webview/webview_page.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -16,6 +16,7 @@ import 'input_phone_number_page.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = 'LoginPage';
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -173,12 +174,18 @@ class Content extends StatelessWidget {
                     text: ' Terms of Service',
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        final response = await Navigator.of(context)
-                            .pushNamed(WebViewPage.routeName, arguments: {
-                          WebViewPage.urlName:
-                              '${buildEnvironment.baseUrl}privacy-policy.html',
-                          WebViewPage.title: 'Privacy Policy',
-                        });
+                        await launch(
+                            '${buildEnvironment.baseUrl}privacy-policy.html',
+                            option: CustomTabsOption(
+                              toolbarColor: ThemeColors.primaryBlue,
+                              enableInstantApps: true,
+                              enableUrlBarHiding: true,
+                              animation: new CustomTabsAnimation.slideIn(),
+                              extraCustomTabs: <String>[
+                                'org.mozilla.firefox',
+                                'com.microsoft.emmx',
+                              ],
+                            ));
                       },
                     style: ThemeText.sfMediumCaption
                         .copyWith(color: ThemeColors.primaryBlue)),

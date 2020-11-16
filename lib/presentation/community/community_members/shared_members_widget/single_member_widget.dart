@@ -20,6 +20,7 @@ class SingleMemberWidget extends StatelessWidget {
   final String rowDescription;
   final Function onRefresh;
   final bool isAdminUser;
+
   // for admin tab only, other than that give false
   final bool isOnlyAdminTab;
 

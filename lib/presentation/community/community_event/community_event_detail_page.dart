@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_detail_provider.dart';
 import 'package:localin/presentation/community/community_event/widgets/community_event_detail_botom_buton_widget.dart';
@@ -37,7 +36,9 @@ class CommunityEventDetailPage extends StatelessWidget {
 
 class CommunityEventWrapperContent extends StatelessWidget {
   final bool isBackToHme;
+
   CommunityEventWrapperContent({@required this.isBackToHme});
+
   @override
   Widget build(BuildContext context) {
     void _onBackPressed() {

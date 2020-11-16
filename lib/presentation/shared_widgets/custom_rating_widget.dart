@@ -6,6 +6,7 @@ import 'package:localin/themes.dart';
 class CustomRatingWidget extends StatelessWidget {
   final String starRating;
   final String totalRating;
+
   CustomRatingWidget({@required this.starRating, @required this.totalRating});
 
   @override

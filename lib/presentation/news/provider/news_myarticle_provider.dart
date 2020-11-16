@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/api/draft_dao.dart';
 import 'package:localin/api/repository.dart';
@@ -11,16 +12,20 @@ class NewsMyArticleProvider with ChangeNotifier {
 
   /// USER TRASH ARTICLE
   int _userArticleArchiveOffset = 1;
+
   int get userArticleArchiveOffset => _userArticleArchiveOffset;
 
   List<ArticleDetail> _userArticleArchiveList = [];
+
   List<ArticleDetail> get userArticleArchiveList => _userArticleArchiveList;
 
   bool _canLoadMoreArticleArchiveList = true;
+
   bool get canLoadMoreArchiveArticleList => _canLoadMoreArticleArchiveList;
 
   final StreamController<archiveState> _archiveController =
       StreamController<archiveState>.broadcast();
+
   Stream<archiveState> get archiveStream => _archiveController.stream;
 
   Future<Null> getUserTrashArticle({isRefresh = true}) async {
@@ -56,16 +61,20 @@ class NewsMyArticleProvider with ChangeNotifier {
 
   /// USER DRAFT ARTICLE
   int _userArticleDraftOffset = 0;
+
   int get userArticleDraftOffset => _userArticleDraftOffset;
   List<DraftArticleModel> _userArticleDraftList = [];
+
   List<DraftArticleModel> get userArticleDraftList => _userArticleDraftList;
   final DraftDao _draftDao = DraftDao();
 
   bool _isCanLoadMoreDraftArticle = true;
+
   bool get isCanLoadMoreDraftArticle => _isCanLoadMoreDraftArticle;
 
   final StreamController<draftState> _controller =
       StreamController<draftState>.broadcast();
+
   Stream<draftState> get draftStream => _controller.stream;
 
   bool _isMounted = true;

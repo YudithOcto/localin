@@ -9,7 +9,9 @@ import 'package:localin/themes.dart';
 class SingleUpcomingWidget extends StatelessWidget {
   final EventResponseData event;
   final int index;
+
   SingleUpcomingWidget({this.event, this.index});
+
   @override
   Widget build(BuildContext context) {
     return Padding(

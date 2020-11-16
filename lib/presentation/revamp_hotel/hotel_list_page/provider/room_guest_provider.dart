@@ -11,7 +11,9 @@ class RoomGuestProvider with ChangeNotifier {
   }
 
   int _roomSelected = 1;
+
   int get roomSelected => _roomSelected;
+
   set changeRoomValue(bool isAdding) {
     if (isAdding) {
       int currentRoomForChecking = _roomSelected + 1;
@@ -38,7 +40,9 @@ class RoomGuestProvider with ChangeNotifier {
   }
 
   int _adultSelected = 1;
+
   int get adultSelected => _adultSelected;
+
   set changeAdultValue(bool isAdding) {
     if (isAdding) {
       int _tempAdults = _adultSelected + 1;
@@ -66,7 +70,9 @@ class RoomGuestProvider with ChangeNotifier {
   }
 
   int _childSelected = 0;
+
   int get childSelected => _childSelected;
+
   set changeChildValue(bool isAdding) {
     if (isAdding) {
       int _tempCheck = _childSelected + 1;

@@ -7,6 +7,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/wid
 import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/widgets/hotel_booking_bottom_widget_payment.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/widgets/hotel_booking_contact_detail_widget.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_booking_confirmation/widgets/hotel_booking_price_detail_widget.dart';
+import 'package:localin/presentation/shared_widgets/coupon_code_row_widget.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -26,7 +27,10 @@ class HotelBookingConfirmationPage extends StatelessWidget {
     RevampHotelListRequest request = routes[sortRequest];
     RoomAvailability roomRequest = routes[roomDetail];
     return ChangeNotifierProvider<HotelBookingProvider>(
-      create: (_) => HotelBookingProvider(),
+      create: (_) => HotelBookingProvider(
+          (roomRequest.pricePerNight.oneNight * request.totalRooms) *
+                  request.checkout.difference(request.checkIn).inDays +
+              roomRequest.adminFee),
       child: Scaffold(
         backgroundColor: ThemeColors.black10,
         appBar: AppBar(
@@ -44,39 +48,55 @@ class HotelBookingConfirmationPage extends StatelessWidget {
           request: request,
         ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
-                child: Subtitle(
-                  title: 'booking detail',
+          child: LayoutBuilder(
+            builder: (context, constraint) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
+                  child: Subtitle(
+                    title: 'booking detail',
+                  ),
                 ),
-              ),
-              HotelBookingBasicDetailWidget(
-                hotelDetail: detail,
-                request: request,
-                roomDetail: roomRequest,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
-                child: Subtitle(
-                  title: 'Contact Details(For e-ticket)',
+                HotelBookingBasicDetailWidget(
+                  hotelDetail: detail,
+                  request: request,
+                  roomDetail: roomRequest,
                 ),
-              ),
-              HotelBookingContactDetailWidget(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
-                child: Subtitle(
-                  title: 'Price Detail',
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
+                  child: Subtitle(
+                    title: 'Contact Details(For e-ticket)',
+                  ),
                 ),
-              ),
-              HotelBookingPriceDetailWidget(
-                request: request,
-                detail: detail,
-                roomAvailability: roomRequest,
-              )
-            ],
+                HotelBookingContactDetailWidget(),
+                CouponCodeRowWidget(
+                  onAppliedParams: (v) {
+                    Provider.of<HotelBookingProvider>(context, listen: false)
+                        .setDiscountStatus(v);
+                  },
+                  onChanged: (priceData) {
+                    Provider.of<HotelBookingProvider>(context, listen: false)
+                        .inputPriceData = priceData;
+                  },
+                  priceToBeCalculated: (roomRequest.pricePerNight.oneNight *
+                              request.totalRooms) *
+                          request.checkout.difference(request.checkIn).inDays +
+                      roomRequest.adminFee,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),
+                  child: Subtitle(
+                    title: 'Price Detail',
+                  ),
+                ),
+                HotelBookingPriceDetailWidget(
+                  request: request,
+                  detail: detail,
+                  roomAvailability: roomRequest,
+                )
+              ],
+            ),
           ),
         ),
       ),

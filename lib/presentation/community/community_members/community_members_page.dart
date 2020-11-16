@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_widget.dart';
 import 'package:localin/presentation/community/community_members/blocked_tab/community_blocked_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/blocked_tab/community_blocked_tab_widget.dart';
-import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_widget.dart';
-import 'package:localin/presentation/community/community_members/admin_tab/community_admin_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_provider.dart';
+import 'package:localin/presentation/community/community_members/members_tab/community_members_tab_widget.dart';
 import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_provider.dart';
 import 'package:localin/presentation/community/community_members/request_tab/community_request_tab_widget.dart';
 import 'package:localin/provider/community_member_provider.dart';
@@ -56,6 +56,7 @@ class CommunityMembersPage extends StatelessWidget {
 
 class CommunityMemberWrapperContent extends StatefulWidget {
   final bool isAdmin;
+
   CommunityMemberWrapperContent({this.isAdmin});
 
   @override

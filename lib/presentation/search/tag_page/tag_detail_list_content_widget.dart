@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:localin/presentation/shared_widgets/article_single_card.dart';
-import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/model/article/article_detail.dart';
 import 'package:localin/model/article/tag_model_model.dart';
 import 'package:localin/presentation/search/provider/tag_article_provider.dart';
-import 'package:localin/presentation/shared_widgets/empty_article_with_custom_message.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +22,7 @@ class _TagDetailListContentWidgetState
   Future getArticle;
   TagModel model;
   final ScrollController _scrollController = ScrollController();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

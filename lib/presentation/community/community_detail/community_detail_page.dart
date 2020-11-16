@@ -3,12 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/community/community_detail/provider/community_detail_event_provider.dart';
+import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_detail_upcoming_events_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_news_activity_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/community_settings_widget.dart';
 import 'package:localin/presentation/community/community_detail/widget/sliver_appbar_widget.dart';
 import 'package:localin/presentation/community/provider/comment/community_retrieve_comment_provider.dart';
-import 'package:localin/presentation/community/community_detail/provider/community_detail_provider.dart';
 import 'package:localin/presentation/shared_widgets/empty_community_with_custom_message.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -60,6 +60,7 @@ class CommunityDetailPage extends StatelessWidget {
 class CommunityDetailColumn extends StatefulWidget {
   final bool isNeedToBackHome;
   final String slug;
+
   CommunityDetailColumn({this.isNeedToBackHome = false, this.slug});
 
   @override

@@ -8,18 +8,22 @@ class TransactionListProvider with ChangeNotifier {
   final _repository = Repository();
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _page = 1;
+
   int get page => _page;
 
   List<TransactionDetailModel> _listCommunityTransaction = List();
+
   List<TransactionDetailModel> get listCommunityTransaction =>
       _listCommunityTransaction;
 
   bool _isMounted = true;
 
   final _streamController = StreamController<transactionState>.broadcast();
+
   Stream<transactionState> get apiStream => _streamController.stream;
 
   Future<Null> getTransactionList(

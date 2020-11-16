@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_image_radius.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
 import 'package:localin/presentation/community/provider/search/search_community_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/components/custom_image_radius.dart';
 import 'package:provider/provider.dart';
 
 class SearchCommunityContentWidget extends StatefulWidget {
@@ -15,6 +15,7 @@ class SearchCommunityContentWidget extends StatefulWidget {
 class _SearchCommunityContentWidgetState
     extends State<SearchCommunityContentWidget> {
   final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     _scrollController..addListener(_scrollListener);

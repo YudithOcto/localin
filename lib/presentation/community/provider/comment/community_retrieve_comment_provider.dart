@@ -14,20 +14,26 @@ class CommunityRetrieveCommentProvider with ChangeNotifier {
   }
 
   final _streamController = StreamController<communityCommentState>.broadcast();
+
   Stream<communityCommentState> get commentListState =>
       _streamController.stream;
 
   int _page = 1;
+
   int get page => _page;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   List<CommunityComment> _commentList = [];
+
   List<CommunityComment> get commentList => _commentList;
 
   Map<int, bool> _childComment = Map();
+
   Map<int, bool> get childComment => _childComment;
+
   void setChildCommentDisplay(bool value, int commentId) {
     final isHaveChildComment = _childComment.containsKey(commentId);
     if (isHaveChildComment) {

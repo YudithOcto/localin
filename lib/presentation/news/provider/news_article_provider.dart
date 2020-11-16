@@ -8,11 +8,14 @@ class NewsArticleProvider with ChangeNotifier {
   final Repository _apiRepository = Repository();
 
   List<ArticleDetail> _articleList = [];
+
   List<ArticleDetail> get articleList => _articleList;
 
   int _pageRequest = 1, _limitPageRequest = 10;
+
   int get pageRequest => _pageRequest;
   bool _canLoadMore = true;
+
   bool get canLoadMoreArticle => _canLoadMore;
   int _pageTotal = 0;
 
@@ -20,6 +23,7 @@ class NewsArticleProvider with ChangeNotifier {
 
   StreamController<NewsArticleState> _articleLoadController =
       StreamController<NewsArticleState>.broadcast();
+
   Stream<NewsArticleState> get streamArticle => _articleLoadController.stream;
 
   Future<List<ArticleDetail>> getArticleList({

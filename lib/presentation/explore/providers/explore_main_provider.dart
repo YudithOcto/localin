@@ -11,34 +11,44 @@ class ExploreMainProvider with ChangeNotifier {
   final _repository = Repository();
 
   int _pageOffset = 1;
+
   int get pageOffset => _pageOffset;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   List<ExploreEventDetail> _eventList = [];
+
   List<ExploreEventDetail> get eventList => _eventList;
 
   final _streamController = StreamController<exploreState>.broadcast();
+
   Stream<exploreState> get stream => _streamController.stream;
 
   bool isMount = true;
   String _searchText = '';
+
   String get searchText => _searchText;
+
   set searchTextValue(String val) {
     _searchText = val;
     notifyListeners();
   }
 
   ExploreFilterModelRequest _filterRequest = ExploreFilterModelRequest();
+
   ExploreFilterModelRequest get filterRequest => _filterRequest;
+
   set changeFilterRequest(ExploreFilterModelRequest request) {
     _filterRequest = request;
     getEventList(isRefresh: true);
   }
 
   bool _isNearby;
+
   bool get isNearby => _isNearby;
+
   set nearby(bool nearby) {
     _isNearby = nearby;
     notifyListeners();

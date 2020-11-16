@@ -6,7 +6,9 @@ import '../../../themes.dart';
 
 class EmptyOtherUserCommunityWidget extends StatelessWidget {
   final String username;
+
   EmptyOtherUserCommunityWidget({this.username});
+
   @override
   Widget build(BuildContext context) {
     return Padding(

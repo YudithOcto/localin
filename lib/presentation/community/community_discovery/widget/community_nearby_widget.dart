@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 class CommunityNearbyWidget extends StatelessWidget {
   final ScrollController scrollController;
+
   CommunityNearbyWidget({Key key, this.scrollController}) : super(key: key);
 
   @override

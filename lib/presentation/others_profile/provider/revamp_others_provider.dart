@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_base_response.dart';
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/model/community/community_detail.dart';
-import 'package:localin/model/community/community_detail_base_response.dart';
 import 'package:localin/model/user/user_model.dart';
 
 class RevampOthersProvider with ChangeNotifier {

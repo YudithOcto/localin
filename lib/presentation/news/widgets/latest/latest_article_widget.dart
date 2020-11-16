@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/locator.dart';
-import 'package:localin/presentation/shared_widgets/article_single_card.dart';
-import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/presentation/home/widget/row_user_location.dart';
 import 'package:localin/presentation/news/provider/news_article_provider.dart';
 import 'package:localin/presentation/search/search_article/search_article_page.dart';
+import 'package:localin/presentation/shared_widgets/article_single_card.dart';
+import 'package:localin/presentation/shared_widgets/empty_article.dart';
 import 'package:localin/text_themes.dart';
 import 'package:provider/provider.dart';
 

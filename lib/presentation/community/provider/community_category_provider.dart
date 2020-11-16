@@ -9,15 +9,19 @@ class CommunityCategoryProvider with ChangeNotifier {
 
   final _otherCommunityStream =
       StreamController<othersCommunityState>.broadcast();
+
   Stream<othersCommunityState> get streamOther => _otherCommunityStream.stream;
 
   int _page = 1;
+
   int get page => _page;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   List<CommunityDetail> _otherCommunity = [];
+
   List<CommunityDetail> get otherCommunity => _otherCommunity;
 
   Future<Null> getCommunityByCategory(
@@ -45,11 +49,14 @@ class CommunityCategoryProvider with ChangeNotifier {
 
   final _popularCommunityStream =
       StreamController<popularCommunityState>.broadcast();
+
   Stream<popularCommunityState> get streamPopular =>
       _popularCommunityStream.stream;
 
   List<CommunityDetail> _popularCommunity = [];
+
   List<CommunityDetail> get popularCommunity => _popularCommunity;
+
   Future<Null> getPopularCommunity({String categoryId}) async {
     final result = await _repository.getPopularCommunity(
         limit: 6, offset: 1, categoryId: categoryId);

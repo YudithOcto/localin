@@ -17,15 +17,19 @@ class HotelBookmarkProvider with ChangeNotifier {
   final _repository = Repository();
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   List<HotelDetailEntity> _hotelList = List();
+
   List<HotelDetailEntity> get hotelList => _hotelList;
 
   final _streamController = StreamController<RoomState>.broadcast();
+
   Stream<RoomState> get stream => _streamController.stream;
 
   Future<Null> getHotelBookmarkList({bool isRefresh = true}) async {

@@ -7,6 +7,7 @@ import '../../text_themes.dart';
 class EmptyCommunityWithCustomMessage extends StatelessWidget {
   final String title;
   final String message;
+
   EmptyCommunityWithCustomMessage(
       {@required this.title, @required this.message});
 

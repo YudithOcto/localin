@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:localin/text_themes.dart';
-import 'package:localin/utils/constants.dart';
+
 import '../../themes.dart';
 
 class EmptyPage extends StatelessWidget {
   static const routeName = 'EmptyPage';
+
   @override
   Widget build(BuildContext context) {
-    final screen = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

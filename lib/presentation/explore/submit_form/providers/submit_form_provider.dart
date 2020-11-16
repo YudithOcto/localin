@@ -1,15 +1,19 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/explore/explore_event_submission_details.dart';
 import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/explore/single_person_form_model.dart';
 import 'package:localin/model/explore/submit_form_request_model.dart';
+import 'package:localin/model/transaction/discount_status.dart';
+import 'package:localin/model/transaction/transaction_discount_response_model.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class SubmitFormProvider with ChangeNotifier {
   ExploreEventSubmissionDetails _eventSubmissionDetails;
+
   ExploreEventSubmissionDetails get eventSubmissionDetails =>
       _eventSubmissionDetails;
 
@@ -22,6 +26,8 @@ class SubmitFormProvider with ChangeNotifier {
       visitorController
           .add(TextEditingController(text: index == 0 ? currentUserName : ''));
     });
+    getAdminFee(_eventSubmissionDetails.totalTicket,
+        _eventSubmissionDetails.totalPrice);
   }
 
   get singlePaxPrice {
@@ -82,7 +88,9 @@ class SubmitFormProvider with ChangeNotifier {
 
     return SubmitFormRequestModel(
         eventName: _eventSubmissionDetails.eventName,
-        profileTicket: profileModel);
+        profileTicket: profileModel,
+        coupon: _couponParams,
+        usePoint: _localPoint);
   }
 
   getTicketTitle(int index) {
@@ -94,11 +102,53 @@ class SubmitFormProvider with ChangeNotifier {
   bool autoValidate = false;
 
   final _repository = Repository();
+
   Future<ExploreOrderResponseModel> orderTicket() async {
     final result = await _repository
         .orderTicket(jsonEncode(eventFormRequestModel.toJson()));
     return result;
   }
+
+  getAdminFee(int qty, int totalPrice) async {
+    final response = await _repository.getAdminFee(FormData.fromMap({
+      'harga': totalPrice,
+      'qty': qty,
+    }));
+    if (!response.isError) {
+      adminFee = response.adminFare;
+    }
+    notifyListeners();
+  }
+
+  int adminFee = 0;
+
+  PriceData _priceData;
+  set addPriceData(PriceData data) {
+    this._priceData = data;
+    _eventSubmissionDetails.totalPrice = data.userPrice;
+    notifyListeners();
+  }
+
+  DiscountStatus _appliedDiscountParams = DiscountStatus();
+  String get _couponParams => _appliedDiscountParams.couponValue != null &&
+          _appliedDiscountParams.couponValue.isNotEmpty
+      ? _appliedDiscountParams.couponValue
+      : '';
+  int get _localPoint => _appliedDiscountParams.isUsingLocalPoint != null
+      ? _appliedDiscountParams.isUsingLocalPoint
+      : 0;
+  set addParamsDiscount(DiscountStatus status) {
+    _appliedDiscountParams = status;
+    notifyListeners();
+  }
+
+  int get couponDiscount => _priceData != null ? _priceData.couponDiscount : 0;
+  int get localPointDiscount =>
+      _priceData != null ? _priceData.pointDiscount : 0;
+  bool get isCouponActive =>
+      _priceData != null && _priceData.couponDiscount > 0;
+  bool get isLocalPointActive =>
+      _priceData != null && _priceData.pointDiscount > 0;
 
   @override
   void dispose() {

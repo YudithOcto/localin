@@ -125,12 +125,19 @@ class VerifyCodeProvider with ChangeNotifier {
   }
 
   String get currentDifference => _currentDifference;
+
   bool get isVerifyCodeNumber => _isVerifyingCodeNumber;
+
   bool get requestingNewSmSCode => _isRequestingNewSmsCode;
+
   Color get formColor => _color;
+
   TimerState get timerState => _timerState;
+
   bool get isFormDisabled => _isFormDisabled;
+
   bool get isAllFieldsFilled => _isAllFieldsFilled;
+
   Stream<bool> get clearAllField => _textClear.stream;
 }
 

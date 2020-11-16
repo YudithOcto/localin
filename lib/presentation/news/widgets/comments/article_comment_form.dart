@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class ArticleCommentForm extends StatefulWidget {
   final ScrollController controller;
+
   ArticleCommentForm({this.controller});
 
   @override

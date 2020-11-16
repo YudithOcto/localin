@@ -17,14 +17,17 @@ class HotelDetailApiProvider with ChangeNotifier {
   }
 
   RevampHotelListRequest _request = RevampHotelListRequest();
+
   RevampHotelListRequest get request => _request;
   int _hotelId = 0;
 
   final _repository = Repository();
   final _streamController = StreamController<searchState>.broadcast();
+
   Stream<searchState> get stream => _streamController.stream;
 
   HotelDetailEntity _hotelDetailEntity = HotelDetailEntity();
+
   HotelDetailEntity get hotelDetailEntity => _hotelDetailEntity;
 
   Future<Null> getHotelDetail() async {

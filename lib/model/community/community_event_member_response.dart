@@ -50,6 +50,8 @@ class EventMemberDetail {
         communityJoinType: map['status_join_komunitas'],
         verifiedUser: map['verified'] == null
             ? null
-            : map['verified'] == 1 ? true : false);
+            : map['verified'] == 1
+                ? true
+                : false);
   }
 }

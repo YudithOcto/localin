@@ -18,6 +18,7 @@ class SingleCardCommunityNewsWidget extends StatelessWidget {
   final CommunityDetail communityDetail;
   final VoidCallback onCommentPressed;
   final int index;
+
   SingleCardCommunityNewsWidget({
     Key key,
     this.commentData,

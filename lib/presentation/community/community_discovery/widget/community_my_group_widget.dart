@@ -8,6 +8,7 @@ import 'package:localin/themes.dart';
 
 class CommunityMyGroupWidget extends StatelessWidget {
   final List<CommunityDetail> userCommunityDetail;
+
   CommunityMyGroupWidget({@required this.userCommunityDetail});
 
   @override

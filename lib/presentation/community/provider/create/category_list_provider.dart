@@ -10,19 +10,25 @@ class CategoryListProvider with ChangeNotifier {
 
   StreamController<categoryState> _streamController =
       StreamController<categoryState>.broadcast();
+
   Stream<categoryState> get categoryStream => _streamController.stream;
 
   List<CommunityCategory> _categoryList = List();
+
   List<CommunityCategory> get categoryList => _categoryList;
 
   bool _canCategoryLoadMore = true;
+
   bool get canCategoryLoadMore => _canCategoryLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequested => _pageRequest;
 
   CommunityCategory _selectedCategory;
+
   CommunityCategory get selectedCategory => _selectedCategory;
+
   bool isCategorySelected(CommunityCategory value) {
     if (value != null &&
         value?.categoryName == _selectedCategory?.categoryName) {

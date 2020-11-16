@@ -5,6 +5,7 @@ import 'package:localin/themes.dart';
 
 class EmptyEvent extends StatelessWidget {
   final String text;
+
   EmptyEvent({@required this.text});
 
   @override

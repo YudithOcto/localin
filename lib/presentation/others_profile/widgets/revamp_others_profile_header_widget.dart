@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/model/user/user_model.dart';
 import 'package:localin/presentation/others_profile/widgets/row_user_community_article_widget.dart';
@@ -10,7 +9,9 @@ import '../../../themes.dart';
 
 class RevampOthersProfileHeaderWidget extends StatefulWidget {
   final UserModel userModel;
+
   RevampOthersProfileHeaderWidget({this.userModel});
+
   @override
   _RevampOthersProfileHeaderWidgetState createState() =>
       _RevampOthersProfileHeaderWidgetState();

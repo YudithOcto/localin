@@ -3,6 +3,7 @@ import 'package:localin/presentation/revamp_hotel/hotel_list_page/provider/hotel
 import 'package:localin/presentation/revamp_hotel/hotel_list_page/widgets/single_column_bottom_sheet_search_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
+
 import 'hotel_bottom_sheet_choose_checkout_widget.dart';
 
 GlobalKey<ScrollSnapListState> sslKey = GlobalKey();

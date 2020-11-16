@@ -12,6 +12,7 @@ class UserModel {
   String email;
   String error;
   String handphone;
+  String userReferralCode;
   int points;
   int views;
   int posts;
@@ -45,6 +46,7 @@ class UserModel {
     this.totalArticle,
     this.totalCommunity,
     this.type,
+    this.userReferralCode,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
@@ -61,14 +63,15 @@ class UserModel {
         username: body['nama'] ?? '',
         email: body['email'] ?? '',
         handphone: body['handphone'] ?? '',
-        points: body['point'] ?? 0,
-        views: body['views'] ?? 0,
+        points: body['total_poin'] ?? 0,
+        views: body['total_view'] ?? 0,
         posts: body['posts'] ?? 0,
         latitude: body['lat'] ?? '0.0',
         longitude: body['long'] ?? '0.0',
         totalView: body['total_View'] ?? 0,
         totalArticle: body['total_artikel'] ?? 0,
         totalCommunity: body['total_komunitas'] ?? 0,
+        userReferralCode: body['kode_referral'] ?? '',
         type: body['tipe'] ?? '');
   }
 
@@ -92,6 +95,12 @@ class UserModel {
     map['handphone'] = handphone;
     map['lat'] = latitude;
     map['long'] = longitude;
+    map['total_view'] = totalView;
+    map['total_artikel'] = totalArticle;
+    map['total_komunitas'] = totalCommunity;
+    map['total_poin'] = points;
+    map['total_view'] = views;
+    map['kode_referral'] = userReferralCode;
     return map;
   }
 }

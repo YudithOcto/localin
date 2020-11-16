@@ -9,6 +9,7 @@ class CommunityBlockedTabProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId = '';
   bool _isAdmin = true;
+
   bool get isAdmin => _isAdmin;
 
   CommunityBlockedTabProvider({String communityId, bool isAdmin}) {
@@ -17,20 +18,25 @@ class CommunityBlockedTabProvider with ChangeNotifier {
   }
 
   List<CommunityMemberDetail> _blockedList = List();
+
   List<CommunityMemberDetail> get blockedList => _blockedList;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get currentPageRequest => _pageRequest;
 
   final _streamController = StreamController<communityMemberState>.broadcast();
+
   Stream<communityMemberState> get blockedStream => _streamController.stream;
 
   bool _isMounted = true;
 
   String _userSearch = '';
+
   set requestSearchKeyword(String value) {
     _userSearch = value;
     getBlockedUser(isRefresh: true);

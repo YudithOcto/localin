@@ -23,6 +23,7 @@ class CreateArticleWrapperWidget extends StatefulWidget {
 class _CreateArticleWrapperWidgetState
     extends State<CreateArticleWrapperWidget> {
   final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();

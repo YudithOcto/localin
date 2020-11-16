@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 class ArticleAddTagWidget extends StatelessWidget {
   final ScrollController controller;
+
   ArticleAddTagWidget({this.controller});
 
   @override

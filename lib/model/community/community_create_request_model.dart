@@ -4,8 +4,8 @@ import 'package:equatable/equatable.dart';
 
 import 'community_category.dart';
 
-class CommunityCreateRequestModel extends Equatable {
-  String locations;
+class CommunityCreateRequestModel with EquatableMixin {
+  List<String> locations;
   String communityName;
   String description;
   CommunityCategory category;

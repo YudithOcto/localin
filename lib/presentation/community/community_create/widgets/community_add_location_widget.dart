@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:localin/components/custom_toast.dart';
 import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/presentation/community/provider/create/community_create_provider.dart';
 import 'package:localin/presentation/search/search_location/search_location_page.dart';
@@ -18,21 +19,25 @@ class CommunityAddLocationWidget extends StatelessWidget {
             shrinkWrap: true,
             padding: EdgeInsets.only(bottom: 20.0),
             physics: ClampingScrollPhysics(),
-            itemCount: provider.selectedLocation.isNotEmpty ? 1 : 1,
+            itemCount: provider.selectedLocation.length + 1,
             itemBuilder: (context, index) {
-              if (provider.selectedLocation.isEmpty ||
-                  provider.selectedLocation.length == index) {
+              if (provider.selectedLocation.length == index) {
                 return InkWell(
                   onTap: () async {
                     FocusScope.of(context).unfocus();
                     final result = await Navigator.of(context).pushNamed(
                       SearchLocationPage.routeName,
                     );
-                    if (result != null && result is LocationResponseDetail) {
+                    if (result != null &&
+                        result is LocationResponseDetail &&
+                        !provider.selectedLocation.contains(result.city)) {
                       final provider = Provider.of<CommunityCreateProvider>(
                           context,
                           listen: false);
-                      provider.addLocationSelected = result.city;
+                      provider.addLocationSelected(result.city);
+                    } else {
+                      CustomToast.showCustomToast(context,
+                          'You already choose this location. Please choose other location');
                     }
                   },
                   child: Row(
@@ -72,7 +77,7 @@ class CommunityAddLocationWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '${provider.selectedLocation}',
+                            '${provider.selectedLocation[index]}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: ThemeText.sfMediumBody,
@@ -93,12 +98,14 @@ class CommunityAddLocationWidget extends StatelessWidget {
                         final result = await Navigator.of(context).pushNamed(
                           SearchLocationPage.routeName,
                         );
+                        final provider = Provider.of<CommunityCreateProvider>(
+                            context,
+                            listen: false);
                         if (result != null &&
-                            result is LocationResponseDetail) {
-                          final provider = Provider.of<CommunityCreateProvider>(
-                              context,
-                              listen: false);
-                          provider.addLocationSelected = result.city;
+                            result is LocationResponseDetail &&
+                            !provider.selectedLocation.contains(result.city)) {
+                          provider.addLocationSelected(result.city,
+                              isEdit: true, position: index);
                         }
                       },
                       child: Container(

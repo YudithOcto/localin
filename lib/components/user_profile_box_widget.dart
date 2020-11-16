@@ -15,6 +15,7 @@ class UserProfileImageWidget extends StatelessWidget {
   final double width;
   final double height;
   final bool isVerifyUser;
+
   UserProfileImageWidget(
       {this.imageUrl,
       this.imageFile,

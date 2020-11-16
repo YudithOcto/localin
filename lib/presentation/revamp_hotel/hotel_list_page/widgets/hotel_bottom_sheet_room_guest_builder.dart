@@ -12,6 +12,7 @@ class HotelBottomSheetRoomGuestBuilder extends StatelessWidget {
   final int totalPreviousRoomRequest;
   final int totalPreviousAdultRequest;
   final int totalPreviousChildRequest;
+
   HotelBottomSheetRoomGuestBuilder(
       {this.totalPreviousRoomRequest = 1,
       this.totalPreviousAdultRequest = 1,
@@ -125,6 +126,7 @@ class HotelBottomSheetRoomGuestSingleRowWidget extends StatelessWidget {
   final VoidCallback subtract;
   final int value;
   final bool isChildren;
+
   HotelBottomSheetRoomGuestSingleRowWidget(
       {this.title, this.add, this.subtract, this.value, this.isChildren});
 

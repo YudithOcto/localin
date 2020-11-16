@@ -7,11 +7,13 @@ import 'package:localin/utils/date_helper.dart';
 
 class BookTicketListSelectionProvider with ChangeNotifier {
   ExploreEventDetail _currentEventDetail;
+
   BookTicketListSelectionProvider({ExploreEventDetail detail}) {
     _currentEventDetail = detail;
   }
 
   List<ExploreAvailableEventDatesDetail> _availableTickets = [];
+
   List<ExploreAvailableEventDatesDetail> get availableTickets =>
       _availableTickets;
 

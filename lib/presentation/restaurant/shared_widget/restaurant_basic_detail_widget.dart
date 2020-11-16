@@ -6,6 +6,7 @@ import 'package:localin/utils/number_helper.dart';
 
 class RestaurantBasicDetailWidget extends StatelessWidget {
   final RestaurantDetail restaurantDetail;
+
   RestaurantBasicDetailWidget({@required this.restaurantDetail});
 
   @override

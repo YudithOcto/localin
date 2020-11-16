@@ -4,7 +4,9 @@ import 'package:localin/themes.dart';
 
 class CustomMemberTextFormFieldWidget extends StatelessWidget {
   final Function(String) onChange;
+
   CustomMemberTextFormFieldWidget({@required this.onChange});
+
   @override
   Widget build(BuildContext context) {
     return Container(

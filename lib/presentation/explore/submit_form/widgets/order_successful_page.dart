@@ -8,6 +8,7 @@ import 'package:localin/themes.dart';
 class OrderSuccessfulPage extends StatelessWidget {
   static const routeName = 'OrderSuccessfulPage';
   static const transactionId = 'TransactionId';
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

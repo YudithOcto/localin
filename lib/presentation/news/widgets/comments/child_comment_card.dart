@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class ChildCommentCard extends StatelessWidget {
   final List<ArticleCommentDetail> replayComment;
+
   ChildCommentCard({this.replayComment});
 
   @override

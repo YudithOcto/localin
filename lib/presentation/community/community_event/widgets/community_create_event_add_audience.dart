@@ -9,6 +9,7 @@ class CreateCommunityEventAddAudience extends StatelessWidget {
   final TextEditingController controller;
   final List<String> defaultAudienceNumber;
   final Function(String) onTap;
+
   CreateCommunityEventAddAudience(
       {this.controller, @required this.defaultAudienceNumber, this.onTap});
 
@@ -34,7 +35,9 @@ class CreateCommunityEventAddAudience extends StatelessWidget {
           UnderlineTextFormField(
             onChanged: (v) {},
             controller: controller,
-            inputFormatter: [WhitelistingTextInputFormatter.digitsOnly],
+            inputFormatter: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             inputType: TextInputType.number,
             inputAction: TextInputAction.done,
           ),

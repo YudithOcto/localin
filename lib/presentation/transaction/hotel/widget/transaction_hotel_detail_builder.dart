@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
+import 'package:localin/presentation/shared_widgets/empty_community_with_custom_message.dart';
+import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
+import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
 import 'package:localin/presentation/transaction/hotel/provider/transaction_hotel_detail_provider.dart';
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_booking_detail.dart';
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_contact_detail.dart';
@@ -9,10 +13,6 @@ import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_
 import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
-import 'package:localin/components/custom_app_bar.dart';
-import 'package:localin/presentation/shared_widgets/empty_community_with_custom_message.dart';
-import 'package:localin/presentation/shared_widgets/row_location_widget.dart';
-import 'package:localin/presentation/shared_widgets/top_bar_transaction_status_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../transaction_hotel_detail_page.dart';

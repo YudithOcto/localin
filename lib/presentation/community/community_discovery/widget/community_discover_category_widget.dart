@@ -15,6 +15,7 @@ class _CommunityDiscoverCategoryWidgetState
     extends State<CommunityDiscoverCategoryWidget> {
   bool _isInit = true;
   final _scrollController = ScrollController();
+
   @override
   void didChangeDependencies() {
     if (_isInit) {

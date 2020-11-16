@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class CommunityTypeRequestModel {
   String duration;
   String communityType;

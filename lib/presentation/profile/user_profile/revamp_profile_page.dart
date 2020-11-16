@@ -37,6 +37,7 @@ class RevampProfileContentWidget extends StatefulWidget {
 class _RevampProfileContentWidgetState
     extends State<RevampProfileContentWidget> {
   bool isInit = true;
+  Future getFuture;
 
   @override
   void didChangeDependencies() {
@@ -46,7 +47,7 @@ class _RevampProfileContentWidgetState
 
       final provider = Provider.of<UserProfileProvider>(context, listen: false);
       provider.getUserDanaStatus();
-      provider.getUserProfile().then((value) {
+      getFuture = provider.getUserProfile().then((value) {
         Provider.of<AuthProvider>(context, listen: false)
             .updateUserIdentityVerification(value);
       });
@@ -94,133 +95,144 @@ class _RevampProfileContentWidgetState
           )
         ],
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              padding: EdgeInsets.only(bottom: 16.0),
+      body: FutureBuilder(
+          future: getFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 24.0 - NavigationToolbar.kMiddleSpacing),
-                  child: Row(
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 16.0),
                     children: <Widget>[
-                      Consumer<AuthProvider>(
-                          builder: (context, provider, child) {
-                        return UserProfileImageWidget(
-                          imageUrl: provider.userModel.imageProfile,
-                          isVerifyUser:
-                              provider.userModel?.status == kUserStatusVerified,
-                        );
-                      }),
-                      SizedBox(
-                        width: 16.0,
-                      ),
-                      Expanded(
-                        child: Consumer<AuthProvider>(
-                          builder: (context, provider, child) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  '${provider.userModel.username}',
-                                  style: ThemeText.rodinaTitle3
-                                      .copyWith(color: ThemeColors.primaryBlue),
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 24.0 - NavigationToolbar.kMiddleSpacing),
+                        child: Row(
+                          children: <Widget>[
+                            Consumer<AuthProvider>(
+                                builder: (context, provider, child) {
+                              return UserProfileImageWidget(
+                                imageUrl: provider.userModel.imageProfile,
+                                isVerifyUser: provider.userModel?.status ==
+                                    kUserStatusVerified,
+                              );
+                            }),
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Expanded(
+                              child: Consumer<AuthProvider>(
+                                builder: (context, provider, child) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        '${provider.userModel.username}',
+                                        style: ThemeText.rodinaTitle3.copyWith(
+                                            color: ThemeColors.primaryBlue),
+                                      ),
+                                      Text(
+                                        '${provider.userModel.email}',
+                                        style: ThemeText.sfRegularBody,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                  border:
+                                      Border.all(color: ThemeColors.black20)),
+                              child: InkWell(
+                                onTap: () => Navigator.of(context)
+                                    .pushNamed(RevampEditProfilePage.routeName),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Edit',
+                                    style: ThemeText.sfMediumFootnote.copyWith(
+                                        color: ThemeColors.primaryBlue),
+                                  ),
                                 ),
-                                Text(
-                                  '${provider.userModel.email}',
-                                  style: ThemeText.sfRegularBody,
-                                )
-                              ],
-                            );
-                          },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
-                            border: Border.all(color: ThemeColors.black20)),
-                        child: InkWell(
-                          onTap: () => Navigator.of(context)
-                              .pushNamed(RevampEditProfilePage.routeName),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Edit',
-                              style: ThemeText.sfMediumFootnote
-                                  .copyWith(color: ThemeColors.primaryBlue),
-                            ),
-                          ),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 16.0,
                         ),
-                      )
+                        child: Text(
+                          'About',
+                          style: ThemeText.sfSemiBoldBody,
+                        ),
+                      ),
+                      Consumer<AuthProvider>(
+                        builder: (context, provider, child) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                            ),
+                            child: Text(
+                              '${provider.userModel.shortBio ?? 'No Data Yet'}',
+                              style: ThemeText.sfRegularBody,
+                            ),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 24.0),
+                        child: Divider(
+                          thickness: 1.5,
+                          color: ThemeColors.black20,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 20.0, right: 20.0, bottom: 4.0),
+                        child: Text(
+                          'Settings',
+                          style: ThemeText.sfSemiBoldBody
+                              .copyWith(color: ThemeColors.black80),
+                        ),
+                      ),
+                      ProfileSettingsWidgets(),
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 16.0,
+                InkWell(
+                  onTap: () => signOut(),
+                  child: Container(
+                    height: 56.0,
+                    width: double.maxFinite,
+                    alignment: Alignment.center,
+                    color: ThemeColors.black10,
+                    child: Text(
+                      'Logout',
+                      textAlign: TextAlign.center,
+                      style: ThemeText.sfMediumBody
+                          .copyWith(color: ThemeColors.red),
+                    ),
                   ),
-                  child: Text(
-                    'About',
-                    style: ThemeText.sfSemiBoldBody,
-                  ),
-                ),
-                Consumer<AuthProvider>(
-                  builder: (context, provider, child) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                      ),
-                      child: Text(
-                        '${provider.userModel.shortBio ?? 'No Data Yet'}',
-                        style: ThemeText.sfRegularBody,
-                      ),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 24.0),
-                  child: Divider(
-                    thickness: 1.5,
-                    color: ThemeColors.black20,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.0),
-                  child: Text(
-                    'Settings',
-                    style: ThemeText.sfSemiBoldBody
-                        .copyWith(color: ThemeColors.black80),
-                  ),
-                ),
-                ProfileSettingsWidgets(),
+                )
               ],
-            ),
-          ),
-          InkWell(
-            onTap: () => signOut(),
-            child: Container(
-              height: 56.0,
-              width: double.maxFinite,
-              alignment: Alignment.center,
-              color: ThemeColors.black10,
-              child: Text(
-                'Logout',
-                textAlign: TextAlign.center,
-                style: ThemeText.sfMediumBody.copyWith(color: ThemeColors.red),
-              ),
-            ),
-          )
-        ],
-      ),
+            );
+          }),
     );
   }
 

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class AmpResponseModel {
   AmpResponseModel({
     this.ampUrls,

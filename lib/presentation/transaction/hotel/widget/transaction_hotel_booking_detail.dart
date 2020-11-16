@@ -7,6 +7,7 @@ import 'package:localin/utils/date_helper.dart';
 
 class TransactionHotelBookingDetail extends StatelessWidget {
   final BookingDetailModel detail;
+
   TransactionHotelBookingDetail({this.detail});
 
   @override

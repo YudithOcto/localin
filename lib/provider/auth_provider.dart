@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:localin/api/repository.dart';
 import 'package:localin/api/social_sign_in.dart';
 import 'package:localin/model/article/base_response.dart';
@@ -105,10 +106,16 @@ class AuthProvider extends BaseModelProvider {
 
   void updateUserIdentityVerification(UserModel model) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
-    if (userModel != null && userModel.status != model.status) {
+    if (model != null) {
       userModel.status = model.status;
       userModel.identityNo = model.identityNo;
       userModel.imageIdentity = model.imageIdentity;
+      userModel.totalCommunity = model.totalCommunity;
+      userModel.totalArticle = model.totalArticle;
+      userModel.totalView = model.totalView;
+      userModel.points = model.points;
+      userModel.posts = model.posts;
+      userModel.userReferralCode = model.userReferralCode;
       sf.setString(kUserCache, jsonEncode(userModel.toJson()));
       notifyListeners();
     }

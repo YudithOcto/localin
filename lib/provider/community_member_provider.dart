@@ -6,6 +6,7 @@ class CommunityMemberProvider with ChangeNotifier {
   final _repository = Repository();
   String _communityId;
   bool _isAdmin = true;
+
   bool get isAdmin => _isAdmin;
 
   CommunityMemberProvider({@required String communityId, bool isAdmin}) {

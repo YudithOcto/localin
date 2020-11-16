@@ -6,7 +6,9 @@ import 'package:localin/themes.dart';
 class HotelListFilterPriceIndicatorColumn extends StatelessWidget {
   final String title;
   final double value;
+
   HotelListFilterPriceIndicatorColumn({this.title, this.value});
+
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -20,6 +20,7 @@ class CommunityCreateEventProvider with ChangeNotifier {
   final eventEndDateController = TextEditingController();
   GooglePlace googlePlace;
   String _communityId = '';
+
   String get communityId => _communityId;
   String _eventId;
 
@@ -69,6 +70,7 @@ class CommunityCreateEventProvider with ChangeNotifier {
   }
 
   String _selectedLocation = '';
+
   String get selectedLocation => _selectedLocation;
   double _latitude = 0.0;
   double _longitude = 0.0;
@@ -90,14 +92,18 @@ class CommunityCreateEventProvider with ChangeNotifier {
   }
 
   bool _isOnlineEvent = false;
+
   bool get isOnlineEvent => _isOnlineEvent;
+
   set enabledOnlineEvent(bool value) {
     _isOnlineEvent = value;
     notifyListeners();
   }
 
   List<Uint8List> _selectedImage = [];
+
   List<Uint8List> get selectedImage => _selectedImage;
+
   addSelectedImage(List<Uint8List> images) {
     _selectedImage.clear();
     _selectedImage.addAll(images);
@@ -110,14 +116,17 @@ class CommunityCreateEventProvider with ChangeNotifier {
   }
 
   DateTime _selectedStartDate;
+
   DateTime get selectedStartDate => _selectedStartDate;
   TimeOfDay _selectedStartTime;
 
   DateTime _selectedEndDate;
+
   DateTime get initialEndDate => _selectedStartDate;
   TimeOfDay _selectedEndTime;
 
   final format = DateFormat('EEEE, MMM dd, yyyy');
+
   String get startTime {
     return '${format.format(_selectedStartDate)} '
         'at ${_selectedStartTime.hour}:${_selectedStartTime.minute}  ${_selectedStartTime.customPeriod}';

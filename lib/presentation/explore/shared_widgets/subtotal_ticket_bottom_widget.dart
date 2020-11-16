@@ -6,6 +6,7 @@ class SubtotalTicketButtonWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final String totalTicketPrice;
   final int totalSelectedTicket;
+
   SubtotalTicketButtonWidget(
       {this.onPressed, this.totalSelectedTicket, this.totalTicketPrice});
 

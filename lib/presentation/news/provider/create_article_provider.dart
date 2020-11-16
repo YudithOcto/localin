@@ -15,6 +15,7 @@ class CreateArticleProvider with ChangeNotifier {
   final DraftDao _draftDao = DraftDao();
 
   List<Uint8List> _selectedImage = [];
+
   List<Uint8List> get selectedImage => _selectedImage;
 
   final TextEditingController titleController = TextEditingController();
@@ -94,9 +95,11 @@ class CreateArticleProvider with ChangeNotifier {
   }
 
   bool _isNeedAskUserToSaveToDraft = false;
+
   bool get isNeedAskUserToSaveToDraft => _isNeedAskUserToSaveToDraft;
 
   List<String> _selectedLocation = [];
+
   List<String> get selectedLocation => _selectedLocation;
 
   String _currentDraftId;
@@ -164,17 +167,22 @@ class CreateArticleProvider with ChangeNotifier {
 
   StreamController<searchTags> _streamController =
       StreamController<searchTags>.broadcast();
+
   Stream<searchTags> get streamTags => _streamController.stream;
 
   List<TagModel> _listTags = [];
+
   List<TagModel> get listTags => _listTags;
+
   void clearListTags() {
     _listTags.clear();
     notifyListeners();
   }
 
   List<String> _selectedTags = [];
+
   List<String> get selectedTags => _selectedTags;
+
   set addTags(String tagName) {
     _selectedTags.add(tagName);
     notifyListeners();

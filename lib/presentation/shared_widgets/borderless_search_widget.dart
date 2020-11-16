@@ -12,6 +12,7 @@ class BorderlessSearchWidget extends StatelessWidget {
   final bool isShowPrefixIcon;
   final bool isAutoFocus;
   final bool isEnabled;
+
   BorderlessSearchWidget({
     this.onChanged,
     this.title,

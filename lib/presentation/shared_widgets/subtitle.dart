@@ -5,6 +5,7 @@ import 'package:localin/themes.dart';
 class Subtitle extends StatelessWidget {
   final String title;
   final bool isNeedUpperCase;
+
   Subtitle({this.title, this.isNeedUpperCase = true});
 
   @override

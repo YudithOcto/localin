@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/api/repository.dart';
@@ -9,17 +10,21 @@ import 'package:localin/utils/debounce.dart';
 class SearchArticleProvider with ChangeNotifier {
   AnalyticsService _analyticsService;
   bool _isClearButtonVisible = false;
+
   bool get isClearButtonVisible => _isClearButtonVisible;
 
   final Repository _repository = Repository();
   final int _totalPageRequested = 10;
   int _offsetPage = 1;
+
   int get offsetPage => _offsetPage;
 
   bool _isCanLoadMoreArticle = true;
+
   bool get isCanLoadMoreArticle => _isCanLoadMoreArticle;
 
   List<ArticleDetail> _articleList = [];
+
   List<ArticleDetail> get articleList => _articleList;
 
   SearchArticleProvider({AnalyticsService analyticsService}) {
@@ -28,6 +33,7 @@ class SearchArticleProvider with ChangeNotifier {
 
   final StreamController<SearchArticleState> _articleStreamController =
       StreamController<SearchArticleState>.broadcast();
+
   Stream<SearchArticleState> get searchArticleStream =>
       _articleStreamController.stream;
 
@@ -59,16 +65,20 @@ class SearchArticleProvider with ChangeNotifier {
   ///
 
   int _offsetTags = 1;
+
   int get offsetTags => _offsetTags;
 
   bool _isCanLoadMoreTags = true;
+
   bool get isCanLoadMoreTags => _isCanLoadMoreTags;
 
   List<TagModel> _tagsList = [];
+
   List<TagModel> get tagsList => _tagsList;
 
   final StreamController<TagState> _tagStreamController =
       StreamController<TagState>.broadcast();
+
   Stream<TagState> get tagStream => _tagStreamController.stream;
 
   Future<Null> getTags({bool isRefresh = true, String keyword = ''}) async {

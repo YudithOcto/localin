@@ -946,7 +946,7 @@ class _YearPickerState extends State<YearPicker> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     final ThemeData themeData = Theme.of(context);
-    final TextStyle style = themeData.textTheme.body1;
+    final TextStyle style = themeData.textTheme.bodyText1;
     return new ListView.builder(
       controller: scrollController,
       itemExtent: _itemExtent,

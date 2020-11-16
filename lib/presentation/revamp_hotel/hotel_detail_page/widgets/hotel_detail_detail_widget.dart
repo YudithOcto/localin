@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:html/parser.dart' as parser;
 import 'package:localin/components/bullet_text.dart';
-import 'package:localin/presentation/calendar_page/calendar_page.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
-import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_room_request_provider.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:html/parser.dart' as parser;
 
 class HotelDetailDetailsWidget extends StatelessWidget {
   @override
@@ -128,7 +126,9 @@ class HotelDetailDetailsWidget extends StatelessWidget {
 class RowEventWidget extends StatelessWidget {
   final String dateTime;
   final String title;
+
   RowEventWidget({this.dateTime, this.title});
+
   @override
   Widget build(BuildContext context) {
     return Container(

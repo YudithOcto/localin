@@ -88,6 +88,12 @@ const kAdult = 'adults';
 const kRoom = 'rooms';
 const kChild = 'child';
 
+const kCouponCodeMessage =
+    'You can use this Coupon Code to get discount for every transaction';
+
+const String SUCCESS_VERIFICATION =
+    'Pembayaran sukses dan sedang di verifikasi';
+
 class Constants {
   static const kAddress =
       'Ruko Graha Boulevard Summarecon\nBVA1 Lt. 3 Ruang Mercury No.5,\nJalan Gading Serpong Boulevard,\n'

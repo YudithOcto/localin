@@ -12,15 +12,18 @@ class SearchRestaurantProvider with ChangeNotifier {
   final LastSearchDao _lastSearchRestaurantDao = LastSearchDao();
 
   final _streamController = StreamController<searchRestaurantEvent>.broadcast();
+
   get stream => _streamController.stream;
 
   final _repository = Repository();
   List<dynamic> searchResult = List();
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   int _trackDataTotal = 0;

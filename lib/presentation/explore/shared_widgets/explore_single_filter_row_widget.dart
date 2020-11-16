@@ -7,8 +7,10 @@ class ExploreSingleFilterRowWidget extends StatelessWidget {
   final String title;
   final bool isSelected;
   final VoidCallback onPressed;
+
   ExploreSingleFilterRowWidget(
       {@required this.title, this.isSelected, this.onPressed});
+
   @override
   Widget build(BuildContext context) {
     return InkWell(

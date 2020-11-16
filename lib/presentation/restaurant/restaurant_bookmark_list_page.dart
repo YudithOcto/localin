@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class RestaurantBookmarkListPage extends StatelessWidget {
   static const routeName = 'RestaurantBookmarkListPage';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RestaurantBookmarkListProvider>(

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 class NewsCommentPage extends StatefulWidget {
   static const routeName = 'CommentPage';
   static const articleDetail = 'articleDetail';
+
   @override
   _NewsCommentPageState createState() => _NewsCommentPageState();
 }

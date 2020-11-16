@@ -5,6 +5,7 @@ import 'package:localin/themes.dart';
 class SingleColumnBottomSheetSearchWidget extends StatelessWidget {
   final String title;
   final String value;
+
   SingleColumnBottomSheetSearchWidget({this.title, this.value});
 
   @override

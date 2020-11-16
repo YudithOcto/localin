@@ -12,6 +12,7 @@ import '../community_comment_page.dart';
 
 class CommunityNewsActivityWidget extends StatefulWidget {
   final CommunityDetail communityDetail;
+
   CommunityNewsActivityWidget({@required this.communityDetail});
 
   @override
@@ -23,6 +24,7 @@ class _CommunityNewsActivityWidgetState
     extends State<CommunityNewsActivityWidget> {
   bool _isInit = true;
   CommunityDetail _communityDetail;
+
   @override
   void didChangeDependencies() {
     if (_isInit) {

@@ -17,6 +17,7 @@ class InputFormWithSubtitleWidget extends StatelessWidget {
       this.maxInput,
       this.onPressed})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(

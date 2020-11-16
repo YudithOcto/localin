@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_api_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_nestedscroll_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/provider/hotel_detail_room_request_provider.dart';
 import 'package:localin/presentation/revamp_hotel/hotel_detail_page/widgets/hotel_detail_revamp_builder.dart';
-
 import 'package:provider/provider.dart';
 
 class HotelRevampDetailPage extends StatelessWidget {

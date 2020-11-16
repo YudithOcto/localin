@@ -12,10 +12,9 @@ import 'package:provider/provider.dart';
 class ExploreFilterPage extends StatelessWidget {
   static const routeName = 'ExplorePage';
   static const previousFilterModel = 'PreviousFilterModel';
+
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return ChangeNotifierProvider<ExploreFilterProvider>(
       create: (_) => ExploreFilterProvider(),
       child: ExploreFilterWrapper(),

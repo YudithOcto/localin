@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 class ExploreDetailPage extends StatelessWidget {
   static const routeName = 'ExploreDetailPage';
   static const exploreId = 'ExploreEventID';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ExploreEventDetailProvider>(

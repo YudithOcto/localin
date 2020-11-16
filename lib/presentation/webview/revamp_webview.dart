@@ -11,6 +11,7 @@ class RevampWebview extends StatefulWidget {
   static const url = 'url';
   static const isFromProfile = 'isFromProfile';
   static const title = 'title';
+
   @override
   _RevampWebviewState createState() => _RevampWebviewState();
 }
@@ -61,7 +62,6 @@ class _RevampWebviewState extends State<RevampWebview> {
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    String url = routeArgs[RevampWebview.url];
     String title = routeArgs[RevampWebview.title] ?? '';
     isFromProfile = routeArgs[RevampWebview.isFromProfile] ?? false;
     //url = url.contains('https') ? url : url.replaceRange(0, 4, 'https');

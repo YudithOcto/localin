@@ -6,6 +6,7 @@ import 'package:localin/themes.dart';
 class CommunityCreateEventOnlineWidget extends StatelessWidget {
   final bool value;
   final Function(bool) onChanged;
+
   CommunityCreateEventOnlineWidget({this.value = false, this.onChanged});
 
   @override

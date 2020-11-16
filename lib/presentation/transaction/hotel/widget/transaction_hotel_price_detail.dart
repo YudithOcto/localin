@@ -8,7 +8,9 @@ import 'package:localin/utils/number_helper.dart';
 
 class TransactionHotelPriceDetail extends StatelessWidget {
   final BookingDetailModel bookingDetail;
+
   TransactionHotelPriceDetail({@required this.bookingDetail});
+
   @override
   Widget build(BuildContext context) {
     return Column(

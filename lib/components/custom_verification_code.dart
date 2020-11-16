@@ -12,6 +12,7 @@ class VerificationCode extends StatefulWidget {
   final double itemSize;
   final BoxDecoration itemDecoration;
   final TextStyle textStyle;
+
   //TODO autofocus == true bug
   final bool autofocus;
   final Widget clearAll;

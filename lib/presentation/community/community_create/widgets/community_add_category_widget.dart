@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class CommunityAddCategoryWidget extends StatefulWidget {
   final CommunityCategory category;
+
   CommunityAddCategoryWidget({this.category});
 
   @override

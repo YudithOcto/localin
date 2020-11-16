@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_place/google_place.dart';
-import 'package:localin/model/location/search_location_response.dart';
 import 'package:localin/presentation/community/community_event/provider/community_create_event_provider.dart';
 import 'package:localin/presentation/community/community_event/widgets/search_google_page.dart';
-import 'package:localin/presentation/search/search_location/search_location_page.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:provider/provider.dart';

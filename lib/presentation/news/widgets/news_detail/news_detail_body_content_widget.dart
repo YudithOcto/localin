@@ -8,13 +8,16 @@ import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_redirect.dart';
+
 import 'news_body_tag_widget.dart';
 import 'news_detail_related_widget.dart';
 
 class NewsDetailBodyContentWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
   final Widget youtubeWidget;
+
   NewsDetailBodyContentWidget({this.articleDetail, this.youtubeWidget});
+
   @override
   _NewsDetailBodyContentWidgetState createState() =>
       _NewsDetailBodyContentWidgetState();

@@ -2,19 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:html/parser.dart' as parser;
 import 'package:localin/model/article/article_detail.dart';
-import 'package:localin/presentation/shared_widgets/row_like_widget.dart';
 import 'package:localin/presentation/home/widget/articles/row_bookmark.dart';
 import 'package:localin/presentation/news/pages/news_comment_page.dart';
 import 'package:localin/presentation/news/pages/news_detail_page.dart';
 import 'package:localin/presentation/others_profile/revamp_others_profile_page.dart';
+import 'package:localin/presentation/shared_widgets/row_like_widget.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/date_helper.dart';
 import 'package:localin/utils/image_helper.dart';
-import 'package:html/parser.dart' as parser;
-import 'package:palette_generator/palette_generator.dart';
 
 class ArticleSingleCard extends StatefulWidget {
   final ArticleDetail articleDetail;
@@ -41,12 +40,6 @@ const kArticleMediaType = 'media';
 const kArticleVideoType = 'video';
 
 class _ArticleSingleCardState extends State<ArticleSingleCard> {
-  Future<Color> getImagePalette(ImageProvider imageProvider) async {
-    final PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(imageProvider);
-    return paletteGenerator.lightMutedColor.color;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(

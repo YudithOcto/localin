@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/user_profile_box_widget.dart';
 import 'package:localin/presentation/profile/provider/revamp_edit_profile_provider.dart';
@@ -10,10 +7,12 @@ import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
+
 import '../../../themes.dart';
 
 class RevampEditProfilePage extends StatelessWidget {
   static const routeName = 'UserEditProfilePage';
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RevampEditProfileProvider>(

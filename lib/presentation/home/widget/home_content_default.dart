@@ -8,6 +8,7 @@ import 'package:localin/presentation/home/widget/row_user_location.dart';
 class HomeContentDefault extends StatefulWidget {
   final bool isHomePage;
   final ValueChanged<int> valueChanged;
+
   HomeContentDefault({this.isHomePage, this.valueChanged});
 
   @override

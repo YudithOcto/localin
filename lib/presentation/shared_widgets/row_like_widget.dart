@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class RowLikeWidget extends StatefulWidget {
   final ArticleDetail articleDetail;
+
   RowLikeWidget({this.articleDetail});
 
   @override
@@ -18,6 +19,7 @@ class RowLikeWidget extends StatefulWidget {
 
 class _RowLikeWidgetState extends State<RowLikeWidget> {
   ArticleDetail _articleDetail;
+
   @override
   void initState() {
     _articleDetail = widget.articleDetail;

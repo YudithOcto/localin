@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/article/article_comment_base_response.dart';
@@ -10,7 +11,9 @@ class CommentProvider with ChangeNotifier {
   final commentController = TextEditingController();
 
   bool _isTextEmpty = false;
+
   bool get isTextEmpty => _isTextEmpty;
+
   set textIsEmpty(bool value) {
     _isTextEmpty = value;
     notifyListeners();
@@ -19,10 +22,12 @@ class CommentProvider with ChangeNotifier {
   List<bool> showReplay = [];
 
   bool _isCanLoadMoreComment = true;
+
   bool get isCanLoadMoreComment => _isCanLoadMoreComment;
 
   int _commentRequestOffset = 1;
   int _pageLimit = 10;
+
   int get commentRequestOffset => _commentRequestOffset;
 
   final ArticleDetail _currentArticleModel;
@@ -30,6 +35,7 @@ class CommentProvider with ChangeNotifier {
 
   final StreamController<commentState> _streamController =
       StreamController<commentState>.broadcast();
+
   Stream<commentState> get state => _streamController.stream;
   bool _isMounted = true;
 
@@ -39,6 +45,7 @@ class CommentProvider with ChangeNotifier {
         _userProfile = profile;
 
   List<ArticleCommentDetail> _articleComments = [];
+
   List<ArticleCommentDetail> get articleCommentList => _articleComments;
 
   Future<Null> getCommentList(String articleId, {bool isRefresh = true}) async {
@@ -66,9 +73,11 @@ class CommentProvider with ChangeNotifier {
 
   /// Publish Comment
   final FocusNode _focusNode = FocusNode();
+
   FocusNode get messageFocusNode => _focusNode;
 
   ArticleCommentDetail _commentReplayClicked;
+
   ArticleCommentDetail get commentClickedItem => _commentReplayClicked;
 
   void setReplyToOtherUserCommentModel(ArticleCommentDetail value,

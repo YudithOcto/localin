@@ -14,9 +14,11 @@ class ExploreEventDetailProvider with ChangeNotifier {
   final _repository = Repository();
 
   final _streamController = StreamController<eventDetailState>.broadcast();
+
   Stream<eventDetailState> get stream => _streamController.stream;
 
   ExploreEventDetail _eventDetail = ExploreEventDetail();
+
   ExploreEventDetail get eventDetail => _eventDetail;
 
   Future<Null> getEventDetail(int eventID) async {

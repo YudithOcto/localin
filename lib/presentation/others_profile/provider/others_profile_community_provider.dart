@@ -8,16 +8,20 @@ class OthersProfileCommunityProvider with ChangeNotifier {
   final _repository = Repository();
 
   List<CommunityDetail> _communityList = [];
+
   List<CommunityDetail> get communityList => _communityList;
 
   bool _canLoadMore = true;
+
   bool get canLoadMore => _canLoadMore;
 
   int _pageRequest = 1;
+
   int get pageRequest => _pageRequest;
 
   StreamController<otherCommunityState> _streamController =
       StreamController<otherCommunityState>.broadcast();
+
   Stream<otherCommunityState> get communityStreamData =>
       _streamController.stream;
 

@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 class RestaurantPage extends StatefulWidget {
   static const routeName = 'RestaurantPage';
+
   @override
   _RestaurantPageState createState() => _RestaurantPageState();
 }

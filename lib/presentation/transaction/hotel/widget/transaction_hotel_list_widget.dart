@@ -3,9 +3,9 @@ import 'package:localin/model/hotel/booking_detail.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/presentation/community/community_event/provider/community_event_provider.dart';
 import 'package:localin/presentation/transaction/community/widget/booking_detail_widget.dart';
+import 'package:localin/presentation/transaction/hotel/provider/transaction_hotel_list_provider.dart';
 import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_empty_widget.dart';
-import 'package:localin/presentation/transaction/hotel/provider/transaction_hotel_list_provider.dart';
 import 'package:provider/provider.dart';
 
 class TransactionHotelListWidget extends StatefulWidget {

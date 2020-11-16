@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/booking_payment_response.dart';
+import 'package:localin/model/transaction/transaction_discount_response_model.dart';
 import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/model/transaction/transaction_response_model.dart';
 import 'package:localin/utils/constants.dart';
@@ -12,9 +13,11 @@ class TransactionDetailProvider with ChangeNotifier {
 
   final _streamController =
       StreamController<transactionDetailState>.broadcast();
+
   Stream<transactionDetailState> get transStream => _streamController.stream;
 
   var transactionDetail;
+
   Future<Null> getTransactionDetail(String transactionId, String type) async {
     _streamController.add(transactionDetailState.loading);
     final result = await _repository.getTransactionDetails(transactionId, type);
@@ -53,9 +56,17 @@ class TransactionDetailProvider with ChangeNotifier {
   }
 
   bool _isNavigateBackNeedRefresh = false;
+
   bool get isNavigateBackNeedRefresh => _isNavigateBackNeedRefresh;
+
   set navigateRefresh(bool value) {
     _isNavigateBackNeedRefresh = value;
+    notifyListeners();
+  }
+
+  PriceData priceData;
+  set addPriceData(PriceData value) {
+    priceData = value;
     notifyListeners();
   }
 

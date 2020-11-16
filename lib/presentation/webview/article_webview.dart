@@ -13,6 +13,7 @@ class ArticleWebView extends StatefulWidget {
   static const url = 'url';
   static const title = 'title';
   static const articleModel = 'articleModel';
+
   @override
   _ArticleWebViewState createState() => _ArticleWebViewState();
 }

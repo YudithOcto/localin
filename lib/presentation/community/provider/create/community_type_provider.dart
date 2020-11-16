@@ -15,8 +15,10 @@ class CommunityTypeProvider with ChangeNotifier {
   final _repository = Repository();
 
   CommunityTypeRequestModel _communityTypeRequest;
+
   CommunityTypeRequestModel get communityTypeRequestModel =>
       _communityTypeRequest;
+
   void setCommunityType(String type) {
     if (type == 'paid') {
       _communityTypeRequest = CommunityTypeRequestModel(
@@ -40,7 +42,7 @@ class CommunityTypeProvider with ChangeNotifier {
     Map<String, dynamic> map = Map();
     map['nama'] = model.communityName;
     map['deskripsi'] = model.description;
-    map['address'] = model.locations;
+    map['address'] = model.locations.map((e) => e).toList();
     map['type'] = _type;
     map['kategori'] = model.category.id;
     map['logo'] = MultipartFile.fromFileSync(model.imageFile.path,
@@ -60,6 +62,7 @@ class CommunityTypeProvider with ChangeNotifier {
   }
 
   CommunityPriceDetail priceModel;
+
   Future<CommunityPriceDetail> getCommunityPrice() async {
     final result = await _repository.getCommunityPrice();
     if (!result.error) {
@@ -69,14 +72,18 @@ class CommunityTypeProvider with ChangeNotifier {
   }
 
   String _type = '';
+
   String get typeCommunity => _type;
+
   void setType(String type) {
     _type = type;
     notifyListeners();
   }
 
   final _panelController = StreamController<bool>.broadcast();
+
   Stream<bool> get panelStream => _panelController.stream;
+
   Function(bool) get showPanel => _panelController.sink.add;
 
   @override

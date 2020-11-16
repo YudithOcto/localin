@@ -8,7 +8,9 @@ import '../../../../themes.dart';
 
 class ExploreVisitorDetailWidget extends StatelessWidget {
   final Data exploreDetail;
+
   ExploreVisitorDetailWidget({@required this.exploreDetail});
+
   @override
   Widget build(BuildContext context) {
     if (exploreDetail == null && exploreDetail.attendees == null)

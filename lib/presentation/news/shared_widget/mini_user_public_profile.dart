@@ -7,6 +7,7 @@ import 'package:localin/themes.dart';
 
 class MiniUserPublicProfile extends StatelessWidget {
   final ArticleDetail _articleDetail;
+
   MiniUserPublicProfile({@required ArticleDetail articleDetail})
       : assert(articleDetail != null),
         _articleDetail = articleDetail;

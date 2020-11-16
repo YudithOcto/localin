@@ -148,7 +148,9 @@ class EventResponseData {
           longitude: json['longitude'] == null ? null : json['longitude'],
           isVerifyCreator: json['verified'] == null
               ? false
-              : json['verified'] == 1 ? true : false);
+              : json['verified'] == 1
+                  ? true
+                  : false);
 }
 
 class EventAttachment {
@@ -169,7 +171,9 @@ class EventAttachment {
         commentId: json["komentar_id"] ?? null,
         attachment: json['gambar'] != null
             ? json['gambar']
-            : json["lampiran"] != null ? json['lampiran'] : null,
+            : json["lampiran"] != null
+                ? json['lampiran']
+                : null,
         type: json["type"] ?? null,
       );
 }
