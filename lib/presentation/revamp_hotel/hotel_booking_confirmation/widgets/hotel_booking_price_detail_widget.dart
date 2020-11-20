@@ -38,8 +38,7 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
                 (index) => SinglePriceDetailRow(
                   title:
                       '(1x) ${detail.hotelName}, ${roomAvailability.categoryName}',
-                  value:
-                      '${getFormattedCurrency(roomAvailability.pricePerNight.oneNight * duration)}',
+                  value: '${getFormattedCurrency(provider?.basePrice)}',
                 ),
               )),
           Visibility(
@@ -63,7 +62,7 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
             ),
           ),
           SinglePriceDetailRow(
-            title: 'Tax Fee',
+            title: 'Tax',
             value:
                 '${provider.baseTax.isNotNullNorEmpty ? getFormattedCurrency(provider.baseTax) : 'Free'}',
           ),
@@ -74,8 +73,7 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
           ),
           SinglePriceDetailRow(
             title: 'Total',
-            value:
-                '${getTotal(provider.priceData, (roomAvailability.pricePerNight.oneNight * request.totalRooms) * duration + provider.baseService + provider.baseTax)}',
+            value: '${getFormattedCurrency(provider.totalPrice)}',
           ),
         ],
       ),

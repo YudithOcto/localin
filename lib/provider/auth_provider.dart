@@ -115,7 +115,17 @@ class AuthProvider extends BaseModelProvider {
       userModel.totalView = model.totalView;
       userModel.points = model.points;
       userModel.posts = model.posts;
+      userModel.friendReferral = model.friendReferral;
       userModel.userReferralCode = model.userReferralCode;
+      sf.setString(kUserCache, jsonEncode(userModel.toJson()));
+      notifyListeners();
+    }
+  }
+
+  void updateFriendReferral(String referral) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    if (referral != null && referral.isNotEmpty) {
+      userModel.friendReferral = referral;
       sf.setString(kUserCache, jsonEncode(userModel.toJson()));
       notifyListeners();
     }

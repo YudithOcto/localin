@@ -1,11 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:localin/animation/fade_in_animation.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
@@ -174,18 +174,13 @@ class Content extends StatelessWidget {
                     text: ' Terms of Service',
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        await launch(
-                            '${buildEnvironment.baseUrl}privacy-policy.html',
-                            option: CustomTabsOption(
-                              toolbarColor: ThemeColors.primaryBlue,
-                              enableInstantApps: true,
-                              enableUrlBarHiding: true,
-                              animation: new CustomTabsAnimation.slideIn(),
-                              extraCustomTabs: <String>[
-                                'org.mozilla.firefox',
-                                'com.microsoft.emmx',
-                              ],
-                            ));
+                        await Navigator.of(context).pushNamed(
+                            TransactionWebView.routeName,
+                            arguments: {
+                              TransactionWebView.urlName:
+                                  '${buildEnvironment.baseUrl}privacy-policy.html',
+                              TransactionWebView.title: 'Dana',
+                            });
                       },
                     style: ThemeText.sfMediumCaption
                         .copyWith(color: ThemeColors.primaryBlue)),

@@ -106,7 +106,7 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
         address = result.first;
         currentAddress = '${address.locality}, ${address.subAdminArea}';
       } catch (error) {
-        print(error);
+        debugPrint(error);
       }
       return currentAddress;
     } catch (e) {

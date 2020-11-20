@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/hotel/booking_detail_response.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
+import 'package:localin/presentation/transaction/hotel/provider/transaction_hotel_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class TransactionHotelPriceDetail extends StatelessWidget {
-  final BookingDetailModel bookingDetail;
+  final TransactionHotelDetailProvider bookingDetail;
 
   TransactionHotelPriceDetail({@required this.bookingDetail});
 
@@ -32,14 +32,46 @@ class TransactionHotelPriceDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _singleRowPriceWidget(
-                  '(1x) ${bookingDetail?.name}, ${bookingDetail?.roomName}',
-                  '${getFormattedCurrency(bookingDetail?.userPrice)}'),
+                  '(1x) ${bookingDetail.hotelName}, ${bookingDetail?.roomName}',
+                  '${getFormattedCurrency(bookingDetail.basicPrice)}'),
               _divider(),
-              _singleRowPriceWidget('Admin Fee',
-                  '${bookingDetail.adminFee > 0 ? getFormattedCurrency(bookingDetail.adminFee) : 'Free'}'),
+              Visibility(
+                visible: bookingDetail.couponDiscount > 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _singleRowPriceWidget('Coupon',
+                        getFormattedCurrency(bookingDetail.couponDiscount)),
+                    _divider(),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: bookingDetail.pointDiscount > 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _singleRowPriceWidget('Local Point',
+                        getFormattedCurrency(bookingDetail.pointDiscount)),
+                    _divider(),
+                  ],
+                ),
+              ),
+              Visibility(
+                  visible: bookingDetail.taxFee > 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _singleRowPriceWidget(
+                          'Tax', getFormattedCurrency(bookingDetail.taxFee)),
+                      _divider(),
+                    ],
+                  )),
+              _singleRowPriceWidget('Service Fee',
+                  getFormattedCurrency(bookingDetail.serviceFee)),
               _divider(),
-              _singleRowPriceWidget('Total',
-                  '${getFormattedCurrency(bookingDetail.userPrice + bookingDetail?.adminFee)}')
+              _singleRowPriceWidget(
+                  'Total', '${getFormattedCurrency(bookingDetail.totalFee)}')
             ],
           ),
         ),
@@ -71,12 +103,5 @@ class TransactionHotelPriceDetail extends StatelessWidget {
             style: ThemeText.sfMediumBody.copyWith(color: ThemeColors.orange))
       ],
     );
-  }
-}
-
-extension on int {
-  String get transformTicketPrice {
-    if (this == null || this == 0) return 'Free';
-    return getFormattedCurrency(this);
   }
 }

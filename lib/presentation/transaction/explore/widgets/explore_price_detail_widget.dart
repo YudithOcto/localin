@@ -34,7 +34,7 @@ class ExplorePriceDetailWidget extends StatelessWidget {
               _singleRowPriceWidget('${exploreDetail?.event?.eventName}',
                   '${exploreDetail?.invoiceTotal?.transformTicketPrice}'),
               _divider(),
-              _singleRowPriceWidget('Admin Fee',
+              _singleRowPriceWidget('Service Fee',
                   '${exploreDetail?.adminFee?.transformTicketPrice}'),
               _divider(),
               _singleRowPriceWidget('Total',

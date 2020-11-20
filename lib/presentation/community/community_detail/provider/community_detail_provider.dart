@@ -110,6 +110,11 @@ class CommunityDetailProvider extends BaseModelProvider {
     setSentCommentLoading(false);
     return response;
   }
+
+  get address =>
+      communityDetail.address != null && communityDetail.address.isNotEmpty
+          ? '• ${communityDetail.address[0]}'
+          : '';
 }
 
 enum communityDetailState { loading, success, empty }

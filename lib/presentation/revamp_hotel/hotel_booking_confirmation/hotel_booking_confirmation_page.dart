@@ -27,10 +27,7 @@ class HotelBookingConfirmationPage extends StatelessWidget {
     RevampHotelListRequest request = routes[sortRequest];
     RoomAvailability roomRequest = routes[roomDetail];
     return ChangeNotifierProvider<HotelBookingProvider>(
-      create: (_) => HotelBookingProvider(
-          (roomRequest.pricePerNight.oneNight * request.totalRooms) *
-                  request.checkout.difference(request.checkIn).inDays +
-              roomRequest.adminFee),
+      create: (_) => HotelBookingProvider(roomRequest.pricePerNight.oneNight),
       child: Scaffold(
         backgroundColor: ThemeColors.black10,
         appBar: AppBar(

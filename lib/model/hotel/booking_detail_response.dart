@@ -43,6 +43,13 @@ class BookingDetailModel {
   String requestCheckInDate;
   String requestCheckOutDate;
   int adminFee;
+  int basicFee;
+  int taxFee;
+  int basicServiceFee;
+  int couponDiscount;
+  int pointDiscount;
+  int singleRoomFee;
+  int totalNight;
 
   BookingDetailModel({
     this.hotelId,
@@ -68,6 +75,13 @@ class BookingDetailModel {
     this.requestCheckInDate,
     this.requestCheckOutDate,
     this.adminFee,
+    this.basicFee,
+    this.pointDiscount,
+    this.couponDiscount,
+    this.basicServiceFee,
+    this.taxFee,
+    this.singleRoomFee,
+    this.totalNight,
   });
 
   factory BookingDetailModel.fromJson(Map<String, dynamic> body) {
@@ -97,6 +111,13 @@ class BookingDetailModel {
       requestCheckInDate: body['request_checkin'],
       requestCheckOutDate: body['request_checkout'],
       adminFee: body['admin_fee'] ?? 0,
+      basicFee: body['dasar_harga'] ?? 0,
+      basicServiceFee: body['dasar_service'] ?? 0,
+      taxFee: body['dasar_ppn'] ?? 0,
+      couponDiscount: body['diskon_kupon'] ?? 0,
+      pointDiscount: body['diskon_poin'] ?? 0,
+      singleRoomFee: body['single_price'] ?? 0,
+      totalNight: body['night'] ?? 0,
     );
   }
 }

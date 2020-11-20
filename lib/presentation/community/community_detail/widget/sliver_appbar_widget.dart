@@ -94,7 +94,7 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
                 ),
                 memberRow(context, provider),
                 Text(
-                  '${provider.communityDetail?.categoryName} • ${provider.communityDetail?.address}',
+                  '${provider.communityDetail?.categoryName} ${provider.address}',
                   style: ThemeText.sfMediumFootnote
                       .copyWith(color: ThemeColors.black0.withOpacity(0.6)),
                 ),

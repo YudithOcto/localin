@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:localin/build_environment.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
@@ -7,11 +6,9 @@ import 'package:localin/presentation/profile/referral_code/referral_code_page.da
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
 import 'package:localin/presentation/profile/user_profile/widgets/row_profile_settings_widget.dart';
 import 'package:localin/presentation/profile/user_profile_verification/revamp_user_verification_page.dart';
-import 'package:localin/presentation/webview/revamp_webview.dart';
 import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/provider/home/home_provider.dart';
-import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -49,17 +46,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
             iconValue: 'images/profile_point.svg',
             showButton: false,
             onPressed: () async {
-              await launch('${buildEnvironment.baseUrl}#point',
-                  option: CustomTabsOption(
-                    toolbarColor: ThemeColors.primaryBlue,
-                    enableInstantApps: true,
-                    enableUrlBarHiding: true,
-                    animation: new CustomTabsAnimation.slideIn(),
-                    extraCustomTabs: <String>[
-                      'org.mozilla.firefox',
-                      'com.microsoft.emmx',
-                    ],
-                  ));
+              await Navigator.of(context)
+                  .pushNamed(TransactionWebView.routeName, arguments: {
+                TransactionWebView.urlName: '${buildEnvironment.baseUrl}#point',
+                TransactionWebView.title: 'Dana',
+              });
             },
           ),
         ),
@@ -71,17 +62,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
             iconValue: 'images/profile_about.svg',
             showButton: false,
             onPressed: () async {
-              await launch('${buildEnvironment.baseUrl}',
-                  option: CustomTabsOption(
-                    toolbarColor: ThemeColors.primaryBlue,
-                    enableInstantApps: true,
-                    enableUrlBarHiding: true,
-                    animation: new CustomTabsAnimation.slideIn(),
-                    extraCustomTabs: <String>[
-                      'org.mozilla.firefox',
-                      'com.microsoft.emmx',
-                    ],
-                  ));
+              await Navigator.of(context)
+                  .pushNamed(TransactionWebView.routeName, arguments: {
+                TransactionWebView.urlName: '${buildEnvironment.baseUrl}',
+                TransactionWebView.title: 'Dana',
+              });
             },
           ),
         ),
@@ -93,17 +78,12 @@ class ProfileSettingsWidgets extends StatelessWidget {
             iconValue: 'images/profile_privacy_policy.svg',
             showButton: false,
             onPressed: () async {
-              await launch('${buildEnvironment.baseUrl}privacy-policy.html',
-                  option: CustomTabsOption(
-                    toolbarColor: ThemeColors.primaryBlue,
-                    enableInstantApps: true,
-                    enableUrlBarHiding: true,
-                    animation: new CustomTabsAnimation.slideIn(),
-                    extraCustomTabs: <String>[
-                      'org.mozilla.firefox',
-                      'com.microsoft.emmx',
-                    ],
-                  ));
+              await Navigator.of(context)
+                  .pushNamed(TransactionWebView.routeName, arguments: {
+                TransactionWebView.urlName:
+                    '${buildEnvironment.baseUrl}privacy-policy.html',
+                TransactionWebView.title: 'Dana',
+              });
             },
           ),
         ),
@@ -138,12 +118,18 @@ class ProfileSettingsWidgets extends StatelessWidget {
               iconValue: 'images/icon_referral.svg',
               referralBackground: 'images/icon_referral_background.svg',
               showButton: false,
-              onPressed: () {
-                Navigator.of(context)
+              onPressed: () async {
+                final isNeedRefresh = await Navigator.of(context)
                     .pushNamed(ReferralCodePage.routeName, arguments: {
-                  ReferralCodePage.referralCode:
-                      provider?.userModel?.userReferralCode,
+                  ReferralCodePage.userModel: provider?.userModel,
                 });
+                if (isNeedRefresh != null && isNeedRefresh) {
+                  Provider.of<UserProfileProvider>(context, listen: false)
+                      .getUserProfile()
+                      .then((value) =>
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .updateUserIdentityVerification(value));
+                }
               },
             ),
           ),
@@ -156,17 +142,11 @@ class ProfileSettingsWidgets extends StatelessWidget {
     final result =
         await Provider.of<HomeProvider>(context, listen: false).getDanaStatus();
     if (result.error == null) {
-      await launch(result.data.urlTopUp,
-          option: CustomTabsOption(
-            toolbarColor: ThemeColors.primaryBlue,
-            enableInstantApps: true,
-            enableUrlBarHiding: true,
-            animation: new CustomTabsAnimation.slideIn(),
-            extraCustomTabs: <String>[
-              'org.mozilla.firefox',
-              'com.microsoft.emmx',
-            ],
-          ));
+      await Navigator.of(context)
+          .pushNamed(TransactionWebView.routeName, arguments: {
+        TransactionWebView.urlName: result.data.urlTopUp,
+        TransactionWebView.title: 'Dana',
+      });
     } else {
       final authState = Provider.of<AuthProvider>(context, listen: false);
       if (authState.userModel.handphone != null &&

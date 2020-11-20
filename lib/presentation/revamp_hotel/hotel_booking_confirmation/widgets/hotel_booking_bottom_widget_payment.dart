@@ -53,12 +53,15 @@ class HotelBookingBottomWidgetPayment extends StatelessWidget {
               TransactionWebView.urlName: urlResponse?.urlRedirect,
               TransactionWebView.title: 'Hotel Transaction',
             });
-            if (navWebViewResult != null &&
-                navWebViewResult == SUCCESS_VERIFICATION) {
+            if (navWebViewResult != null) {
               Navigator.of(context).pushReplacementNamed(
                   HotelSuccessfulPage.routeName,
                   arguments: {
                     HotelSuccessfulPage.bookingId: result.detail.bookingId,
+                    HotelSuccessfulPage.localPoint: navWebViewResult != null &&
+                            navWebViewResult != SUCCESS_VERIFICATION
+                        ? navWebViewResult
+                        : null
                   });
             } else {
               Navigator.of(context).pushNamedAndRemoveUntil(

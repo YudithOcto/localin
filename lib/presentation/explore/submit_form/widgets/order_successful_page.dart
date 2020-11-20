@@ -8,9 +8,12 @@ import 'package:localin/themes.dart';
 class OrderSuccessfulPage extends StatelessWidget {
   static const routeName = 'OrderSuccessfulPage';
   static const transactionId = 'TransactionId';
+  static const localPoint = 'LocalPoint';
 
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushNamedAndRemoveUntil(
@@ -68,8 +71,24 @@ class OrderSuccessfulPage extends StatelessWidget {
                     style: ThemeText.sfRegularBody
                         .copyWith(color: ThemeColors.black0),
                   ),
-                  SizedBox(
-                    height: 24.0,
+                  Visibility(
+                    visible: routes[localPoint] != null,
+                    child: Container(
+                      width: double.maxFinite,
+                      height: 48.0,
+                      alignment: FractionalOffset.center,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 35.0, vertical: 15.0),
+                      decoration: BoxDecoration(
+                        color: ThemeColors.red,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Text(
+                          'YOU GOT ${routes != null ? routes[localPoint] : 0} LOCAL POIN!',
+                          textAlign: TextAlign.center,
+                          style: ThemeText.rodinaHeadline
+                              .copyWith(color: ThemeColors.black0)),
+                    ),
                   ),
                   InkWell(
                     onTap: () {

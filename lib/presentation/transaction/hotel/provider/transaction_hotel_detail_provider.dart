@@ -14,6 +14,46 @@ class TransactionHotelDetailProvider with ChangeNotifier {
 
   BookingDetailModel get bookingDetailModel => _bookingDetail;
 
+  int get serviceFee =>
+      _bookingDetail.adminFee != null && _bookingDetail.basicServiceFee > 0
+          ? _bookingDetail.basicServiceFee
+          : 0;
+
+  int get taxFee => _bookingDetail.taxFee != null && _bookingDetail.taxFee > 0
+      ? _bookingDetail.taxFee
+      : 0;
+
+  int get couponDiscount =>
+      _bookingDetail.couponDiscount != null && _bookingDetail.couponDiscount > 0
+          ? _bookingDetail.couponDiscount
+          : 0;
+
+  int get pointDiscount =>
+      _bookingDetail.pointDiscount != null && _bookingDetail.pointDiscount > 0
+          ? _bookingDetail.pointDiscount
+          : 0;
+
+  int get totalFee =>
+      _bookingDetail.userPrice != null && _bookingDetail.userPrice > 0
+          ? _bookingDetail.userPrice
+          : 0;
+
+  String get hotelName =>
+      _bookingDetail.name != null ? _bookingDetail.name : '';
+
+  String get roomName =>
+      _bookingDetail.roomName != null ? _bookingDetail.roomName : '';
+
+  int get singleRoomPrice =>
+      _bookingDetail.singleRoomFee != null && _bookingDetail.singleRoomFee > 0
+          ? _bookingDetail.singleRoomFee
+          : 0;
+
+  int get basicPrice =>
+      _bookingDetail.basicFee != null && _bookingDetail.basicFee > 0
+          ? _bookingDetail.basicFee
+          : 0;
+
   final _streamController =
       StreamController<transactionDetailState>.broadcast();
 

@@ -11,13 +11,13 @@ Future<void> main() async {
       baseApiUrl: 'https://api.localin.xyz/',
       baseUrl: 'https://localin.xyz/');
   assert(buildEnvironment != null);
-  Crashlytics.instance.enableInDevMode = true;
-
-  // Pass all uncaught errors from the framework to Crashlytics.
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
-//  runZoned(() {
-//    runApp(MyApp());
-//  }, onError: Crashlytics.instance.recordError);
+  runZonedGuarded(() {
+    runApp(MyApp(
+      isDebugMode: true,
+    ));
+  }, (error, stackTrace) {
+    debugPrint('runZonedGuarded: Caught error in my root zone.');
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }

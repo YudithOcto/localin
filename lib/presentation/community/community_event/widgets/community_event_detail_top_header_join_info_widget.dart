@@ -33,7 +33,6 @@ class CommunityEventDetailTopHeaderJoinInfoWidget extends StatelessWidget {
 
 extension on String {
   Color get backgroundColorEventStatus {
-    print(this);
     if (this.toLowerCase().contains('canceled')) {
       return ThemeColors.black100;
     } else if (this.toLowerCase().contains('going')) {

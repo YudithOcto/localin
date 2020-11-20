@@ -22,6 +22,7 @@ class UserModel {
   int totalArticle;
   int totalCommunity;
   String type;
+  String friendReferral;
 
   UserModel({
     this.id,
@@ -47,6 +48,7 @@ class UserModel {
     this.totalCommunity,
     this.type,
     this.userReferralCode,
+    this.friendReferral,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> body) {
@@ -72,6 +74,7 @@ class UserModel {
         totalArticle: body['total_artikel'] ?? 0,
         totalCommunity: body['total_komunitas'] ?? 0,
         userReferralCode: body['kode_referral'] ?? '',
+        friendReferral: body['friend_referral'] ?? '',
         type: body['tipe'] ?? '');
   }
 
@@ -101,6 +104,7 @@ class UserModel {
     map['total_poin'] = points;
     map['total_view'] = views;
     map['kode_referral'] = userReferralCode;
+    map['friend_referral'] = friendReferral;
     return map;
   }
 }

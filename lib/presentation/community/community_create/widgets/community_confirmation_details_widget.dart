@@ -49,12 +49,16 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
             TransactionWebView.urlName: result?.urlRedirect,
             TransactionWebView.title: 'Transaction Community',
           });
-          if (payment != null && payment == SUCCESS_VERIFICATION) {
+          if (payment != null) {
             Navigator.of(context).pushNamed(
                 CommunityPaymentSuccessfulPage.routeName,
                 arguments: {
                   CommunityPaymentSuccessfulPage.communityData:
-                      response.detailCommunity
+                      response.detailCommunity,
+                  CommunityPaymentSuccessfulPage.localPoint:
+                      payment != null && payment != SUCCESS_VERIFICATION
+                          ? payment
+                          : null
                 });
           } else {
             Navigator.of(context).pushNamedAndRemoveUntil(

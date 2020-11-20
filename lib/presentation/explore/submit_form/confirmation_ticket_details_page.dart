@@ -88,11 +88,15 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                       TransactionWebView.urlName: getUrl?.urlRedirect,
                       TransactionWebView.title: 'Explore Transaction',
                     });
-                    if (payment != null && payment == SUCCESS_VERIFICATION) {
+                    if (payment != null) {
                       Navigator.of(context)
                           .pushNamed(OrderSuccessfulPage.routeName, arguments: {
                         OrderSuccessfulPage.transactionId:
-                            _orderDetail.transactionId
+                            _orderDetail.transactionId,
+                        OrderSuccessfulPage.localPoint:
+                            payment != null && payment != SUCCESS_VERIFICATION
+                                ? payment
+                                : null,
                       });
                     } else {
                       Navigator.of(context).pushNamedAndRemoveUntil(

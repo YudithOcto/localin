@@ -43,7 +43,6 @@ class _CommunityCommentListWidgetState
       builder: (context, provider, child) {
         return StreamBuilder<communityCommentState>(
           builder: (context, snapshot) {
-            print(snapshot);
             if (snapshot.connectionState == ConnectionState.waiting &&
                 provider.page <= 1) {
               return Container(

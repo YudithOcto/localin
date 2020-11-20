@@ -59,65 +59,69 @@ class _TransactionWebViewState extends State<TransactionWebView> {
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     String title = routeArgs[TransactionWebView.title] ?? '';
-    return FutureBuilder<String>(
-      future: checkAmp,
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: ThemeColors.black0,
-              elevation: 0,
-              titleSpacing: 0.0,
-              title: Container(
-                margin: EdgeInsets.only(right: 80.0),
-                child: Text(
-                  title ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: ThemeText.sfMediumHeadline,
-                ),
-              ),
-              leading: InkWell(
-                onTap: () async {
-                  if (await webView.canGoBack()) {
-                    await webView.goBack();
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Icon(
-                  Icons.keyboard_backspace,
-                  color: ThemeColors.black80,
-                ),
-              ),
-            ),
-            body: InAppWebView(
-              initialUrl: snapshot.data,
-              initialHeaders: {},
-              initialOptions: InAppWebViewGroupOptions(
-                  crossPlatform: InAppWebViewOptions(
-                debuggingEnabled: true,
-              )),
-              onWebViewCreated: (InAppWebViewController controller) {
-                webView = controller;
-              },
-              onLoadStop: (controller, message) {
-                if (message.startsWith(
-                    '${buildEnvironment.baseApiUrl}payment/dana/auth')) {
-                  Navigator.of(context).pop('success');
-                } else if (message.contains('success')) {
-                  Future.delayed(Duration(milliseconds: 2000), () {
-                    Navigator.of(context).pop('$SUCCESS_VERIFICATION}');
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ThemeColors.black0,
+        elevation: 0,
+        titleSpacing: 0.0,
+        title: Container(
+          margin: EdgeInsets.only(right: 80.0),
+          child: Text(
+            title ?? '',
+            overflow: TextOverflow.ellipsis,
+            style: ThemeText.sfMediumHeadline,
+          ),
+        ),
+        leading: InkWell(
+          onTap: () async {
+            if (await webView.canGoBack()) {
+              await webView.goBack();
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
+          child: Icon(
+            Icons.keyboard_backspace,
+            color: ThemeColors.black80,
+          ),
+        ),
+      ),
+      body: FutureBuilder<String>(
+        future: checkAmp,
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return InAppWebView(
+            initialUrl: snapshot.data,
+            initialHeaders: {},
+            initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+              debuggingEnabled: true,
+            )),
+            onWebViewCreated: (InAppWebViewController controller) {
+              webView = controller;
+              webView.addJavaScriptHandler(
+                  handlerName: 'mySum',
+                  callback: (args) {
+                    if (args != null && args.length > 1) {
+                      Navigator.of(context).pop(args[1]);
+                    } else {
+                      Navigator.of(context).pop(SUCCESS_VERIFICATION);
+                    }
                   });
-                }
-              },
-            ),
+            },
+            onLoadStop: (controller, message) {
+              if (message.startsWith(
+                  '${buildEnvironment.baseApiUrl}payment/dana/auth')) {
+                Navigator.of(context).pop('success');
+              }
+            },
           );
-        }
-      },
+        },
+      ),
     );
   }
 }

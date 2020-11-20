@@ -16,16 +16,16 @@ class SocialSignIn {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
         final AuthCredential credential =
-            FacebookAuthProvider.getCredential(accessToken: token);
-        final AuthResult authResult =
+            FacebookAuthProvider.credential(token);
+        final UserCredential authResult =
             await _auth.signInWithCredential(credential);
-        final FirebaseUser user = authResult.user;
+        final User user = authResult.user;
 
         Map<String, dynamic> _userResult = Map();
         _userResult['user_id'] = user.uid;
         _userResult['user_email'] = user.email;
         _userResult['user_name'] = user.displayName;
-        _userResult['user_photo'] = user.photoUrl;
+        _userResult['user_photo'] = user.photoURL;
         _userResult['source'] = credential.providerId;
 
         SharedPreferences sf = await SharedPreferences.getInstance();
@@ -55,25 +55,25 @@ class SocialSignIn {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final AuthResult authResult =
+      final UserCredential authResult =
           await _auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
+      final User user = authResult.user;
 
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
 
-      final FirebaseUser currentUser = await _auth.currentUser();
+      final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
 
       _userResult['user_id'] = user.uid;
       _userResult['user_email'] = user.email;
       _userResult['user_name'] = user.displayName;
-      _userResult['user_photo'] = user.photoUrl;
+      _userResult['user_photo'] = user.photoURL;
       _userResult['source'] = credential.providerId;
     } catch (error) {
       _userResult['error'] = 'Authentication failed';
@@ -83,8 +83,7 @@ class SocialSignIn {
   }
 
   Future<Null> signOutGoogle() async {
-    var result = await googleSignIn.signOut();
-    print(result);
+    await googleSignIn.signOut();
     await _auth.signOut();
   }
 

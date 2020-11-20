@@ -52,6 +52,8 @@ class HotelBookingProvider with ChangeNotifier {
   PriceData get priceData => _priceData;
   int get baseTax => _priceData != null ? _priceData.baseTax : 0;
   int get baseService => _priceData != null ? _priceData.baseService : 0;
+  int get basePrice => _priceData != null ? _priceData.basePrice : 0;
+  int get totalPrice => _priceData != null ? _priceData.userPrice : 0;
   set inputPriceData(PriceData value) {
     _priceData = value;
     notifyListeners();

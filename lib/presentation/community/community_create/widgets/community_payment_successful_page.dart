@@ -10,6 +10,7 @@ import '../../../../themes.dart';
 class CommunityPaymentSuccessfulPage extends StatelessWidget {
   static const routeName = 'CommunitySuccessfulPage';
   static const communityData = 'communityData';
+  static const localPoint = 'LocalPoint';
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +70,24 @@ class CommunityPaymentSuccessfulPage extends StatelessWidget {
                   style: ThemeText.sfRegularBody
                       .copyWith(color: ThemeColors.black0),
                 ),
-                SizedBox(
-                  height: 24.0,
+                Visibility(
+                  visible: routeArgs[localPoint] != null,
+                  child: Container(
+                    width: double.maxFinite,
+                    height: 48.0,
+                    alignment: FractionalOffset.center,
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
+                    decoration: BoxDecoration(
+                      color: ThemeColors.red,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Text(
+                        'YOU GOT ${routeArgs != null ? routeArgs[localPoint] : 0} LOCAL POIN!',
+                        textAlign: TextAlign.center,
+                        style: ThemeText.rodinaHeadline
+                            .copyWith(color: ThemeColors.black0)),
+                  ),
                 ),
                 InkWell(
                   onTap: () {
