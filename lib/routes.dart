@@ -61,9 +61,9 @@ import 'package:localin/presentation/shared_widgets/explore_operational_hours_pa
 import 'package:localin/presentation/transaction/community/transaction_community_detail_page.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
 import 'package:localin/presentation/transaction/hotel/transaction_hotel_detail_page.dart';
-import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/presentation/webview/article_webview.dart';
 import 'package:localin/presentation/webview/revamp_webview.dart';
+import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/splash_screen.dart';
 
 import 'presentation/explore/submit_form/confirmation_ticket_details_page.dart';

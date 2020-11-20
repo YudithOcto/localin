@@ -19,6 +19,7 @@ class ReferralProvider with ChangeNotifier {
   }
 
   bool _statusSuccess = false;
+
   bool get statusSuccess => _statusSuccess;
 
   bool get isTextNotEmpty => referralEditTextController.text.isNotEmpty;

@@ -123,6 +123,7 @@ class SubmitFormProvider with ChangeNotifier {
   int adminFee = 0;
 
   PriceData _priceData;
+
   set addPriceData(PriceData data) {
     this._priceData = data;
     _eventSubmissionDetails.totalPrice = data.userPrice;
@@ -130,23 +131,29 @@ class SubmitFormProvider with ChangeNotifier {
   }
 
   DiscountStatus _appliedDiscountParams = DiscountStatus();
+
   String get _couponParams => _appliedDiscountParams.couponValue != null &&
           _appliedDiscountParams.couponValue.isNotEmpty
       ? _appliedDiscountParams.couponValue
       : '';
+
   int get _localPoint => _appliedDiscountParams.isUsingLocalPoint != null
       ? _appliedDiscountParams.isUsingLocalPoint
       : 0;
+
   set addParamsDiscount(DiscountStatus status) {
     _appliedDiscountParams = status;
     notifyListeners();
   }
 
   int get couponDiscount => _priceData != null ? _priceData.couponDiscount : 0;
+
   int get localPointDiscount =>
       _priceData != null ? _priceData.pointDiscount : 0;
+
   bool get isCouponActive =>
       _priceData != null && _priceData.couponDiscount > 0;
+
   bool get isLocalPointActive =>
       _priceData != null && _priceData.pointDiscount > 0;
 

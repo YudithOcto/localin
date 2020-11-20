@@ -65,6 +65,7 @@ class TransactionDetailProvider with ChangeNotifier {
   }
 
   PriceData priceData;
+
   set addPriceData(PriceData value) {
     priceData = value;
     notifyListeners();

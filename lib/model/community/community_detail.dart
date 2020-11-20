@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:localin/model/community/community_discover_type.dart';
 import 'package:localin/model/community/community_member_detail.dart';
 

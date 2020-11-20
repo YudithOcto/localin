@@ -11,7 +11,6 @@ import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_detail_refund_information.dart';
 import 'package:localin/presentation/transaction/hotel/widget/transaction_hotel_price_detail.dart';
 import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
-import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';

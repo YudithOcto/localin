@@ -24,7 +24,9 @@ final GlobalKey<NavigatorState> navigator = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   final bool isDebugMode;
+
   MyApp({this.isDebugMode = true});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
