@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
@@ -22,15 +21,14 @@ class _SplashScreenState extends State<SplashScreen> {
       final userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
       final save = await SharedPreferences.getInstance();
-      bool isUserAlreadyDoneVerifying = save.getBool(kUserVerify);
-      bool isNeedDisplayCarousel = save.getBool(kUserCarousel);
+      bool isUserAlreadyDoneVerifying = save.getBool(kUserVerify) ?? false;
+      bool isNeedDisplayCarousel = save.getBool(kUserCarousel) ?? false;
       if (isNeedDisplayCarousel == null || isNeedDisplayCarousel) {
         Navigator.of(context).pushNamed(OnBoardingPage.routeName);
       } else if (userCache != null) {
         if (userCache.handphone != null &&
             userCache.handphone.isNotEmpty &&
             isUserAlreadyDoneVerifying) {
-          await AnalyticsService().setUserProperties(userId: userCache.id);
           Navigator.of(context)
               .pushReplacementNamed(MainBottomNavigation.routeName);
         } else {

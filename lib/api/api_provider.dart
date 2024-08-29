@@ -60,8 +60,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String REQUIRED_TOKEN = 'required_token';
 
 class ApiProvider {
-  Dio _dio;
-  SharedPreferences sharedPreferences;
+  late Dio _dio;
+  late SharedPreferences sharedPreferences;
 
   ApiProvider() {
     getOptionRequest();
@@ -73,9 +73,9 @@ class ApiProvider {
   getOptionRequest() async {
     BaseOptions options = BaseOptions(
         baseUrl: buildEnvironment.baseApiUrl,
-        receiveTimeout: 20000,
+        receiveTimeout: Duration(milliseconds: 2000),
         maxRedirects: 3,
-        connectTimeout: 20000);
+        connectTimeout: Duration(milliseconds: 2000));
     _dio = Dio(options);
     sharedPreferences = await SharedPreferences.getInstance();
   }
@@ -91,26 +91,25 @@ class ApiProvider {
   String _handleError(DioError error) {
     String errorDescription = "";
     switch (error.type) {
-      case DioErrorType.CANCEL:
+      case DioExceptionType.cancel:
         errorDescription = "Request to API server was cancelled";
         break;
-      case DioErrorType.CONNECT_TIMEOUT:
+      case DioExceptionType.connectionTimeout:
         errorDescription = "Connection timeout with API server";
         break;
-      case DioErrorType.DEFAULT:
+      case DioExceptionType.connectionError:
         errorDescription =
             "Connection to API server failed due to internet connection";
         break;
-      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioExceptionType.connectionTimeout:
         errorDescription = "Receive timeout in connection with API server";
         break;
-      case DioErrorType.RESPONSE:
-        errorDescription = error.response.data != null &&
-                !error.response.data.toString().contains('html')
-            ? convertResponseErrorMessage(error.response.data)
-            : 'Request failed with status code ${error.response.statusCode}';
+      case DioExceptionType.unknown:
+        errorDescription = error.response?.data != null
+            ? convertResponseErrorMessage(error.response!.data)
+            : 'Request failed with status code ${error.response?.statusCode}';
         break;
-      case DioErrorType.SEND_TIMEOUT:
+      case DioExceptionType.sendTimeout:
         errorDescription = "Request to API Timeout";
         break;
       default:
@@ -161,7 +160,7 @@ class ApiProvider {
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache)));
+    final model = UserModel.fromJson(jsonDecode(prefs.getString(kUserCache) ?? ''));
     return model.apiToken;
   }
 
