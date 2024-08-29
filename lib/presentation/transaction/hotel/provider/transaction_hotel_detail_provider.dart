@@ -14,10 +14,10 @@ class TransactionHotelDetailProvider with ChangeNotifier {
 
   BookingDetailModel get bookingDetailModel => _bookingDetail;
 
-  int get serviceFee =>
-      _bookingDetail.adminFee != null && _bookingDetail.basicServiceFee > 0
-          ? _bookingDetail.basicServiceFee
-          : 0;
+  int get serviceFee => _bookingDetail.basicServiceFee != null &&
+          _bookingDetail.basicServiceFee > 0
+      ? _bookingDetail.basicServiceFee
+      : 0;
 
   int get taxFee => _bookingDetail.taxFee != null && _bookingDetail.taxFee > 0
       ? _bookingDetail.taxFee

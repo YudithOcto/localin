@@ -26,11 +26,11 @@ class SubmitFormTicketPriceDetails extends StatelessWidget {
           child: Column(
             children: <Widget>[
               singleRowTitleValue(provider.singlePaxPrice,
-                  '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}',
+                  '${provider.basicPrice == 0 ? 'Free' : getFormattedCurrency(provider.basicPrice)}',
                   isNeedGrey: true),
               divider(),
               singleRowTitleValue('Service Fee',
-                  '${provider.adminFee == 0 ? 'Free' : getFormattedCurrency(provider.adminFee)}',
+                  '${provider.servicePrice == 0 ? 'Free' : getFormattedCurrency(provider.servicePrice)}',
                   isNeedGrey: true),
               Visibility(
                 visible: provider.isCouponActive,
@@ -56,7 +56,7 @@ class SubmitFormTicketPriceDetails extends StatelessWidget {
               ),
               divider(),
               singleRowTitleValue('Total Price',
-                  '${provider.eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.eventSubmissionDetails.totalPrice)}')
+                  '${provider.totalPrice == 0 ? 'Free' : getFormattedCurrency(provider.totalPrice)}')
             ],
           ),
         )

@@ -27,8 +27,7 @@ class UserProfileImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      overflow: Overflow.visible,
-      children: <Widget>[
+      clipBehavior: Clip.none, children: <Widget>[
         Material(
           clipBehavior: Clip.antiAlias,
           shape: SuperellipseShape(

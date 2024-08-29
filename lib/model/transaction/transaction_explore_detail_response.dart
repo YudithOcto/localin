@@ -38,22 +38,33 @@ class Data {
   Event event;
   Schedule schedule;
   List<Attendees> attendees;
+  int basicFee;
+  int basicServiceFee;
+  int couponDiscount;
+  int pointDiscount;
+  int basicTax;
 
-  Data(
-      {this.transactionId,
-      this.description,
-      this.invoiceCode,
-      this.invoiceQuantityTotal,
-      this.invoiceTotal,
-      this.discount,
-      this.adminFee,
-      this.totalPayment,
-      this.status,
-      this.createdAt,
-      this.expiredAt,
-      this.event,
-      this.schedule,
-      this.attendees});
+  Data({
+    this.transactionId,
+    this.description,
+    this.invoiceCode,
+    this.invoiceQuantityTotal,
+    this.invoiceTotal,
+    this.discount,
+    this.adminFee,
+    this.totalPayment,
+    this.status,
+    this.createdAt,
+    this.expiredAt,
+    this.event,
+    this.schedule,
+    this.attendees,
+    this.basicFee,
+    this.basicServiceFee,
+    this.couponDiscount,
+    this.pointDiscount,
+    this.basicTax,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     transactionId = json['transaksi_id'];
@@ -67,6 +78,11 @@ class Data {
     status = json['status'];
     createdAt = json['created_at'];
     expiredAt = json['expired_at'];
+    basicFee = json['dasar_harga'] ?? 0;
+    basicServiceFee = json['dasar_service'] ?? 0;
+    couponDiscount = json['diskon_kupon'] ?? 0;
+    pointDiscount = json['diskon_poin'] ?? 0;
+    basicTax = json['dasar_ppn'] ?? 0;
     event = json['event'] != null ? Event.fromJson(json['event']) : null;
     schedule =
         json['jadwal'] != null ? Schedule.fromJson(json['jadwal']) : null;

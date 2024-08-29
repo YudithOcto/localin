@@ -107,7 +107,7 @@ class _SearchLocationListWidgetState extends State<SearchLocationListWidget> {
           } else {
             if (provider.searchList.isEmpty) {
               return Consumer<AuthProvider>(
-                builder: (context, user, child) {
+                builder: (_, user, __) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: InkWell(
@@ -115,7 +115,7 @@ class _SearchLocationListWidgetState extends State<SearchLocationListWidget> {
                         LocationResponseDetail locationDetail =
                             LocationResponseDetail();
                         locationDetail.id = 'idUser';
-                        locationDetail.city = user.userModel.address.titleCase;
+                        locationDetail.city = user.userModel.address?.titleCase;
                         locationDetail.province = '';
                         Navigator.of(context).pop(locationDetail);
                       },

@@ -89,7 +89,14 @@ class CommunityEventWrapperContent extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return CommunityEventDetailWrapperWidget();
+              if (snapshot.data == eventDetailState.empty) {
+                return Container(
+                  alignment: FractionalOffset.center,
+                  child: Text('Event Not Found'),
+                );
+              } else {
+                return CommunityEventDetailWrapperWidget();
+              }
             }
           },
         ),

@@ -77,9 +77,8 @@ class HotelBookingConfirmationPage extends StatelessWidget {
                         .inputPriceData = priceData;
                   },
                   priceToBeCalculated: (roomRequest.pricePerNight.oneNight *
-                              request.totalRooms) *
-                          request.checkout.difference(request.checkIn).inDays +
-                      roomRequest.adminFee,
+                          request.totalRooms) *
+                      request.checkout.difference(request.checkIn).inDays,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 8.0),

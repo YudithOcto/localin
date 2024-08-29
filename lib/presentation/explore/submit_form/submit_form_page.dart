@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localin/components/custom_app_bar.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/components/custom_toast.dart';
+import 'package:localin/model/transaction/admin_fee_response_model.dart';
 import 'package:localin/presentation/explore/submit_form/confirmation_ticket_details_page.dart';
 import 'package:localin/presentation/explore/submit_form/providers/submit_form_provider.dart';
 import 'package:localin/presentation/explore/submit_form/widgets/submit_form_ticket_description.dart';
@@ -30,7 +31,25 @@ class SubmitFormPage extends StatelessWidget {
   }
 }
 
-class SubmitFormContent extends StatelessWidget {
+class SubmitFormContent extends StatefulWidget {
+  @override
+  _SubmitFormContentState createState() => _SubmitFormContentState();
+}
+
+class _SubmitFormContentState extends State<SubmitFormContent> {
+  bool _isInit = true;
+  Future getPrice;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      getPrice =
+          Provider.of<SubmitFormProvider>(context, listen: false).getAdminFee();
+      _isInit = false;
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,6 +102,10 @@ class SubmitFormContent extends StatelessWidget {
                             provider.eventFormPersonNam,
                         ConfirmationTicketDetailsPage.orderApiReturned:
                             result.data,
+                        ConfirmationTicketDetailsPage.priceDataInfo:
+                            provider.priceData,
+                        ConfirmationTicketDetailsPage.singleTax:
+                            provider.servicePrice,
                       });
                 }
               }
@@ -102,29 +125,35 @@ class SubmitFormContent extends StatelessWidget {
           );
         },
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SubmitFormTicketDescription(),
-            SubmitFormTicketVisitor(),
-            Consumer<SubmitFormProvider>(
-              builder: (_, provider, __) => CouponCodeRowWidget(
-                onChanged: (s) {
-                  final provider =
-                      Provider.of<SubmitFormProvider>(context, listen: false);
-                  provider.addPriceData = s;
-                },
-                onAppliedParams: (v) {
-                  provider.addParamsDiscount = v;
-                },
-                priceToBeCalculated: provider.adminFee +
-                    provider.eventSubmissionDetails.totalPrice,
-              ),
-            ),
-            SubmitFormTicketPriceDetails(),
-          ],
-        ),
-      ),
+      body: FutureBuilder<AdminFeeResponseModel>(
+          future: getPrice,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    SubmitFormTicketDescription(),
+                    SubmitFormTicketVisitor(),
+                    Consumer<SubmitFormProvider>(
+                      builder: (_, provider, __) => CouponCodeRowWidget(
+                        onChanged: (s) {
+                          provider.addPriceData = s;
+                        },
+                        onAppliedParams: (v) {
+                          provider.addParamsDiscount = v;
+                        },
+                        priceToBeCalculated: snapshot.data.adminFee +
+                            provider.eventSubmissionDetails.totalPrice,
+                      ),
+                    ),
+                    SubmitFormTicketPriceDetails(),
+                  ],
+                ),
+              );
+            }
+          }),
     );
   }
 }

@@ -41,7 +41,7 @@ class TransactionHotelPriceDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _singleRowPriceWidget('Coupon',
-                        getFormattedCurrency(bookingDetail.couponDiscount)),
+                        '- ${getFormattedCurrency(bookingDetail.couponDiscount)}'),
                     _divider(),
                   ],
                 ),
@@ -52,7 +52,7 @@ class TransactionHotelPriceDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _singleRowPriceWidget('Local Point',
-                        getFormattedCurrency(bookingDetail.pointDiscount)),
+                        '- ${getFormattedCurrency(bookingDetail.pointDiscount)}'),
                     _divider(),
                   ],
                 ),

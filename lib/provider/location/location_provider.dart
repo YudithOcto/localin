@@ -7,46 +7,55 @@ import 'package:localin/model/user/user_base_model.dart';
 class LocationProvider with ChangeNotifier {
   Coordinates _coordinates = Coordinates(0.0, 0.0);
   String _address = '';
-  bool _isLocationEnabled = false;
-  final Geolocator _locationManager = Geolocator()..forceAndroidLocationManager;
   final Repository _apiRepository = Repository();
 
-  Future<bool> getUserLocation() async {
+  /// only once update location
+  bool _isAlreadyUpdateUserLocation = false;
+
+  Future<UserBaseModel> updateUserLocation(bool isRefresh) async {
+    if (!isRefresh && _isAlreadyUpdateUserLocation) {
+      return null;
+    }
     try {
-      final isEnabled = await _locationManager.isLocationServiceEnabled();
-      if (isEnabled != null && isEnabled) {
-        _isLocationEnabled = true;
-        final position = await _locationManager.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best);
-        if (position != null) {
-          _coordinates = Coordinates(position.latitude, position.longitude);
-        }
-        final findAddress =
+      final position = await Geolocator.getCurrentPosition();
+      if (position != null) {
+        _coordinates = Coordinates(position.latitude, position.longitude);
+        final getAddress =
             await Geocoder.local.findAddressesFromCoordinates(_coordinates);
         _address =
-            '${findAddress.first.locality ?? ''}, ${findAddress.first.subAdminArea}';
-        updateUserLocation(position.latitude.toString(),
-            position.longitude.toString(), _address);
-      } else {
-        _isLocationEnabled = false;
+            '${getAddress.first.locality ?? ''}, ${getAddress.first.subAdminArea}';
+        final result = await _apiRepository.updateUserLocation(
+            position.latitude.toString(),
+            position.longitude.toString(),
+            _address);
+        _isAlreadyUpdateUserLocation = true;
+        return result;
       }
-      notifyListeners();
-      return true;
+      return null;
     } catch (error) {
-      _isLocationEnabled = false;
-      print(error);
-      return false;
+      debugPrint(error.toString());
+      return null;
     }
   }
 
-  Future<UserBaseModel> updateUserLocation(
-      String latitude, String longitude, String address) async {
-    return await _apiRepository.updateUserLoction(latitude, longitude, address);
+  Future<bool> checkUserPermission() async {
+    /// Check permission first
+    LocationPermission permission = await Geolocator.checkPermission();
+    switch (permission) {
+      case LocationPermission.whileInUse:
+      case LocationPermission.always:
+        return true;
+        break;
+      case LocationPermission.deniedForever:
+      case LocationPermission.denied:
+      default:
+        return false;
+        break;
+    }
   }
 
+  /// this method to show current address to some pages.
   String get address => _address;
-
-  bool get isLocationEnabled => _isLocationEnabled;
 
   Coordinates get userCoordinates => _coordinates;
 }

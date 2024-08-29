@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
 import 'package:localin/presentation/transaction/explore/transaction_explore_detail_page.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
+import 'package:provider/provider.dart';
 
 class OrderSuccessfulPage extends StatelessWidget {
   static const routeName = 'OrderSuccessfulPage';
@@ -12,6 +14,7 @@ class OrderSuccessfulPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<AuthProvider>(context, listen: false).refreshUserData();
     final routes =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return WillPopScope(
@@ -22,8 +25,7 @@ class OrderSuccessfulPage extends StatelessWidget {
       },
       child: Scaffold(
         body: Stack(
-          overflow: Overflow.visible,
-          fit: StackFit.expand,
+          clipBehavior: Clip.none, fit: StackFit.expand,
           children: <Widget>[
             Image.asset(
               'images/overlay.png',

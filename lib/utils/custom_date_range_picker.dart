@@ -12,7 +12,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import '../themes.dart';
 
@@ -92,9 +91,9 @@ class _DatePickerHeader extends StatelessWidget {
         yearColor = mode == DatePickerMode.year ? Colors.white : Colors.white70;
         break;
     }
-    final TextStyle dayStyle = headerTextTheme.display1
+    final TextStyle dayStyle = headerTextTheme.headlineMedium
         .copyWith(color: dayColor, height: 1.4, fontSize: 22.0);
-    final TextStyle yearStyle = headerTextTheme.subhead.copyWith(
+    final TextStyle yearStyle = headerTextTheme.titleMedium.copyWith(
         color: yearColor, fontSize: 16.0, fontWeight: FontWeight.w600);
 
     Color backgroundColor;
@@ -103,7 +102,7 @@ class _DatePickerHeader extends StatelessWidget {
         backgroundColor = ThemeColors.primaryBlue;
         break;
       case Brightness.dark:
-        backgroundColor = themeData.backgroundColor;
+        backgroundColor = themeData.colorScheme.background;
         break;
     }
 
@@ -424,7 +423,7 @@ class DayPicker extends StatelessWidget {
     final int firstDayOffset =
         _computeFirstDayOffset(year, month, localizations);
     final List<Widget> labels = <Widget>[];
-    labels.addAll(_getDayHeaders(themeData.textTheme.caption, localizations));
+    labels.addAll(_getDayHeaders(themeData.textTheme.bodySmall, localizations));
     for (int i = 0; true; i += 1) {
       // 1-based day of month, e.g. 1-31 for January, and 1-29 for February on
       // a leap year.
@@ -442,7 +441,7 @@ class DayPicker extends StatelessWidget {
                 !selectableDayPredicate(dayToBuild));
         BoxDecoration decoration;
         BoxDecoration backgroundDecoration;
-        TextStyle itemStyle = themeData.textTheme.body1
+        TextStyle itemStyle = themeData.textTheme.bodyMedium
             .copyWith(fontWeight: FontWeight.w600, color: Colors.black);
         final bool isSelectedFirstDay = selectedFirstDate.year == year &&
             selectedFirstDate.month == month &&
@@ -492,10 +491,10 @@ class DayPicker extends StatelessWidget {
               color: ThemeColors.orange.withOpacity(0.6),
               shape: BoxShape.rectangle);
         } else if (disabled) {
-          itemStyle = themeData.textTheme.body1.copyWith(
+          itemStyle = themeData.textTheme.bodyMedium.copyWith(
               color: themeData.disabledColor, fontWeight: FontWeight.w600);
         } else if (weekday == 7 || weekday == 6) {
-          itemStyle = themeData.textTheme.body1
+          itemStyle = themeData.textTheme.bodyMedium
               .copyWith(color: Colors.red, fontWeight: FontWeight.w600);
         }
 
@@ -564,7 +563,7 @@ class DayPicker extends StatelessWidget {
               child: new ExcludeSemantics(
                 child: new Text(
                   localizations.formatMonthYear(displayedMonth),
-                  style: themeData.textTheme.subhead,
+                  style: themeData.textTheme.titleMedium,
                 ),
               ),
             ),
@@ -946,7 +945,7 @@ class _YearPickerState extends State<YearPicker> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     final ThemeData themeData = Theme.of(context);
-    final TextStyle style = themeData.textTheme.bodyText1;
+    final TextStyle style = themeData.textTheme.bodyLarge;
     return new ListView.builder(
       controller: scrollController,
       itemExtent: _itemExtent,
@@ -957,8 +956,8 @@ class _YearPickerState extends State<YearPicker> {
             (widget.selectedLastDate != null &&
                 year == widget.selectedLastDate.year);
         final TextStyle itemStyle = isSelected
-            ? themeData.textTheme.headline
-                .copyWith(color: themeData.accentColor)
+            ? themeData.textTheme.headlineSmall
+                .copyWith(color: themeData.colorScheme.secondary)
             : style;
         return new InkWell(
           key: new ValueKey<int>(year),

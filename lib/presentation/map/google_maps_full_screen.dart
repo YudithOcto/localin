@@ -50,10 +50,9 @@ class _GoogleMapFullScreenState extends State<GoogleMapFullScreen> {
   }
 
   void getLocation() async {
-    isLocationEnabled = await Geolocator().isLocationServiceEnabled();
+    isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationEnabled) {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition();
       latitude = position.latitude;
       longitude = position.longitude;
     }

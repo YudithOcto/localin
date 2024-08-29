@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:localin/model/transaction/transaction_explore_detail_response.dart';
 import 'package:localin/presentation/news/widgets/comments/parent_comment_card.dart';
 import 'package:localin/presentation/shared_widgets/subtitle.dart';
+import 'package:localin/presentation/transaction/provider/transaction_detail_provider.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 import 'package:localin/utils/number_helper.dart';
 
 class ExplorePriceDetailWidget extends StatelessWidget {
-  final Data exploreDetail;
+  final TransactionDetailProvider bookingDetail;
 
-  ExplorePriceDetailWidget({@required this.exploreDetail});
+  ExplorePriceDetailWidget({@required this.bookingDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,36 @@ class ExplorePriceDetailWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _singleRowPriceWidget('${exploreDetail?.event?.eventName}',
-                  '${exploreDetail?.invoiceTotal?.transformTicketPrice}'),
+              _singleRowPriceWidget('${bookingDetail.eventName}',
+                  '${(bookingDetail.basicPrice).transformTicketPrice}'),
+              Visibility(
+                visible: bookingDetail.couponDiscount > 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _divider(),
+                    _singleRowPriceWidget('Coupon',
+                        '- ${bookingDetail.couponDiscount.transformTicketPrice}'),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: bookingDetail.pointDiscount > 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _divider(),
+                    _singleRowPriceWidget('Local Point',
+                        '- ${bookingDetail.pointDiscount.transformTicketPrice}'),
+                  ],
+                ),
+              ),
               _divider(),
               _singleRowPriceWidget('Service Fee',
-                  '${exploreDetail?.adminFee?.transformTicketPrice}'),
+                  '${bookingDetail.serviceFee?.transformTicketPrice}'),
               _divider(),
-              _singleRowPriceWidget('Total',
-                  '${exploreDetail?.totalPayment?.transformTicketPrice}')
+              _singleRowPriceWidget(
+                  'Total', '${bookingDetail?.totalFee?.transformTicketPrice}')
             ],
           ),
         ),

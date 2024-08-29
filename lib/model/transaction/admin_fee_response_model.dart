@@ -3,15 +3,18 @@ import 'package:equatable/equatable.dart';
 class AdminFeeResponseModel with EquatableMixin {
   bool isError;
   String message;
-  int adminFare;
+  int baseFee;
+  int adminFee;
 
-  AdminFeeResponseModel({this.isError, this.message, this.adminFare});
+  AdminFeeResponseModel(
+      {this.isError, this.message, this.baseFee, this.adminFee});
 
   factory AdminFeeResponseModel.fromJson(Map<String, dynamic> json) =>
       AdminFeeResponseModel(
         isError: false,
         message: json['message'],
-        adminFare: json['data']['admin_fee'],
+        baseFee: int.parse(json['data']['harga_dasar']),
+        adminFee: json['data']['admin_fee'],
       );
 
   AdminFeeResponseModel.errorJson(String value)
@@ -19,5 +22,5 @@ class AdminFeeResponseModel with EquatableMixin {
         isError = true;
 
   @override
-  List<Object> get props => [isError, message, adminFare];
+  List<Object> get props => [isError, message, baseFee];
 }

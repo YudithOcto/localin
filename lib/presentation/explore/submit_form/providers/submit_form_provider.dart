@@ -7,9 +7,9 @@ import 'package:localin/model/explore/explore_event_submission_details.dart';
 import 'package:localin/model/explore/explore_response_model.dart';
 import 'package:localin/model/explore/single_person_form_model.dart';
 import 'package:localin/model/explore/submit_form_request_model.dart';
+import 'package:localin/model/transaction/admin_fee_response_model.dart';
 import 'package:localin/model/transaction/discount_status.dart';
 import 'package:localin/model/transaction/transaction_discount_response_model.dart';
-import 'package:localin/utils/number_helper.dart';
 
 class SubmitFormProvider with ChangeNotifier {
   ExploreEventSubmissionDetails _eventSubmissionDetails;
@@ -26,12 +26,10 @@ class SubmitFormProvider with ChangeNotifier {
       visitorController
           .add(TextEditingController(text: index == 0 ? currentUserName : ''));
     });
-    getAdminFee(_eventSubmissionDetails.totalTicket,
-        _eventSubmissionDetails.totalPrice);
   }
 
   get singlePaxPrice {
-    return 'Pax (${_eventSubmissionDetails.totalTicket}) @${_eventSubmissionDetails.totalPrice == 0 ? 'Free' : getFormattedCurrency(_eventSubmissionDetails.totalPrice)}';
+    return '${_eventSubmissionDetails.totalTicket} Ticket(s)';
   }
 
   List<TextEditingController> visitorController = [];
@@ -109,24 +107,11 @@ class SubmitFormProvider with ChangeNotifier {
     return result;
   }
 
-  getAdminFee(int qty, int totalPrice) async {
-    final response = await _repository.getAdminFee(FormData.fromMap({
-      'harga': totalPrice,
-      'qty': qty,
-    }));
-    if (!response.isError) {
-      adminFee = response.adminFare;
-    }
-    notifyListeners();
-  }
-
-  int adminFee = 0;
-
   PriceData _priceData;
+  PriceData get priceData => _priceData;
 
   set addPriceData(PriceData data) {
     this._priceData = data;
-    _eventSubmissionDetails.totalPrice = data.userPrice;
     notifyListeners();
   }
 
@@ -156,6 +141,43 @@ class SubmitFormProvider with ChangeNotifier {
 
   bool get isLocalPointActive =>
       _priceData != null && _priceData.pointDiscount > 0;
+
+  int get basicPrice => _eventSubmissionDetails.totalPrice != null
+      ? _eventSubmissionDetails.totalPrice
+      : 0;
+
+  int get totalPrice =>
+      servicePrice +
+      _eventSubmissionDetails.totalPrice -
+      (couponDiscount + localPointDiscount);
+
+  int servicePrice = 0;
+
+  Future<AdminFeeResponseModel> getAdminFee() async {
+    final result = await _repository.getAdminFee(FormData.fromMap({
+      'harga': _eventSubmissionDetails.totalPrice,
+      'qty': _eventSubmissionDetails.totalTicket
+    }));
+    servicePrice = result.adminFee;
+    notifyListeners();
+    return result;
+  }
+
+  Future<PriceData> getTransactionDiscount() async {
+    final form = FormData.fromMap({
+      'kupon': null,
+      'use_poin': 0,
+      'harga': servicePrice + _eventSubmissionDetails.totalPrice,
+    });
+    final response = await _repository.getTransactionDiscount(form);
+    _priceData = response.priceData;
+    notifyListeners();
+    return _priceData;
+  }
+
+  // harga dasar adalah harga depan
+  // harga admin fee
+  // harga total bawah yang bakal berubah nanti itu aja... ketika di
 
   @override
   void dispose() {

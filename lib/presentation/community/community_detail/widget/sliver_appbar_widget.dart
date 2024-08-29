@@ -28,8 +28,7 @@ class SliverAppBarWidget extends SliverPersistentHeaderDelegate {
         return SizedBox(
           height: (h < minExtent) ? minExtent : h,
           child: Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
+            clipBehavior: Clip.none, children: <Widget>[
               Container(
                 decoration: BoxDecoration(
                     image: DecorationImage(

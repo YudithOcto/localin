@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:localin/api/hotel_last_search_dao.dart';
 import 'package:localin/api/repository.dart';
 import 'package:localin/model/hotel/hotel_search_suggest_model.dart';

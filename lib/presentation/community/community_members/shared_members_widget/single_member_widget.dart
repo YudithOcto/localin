@@ -44,8 +44,7 @@ class SingleMemberWidget extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
+            clipBehavior: Clip.none, children: <Widget>[
               UserProfileImageWidget(
                 imageUrl: '${detail?.imageProfile ?? ''}',
               ),

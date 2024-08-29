@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
 

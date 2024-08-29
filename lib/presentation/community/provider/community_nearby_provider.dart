@@ -31,9 +31,11 @@ class CommunityNearbyProvider with ChangeNotifier {
       _canLoadMore = true;
       _communityNearbyList.clear();
     }
+    if (!_canLoadMore) return;
     setState(communityNearbyState.loading);
     final response =
         await _repository.getCommunityList(page: _offset, limit: 4);
+    response.total = 3;
     if (response.error == null && response.total > 0) {
       _communityNearbyList.addAll(response.communityDetailList);
       _offset += 1;

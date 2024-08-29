@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localin/presentation/profile/user_profile/provider/user_profile_detail_provider.dart';
@@ -103,9 +102,9 @@ class _MyAppState extends State<MyApp> {
               canvasColor: ThemeColors.black0,
               fontFamily: 'SfProText',
               textTheme: ThemeData.light().textTheme.copyWith(
-                  bodyText1: ThemeText.sfSemiBoldTitle3,
-                  bodyText2: ThemeText.sfMediumTitle3,
-                  headline6: ThemeText.rodinaTitle3)),
+                  bodyLarge: ThemeText.sfSemiBoldTitle3,
+                  bodyMedium: ThemeText.sfMediumTitle3,
+                  titleLarge: ThemeText.rodinaTitle3)),
           initialRoute: 'SplashScreenPage',
           navigatorObservers: [
             locator<AnalyticsService>().getAnalyticsObserver(),

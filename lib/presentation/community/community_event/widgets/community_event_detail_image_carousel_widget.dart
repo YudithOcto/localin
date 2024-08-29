@@ -34,8 +34,7 @@ class CommunityEventDetailImageCarouselWidget extends StatelessWidget {
                 redirectImage(context, list);
               },
               child: Stack(
-                fit: StackFit.expand,
-                overflow: Overflow.visible,
+                clipBehavior: Clip.none, fit: StackFit.expand,
                 children: <Widget>[
                   CustomImageRadius(
                     imageUrl:

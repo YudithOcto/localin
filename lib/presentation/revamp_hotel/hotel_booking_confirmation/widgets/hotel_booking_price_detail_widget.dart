@@ -21,7 +21,6 @@ class HotelBookingPriceDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int duration = request.checkout.difference(request.checkIn).inDays;
     final provider = Provider.of<HotelBookingProvider>(context);
     return Container(
       color: ThemeColors.black0,

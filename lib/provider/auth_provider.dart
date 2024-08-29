@@ -122,6 +122,14 @@ class AuthProvider extends BaseModelProvider {
     }
   }
 
+  Future<Null> refreshUserData() async {
+    final response = await _repository.getUserProfile();
+    if (response != null && response.error == null) {
+      userModel = response;
+      notifyListeners();
+    }
+  }
+
   void updateFriendReferral(String referral) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     if (referral != null && referral.isNotEmpty) {

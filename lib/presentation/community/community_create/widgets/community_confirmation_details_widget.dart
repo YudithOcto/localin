@@ -11,7 +11,6 @@ import 'package:localin/presentation/transaction/community/transaction_community
 import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/text_themes.dart';
 import 'package:localin/themes.dart';
-import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'community_payment_successful_page.dart';
@@ -54,11 +53,7 @@ class CommunityConfirmationDetailsWidget extends StatelessWidget {
                 CommunityPaymentSuccessfulPage.routeName,
                 arguments: {
                   CommunityPaymentSuccessfulPage.communityData:
-                      response.detailCommunity,
-                  CommunityPaymentSuccessfulPage.localPoint:
-                      payment != null && payment != SUCCESS_VERIFICATION
-                          ? payment
-                          : null
+                      response.detailCommunity
                 });
           } else {
             Navigator.of(context).pushNamedAndRemoveUntil(

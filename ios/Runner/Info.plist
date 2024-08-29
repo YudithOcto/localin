@@ -117,5 +117,7 @@
     <string>YES</string>
     <key>io.flutter.embedded_views_preview</key>
     <true/>
+    <key>firebase_crashlytics_collection_enabled</key>
+    <false/>
 </dict>
 </plist>

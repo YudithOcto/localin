@@ -33,3 +33,6 @@ class AnalyticsService {
         numberOfRooms: numberOfRooms);
   }
 }
+
+class FirebaseAnalytics {
+}

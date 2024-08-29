@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localin/components/custom_dialog.dart';
@@ -54,32 +53,7 @@ class CouponCodeRowWidget extends StatelessWidget {
                       hintStyle: ThemeText.rodinaTitle3
                           .copyWith(color: ThemeColors.black60),
                       suffixIcon: InkResponse(
-                        onTap: () async {
-                          CustomDialog.showLoadingDialog(context,
-                              message: 'Loading');
-                          FocusScope.of(context).unfocus();
-                          final provider =
-                              Provider.of<TransactionDiscountProvider>(context);
-                          final response =
-                              await provider.getTransactionDiscount();
-                          if (response != null && !response.isError) {
-                            onChanged(response.priceData);
-                            onAppliedParams(DiscountStatus(
-                              isUsingLocalPoint:
-                                  provider.isUseLocalPoint ? 1 : 0,
-                              couponValue: provider.couponController.text,
-                            ));
-                            CustomToast.showCustomToastWhite(
-                                context,
-                                !provider.isUseLocalPoint
-                                    ? 'Removing coupon discount'
-                                    : 'Successfully add discount with coupon.');
-                          } else {
-                            CustomToast.showCustomToastWhite(
-                                context, response?.message);
-                          }
-                          CustomDialog.closeDialog(context);
-                        },
+                        onTap: () => _onCouponClick(context),
                         child: SvgPicture.asset(
                           'images/icon_enter.svg',
                           fit: BoxFit.cover,
@@ -106,38 +80,15 @@ class CouponCodeRowWidget extends StatelessWidget {
                     builder: (_, provider, __) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text('Use Local Point',
-                                  style: ThemeText.sfMediumHeadline),
-                            ),
-                            InkResponse(
-                              onTap: () async {
-                                CustomDialog.showLoadingDialog(context,
-                                    message: 'Loading');
-                                provider.switchLocalPointUsage();
-                                final response =
-                                    await provider.getTransactionDiscount();
-                                if (response != null && !response.isError) {
-                                  onChanged(response.priceData);
-                                  onAppliedParams(DiscountStatus(
-                                    isUsingLocalPoint:
-                                        provider.isUseLocalPoint ? 1 : 0,
-                                    couponValue: provider.couponController.text,
-                                  ));
-                                  CustomToast.showCustomToastWhite(
-                                      context,
-                                      !provider.isUseLocalPoint
-                                          ? 'Removing local point discount'
-                                          : 'Successfully add discount with local point.');
-                                } else {
-                                  CustomToast.showCustomToastWhite(
-                                      context, response.message);
-                                }
-                                CustomDialog.closeDialog(context);
-                              },
-                              child: provider.isUseLocalPoint
+                        InkResponse(
+                          onTap: () => _onLocalPointClick(context, provider),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text('Use Local Point',
+                                    style: ThemeText.sfMediumHeadline),
+                              ),
+                              provider.isUseLocalPoint
                                   ? Container(
                                       width: 14.0,
                                       height: 14.0,
@@ -157,9 +108,9 @@ class CouponCodeRowWidget extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(4.0),
                                       ),
-                                    ),
-                            )
-                          ],
+                                    )
+                            ],
+                          ),
                         ),
                         Divider(
                           color: ThemeColors.black80,
@@ -175,5 +126,57 @@ class CouponCodeRowWidget extends StatelessWidget {
         },
       ),
     );
+  }
+
+  _onLocalPointClick(
+      BuildContext context, TransactionDiscountProvider provider) async {
+    provider.switchLocalPointUsage();
+    CustomDialog.showLoadingDialog(context, message: 'Loading');
+    final response = await provider.getTransactionDiscount();
+    if (response != null && !response.isError) {
+      if (provider.isUseLocalPoint && response.priceData.pointDiscount == 0) {
+        CustomToast.showCustomToastWhite(
+            context, "You don't have enough point to get discount");
+        CustomDialog.closeDialog(context);
+        provider.switchLocalPointUsage();
+        return;
+      }
+      onChanged(response.priceData);
+      onAppliedParams(DiscountStatus(
+        isUsingLocalPoint: provider.isUseLocalPoint ? 1 : 0,
+        couponValue: provider.couponController.text,
+      ));
+      CustomToast.showCustomToastWhite(
+          context,
+          !provider.isUseLocalPoint
+              ? 'Successfully remove local point discount'
+              : 'Successfully add discount with local point.');
+    } else {
+      CustomToast.showCustomToastWhite(context, response.message);
+    }
+    CustomDialog.closeDialog(context);
+  }
+
+  _onCouponClick(BuildContext context) async {
+    final provider =
+        Provider.of<TransactionDiscountProvider>(context, listen: false);
+    if (provider.couponController.text.isEmpty) {
+      return;
+    }
+    CustomDialog.showLoadingDialog(context, message: 'Loading');
+    FocusScope.of(context).unfocus();
+    final response = await provider.getTransactionDiscount();
+    if (response != null && !response.isError) {
+      onChanged(response.priceData);
+      onAppliedParams(DiscountStatus(
+        isUsingLocalPoint: provider.isUseLocalPoint ? 1 : 0,
+        couponValue: provider.couponController.text,
+      ));
+      CustomToast.showCustomToastWhite(
+          context, 'Successfully add discount with coupon.');
+    } else {
+      CustomToast.showCustomToastWhite(context, response?.message);
+    }
+    CustomDialog.closeDialog(context);
   }
 }

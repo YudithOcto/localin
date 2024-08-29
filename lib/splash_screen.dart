@@ -1,4 +1,3 @@
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/analytics/analytic_service.dart';
 import 'package:localin/presentation/bottom_navigation/main_bottom_navigation.dart';
@@ -6,8 +5,6 @@ import 'package:localin/presentation/login/input_phone_number_page.dart';
 import 'package:localin/presentation/login/login_page.dart';
 import 'package:localin/presentation/onboarding/onboarding_page.dart';
 import 'package:localin/provider/auth_provider.dart';
-import 'package:localin/provider/location/location_provider.dart';
-import 'package:localin/themes.dart';
 import 'package:localin/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,25 +14,10 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with WidgetsBindingObserver {
-  bool updateAndroidIntent = false;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      if (updateAndroidIntent) {
-        checkGps('');
-        updateAndroidIntent = false;
-      }
-    }
-  }
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration.zero).then((value) async {
       final userCache =
           await Provider.of<AuthProvider>(context).getUserFromCache();
@@ -48,7 +30,9 @@ class _SplashScreenState extends State<SplashScreen>
         if (userCache.handphone != null &&
             userCache.handphone.isNotEmpty &&
             isUserAlreadyDoneVerifying) {
-          checkGps(userCache.id);
+          await AnalyticsService().setUserProperties(userId: userCache.id);
+          Navigator.of(context)
+              .pushReplacementNamed(MainBottomNavigation.routeName);
         } else {
           Navigator.of(context)
               .pushReplacementNamed(InputPhoneNumberPage.routeName, arguments: {
@@ -59,45 +43,6 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       }
     });
-  }
-
-  checkGps(String userId) async {
-    await AnalyticsService().setUserProperties(userId: userId);
-    final isGpsOn = await Provider.of<LocationProvider>(context, listen: false)
-        .getUserLocation();
-    if (isGpsOn) {
-      Navigator.of(context)
-          .pushReplacementNamed(MainBottomNavigation.routeName);
-    } else if (!isGpsOn) {
-      showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Location'),
-              content: Text('You need to enable your gps'),
-              actions: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    final AndroidIntent intent = new AndroidIntent(
-                      action: 'android.settings.LOCATION_SOURCE_SETTINGS',
-                    );
-                    intent.launch();
-                    updateAndroidIntent = true;
-                  },
-                  color: ThemeColors.primaryBlue,
-                  child: Text('Enabled'),
-                )
-              ],
-            );
-          });
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   @override

@@ -10,7 +10,7 @@ import 'package:localin/model/dana/dana_user_account_response.dart';
 
 class HomeProvider with ChangeNotifier {
   Repository _repository = Repository();
-  List<CommunityDetail> communityDetail = List();
+
   List<ArticleDetail> _articleDetailList = List();
   final int _limitPageRequest = 10;
   int _pageRequest = 1;
@@ -23,6 +23,7 @@ class HomeProvider with ChangeNotifier {
       communityDetail.clear();
       communityDetail.addAll(response.communityDetailList);
     }
+    notifyListeners();
     return response;
   }
 
@@ -70,9 +71,11 @@ class HomeProvider with ChangeNotifier {
   }
 
   List<ArticleDetail> get articleDetailList => _articleDetailList;
+  List<CommunityDetail> communityDetail = List();
 
   Stream<articleState> get articleStream => _articleController.stream;
 }
 
 enum articleState { Loading, Success, NoData }
 enum danaState { loading, success, empty }
+enum CommunityState { loading, Success, Empty }

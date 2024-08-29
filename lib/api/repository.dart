@@ -88,7 +88,7 @@ class Repository {
     return apiProvider.verifyPhoneCodeVerification(smsCode);
   }
 
-  Future<UserBaseModel> updateUserLoction(
+  Future<UserBaseModel> updateUserLocation(
       String latitude, String longitude, String address) async {
     return apiProvider.updateUserLocation(latitude, longitude, address);
   }

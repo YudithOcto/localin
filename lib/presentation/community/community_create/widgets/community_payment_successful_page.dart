@@ -3,25 +3,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:localin/model/community/community_detail.dart';
 import 'package:localin/presentation/community/community_create/community_create_page.dart';
 import 'package:localin/presentation/community/community_detail/community_detail_page.dart';
+import 'package:localin/provider/auth_provider.dart';
 import 'package:localin/text_themes.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../themes.dart';
 
 class CommunityPaymentSuccessfulPage extends StatelessWidget {
   static const routeName = 'CommunitySuccessfulPage';
   static const communityData = 'communityData';
-  static const localPoint = 'LocalPoint';
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<AuthProvider>(context, listen: false).refreshUserData();
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     CommunityDetail detail =
         routeArgs[CommunityPaymentSuccessfulPage.communityData];
     return Scaffold(
       body: Stack(
-        overflow: Overflow.visible,
-        fit: StackFit.expand,
+        clipBehavior: Clip.none, fit: StackFit.expand,
         children: <Widget>[
           Image.asset(
             'images/overlay.png',
@@ -70,24 +71,8 @@ class CommunityPaymentSuccessfulPage extends StatelessWidget {
                   style: ThemeText.sfRegularBody
                       .copyWith(color: ThemeColors.black0),
                 ),
-                Visibility(
-                  visible: routeArgs[localPoint] != null,
-                  child: Container(
-                    width: double.maxFinite,
-                    height: 48.0,
-                    alignment: FractionalOffset.center,
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
-                    decoration: BoxDecoration(
-                      color: ThemeColors.red,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Text(
-                        'YOU GOT ${routeArgs != null ? routeArgs[localPoint] : 0} LOCAL POIN!',
-                        textAlign: TextAlign.center,
-                        style: ThemeText.rodinaHeadline
-                            .copyWith(color: ThemeColors.black0)),
-                  ),
+                SizedBox(
+                  height: 4.0,
                 ),
                 InkWell(
                   onTap: () {

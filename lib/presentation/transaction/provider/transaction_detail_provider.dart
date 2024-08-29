@@ -71,6 +71,37 @@ class TransactionDetailProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  int get serviceFee =>
+      transactionDetail.adminFee != null && transactionDetail.adminFee > 0
+          ? transactionDetail.adminFee
+          : 0;
+
+  int get couponDiscount => transactionDetail.couponDiscount != null &&
+          transactionDetail.couponDiscount > 0
+      ? transactionDetail.couponDiscount
+      : 0;
+
+  int get pointDiscount => transactionDetail.pointDiscount != null &&
+          transactionDetail.pointDiscount > 0
+      ? transactionDetail.pointDiscount
+      : 0;
+
+  int get totalFee => transactionDetail.totalPayment != null &&
+          transactionDetail.totalPayment > 0
+      ? transactionDetail.totalPayment
+      : 0;
+
+  int get basicPrice => transactionDetail.invoiceTotal != null &&
+          transactionDetail.invoiceTotal > 0
+      ? transactionDetail.invoiceTotal
+      : 0;
+
+  String get eventName => transactionDetail != null &&
+          transactionDetail.event != null &&
+          transactionDetail.event.eventName != null
+      ? transactionDetail.event.eventName
+      : "";
+
   @override
   void dispose() {
     _streamController.close();

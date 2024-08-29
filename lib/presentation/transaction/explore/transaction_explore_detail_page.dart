@@ -139,7 +139,8 @@ class _TransactionExploreContentWidgetState
                           eventName: detail?.event?.eventName,
                         ),
                         ExplorePriceDetailWidget(
-                          exploreDetail: detail,
+                          bookingDetail:
+                              Provider.of<TransactionDetailProvider>(context),
                         ),
                       ],
                     ),

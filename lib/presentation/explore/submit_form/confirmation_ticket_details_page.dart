@@ -24,6 +24,8 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
   static const basicOrderInfo = 'BasicOrderInfo';
   static const orderVisitorsName = 'eventApiRequestForm';
   static const orderApiReturned = 'OrderApiReturned';
+  static const priceDataInfo = "PriceDataInfo";
+  static const singleTax = "SingleTax";
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,8 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     ExploreEventSubmissionDetails detail = routes[basicOrderInfo];
     ExploreOrderDetail _orderDetail = routes[orderApiReturned];
+    PriceData _priceData = routes[priceDataInfo];
+    int serviceFee = routes[singleTax];
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushNamedAndRemoveUntil(
@@ -69,7 +73,7 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
               ),
               bottomNavigationBar: InkWell(
                 onTap: () async {
-                  if (detail.totalPrice <= 0) {
+                  if (_priceData.userPrice <= 0) {
                     Navigator.of(context)
                         .pushNamed(OrderSuccessfulPage.routeName, arguments: {
                       OrderSuccessfulPage.transactionId:
@@ -132,30 +136,26 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
                       ConfirmationVisitorDetail(
                           eventRequestForm: routes[orderVisitorsName]),
                       TitleGreySection(title: 'price detail'),
-                      SingleConfirmationRow('Ticket (${detail?.totalTicket})',
-                          '${_orderDetail?.invoicePaymentTotal?.transformTicketPrice}'),
-                      SingleConfirmationRow('Admin Fee',
-                          '${_orderDetail?.adminFee?.transformTicketPrice}'),
+                      SingleConfirmationRow('${detail?.totalTicket} Ticket(s)',
+                          '${detail.totalPrice.transformTicketPrice}'),
+                      SingleConfirmationRow(
+                          'Service Fee', '${serviceFee.transformTicketPrice}'),
                       Visibility(
-                        visible: provider.priceData != null &&
-                            provider.priceData.couponDiscount != null &&
-                            provider.priceData.couponDiscount > 0,
+                        visible: _priceData.couponDiscount > 0,
                         child: SingleConfirmationRow(
                           'Coupon',
-                          '- ${getFormattedCurrency(provider.priceData?.couponDiscount)}',
+                          '- ${_priceData.couponDiscount.transformTicketPrice}',
                         ),
                       ),
                       Visibility(
-                        visible: provider.priceData != null &&
-                            provider.priceData.pointDiscount != null &&
-                            provider.priceData.pointDiscount > 0,
+                        visible: _priceData.pointDiscount > 0,
                         child: SingleConfirmationRow(
                           'Local Point',
-                          '- ${getFormattedCurrency(provider.priceData?.pointDiscount)}',
+                          '- ${_priceData.pointDiscount.transformTicketPrice}',
                         ),
                       ),
                       SingleConfirmationRow('Total Amount',
-                          '${getTotalAmount((_orderDetail.invoicePaymentTotal + _orderDetail?.adminFee), provider.priceData)}'),
+                          '${_priceData.userPrice.transformTicketPrice}'),
                     ],
                   ),
                 ),
@@ -165,15 +165,6 @@ class ConfirmationTicketDetailsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getTotalAmount(int basicTotal, PriceData price) {
-    if (price != null &&
-        (price.couponDiscount > 0 || price.pointDiscount > 0)) {
-      return getFormattedCurrency(price.userPrice);
-    } else {
-      return getFormattedCurrency(basicTotal);
-    }
   }
 }
 

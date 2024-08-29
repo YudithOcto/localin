@@ -47,7 +47,9 @@ class TransactionListProvider with ChangeNotifier {
           ? transactionState.empty
           : transactionState.success);
     }
-    notifyListeners();
+    if (_isMounted) {
+      notifyListeners();
+    }
   }
 
   setState(transactionState state) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:localin/components/custom_dialog.dart';
+import 'package:localin/components/vertical_dash.dart';
 import 'package:localin/model/dana/dana_user_account_response.dart';
 import 'package:localin/presentation/webview/transaction_webview.dart';
 import 'package:localin/provider/auth_provider.dart';
@@ -113,7 +113,7 @@ class _RowDanaWidgetState extends State<RowDanaWidget> {
             margin: EdgeInsets.symmetric(horizontal: 16.0),
             child: SizedBox(
               height: 32.0,
-              child: Dash(
+              child: VerticalDash(
                 direction: Axis.vertical,
                 length: 32.0,
                 dashThickness: 1.5,

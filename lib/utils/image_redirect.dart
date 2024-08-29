@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localin/components/custom_dialog.dart';
 import 'package:localin/presentation/shared_widgets/gallery_photo_view.dart';
