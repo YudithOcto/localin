@@ -6,9 +6,7 @@ class StarDisplay extends StatelessWidget {
   final double value;
   final double size;
 
-  const StarDisplay({Key key, this.value = 0, this.size = 10.0})
-      : assert(value != null),
-        super(key: key);
+  const StarDisplay({this.value = 0, this.size = 10.0});
 
   @override
   Widget build(BuildContext context) {

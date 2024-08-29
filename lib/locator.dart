@@ -5,5 +5,4 @@ import 'analytics/analytic_service.dart';
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
-  locator.registerLazySingleton(() => AnalyticsService());
 }
